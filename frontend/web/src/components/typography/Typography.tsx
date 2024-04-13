@@ -26,9 +26,6 @@ const StyledTypography = styled.div<FontProps>`
   font-size: ${(props) => `${props.fontSize}px`};
   color: ${(props) => props.color || 'black'};
   line-height: ${(props) => `${props.fontSize * 1.5}px`};
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 `;
 
 export const H1 = (props: TypographyProps) => {

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import '@/App.css';
-import '../public/fonts.css';
+import '../public/font/fonts.css';
+import { Example } from '@/components/Example.tsx';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -21,6 +22,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <Example />
     </>
   );
 }
