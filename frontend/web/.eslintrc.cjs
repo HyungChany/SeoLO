@@ -1,26 +1,29 @@
 module.exports = {
   root: true,
-  env: {
-    browser: true, es2020: true,
-  },
-  extends: ['eslint:recommended', 'plugin:react/recommended', 'plugin:react/jsx-runtime', 'plugin:react-hooks/recommended', 'airbnb', 'plugin:prettier/recommended'],
-  ignorePatterns: ['dist', '.eslintrc.cjs'],
+  env: { browser: true, es2020: true },
+  extends: [
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:react-hooks/recommended',
+    'airbnb-typescript', // 추가
+    'plugin:prettier/recommended', // 추가
+  ],
+  ignorePatterns: ['dist', '.eslintrc.cjs', 'vite.config.ts'],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 'latest', sourceType: 'module',
+    project: './tsconfig.json', // TypeScript 설정 파일 경로 지정
   },
-  settings: {
-    react: {
-      version: '18.2',
-    },
-  },
-  plugins: ['react-refresh', 'prettier'],
+  plugins: ['react-refresh', 'import', 'react'],
   rules: {
-    'react/jsx-uses-react': 'off',
-    'react/react-in-jsx-scope': 'off',
-    'react/jsx-no-target-blank': 'off',
-    'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
-    'prettier/prettier': ['error', {}, {
-      usePrettierrc: true,
-    }],
+    'react-refresh/only-export-components': [
+      'warn',
+      { allowConstantExport: true },
+    ],
+    'import/extensions': ['error', 'always', { ignorePackages: true }],
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'react/jsx-filename-extension': [
+      1,
+      { extensions: ['.jsx', '.js', 'ts', 'tsx'] },
+    ],
   },
 };
