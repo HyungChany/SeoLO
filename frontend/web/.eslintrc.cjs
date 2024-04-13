@@ -5,13 +5,13 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
-    'airbnb-typescript', // 추가
-    'plugin:prettier/recommended', // 추가
+    'airbnb-typescript',
+    'plugin:prettier/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs', 'vite.config.ts'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: './tsconfig.json', // TypeScript 설정 파일 경로 지정
+    project: './tsconfig.json',
   },
   plugins: ['react-refresh', 'import', 'react'],
   rules: {
@@ -25,5 +25,14 @@ module.exports = {
       1,
       { extensions: ['.jsx', '.js', 'ts', 'tsx'] },
     ],
+        'prettier/prettier': ['error', {
+      'endOfLine': 'auto',
+      'semi': true,
+      'singleQuote': true,
+      'printWidth': 80,
+      'tabWidth': 2,
+      'trailingComma': 'all',
+      'bracketSpacing': true
+    }],
   },
 };
