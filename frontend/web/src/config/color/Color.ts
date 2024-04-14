@@ -31,8 +31,8 @@ export const GREEN600: string = '#60C200';
 export const GREEN700: string = '#40A200';
 export const GREEN800: string = '#208200';
 
-export const MINT100: string = '#CFF1D6';
-export const MINT200: string = '#77EAE7';
+export const MINT100: string = '#77EAE7';
+export const MINT200: string = '#CFF1D6';
 export const MINT300: string = '#91CEC2';
 export const MINT400: string = '#5DB0AD';
 export const MINT500: string = '#2A9299';
