@@ -9,3 +9,10 @@ app figma 진행중\
 app logo 완성
 ![캡처](/docs/images/귀여운공사장누끼.png)
 figma watch부분 완성
+
+### 4/16
+
+[figma]\
+figma web 진행 중\
+figma watch 완성\
+app logo 수정 (안전모 수정)
