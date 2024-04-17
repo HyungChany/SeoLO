@@ -9,3 +9,5 @@ app figma 진행중\
 app logo 완성
 ![캡처](/docs/images/귀여운공사장누끼.png)
 figma watch부분 완성
+ucc 시나리오 완성
+figma splash, 로딩화면 완성
