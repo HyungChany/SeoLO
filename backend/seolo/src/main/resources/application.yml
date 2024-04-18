@@ -1,0 +1,7 @@
+#  모든 환경에서 공통으로 사용될 기본 설정
+server:
+  port: 8080
+
+spring:
+  profiles:
+    active: prod
