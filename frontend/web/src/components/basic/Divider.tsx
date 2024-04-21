@@ -1,5 +1,6 @@
-import * as Color from '../../config/color/Color';
+import * as Color from '@/config/color/Color.ts';
 
+// 타입 정의
 interface DividerProps {
   borderWidth?: number;
   marginHorizontal?: number;
@@ -25,6 +26,8 @@ interface DividerProps {
  * 각 Divider는 페이지 내 다른 섹션들을 구분하는 데 사용할 수 있습니다.
  * @author 오민상
  */
+
+// 컴포넌트 정의
 export const Divider = (props: DividerProps) => {
   return (
     <div

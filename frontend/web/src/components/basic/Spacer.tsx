@@ -1,3 +1,4 @@
+// 타입 정의
 interface SpacerProps {
   space: string;
   horizontal?: boolean;
@@ -29,6 +30,7 @@ interface SpacerProps {
  * @author 오민상
  */
 
+// 컴포넌트 정의
 export const Spacer = (props: SpacerProps) => {
   if (props.horizontal) {
     return <div style={{ marginLeft: props.space }} />;
