@@ -8,6 +8,7 @@ import { Button } from '@/components/button/Button.tsx';
 import { Menu } from '@/components/menu/Menu.tsx';
 import CheckList from '@/../assets/icons/CheckList.svg?react';
 import { Modal } from '@/components/modal/Modal.tsx';
+import Footer from '@/components/footer/Footer.tsx';
 
 interface ContainerProps {
   width: number;
@@ -69,6 +70,7 @@ export const Example = () => {
       <Modal maxHeight={600} maxWidth={1100}>
         <Typo.Body1B color={Color.ONYX}>모달입니다.</Typo.Body1B>
       </Modal>
+      <Footer />
     </>
   );
 };
