@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { Divider } from '@/components/basic/Divider.tsx';
 import { Spacer } from '@/components/basic/Spacer.tsx';
 import { Button } from '@/components/button/Button.tsx';
+import { Menu } from '@/components/menu/Menu.tsx';
+import CheckList from '@/../assets/icons/CheckList.svg?react';
 
 interface ContainerProps {
   width: number;
@@ -58,6 +60,11 @@ export const Example = () => {
       >
         버튼입니다.
       </Button>
+      <Menu onClick={() => console.log('클릭')} width={300} $enterSize={30}>
+        <CheckList width={50} />
+        <Spacer space={'20px'} horizontal={true} />
+        <Typo.Body1B color={Color.ONYX}>새 작업장 추가</Typo.Body1B>
+      </Menu>
     </>
   );
 };
