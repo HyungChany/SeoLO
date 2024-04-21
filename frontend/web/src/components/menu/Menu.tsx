@@ -7,9 +7,9 @@ import EnterIcon from '@/../assets/icons/Enter.svg?react';
 // 타입 정의
 interface MenuProps {
   onClick: () => void;
-  children: React.ReactNode;
   width: number;
   $enterSize: number;
+  children: React.ReactNode;
 }
 
 // 스타일 정의
@@ -31,12 +31,33 @@ const Enter = styled(EnterIcon)<Pick<MenuProps, '$enterSize'>>`
   height: ${(props) => props.$enterSize}px;
 `;
 
+/**
+ * 네비게이션 메뉴 또는 다른 목적으로 사용될 수 있는 메뉴 컴포넌트입니다. 이 컴포넌트는 자식 요소와
+ * 함께 사용자 정의 크기의 Enter 아이콘을 포함합니다. 메뉴는 클릭 가능하며, 호버 효과를 포함하고 있습니다.
+ *
+ * @param props 컴포넌트 설정을 위한 프로퍼티:
+ * - `onClick`: 버튼 클릭 시 호출되는 함수입니다.
+ * - `children`: 메뉴 내부에 표시될 내용입니다.
+ * - `width`: 컨테이너의 너비를 설정합니다.
+ * - `$enterSize`: Enter 아이콘의 크기를 설정합니다.
+ *
+ * ### 사용 예시
+ * ```jsx
+ * <Menu onClick={handleClick} width={300} $enterSize={24}>
+ *   <span>Menu Item 1</span>
+ *   <span>Menu Item 2</span>
+ * </Menu>
+ * ```
+ *
+ * @returns JSX.Element - 스타일이 적용된 메뉴 요소를 반환합니다.
+ */
+
 // 컴포넌트 정의
 export const Menu: React.FC<MenuProps> = ({
   onClick,
-  children,
   width,
   $enterSize,
+  children,
 }) => {
   return (
     <Container onClick={onClick} width={width}>
