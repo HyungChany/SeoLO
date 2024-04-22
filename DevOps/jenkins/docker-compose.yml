@@ -3,11 +3,14 @@ version: '3.8'
 services:
   jenkins:
     container_name: seolo-jenkins
-    image: willom2c/seolo-jenkins
+    build:
+      context: ./Dockerfile # Dockerfile이 위치한 경로
+      dockerfile: Dockerfile # 사용할 Dockerfile의 이름, 폴더 내 다른 이름의 파일을 사용하는 경우 변경 가능
     ports:
       - "9000:8080"
     volumes:
       - /home/ubuntu/jenkins/jenkins-data/jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - net
 networks:
