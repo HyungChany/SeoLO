@@ -1,11 +1,10 @@
 version: '3.8'
 services:
   nginx:
-    image: nginx:latest
-    container_name: nginx-https
+    image: nginx:latest  # 사용할 Nginx 이미지를 지정합니다.
+    restart: always
     ports:
-      - "80:80"
+      - "80:80"  # Nginx가 사용할 포트를 설정합니다. 필요에 따라 조정하세요.
       - "443:443"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-    restart: unless-stopped
+      - ./nginx.conf:/etc/nginx/nginx.conf  # nginx 설정 파일을 컨테이너에 마운트합니다.
