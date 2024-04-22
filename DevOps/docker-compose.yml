@@ -16,6 +16,8 @@ services:
 #      - back
     networks:
       - jenkins-network
+networks:
+  jenkins-network:
 
 #  back:
 #    container_name: seolo-back
@@ -29,6 +31,3 @@ services:
 #    networks:
 #      - jenkins-network
 #
-networks:
-  jenkins-network:
-    external: true
