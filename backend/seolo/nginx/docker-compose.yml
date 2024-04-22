@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  nginx:
+    build:
+      context: .
+    ports:
+      - "80:80"  # Nginx가 사용할 포트를 설정합니다. 필요에 따라 조정하세요.
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf  # nginx 설정 파일을 컨테이너에 마운트합니다.
