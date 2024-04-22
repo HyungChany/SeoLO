@@ -4,6 +4,8 @@ USER root
 
 ENV DEBIAN_FRONTEND noninteractive
 ENV DEBCONF_NOWARNINGS="yes"
+ENV JENKINS_HOME /home/ubuntu/jenkins/jenkins-data/jenkins_home
+
 
 RUN apt-get -y update && \
     apt-get install -y --no-install-recommends \
