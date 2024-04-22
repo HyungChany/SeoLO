@@ -3,7 +3,7 @@ import * as Color from '@/config/color/Color.ts';
 
 // 스타일 정의
 const FooterContainer = styled.footer`
-    position: fixed;
+    position: relative;
     width: 100dvw;
     height: 5.625rem;
     left: 0;

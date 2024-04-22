@@ -4,17 +4,17 @@ import React from 'react';
 
 // 타입 정의
 interface ModalProps {
-  maxWidth: number;
-  maxHeight: number;
+  $maxWidth: number;
+  $maxHeight: number;
   children: React.ReactNode;
 }
 
 // 스타일 정의
 const ModalContainer = styled.div<ModalProps>`
   width: 100%;
-  max-width: ${(props) => props.maxWidth || 62.5}rem;
+  max-width: ${(props) => props.$maxWidth || 62.5}rem;
   height: auto;
-  max-height: ${(props) => props.maxHeight || 37.5}rem;
+  max-height: ${(props) => props.$maxHeight || 37.5}rem;
   border-radius: 3.125rem;
   border: 1px solid ${Color.GRAY100};
   background-color: ${Color.GRAY300};
@@ -50,12 +50,10 @@ const ModalContainer = styled.div<ModalProps>`
 // 컴포넌트 정의
 export const Modal: React.FC<ModalProps> = ({
   children,
-  maxWidth,
-  maxHeight,
-}) => {
-  return (
-    <ModalContainer maxWidth={maxWidth} maxHeight={maxHeight}>
-      {children}
-    </ModalContainer>
-  );
-};
+  $maxWidth,
+  $maxHeight,
+}) => (
+  <ModalContainer $maxWidth={$maxWidth} $maxHeight={$maxHeight}>
+    {children}
+  </ModalContainer>
+);
