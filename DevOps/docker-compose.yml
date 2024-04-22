@@ -2,9 +2,8 @@ version: '3.8'
 
 services:
   jenkins:
-    container_name: jenkins
-    image: jenkins/jenkins
-    user: root
+    container_name: seolo-jenkins
+    image: willom2c/seolo-jenkins
     ports:
       - "9000:8080"
     volumes:
@@ -13,6 +12,7 @@ services:
       - net
 
   nginx:
+    container_name: seolo-nginx
     image: nginx:latest
     ports:
       - "443:443"
