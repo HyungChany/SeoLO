@@ -20,7 +20,7 @@ services:
   back:
     container_name: seolo-back
     build:
-      context: ../backend
+      context: ../backend/seolo
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
