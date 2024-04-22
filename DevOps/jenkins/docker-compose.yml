@@ -12,6 +12,8 @@ services:
       - /home/ubuntu/jenkins/jenkins-data/jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
     networks:
-      - net
+      - jenkins-network
+
 networks:
-  net:
+  jenkins-network:
+    external: true
