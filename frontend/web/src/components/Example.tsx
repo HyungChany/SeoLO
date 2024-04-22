@@ -9,6 +9,7 @@ import { Menu } from '@/components/menu/Menu.tsx';
 import CheckList from '@/../assets/icons/CheckList.svg?react';
 import { Modal } from '@/components/modal/Modal.tsx';
 import Footer from '@/components/footer/Footer.tsx';
+import { TopNavigator } from './navigation/navigator';
 
 interface ContainerProps {
   width: number;
@@ -23,11 +24,12 @@ const Container = styled.div<ContainerProps>`
 export const Example = () => {
   return (
     <>
+      <TopNavigator />
       <Typo.H1 color={Color.BLACK}>헤더1</Typo.H1>
       <Typo.H2 color={Color.RED500}>헤더2</Typo.H2>
       <Typo.H3 color={Color.YELLOW500}>헤더3</Typo.H3>
       <Typo.H4 color={Color.MINT200}>헤더4</Typo.H4>
-      <Container height={300} width={300}>
+      <Container height={10} width={10}>
         <Exam />
       </Container>
       <Typo.Body0B>본문0</Typo.Body0B>
@@ -62,7 +64,7 @@ export const Example = () => {
       >
         버튼입니다.
       </Button>
-      <Menu onClick={() => console.log('클릭')} width={300} $enterSize={30}>
+      <Menu onClick={() => console.log('클릭')} width={10} $enterSize={1}>
         <CheckList width={50} />
         <Spacer space={'20px'} horizontal={true} />
         <Typo.Body1B color={Color.ONYX}>새 작업장 추가</Typo.Body1B>
