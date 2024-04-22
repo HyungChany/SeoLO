@@ -44,7 +44,7 @@ pipeline {
             steps {
                 script {
                     // Docker Compose를 사용하여 이미지 빌드
-                    sh ""
+                    sh 'pwd'
                     sh "docker-compose -f ${env.DOCKER_COMPOSE_FILE} build"
                 }
             }
@@ -54,6 +54,7 @@ pipeline {
             steps {
                 script {
                     // Docker Compose를 사용하여 서비스 배포
+                    sh 'pwd'
                     sh "docker-compose -f ${env.DOCKER_COMPOSE_FILE} up -d"
                 }
             }
