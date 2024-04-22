@@ -29,6 +29,6 @@ services:
 #    networks:
 #      - jenkins-network
 #
-#networks:
-#  jenkins-network:
-#    external: true
+networks:
+  jenkins-network:
+    external: true
