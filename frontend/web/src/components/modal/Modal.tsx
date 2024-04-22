@@ -52,8 +52,10 @@ export const Modal: React.FC<ModalProps> = ({
   children,
   maxWidth,
   maxHeight,
-}) => (
-  <ModalContainer maxWidth={maxWidth} maxHeight={maxHeight}>
-    {children}
-  </ModalContainer>
-);
+}) => {
+  return (
+    <ModalContainer maxWidth={maxWidth} maxHeight={maxHeight}>
+      {children}
+    </ModalContainer>
+  );
+};
