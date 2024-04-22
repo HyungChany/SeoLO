@@ -17,12 +17,12 @@ interface ButtonProps {
 // 스타일 정의
 const ButtonContainer = styled.button<ButtonProps>`
   width: ${(props) =>
-    typeof props.width === 'number' ? `${props.width}px` : props.width};
+    typeof props.width === 'number' ? `${props.width}rem` : props.width};
   height: ${(props) =>
-    typeof props.height === 'number' ? `${props.height}px` : props.height};
-  border-radius: ${(props) => props.$borderRadius}px;
+    typeof props.height === 'number' ? `${props.height}rem` : props.height};
+  border-radius: ${(props) => props.$borderRadius}rem;
   border: 1px solid ${(props) => props.$borderColor};
-  padding: 10px;
+  padding: 0.7rem;
   align-items: center;
   justify-content: center;
   display: flex;

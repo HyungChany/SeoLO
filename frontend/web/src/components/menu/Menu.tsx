@@ -14,7 +14,7 @@ interface MenuProps {
 
 // 스타일 정의
 const Container = styled.div<Pick<MenuProps, 'width'>>`
-  width: ${(props) => props.width}px;
+  width: ${(props) => props.width}rem;
 `;
 
 const MenuContainer = styled.div`
@@ -22,13 +22,13 @@ const MenuContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 0.7rem;
   cursor: pointer;
 `;
 
 const Enter = styled(EnterIcon)<Pick<MenuProps, '$enterSize'>>`
-  width: ${(props) => props.$enterSize}px;
-  height: ${(props) => props.$enterSize}px;
+  width: ${(props) => props.$enterSize}rem;
+  height: ${(props) => props.$enterSize}rem;
 `;
 
 /**

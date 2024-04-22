@@ -52,8 +52,8 @@ export const Example = () => {
       <Spacer space={'20px'} />
       <Button
         onClick={() => console.log('클릭')}
-        height={50}
-        width={300}
+        height={3}
+        width={10}
         $backgroundColor={Color.GRAY200}
         $borderColor={Color.SNOW}
         $borderRadius={10}
@@ -67,7 +67,7 @@ export const Example = () => {
         <Spacer space={'20px'} horizontal={true} />
         <Typo.Body1B color={Color.ONYX}>새 작업장 추가</Typo.Body1B>
       </Menu>
-      <Modal maxHeight={600} maxWidth={1100}>
+      <Modal maxHeight={30} maxWidth={40}>
         <Typo.Body1B color={Color.ONYX}>모달입니다.</Typo.Body1B>
       </Modal>
       <Footer />
