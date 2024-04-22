@@ -1,6 +1,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/java,webstorm,intellij,visualstudiocode,react,flutter,kotlin
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,webstorm,intellij,visualstudiocode,react,flutter,kotlin
 
+### Django ###
+# django settings
+my_settings.py
+
 ### Flutter ###
 # Flutter/Dart/Pub related
 **/doc/api/
