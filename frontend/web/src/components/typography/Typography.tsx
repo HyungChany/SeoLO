@@ -13,9 +13,9 @@ interface FontProps extends TypographyProps {
 
 const StyledHeaderTypography = styled.div<FontProps>`
   font-family: ${(props) => props.fontFamily};
-  font-size: ${(props) => `${props.fontSize}px`};
+  font-size: ${(props) => `${props.fontSize}rem`};
   color: ${(props) => props.color || 'black'};
-  line-height: ${(props) => `${props.fontSize * 1.5}px`};
+  line-height: ${(props) => `${props.fontSize * 1.5}rem`};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -23,9 +23,9 @@ const StyledHeaderTypography = styled.div<FontProps>`
 
 const StyledTypography = styled.div<FontProps>`
   font-family: ${(props) => props.fontFamily};
-  font-size: ${(props) => `${props.fontSize}px`};
+  font-size: ${(props) => `${props.fontSize}rem`};
   color: ${(props) => props.color || 'black'};
-  line-height: ${(props) => `${props.fontSize * 1.5}px`};
+  line-height: ${(props) => `${props.fontSize * 1.5}rem`};
 `;
 
 export const H1 = (props: TypographyProps) => {

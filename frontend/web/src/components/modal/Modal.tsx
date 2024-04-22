@@ -12,13 +12,13 @@ interface ModalProps {
 // 스타일 정의
 const ModalContainer = styled.div<ModalProps>`
   width: 100%;
-  max-width: ${(props) => props.maxWidth || 1000}px;
+  max-width: ${(props) => props.maxWidth || 62.5}rem;
   height: auto;
-  max-height: ${(props) => props.maxHeight || 600}px;
-  border-radius: 50px;
+  max-height: ${(props) => props.maxHeight || 37.5}rem;
+  border-radius: 3.125rem;
   border: 1px solid ${Color.GRAY100};
   background-color: ${Color.GRAY300};
-  padding: 10px;
+  padding: 0.7rem;
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -26,17 +26,6 @@ const ModalContainer = styled.div<ModalProps>`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
-
-  @media (max-width: 768px) {
-    max-width: 90%;
-    border-radius: 30px;
-  }
-
-  @media (max-width: 480px) {
-    max-width: 95%;
-    border-radius: 20px;
-    padding: 5px;
-  }
 `;
 
 /**
