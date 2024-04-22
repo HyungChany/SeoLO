@@ -2,6 +2,14 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=java,webstorm,intellij,visualstudiocode,react,flutter,kotlin
 
 ### Django ###
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media
 # django settings
 my_settings.py
 
