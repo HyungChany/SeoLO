@@ -53,12 +53,7 @@ const Enter = styled(EnterIcon)<Pick<MenuProps, '$enterSize'>>`
  */
 
 // 컴포넌트 정의
-export const Menu: React.FC<MenuProps> = ({
-  onClick,
-  width,
-  $enterSize,
-  children,
-}) => {
+export const Menu = ({ onClick, width, $enterSize, children }: MenuProps) => {
   return (
     <Container onClick={onClick} width={width}>
       <MenuContainer>
