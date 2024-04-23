@@ -24,6 +24,7 @@ pipeline {
                 script {
                     // Git 저장소에서 develop 브랜치 클론
                     git branch: env.BRANCH_NAME, credentialsId: env.CREDENTIALS_ID, url: env.REPO_URL
+                    sh 'git submodule update --init --recursive'
                 }
             }
         }
