@@ -3,13 +3,28 @@ pipeline {
     environment {
         // 환경 변수 정의
         DOCKER_COMPOSE_FILE = 'DevOps/docker-compose.yml'
+        REPO_URL = 'https://lab.ssafy.com/s10-final/S10P31C104.git'
+        BRANCH_NAME = 'develop'
+        CREDENTIALS_ID = 'seolo-git-token'
     }
 
     stages {
+        stage('Prepare Workspace') {
+            steps {
+                script {
+                    // 현재 작업 공간 전체를 정리
+                    echo "Cleaning the workspace..."
+                    deleteDir() // 현재 작업 공간의 모든 내용을 삭제
+                }
+            }
+        }
+
         stage('Clone Repository') {
             steps {
-                // Git 저장소에서 develop 브랜치 클론
-                git branch: 'develop', credentialsId: 'seolo-git-token', url: 'https://lab.ssafy.com/s10-final/S10P31C104.git'
+                script {
+                    // Git 저장소에서 develop 브랜치 클론
+                    git branch: env.BRANCH_NAME, credentialsId: env.CREDENTIALS_ID, url: env.REPO_URL
+                }
             }
         }
 
@@ -79,4 +94,3 @@ pipeline {
         }
     }
 }
-
