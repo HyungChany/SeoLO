@@ -1,6 +1,7 @@
 import 'package:app/main.dart';
 import 'package:app/services/test_service.dart';
 import 'package:app/widgets/common_icon_button.dart';
+import 'package:app/widgets/common_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
@@ -46,11 +47,12 @@ class _LockScreenState extends State<LockScreen> {
                     TestService testService = TestService();
                     testService.getTest();
                   }),
-              // CommonIconButton(
-              //     text: '정비',
-              //     iconImage: 'assets/images/maintenance_icon.png',
-              //     shape: BoxShape.circle,
-              //     onTap: () {}),
+              CommonIconButton(
+                  text: '정비',
+                  iconImage: 'assets/images/maintenance_icon.png',
+                  shape: BoxShape.circle,
+                  onTap: () {}),
+              CommonTextButton(text: '다음 단계', onTap: () {}),
               ElevatedButton(
                 onPressed: () {
                   screenLockCreate(
