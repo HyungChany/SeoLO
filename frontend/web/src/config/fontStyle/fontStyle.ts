@@ -10,7 +10,6 @@ export const F_SIZE_XS: number = 1; // 16px
 export const F_SIZE_XXS: number = 0.875; // 14px
 export const F_SIZE_XXXS: number = 0.75; // 12px
 
-
 // font-family
 export const F_PRIMARY_EB: string = 'NYJGothicEB';
 export const F_PRIMARY_B: string = 'NYJGothicB';
