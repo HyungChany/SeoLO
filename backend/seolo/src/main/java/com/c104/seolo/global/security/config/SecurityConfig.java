@@ -1,8 +1,8 @@
 package com.c104.seolo.global.security.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,7 +14,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import java.util.Collections;
 
 @RequiredArgsConstructor
-@Configurable
+@Configuration
 public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -23,12 +23,14 @@ public class SecurityConfig {
                 .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfig()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll());  // 모든 요청에 대해 접근 허용
                 // 인가 경로 설정
-                .authorizeHttpRequests((requests) ->
-                        requests.requestMatchers(
-                                "/error",
-                                "/*"//
-                        ).permitAll().anyRequest().authenticated());
+//                .authorizeHttpRequests((requests) ->
+//                        requests.requestMatchers(
+//                                "/error",
+//                                "/*"//
+//                        ).permitAll().anyRequest().authenticated());
 
         return http.build();
     }
