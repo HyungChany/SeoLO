@@ -11,7 +11,7 @@ db.sqlite3
 db.sqlite3-journal
 media
 # django settings
-my_settings.py
+.news/**/my_settings.py
 
 ### Flutter ###
 # Flutter/Dart/Pub related

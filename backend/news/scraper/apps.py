@@ -1,6 +1,6 @@
 from django.apps import AppConfig
+from django.conf import settings
 
-
-class LotoConfig(AppConfig):
+class ScraperConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'loto'
+    name = 'scraper'
