@@ -1,15 +1,17 @@
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 import * as Typo from '@/components/typography/Typography.tsx';
+import { Link } from 'react-router-dom';
 
 const NavigatorBox = styled.div`
   box-sizing: border-box;
   width: 100%;
-  height: 7.5rem;
+  height: 7rem;
   padding: 2rem 2.65625rem;
   display: flex;
   top: 0;
   background-color: ${Color.SNOW};
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   /* position: fixed; */
 `;
 const NavigatorContent = styled.div`
@@ -20,7 +22,7 @@ const NavigatorContent = styled.div`
   align-items: center;
   gap: 16.875rem;
 `;
-const Title = styled.div`
+const Title = styled(Link)`
   width: 11.125rem;
   height: 100%;
   align-items: center;
@@ -31,6 +33,8 @@ const Title = styled.div`
   font-style: normal;
   font-weight: 700;
   display: flex;
+  cursor: pointer;
+  text-decoration: none;
 `;
 const Menu = styled.div`
   width: 100%;
@@ -44,11 +48,17 @@ export const TopNavigator = () => {
   return (
     <NavigatorBox>
       <NavigatorContent>
-        <Title>SeoLo</Title>
+        <Title to="/">SeoLo</Title>
         <Menu>
-          <Typo.H3>LOTO 일지</Typo.H3>
-          <Typo.H3>체크리스트 관리</Typo.H3>
-          <Typo.H3>사업장 정보조회/수정</Typo.H3>
+          <Link to="/1" style={{ textDecoration: 'none' }}>
+            <Typo.H3>LOTO 일지</Typo.H3>
+          </Link>
+          <Link to="/2" style={{ textDecoration: 'none' }}>
+            <Typo.H3>체크리스트 관리</Typo.H3>
+          </Link>
+          <Link to="/3" style={{ textDecoration: 'none' }}>
+            <Typo.H3>사업장 정보조회/수정</Typo.H3>
+          </Link>
         </Menu>
       </NavigatorContent>
     </NavigatorBox>
