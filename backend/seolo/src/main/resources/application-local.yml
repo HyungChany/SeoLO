@@ -1,12 +1,13 @@
 # 각자 환경에서  개발
 spring:
   config:
+    import: "classpath:application-secret.yml"
     activate:
       on-profile: local
   security:
     user:
-      name: test
-      password: 1234
+      name: ${security.user.name}
+      password: ${security.user.name}
   datasource:
     driver-class-name: org.h2.Driver
     url: jdbc:h2:tcp://localhost/~/test
