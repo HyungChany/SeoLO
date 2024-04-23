@@ -16,3 +16,21 @@
   font-weight: normal;
   font-style: normal;
 }
+@font-face {
+  font-family: 'esamanru';
+  src: url('esamanru Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'esamanru';
+  src: url('esamanru Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'esamanru';
+  src: url('esamanru Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
