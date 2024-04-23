@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) ->
                         requests.requestMatchers(
                                 "/error",
-                                "*"// 알람
+                                "/*"//
                         ).permitAll().anyRequest().authenticated());
 
         return http.build();
