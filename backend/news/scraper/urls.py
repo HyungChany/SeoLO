@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import scratch_news
+from .views import ScratchNews
 
 urlpatterns = [
-    path('', scratch_news.as_view()),
+    path('', ScratchNews.as_view()),
 ]

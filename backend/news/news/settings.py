@@ -55,6 +55,7 @@ CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379",
+        "TIMEOUT": 10800, # 3H
         "OPTIONS": {
             "CONNECTION_CLASS": "django_redis.connection.DefaultConnection",
         }
