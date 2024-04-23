@@ -1,10 +1,10 @@
-package com.seolo.watch.presentation.theme
+package com.seolo.seolo.presentation.theme
 
 import androidx.compose.runtime.Composable
 import androidx.wear.compose.material.MaterialTheme
 
 @Composable
-fun WatchTheme(
+fun SeoLoTheme(
     content: @Composable () -> Unit
 ) {
     /**

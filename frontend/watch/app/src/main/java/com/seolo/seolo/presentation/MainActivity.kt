@@ -4,7 +4,7 @@
  * changes to the libraries and their usages.
  */
 
-package com.seolo.watch.presentation
+package com.seolo.seolo.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -24,8 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
-import com.seolo.watch.R
-import com.seolo.watch.presentation.theme.WatchTheme
+import com.seolo.seolo.R
+import com.seolo.seolo.presentation.theme.SeoLoTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +43,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun WearApp(greetingName: String) {
-    WatchTheme {
+    SeoLoTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
