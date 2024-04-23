@@ -37,7 +37,6 @@ dependencies:
   cupertino_icons: ^1.0.6 # 플러터 아이콘
   flutter_native_splash: ^2.4.0 # 스플래쉬
   provider: ^6.1.2 # flutter 상태관리
-  flutter_screen_lock: ^9.0.2 # 잠금화면
   local_auth: ^2.2.0 # 생체인증 (지문)
   dio: ^5.4.3+1 # http 통신
   flutter_dotenv: ^5.1.0 # .env파일

@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 // main.dart import 후 color: blue100 이러한 방식으로 사용
 // 참고로 color: blue100하고 tab 누르면 알아서 import 됨
 const Color blue100 = Color.fromRGBO(135, 185, 231, 1);
+const Color blue400 = Color.fromRGBO(52, 107, 190, 1);
 const Color blue800 = Color.fromRGBO(56, 61, 101, 1);
 const Color mint200 = Color.fromRGBO(207, 241, 214, 1);
 const Color gray100 = Color.fromRGBO(242, 244, 247, 1);
