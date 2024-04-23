@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import * as Color from '@/config/color/Color';
+import * as Color from '@/config/color/Color.tsx';
 import useDetectClose from '@/hooks/UseDetectClose';
 import Arrow from '/assets/icons/Arrow.svg';
 import Select, { StylesConfig } from 'react-select';

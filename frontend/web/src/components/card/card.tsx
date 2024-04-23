@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import * as Color from '@/config/color/Color';
+import * as Color from '@/config/color/Color.ts';
 import React from 'react';
 interface CardProps {
   width: number;
   height: number;
   children: React.ReactNode;
-  onclick: () => void;
+  onClick: () => void;
 }
 const CardContainer = styled.div<CardProps>`
   width: ${(props) => props.width}rem;
@@ -20,7 +20,7 @@ const Card = (props: CardProps) => {
     <CardContainer
       width={props.width}
       height={props.height}
-      onclick={props.onclick}
+      onClick={props.onClick}
     >
       {props.children}
     </CardContainer>
