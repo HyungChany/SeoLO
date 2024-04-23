@@ -1,7 +1,11 @@
-import requests
+import requests, redis, json
 from bs4 import BeautifulSoup
+from django.conf import settings
 
 def scrape():
+    news_data = []
+    conn = redis.StrictRedis.from_url(settings.CACHES["default"]["LOCATION"])
+
     url = 'https://search.daum.net/search?w=news&nil_search=btn&DA=STC&enc=utf8&cluster=y&cluster_page=1&q=%EC%95%88%EC%A0%84&p=1&sort=accuracy'
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -32,5 +36,17 @@ def scrape():
         # print("시간:", date)
         # print("신문사:", source)
         # print()
+        
+        news_data.append({
+            'title': title,
+            'preview': preview,
+            'author': source,
+            'date': date,
+            'thum': thumbnail,
+            'link': link
+        })
+    
+    conn.set('news', json.dumps(news_data, ensure_ascii=False))
+    conn.expire('news', 10800)
 
 scrape()
