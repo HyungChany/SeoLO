@@ -1,4 +1,3 @@
-// App 설정
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -10,8 +9,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export default defineConfig({
   base: './',
   server: {
-    port: 3000,
+    port: 5173,
     host: '0.0.0.0',
+    hmr: {
+      protocol: 'wss',
+      host: 'k10c104.p.ssafy.io',
+    },
   },
   plugins: [react(), svgr()],
   resolve: {
