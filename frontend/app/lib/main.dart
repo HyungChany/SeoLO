@@ -1,8 +1,7 @@
 import 'package:app/routes/main_route.dart';
-import 'package:app/screens/lock/lock_screen.dart';
+import 'package:app/screens/test_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 // main.dart import 후 color: blue100 이러한 방식으로 사용
 // 참고로 color: blue100하고 tab 누르면 알아서 import 됨
@@ -32,7 +31,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity
       ),
-      home: const LockScreen(),
+      home: const TestScreen(),
       onGenerateRoute: generateMainRoute,
     );
   }
