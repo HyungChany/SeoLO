@@ -9,9 +9,6 @@ interface OptionType {
   value: string;
   label: string;
 }
-interface DropDownProps {
-  onClick: () => void;
-}
 
 const DropDownBox = styled.div`
   display: flex;
