@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
-import * as Typo from '@/components/typography/Typography';
+import * as Typo from '@/components/typography/Typography.tsx';
 
 const NavigatorBox = styled.div`
   box-sizing: border-box;

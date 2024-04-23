@@ -23,9 +23,9 @@ module.exports = {
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'react/jsx-filename-extension': [
       1,
-      { extensions: ['.jsx', '.js', 'ts', 'tsx'] },
+      { extensions: ['.jsx', '.js', '.ts', '.tsx'] },
     ],
-        'prettier/prettier': ['error', {
+      'prettier/prettier': ['error', {
       'endOfLine': 'auto',
       'semi': true,
       'singleQuote': true,
