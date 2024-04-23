@@ -41,7 +41,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
-    'django_apscheduler'
+    'django_apscheduler',
     'scraper',
 ]
 
@@ -53,10 +53,10 @@ APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 # redis
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+        "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379",
         "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "CONNECTION_CLASS": "django_redis.connection.DefaultConnection",
         }
     }
 }
