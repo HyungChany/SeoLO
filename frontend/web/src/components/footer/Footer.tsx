@@ -4,10 +4,8 @@ import * as Color from '@/config/color/Color.ts';
 // 스타일 정의
 const FooterContainer = styled.footer`
   position: relative;
-  width: 100dvw;
+  width: 100%;
   height: 5.625rem;
-  left: 0;
-  bottom: 0;
   background: #353935;
   display: flex;
   align-items: center;
@@ -18,13 +16,11 @@ const LinksContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 0;
   gap: 5.625rem;
   position: absolute;
   width: 30.2rem;
   height: 1rem;
   left: 2.75rem;
-  top: 2.31rem;
 `;
 
 const Link = styled.a`
@@ -34,6 +30,7 @@ const Link = styled.a`
   font-size: 1rem;
   color: ${Color.SNOW};
   cursor: pointer;
+  text-decoration: none;
 `;
 
 const Copyright = styled.div`
@@ -41,7 +38,6 @@ const Copyright = styled.div`
   width: 12.25rem;
   height: 1rem;
   right: 2.75rem;
-  top: 2.31rem;
   font-family: 'NYJGothicM', sans-serif;
   font-style: normal;
   font-weight: 500;
