@@ -9,9 +9,9 @@ import { Menu } from '@/components/menu/Menu.tsx';
 import CheckList from '@/../assets/icons/CheckList.svg?react';
 import { Modal } from '@/components/modal/Modal.tsx';
 import Footer from '@/components/footer/Footer.tsx';
-import { TopNavigator } from './navigation/navigator';
-import Card from './card/card';
-import Dropdown from '@/components/dropdown/DropDown';
+import { TopNavigator } from './navigation/navigator.tsx';
+import Card from './card/card.tsx';
+// import Dropdown from '@/components/dropdown/DropDown.tsx';
 
 interface ContainerProps {
   width: number;
@@ -27,10 +27,10 @@ export const Example = () => {
   return (
     <>
       <TopNavigator />
-      <Card width={10} height={10} onclick={Handle}>
+      <Card width={10} height={10} onClick={Handle}>
         gdgdgd
       </Card>
-      <Dropdown />
+      {/* <Dropdown /> */}
       <Typo.H1 color={Color.BLACK}>헤더1</Typo.H1>
       <Typo.H2 color={Color.RED500}>헤더2</Typo.H2>
       <Typo.H3 color={Color.YELLOW500}>헤더3</Typo.H3>

@@ -11,10 +11,6 @@ export default defineConfig({
   server: {
     port: 5173,
     host: '0.0.0.0',
-    hmr: {
-      protocol: 'wss',
-      host: 'k10c104.p.ssafy.io'
-    },
   },
   plugins: [react(), svgr()],
   resolve: {
