@@ -7,14 +7,13 @@ spring:
 # 개발전용DB로 연결
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://k10c104.p.ssafy.io:${dev.datasource.port}/fullerting?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://k10c104.p.ssafy.io:${dev.datasource.port}/seolo?serverTimezone=Asia/Seoul
     username: ${dev.datasource.username}
     password: ${dev.datasource.password}
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQL5Dialect
 logging:
   level:
     org.hibernate.SQL: DEBUG
