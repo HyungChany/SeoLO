@@ -2,6 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../main.dart';
 
+// 사용법 예시
+
+// import 'package:app/widgets/common_icon_button.dart';
+// or
+// CommonIconButton tab키 누르면 알아서 import
+
+// CommonIconButton(
+// text: 'NFC 태그',
+// iconImage: 'assets/images/nfc_tag_icon.png',
+// shape: BoxShape.rectangle,
+// onTap: () {})
+
 class CommonIconButton extends StatelessWidget {
   // final => 더이상 변경되지 않는 값
   // 필수가 아니라면 뒤에 ?
