@@ -39,6 +39,8 @@ dependencies:
   provider: ^6.1.2 # flutter 상태관리
   flutter_screen_lock: ^9.0.2 # 잠금화면
   local_auth: ^2.2.0 # 생체인증 (지문)
+  dio: ^5.4.3+1 # http 통신
+  flutter_dotenv: ^5.1.0 # .env파일
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +67,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - .env
     - assets/images/nfc_tag_icon.png
     - assets/images/maintenance_icon.png
 
