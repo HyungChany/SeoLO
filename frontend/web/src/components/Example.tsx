@@ -10,6 +10,8 @@ import CheckList from '@/../assets/icons/CheckList.svg?react';
 import { Modal } from '@/components/modal/Modal.tsx';
 import Footer from '@/components/footer/Footer.tsx';
 import { TopNavigator } from './navigation/navigator';
+import Card from './card/card';
+import Dropdown from '@/components/dropdown/DropDown';
 
 interface ContainerProps {
   width: number;
@@ -20,11 +22,15 @@ const Container = styled.div<ContainerProps>`
   width: ${(props) => props.width}px;
   height: ${(props) => props.height}px;
 `;
-
+const Handle = () => {};
 export const Example = () => {
   return (
     <>
       <TopNavigator />
+      <Card width={10} height={10} onclick={Handle}>
+        gdgdgd
+      </Card>
+      <Dropdown />
       <Typo.H1 color={Color.BLACK}>헤더1</Typo.H1>
       <Typo.H2 color={Color.RED500}>헤더2</Typo.H2>
       <Typo.H3 color={Color.YELLOW500}>헤더3</Typo.H3>
