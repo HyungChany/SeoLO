@@ -13,8 +13,7 @@ export default defineConfig({
     host: '0.0.0.0',
     hmr: {
       protocol: 'wss',
-      host: 'k10c104.p.ssafy.io',
-      port: 443
+      host: 'k10c104.p.ssafy.io'
     },
   },
   plugins: [react(), svgr()],
