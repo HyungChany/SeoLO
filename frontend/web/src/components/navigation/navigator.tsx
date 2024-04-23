@@ -26,6 +26,7 @@ const Title = styled.div`
   align-items: center;
   justify-content: center;
   color: ${Color.BLUE100};
+  font-family: esamanru;
   font-size: 3rem;
   font-style: normal;
   font-weight: 700;
