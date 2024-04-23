@@ -13,6 +13,6 @@ import java.util.Optional;
 public interface CheckListRepository extends JpaRepository<CheckList, Long> {
     @Query("SELECT c.id, c.checkListContext " +
             "FROM CheckList c " +
-            "WHERE c.company.id = :company_id")
-    Optional<List<CheckListInfo>> findByCompany(Long company_id);
+            "WHERE c.company.companyCode = :company_code")
+    Optional<List<CheckListInfo>> findByCompany(String company_code);
 }

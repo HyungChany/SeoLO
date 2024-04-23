@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class CheckListInfo {
+public class CheckListTemplateInfo {
     private Long id;
     private String context;
 }
