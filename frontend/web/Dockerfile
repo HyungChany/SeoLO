@@ -1,16 +1,24 @@
-# 기존 멀티 스테이지 빌드의 builder 단계 제거 (필요에 따라)
-FROM node:lts-alpine
+# 베이스 이미지로 Flutter SDK가 포함된 이미지 사용
+FROM cirrusci/flutter:latest AS builder
 
-WORKDIR /FRONTEND/web
+# 작업 디렉토리 설정
+WORKDIR /app
 
-# package.json과 package-lock.json을 먼저 복사
-COPY package*.json ./
+# Flutter 프로젝트의 소스 코드를 이미지에 복사
+COPY ./frontend/app /app
 
-# 프로젝트 의존성 설치
-RUN npm install
+# Flutter 의존성 가져오기 및 앱 빌드
+RUN flutter pub get
+RUN flutter build web
 
-# 프로젝트 소스 복사
-COPY . .
+# Python 이미지 사용하여 앱 서빙
+FROM python:3.9-slim
 
-# 애플리케이션 실행
-CMD ["npm", "run", "dev", "--", "--host"]
+# 작업 디렉토리 설정
+WORKDIR /app
+
+# 빌드된 Flutter 웹 앱 파일 복사
+COPY --from=builder /app/build/web /app
+
+# Python HTTP 서버 실행
+CMD ["python", "-m", "http.server", "5000"]
