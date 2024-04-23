@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.watch"
+    namespace = "com.seolo.watch"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.watch"
+        applicationId = "com.seolo.watch"
         minSdk = 30
         targetSdk = 34
         versionCode = 1
@@ -58,11 +58,6 @@ dependencies {
     implementation(libs.compose.foundation)
     implementation(libs.activity.compose)
     implementation(libs.core.splashscreen)
-    implementation(libs.tiles)
-    implementation(libs.tiles.material)
-    implementation(libs.horologist.compose.tools)
-    implementation(libs.horologist.tiles)
-    implementation(libs.watchface.complications.data.source.ktx)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)

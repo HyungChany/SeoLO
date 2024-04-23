@@ -4,7 +4,7 @@
  * changes to the libraries and their usages.
  */
 
-package com.example.watch.presentation
+package com.seolo.watch.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -24,8 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
-import com.example.watch.R
-import com.example.watch.presentation.theme.WatchTheme
+import com.seolo.watch.R
+import com.seolo.watch.presentation.theme.WatchTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
