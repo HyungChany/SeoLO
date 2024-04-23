@@ -1,4 +1,5 @@
 import 'package:app/main.dart';
+import 'package:app/widgets/common_icon_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:local_auth/local_auth.dart';
@@ -36,6 +37,14 @@ class _LockScreenState extends State<LockScreen> {
                 runSpacing: 16,
                 alignment: WrapAlignment.start,
                 children: [
+                  CommonIconButton(text: 'NFC 태그',
+                      iconImage: 'assets/images/nfc_tag_icon.png',
+                      shape: BoxShape.rectangle,
+                      onTap: () {}),
+                  CommonIconButton(text: '정비',
+                      iconImage: 'assets/images/maintenance_icon.png',
+                      shape: BoxShape.circle,
+                      onTap: () {}),
                   ElevatedButton(
                     onPressed: () {
                       screenLockCreate(
@@ -71,17 +80,18 @@ class _LockScreenState extends State<LockScreen> {
                             disabledColor: Colors.grey,
                             enabledColor: blue100,
                             size: 15,
-                            builder: (context, config, enabled) => Container(
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: enabled
-                                    ? config.enabledColor
-                                    : config.disabledColor,
-                              ),
-                              padding: const EdgeInsets.all(10),
-                              width: config.size,
-                              height: config.size,
-                            ),
+                            builder: (context, config, enabled) =>
+                                Container(
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: enabled
+                                        ? config.enabledColor
+                                        : config.disabledColor,
+                                  ),
+                                  padding: const EdgeInsets.all(10),
+                                  width: config.size,
+                                  height: config.size,
+                                ),
                           ),
                         ),
                         keyPadConfig: const KeyPadConfig(

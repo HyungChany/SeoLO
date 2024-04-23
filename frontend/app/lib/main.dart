@@ -6,6 +6,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 const Color blue100 = Color.fromRGBO(135, 185, 231, 1);
 const Color blue800 = Color.fromRGBO(56, 61, 101, 1);
 const Color mint200 = Color.fromRGBO(207, 241, 214, 1);
+const Color gray100 = Color.fromRGBO(242, 244, 247, 1);
 const Color samsungBlue = Color.fromRGBO(20, 40, 160, 1);
 
 void main() {
