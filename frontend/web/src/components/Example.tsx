@@ -9,9 +9,11 @@ import { Menu } from '@/components/menu/Menu.tsx';
 import CheckList from '@/../assets/icons/CheckList.svg?react';
 import { Modal } from '@/components/modal/Modal.tsx';
 import Footer from '@/components/footer/Footer.tsx';
-import { TopNavigator } from './navigation/navigator.tsx';
-import Card from './card/card.tsx';
+import Navigation from './navigation/Navigation.tsx';
+
 import Dropdown from './dropdown/DropDown.tsx';
+import Card from './card/Card.tsx';
+
 // import Dropdown from '@/components/dropdown/DropDown.tsx';
 
 interface ContainerProps {
@@ -27,7 +29,7 @@ const Handle = () => {};
 export const Example = () => {
   return (
     <>
-      <TopNavigator />
+      <Navigation />
       <Card width={10} height={10} onClick={Handle}>
         gdgdgd
       </Card>

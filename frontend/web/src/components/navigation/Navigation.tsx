@@ -44,7 +44,7 @@ const Menu = styled.div`
   display: flex;
   flex-direction: row;
 `;
-export const TopNavigator = () => {
+const Navigation = () => {
   return (
     <NavigatorBox>
       <NavigatorContent>
@@ -64,3 +64,5 @@ export const TopNavigator = () => {
     </NavigatorBox>
   );
 };
+
+export default Navigation;
