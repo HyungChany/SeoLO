@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import * as Color from '@/config/color/Color';
-
-import Arrow from '/assets/icons/Arrow.svg';
-import Select, { ActionMeta, SingleValue, MultiValue } from 'react-select';
+import * as Color from '@/config/color/Color.ts';
+import Select, { ActionMeta, SingleValue } from 'react-select';
 
 interface OptionType {
   value: string;
@@ -22,23 +20,7 @@ const DropDownBox = styled.div`
   background: ${Color.SNOW};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 `;
-// const DropDownContent = styled.div<DropDownProps>`
-//   width: 100%;
-//   height: 100%;
-//   justify-content: center;
-//   align-items: center;
-//   display: flex;
-// `;
-// const DropDownText = styled.div`
-//   font-size: 1.375rem;
-//   font-style: normal;
-//   font-weight: 700;
-//   line-height: normal;
-// `;
-// const DropDownArrow = styled.img`
-//   width: 1.5rem;
-//   height: 1.5rem;
-// `;
+
 const StyledSelect = styled(Select<OptionType>).attrs({
   classNamePrefix: 'react-select',
 })`
@@ -89,7 +71,7 @@ const Dropdown: React.FC = () => {
     newValue: SingleValue<OptionType>,
     actionMeta: ActionMeta<OptionType>,
   ) => {
-    // console.log('Action: ', actionMeta.action);
+    console.log('Action: ', actionMeta.action);
     setSelectedOption(newValue);
   };
   const options: OptionType[] = [
