@@ -9,7 +9,7 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 // Git 저장소에서 develop 브랜치 클론
-                git branch: 'develop', credentialsId: 'seolo', url: 'https://lab.ssafy.com/s10-final/S10P31C104.git'
+                git branch: 'develop', credentialsId: 'seolo-git-token', url: 'https://lab.ssafy.com/s10-final/S10P31C104.git'
             }
         }
 
