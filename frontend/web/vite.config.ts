@@ -14,6 +14,8 @@ export default defineConfig({
     hmr: {
       protocol: 'wss',
       host: 'k10c104.p.ssafy.io',
+      port: 5173, // 포트 명시적으로 설정
+      clientPort: 443 // 브라우저에서 접속하는 포트 (보안 연결)
     },
   },
   plugins: [react(), svgr()],
