@@ -28,7 +28,7 @@ pipeline {
                     git branch: env.BRANCH_NAME, credentialsId: env.CREDENTIALS_ID, url: env.REPO_URL
 
                     // SECRET KEY 저장소 clone
-                    dir('backend/seolo/src/main/resource') {
+                    dir('backend/seolo/src/main/resources') {
                         sh 'mkdir -p confidence'
                         dir('confidence') {
                             git branch: 'master', credentialsId: env.GITHUB_CREDENTIALS_ID, url: env.GITHUB_REPO_URL
