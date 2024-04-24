@@ -66,7 +66,7 @@ const ButtonContainer = styled.button<ButtonProps>`
  */
 
 // 컴포넌트 정의
-export const Button: React.FC<ButtonProps> = ({
+export const Button = ({
   onClick,
   width,
   height,
@@ -76,7 +76,7 @@ export const Button: React.FC<ButtonProps> = ({
   $hoverBackgroundColor,
   $hoverBorderColor,
   children,
-}) => (
+}: ButtonProps) => (
   <ButtonContainer
     onClick={onClick}
     $backgroundColor={$backgroundColor}

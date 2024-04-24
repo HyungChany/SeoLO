@@ -2,6 +2,7 @@ import 'package:app/services/test_service.dart';
 import 'package:app/widgets/common_icon_button.dart';
 import 'package:app/widgets/common_text_button.dart';
 import 'package:flutter/material.dart';
+import 'package:app/widgets/common_navigation_bar.dart';
 
 class TestScreen extends StatefulWidget {
   const TestScreen({super.key});
@@ -11,7 +12,13 @@ class TestScreen extends StatefulWidget {
 }
 
 class _TestScreenState extends State<TestScreen> {
+  int _selectedIndex = 0;  // 현재 선택된 탭의 인덱스를 저장하는 변수
 
+  void _onItemTapped(int index) {  // 탭이 눌렸을 때 호출할 메소드
+    setState(() {
+      _selectedIndex = index;  // 선택된 탭의 인덱스를 업데이트
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,12 +50,17 @@ class _TestScreenState extends State<TestScreen> {
                   },
                   child: const Text('잠금화면'),
                 ),
+
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/main');
                   },
                   child: const Text('메인화면'),
                 ),
+                CustomBottomNavigationBar(
+                  selectedIndex: _selectedIndex,  // 현재 선택된 인덱스를 전달
+                  onItemTapped: _onItemTapped,  // 탭 선택 이벤트 처리 메소드를 전달
+                )
               ],
             ),
           ),

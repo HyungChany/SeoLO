@@ -1,4 +1,4 @@
-package com.example.watch.tile
+package com.seolo.seolo.tile
 
 import android.content.Context
 import androidx.compose.runtime.Composable
