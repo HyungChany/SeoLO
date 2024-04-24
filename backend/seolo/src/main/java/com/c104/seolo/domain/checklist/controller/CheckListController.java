@@ -24,10 +24,4 @@ public class CheckListController {
     ) {
         return ResponseEntity.ok(checkListService.getCheckListByCompany(companyCode));
     }
-
-//    @GetMapping("/test")
-//    public ResponseEntity<String> testEndpoint() {
-//        String message = "이것은 테스트 메시지입니다.";
-//        return new ResponseEntity<>(message, HttpStatus.OK);
-//    }
 }

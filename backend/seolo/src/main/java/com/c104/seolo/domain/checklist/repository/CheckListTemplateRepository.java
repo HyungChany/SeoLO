@@ -10,7 +10,9 @@ import java.util.List;
 
 @Repository
 public interface CheckListTemplateRepository extends JpaRepository<CheckListTemplate, Long> {
-    @Query("select c.id, c.checkListTemplateContext " +
+    @Query("select new com.c104.seolo.domain.checklist.dto.info.CheckListTemplateInfo( " +
+            "c.id, c.checkListTemplateContext ) " +
             "from CheckListTemplate c ")
     List<CheckListTemplateInfo> getCheckListTemplates();
+
 }
