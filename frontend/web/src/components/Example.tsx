@@ -10,9 +10,10 @@ import CheckList from '@/../assets/icons/CheckList.svg?react';
 import { Modal } from '@/components/modal/Modal.tsx';
 import Footer from '@/components/footer/Footer.tsx';
 import Navigation from './navigation/Navigation.tsx';
-
 import Dropdown from './dropdown/DropDown.tsx';
 import Card from '@/components/card/Cards.tsx';
+import InputBox from '@/components/inputbox/InputBox.tsx';
+import { ChangeEvent, useState } from 'react';
 
 // import Dropdown from '@/components/dropdown/DropDown.tsx';
 
@@ -26,13 +27,25 @@ const Container = styled.div<ContainerProps>`
   height: ${(props) => props.height}px;
 `;
 const Handle = () => {};
+
 export const Example = () => {
+  const [content, setContent] = useState<string>('');
+  const handleContent = (e: ChangeEvent<HTMLInputElement>) => {
+    setContent(e.target.value);
+  };
   return (
     <>
       <Navigation />
       <Card width={10} height={10} onClick={Handle}>
         gdgdgd
       </Card>
+      <InputBox
+        width={10}
+        height={3}
+        onChange={handleContent}
+        value={content}
+        placeholder="테스트지롱~"
+      ></InputBox>
       <Dropdown />
       <Typo.H1 color={Color.BLACK}>헤더1</Typo.H1>
       <Typo.H2 color={Color.RED500}>헤더2</Typo.H2>
