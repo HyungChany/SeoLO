@@ -13,6 +13,7 @@ const Color gray100 = Color.fromRGBO(242, 244, 247, 1);
 const Color gray200 = Color.fromRGBO(228, 231, 236, 1);
 const Color samsungBlue = Color.fromRGBO(20, 40, 160, 1);
 const Color safetyBlue = Color.fromRGBO(0, 0, 255, 1);
+const Color snow = Color.fromRGBO(255, 250, 250, 1);
 // 그림자
 const BoxShadow shadow = BoxShadow(
     color: Color.fromRGBO(0, 0, 0, 0.25),
