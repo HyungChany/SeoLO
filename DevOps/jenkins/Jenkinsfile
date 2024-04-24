@@ -69,8 +69,15 @@ pipeline {
             steps {
                 script {
                     // Docker Compose를 사용하여 이미지 빌드
-                    sh 'pwd'
-                    sh "docker-compose -f ${env.DOCKER_COMPOSE_FILE} build"
+                    def profile = ''
+                    if (env.BRANCH_NAME == 'master') {
+                        profile = 'prod'
+                    } else {
+                        profile = 'dev'
+                    }
+
+                    // Docker Compose를 사용하여 이미지 빌드할 때 선택한 프로파일 적용
+                    sh "docker-compose -f ${env.DOCKER_COMPOSE_FILE} build --build-arg SPRING_PROFILES_ACTIVE=${profile}"
                 }
             }
         }
