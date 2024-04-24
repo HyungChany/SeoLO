@@ -30,6 +30,9 @@ import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
 import com.seolo.seolo.R
 import com.seolo.seolo.presentation.theme.SeoLoTheme
+import androidx.viewpager2.widget.ViewPager2
+import com.seolo.seolo.adapters.CarouselStateAdapter
+import com.seolo.seolo.fragments.CardFragment
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,13 +40,18 @@ class MainActivity : ComponentActivity() {
         installSplashScreen()
         setTheme(android.R.style.Theme_DeviceDefault)
 
-//        setContent {
-//            WearApp("Android")
-//        }
-        setContentView(R.layout.activity_textbox)
+        // 메인 레이아웃 설정
+        setContentView(R.layout.active_view)
+
+        // ViewPager2와 CarouselStateAdapter 설정
+        val viewPager: ViewPager2 = findViewById(R.id.viewPager)
+        val adapter = CarouselStateAdapter(this)
+        adapter.addFragment(CardFragment.newInstance("Page 1"))
+        adapter.addFragment(CardFragment.newInstance("Page 2"))
+        adapter.addFragment(CardFragment.newInstance("Page 3"))
+        viewPager.adapter = adapter
     }
 }
-
 @Composable
 fun WearApp(greetingName: String) {
     SeoLoTheme {
