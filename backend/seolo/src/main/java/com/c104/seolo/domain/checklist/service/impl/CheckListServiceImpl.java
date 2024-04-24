@@ -10,8 +10,10 @@ import com.c104.seolo.domain.checklist.repository.CheckListTemplateRepository;
 import com.c104.seolo.domain.checklist.service.CheckListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,14 +34,17 @@ public class CheckListServiceImpl implements CheckListService {
                 .collect(Collectors.toList());
     }
 
-    private List<CheckListDto> getCheckLists(List<CheckListInfo> checkListInfoList) {
-        return checkListInfoList.stream()
-                .map(info -> CheckListDto.builder()
-                        .id(info.getId())
-                        .context(info.getContext())
-                        .build())
-                .collect(Collectors.toList());
+    private List<CheckListDto> getCheckLists(Optional<List<CheckListInfo>> checkListInfoListOptional) {
+        return checkListInfoListOptional.map(checkListInfoList ->
+                checkListInfoList.stream()
+                        .map(info -> CheckListDto.builder()
+                                .id(info.getId())
+                                .context(info.getContext())
+                                .build())
+                        .collect(Collectors.toList())
+        ).orElse(Collections.emptyList());
     }
+
 
     @Override
     public GetCheckListResponse getCheckListByCompany(String company_code) {
@@ -47,11 +52,11 @@ public class CheckListServiceImpl implements CheckListService {
         Optional<List<CheckListInfo>> checklists = checkListRepository.findByCompany(company_code);
 
         List<CheckListTemplateDto> checkListTemplateDtos = getCheckListTemplates(basicList);
-//        Optional<List<CheckListDto>> checkListDtos = getCheckLists(checklists);
+        List<CheckListDto> checkListDtos = getCheckLists(checklists);
 
         return GetCheckListResponse.builder()
                 .basic_checklists(checkListTemplateDtos)
-//                .checklists(checkListDtos)
+                .checklists(checkListDtos)
                 .build();
     }
 }

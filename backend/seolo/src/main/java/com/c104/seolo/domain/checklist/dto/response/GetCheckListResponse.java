@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -17,9 +16,5 @@ import java.util.Optional;
 @Getter
 public class GetCheckListResponse {
     private List<CheckListTemplateDto> basic_checklists;
-    private Optional<List<CheckListDto>> checklists;
-
-    public void setCheckLists(List<CheckListDto> checkListDtos) {
-        this.checklists = Optional.of(checkListDtos);
-    }
+    private List<CheckListDto> checklists;
 }
