@@ -7,12 +7,13 @@ const NavigatorBox = styled.div`
   box-sizing: border-box;
   width: 100%;
   height: 7rem;
-  padding: 2rem 2.65625rem;
+  padding: 3rem;
   display: flex;
-  top: 0;
+  justify-content: center;
   background-color: ${Color.SNOW};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  /* position: fixed; */
+  overflow-x: hidden;
+  z-index: 100;
 `;
 const NavigatorContent = styled.div`
   display: flex;
@@ -20,7 +21,7 @@ const NavigatorContent = styled.div`
   /* width: calc(100% - 2 * 2.65625rem); */
   /* height: calc(100% - 2 * 2rem); */
   align-items: center;
-  gap: 16.875rem;
+  justify-content: space-between;
 `;
 const Title = styled(Link)`
   width: 11.125rem;
@@ -28,6 +29,7 @@ const Title = styled(Link)`
   align-items: center;
   justify-content: center;
   color: ${Color.BLUE100};
+  margin-right: 3rem;
   font-family: esamanru;
   font-size: 3rem;
   font-style: normal;
@@ -37,28 +39,29 @@ const Title = styled(Link)`
   text-decoration: none;
 `;
 const Menu = styled.div`
-  width: 100%;
-  margin-right: 1.62rem;
-  gap: 9.38rem;
-  /* justify-content: space-between; */
   display: flex;
-  flex-direction: row;
+  gap: 6rem;
 `;
+
+const MenuLink = styled(Link)`
+  text-decoration: none;
+`;
+
 const Navigation = () => {
   return (
     <NavigatorBox>
       <NavigatorContent>
         <Title to="/">SeoLo</Title>
         <Menu>
-          <Link to="/1" style={{ textDecoration: 'none' }}>
+          <MenuLink to="/1">
             <Typo.H3>LOTO 일지</Typo.H3>
-          </Link>
-          <Link to="/2" style={{ textDecoration: 'none' }}>
+          </MenuLink>
+          <MenuLink to="/2">
             <Typo.H3>체크리스트 관리</Typo.H3>
-          </Link>
-          <Link to="/3" style={{ textDecoration: 'none' }}>
+          </MenuLink>
+          <MenuLink to="/3">
             <Typo.H3>사업장 정보조회/수정</Typo.H3>
-          </Link>
+          </MenuLink>
         </Menu>
       </NavigatorContent>
     </NavigatorBox>
