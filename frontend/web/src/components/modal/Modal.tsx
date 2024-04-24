@@ -48,11 +48,7 @@ const ModalContainer = styled.div<ModalProps>`
  */
 
 // 컴포넌트 정의
-export const Modal: React.FC<ModalProps> = ({
-  children,
-  $maxWidth,
-  $maxHeight,
-}) => (
+export const Modal = ({ children, $maxWidth, $maxHeight }: ModalProps) => (
   <ModalContainer $maxWidth={$maxWidth} $maxHeight={$maxHeight}>
     {children}
   </ModalContainer>

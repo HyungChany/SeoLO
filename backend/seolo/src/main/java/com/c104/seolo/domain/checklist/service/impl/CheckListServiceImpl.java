@@ -47,11 +47,11 @@ public class CheckListServiceImpl implements CheckListService {
         Optional<List<CheckListInfo>> checklists = checkListRepository.findByCompany(company_code);
 
         List<CheckListTemplateDto> checkListTemplateDtos = getCheckListTemplates(basicList);
-        Optional<List<CheckListDto>> checkListDtos = getCheckLists(checklists);
+//        Optional<List<CheckListDto>> checkListDtos = getCheckLists(checklists);
 
         return GetCheckListResponse.builder()
                 .basic_checklists(checkListTemplateDtos)
-                .checklists(checkListDtos)
+//                .checklists(checkListDtos)
                 .build();
     }
 }

@@ -1,19 +1,19 @@
 spring:
   config:
+    import: "classpath:confidence/application-secret.yml"
     activate:
       on-profile: dev
 
 # 개발전용DB로 연결
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://dev-db-host:3306/devdatabase?useSSL=false&serverTimezone=UTC
-    username: devuser
-    password: devpassword
+    url: jdbc:mysql://k10c104.p.ssafy.io:${dev.datasource.port}/seolo?serverTimezone=Asia/Seoul
+    username: ${dev.datasource.username}
+    password: ${dev.datasource.password}
   jpa:
     show-sql: true
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQL5Dialect
 logging:
   level:
     org.hibernate.SQL: DEBUG

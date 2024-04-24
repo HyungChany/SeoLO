@@ -29,6 +29,15 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+	// DB
+	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.mysql:mysql-connector-j'// sockjs
+
+	// websocket
+	implementation 'org.webjars:stomp-websocket:2.3.3-1' // stomp
+	implementation 'org.springframework.boot:spring-boot-starter-websocket' // 스프링에서 제공하는 웹소켓
+	implementation 'org.webjars:sockjs-client:1.1.2'
 }
 
 tasks.named('test') {
