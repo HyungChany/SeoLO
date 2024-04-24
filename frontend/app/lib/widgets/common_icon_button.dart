@@ -23,7 +23,8 @@ class CommonIconButton extends StatelessWidget {
   final VoidCallback onTap; // 클릭 이벤트
 
   // 필수가 아니라면 required 빼기
-  const CommonIconButton({super.key,
+  const CommonIconButton({
+    super.key,
     required this.text,
     required this.iconImage,
     required this.shape,
@@ -47,24 +48,23 @@ class CommonIconButton extends StatelessWidget {
             decoration: BoxDecoration(
                 color: shape == BoxShape.rectangle ? mint200 : gray100,
                 shape: shape,
-                borderRadius: shape == BoxShape.rectangle ? BorderRadius.circular(15.0) : null,
-                boxShadow: const [BoxShadow(
-                    color: shadow,
-                    blurRadius: 4.0,
-                    spreadRadius: 3.0,
-                    offset: Offset(
-                      3, 3,
-                    )
-                )
-                ],
+                borderRadius: shape == BoxShape.rectangle
+                    ? BorderRadius.circular(15.0)
+                    : null,
+                boxShadow: const [shadow],
                 image: DecorationImage(
                   image: AssetImage(iconImage),
-                )
-            ),
+                )),
           ),
           // 텍스트 부분
-          Text(text, textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold,),)
+          Text(
+            text,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          )
         ],
       ),
     );

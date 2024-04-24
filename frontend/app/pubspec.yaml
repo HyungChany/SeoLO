@@ -70,6 +70,9 @@ flutter:
     - assets/images/nfc_tag_icon.png
     - assets/images/maintenance_icon.png
     - assets/images/seolo_character.png
+    - assets/images/loto_lock_icon.png
+    - assets/images/loto_process_icon.png
+    - assets/images/work_report_icon.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

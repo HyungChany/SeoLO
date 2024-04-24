@@ -1,15 +1,14 @@
 import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 
-class WelcomeBanner extends StatefulWidget {
-  const WelcomeBanner({super.key});
+class MainWelcomeBanner extends StatefulWidget {
+  const MainWelcomeBanner({super.key});
 
   @override
-  _WelcomeBannerState createState() => _WelcomeBannerState();
+  _MainWelcomeBannerState createState() => _MainWelcomeBannerState();
 }
 
-class _WelcomeBannerState extends State<WelcomeBanner> {
-
+class _MainWelcomeBannerState extends State<MainWelcomeBanner> {
   content() {
     return RichText(
         text: const TextSpan(
@@ -30,16 +29,7 @@ class _WelcomeBannerState extends State<WelcomeBanner> {
       decoration: BoxDecoration(
           color: gray200,
           borderRadius: BorderRadius.circular(10.0),
-          boxShadow: const [
-            BoxShadow(
-                color: shadow,
-                blurRadius: 4.0,
-                spreadRadius: 4.0,
-                offset: Offset(
-                  3,
-                  3,
-                ))
-          ]),
+          boxShadow: const [shadow]),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

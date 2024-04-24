@@ -13,14 +13,22 @@ const Color gray100 = Color.fromRGBO(242, 244, 247, 1);
 const Color gray200 = Color.fromRGBO(228, 231, 236, 1);
 const Color samsungBlue = Color.fromRGBO(20, 40, 160, 1);
 const Color safetyBlue = Color.fromRGBO(0, 0, 255, 1);
-const Color shadow = Color.fromRGBO(0, 0, 0, 0.25);
+// 그림자
+const BoxShadow shadow = BoxShadow(
+    color: Color.fromRGBO(0, 0, 0, 0.25),
+    blurRadius: 4.0,
+    spreadRadius: 4.0,
+    offset: Offset(
+      3,
+      3,
+    ));
 
-void main() async{
+void main() async {
   // WidgetsBinding widgetsBinding =
-      WidgetsFlutterBinding.ensureInitialized(); // 초기화 보장
+  WidgetsFlutterBinding.ensureInitialized(); // 초기화 보장
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-      await dotenv.load(fileName: '.env');
-      runApp(const MyApp());
+  await dotenv.load(fileName: '.env');
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -32,9 +40,8 @@ class MyApp extends StatelessWidget {
       title: 'SeoLo',
       // debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity
-      ),
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity),
       home: const TestScreen(),
       onGenerateRoute: generateMainRoute,
     );
