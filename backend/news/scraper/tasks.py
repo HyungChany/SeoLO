@@ -10,9 +10,9 @@ def start_scheduler():
 
     scheduler.add_job(
         scrape,
-        trigger=CronTrigger(second='*'),  # 매 초마다 실행
+        trigger=CronTrigger(hour='0, 3, 6, 9, 12, 15, 18, 21'),  # 매 초마다 실행
         id='scraping_job',
-        name='Run scraping task every second',
+        name='Run scraping task every 3 hours',
         replace_existing=True,
     )
 
