@@ -11,7 +11,7 @@ import { Modal } from '@/components/modal/Modal.tsx';
 import Footer from '@/components/footer/Footer.tsx';
 import Navigation from './navigation/Navigation.tsx';
 import Dropdown from './dropdown/DropDown.tsx';
-import Card from '@/components/card/Cards.tsx';
+import Card from '@/components/card/Card.tsx';
 import InputBox from '@/components/inputbox/InputBox.tsx';
 import { ChangeEvent, useState } from 'react';
 

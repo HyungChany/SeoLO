@@ -1,26 +1,23 @@
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 
-// 스타일 정의
 const FooterContainer = styled.footer`
-  position: relative;
-  width: 100%;
-  height: 5.625rem;
+  height: 5rem;
   background: #353935;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 47rem;
+  overflow-x: hidden;
 `;
 
 const LinksContainer = styled.div`
+  width: 400px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  gap: 5.625rem;
-  position: absolute;
-  width: 30.2rem;
-  height: 1rem;
-  left: 2.75rem;
+  padding-left: 3rem;
+  gap: 5rem;
 `;
 
 const Link = styled.a`
@@ -31,22 +28,22 @@ const Link = styled.a`
   color: ${Color.SNOW};
   cursor: pointer;
   text-decoration: none;
+  white-space: nowrap;
 `;
 
 const Copyright = styled.div`
-  position: absolute;
-  width: 12.25rem;
-  height: 1rem;
-  right: 2.75rem;
+  flex-grow: 1;
+  display: flex;
+  padding-right: 3rem;
   font-family: 'NYJGothicM', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 1rem;
-  line-height: 1rem;
   color: ${Color.SNOW};
+  white-space: nowrap;
+  overflow-x: hidden;
 `;
 
-// 컴포넌트 정의
 const Footer = () => (
   <FooterContainer>
     <LinksContainer>
