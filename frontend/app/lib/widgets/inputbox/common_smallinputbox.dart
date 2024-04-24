@@ -10,7 +10,7 @@ class MyCustomForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double baseSize = Theme.of(context).textTheme.bodyText2?.fontSize ?? 16.0; // 기본 글꼴 크기를 가져옴
+    double baseSize = Theme.of(context).textTheme.bodyMedium?.fontSize ?? 16.0; // 기본 글꼴 크기를 가져옴
     double width = baseSize * 20; // width: 17.5625rem;
     double height = baseSize * 2.5; // height: 2.5rem;
 
