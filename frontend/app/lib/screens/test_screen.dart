@@ -50,9 +50,16 @@ class _TestScreenState extends State<TestScreen> {
                   },
                   child: const Text('잠금화면'),
                 ),
+
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/main');
+                  },
+                  child: const Text('메인화면'),
+                ),
                 CustomBottomNavigationBar(
                   selectedIndex: _selectedIndex,  // 현재 선택된 인덱스를 전달
-                  onItemTapped: _onItemTapped,
+                  onItemTapped: _onItemTapped,  // 탭 선택 이벤트 처리 메소드를 전달
                 )
               ],
             ),

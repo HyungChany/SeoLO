@@ -72,7 +72,7 @@ flutter:
     - assets/images/profile_icon.png
     - assets/images/nfc_icon.png
     - assets/images/home_icon.png
-
+    - assets/images/seolo_character.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

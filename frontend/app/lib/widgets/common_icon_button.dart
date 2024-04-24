@@ -49,7 +49,7 @@ class CommonIconButton extends StatelessWidget {
                 shape: shape,
                 borderRadius: shape == BoxShape.rectangle ? BorderRadius.circular(15.0) : null,
                 boxShadow: const [BoxShadow(
-                    color: Color.fromRGBO(0, 0, 0, 0.25),
+                    color: shadow,
                     blurRadius: 4.0,
                     spreadRadius: 3.0,
                     offset: Offset(

@@ -10,7 +10,10 @@ const Color blue400 = Color.fromRGBO(52, 107, 190, 1);
 const Color blue800 = Color.fromRGBO(56, 61, 101, 1);
 const Color mint200 = Color.fromRGBO(207, 241, 214, 1);
 const Color gray100 = Color.fromRGBO(242, 244, 247, 1);
+const Color gray200 = Color.fromRGBO(228, 231, 236, 1);
 const Color samsungBlue = Color.fromRGBO(20, 40, 160, 1);
+const Color safetyBlue = Color.fromRGBO(0, 0, 255, 1);
+const Color shadow = Color.fromRGBO(0, 0, 0, 0.25);
 
 void main() async{
   // WidgetsBinding widgetsBinding =

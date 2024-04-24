@@ -1,4 +1,4 @@
-package com.example.watch.complication
+package com.seolo.seolo.complication
 
 import androidx.wear.watchface.complications.data.ComplicationData
 import androidx.wear.watchface.complications.data.ComplicationType
