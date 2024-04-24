@@ -13,7 +13,7 @@ import Navigation from './navigation/Navigation.tsx';
 import Dropdown from './dropdown/DropDown.tsx';
 import Card from '@/components/card/Cards.tsx';
 import InputBox from '@/components/inputbox/InputBox.tsx';
-import React, { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 
 // import Dropdown from '@/components/dropdown/DropDown.tsx';
 
@@ -27,14 +27,12 @@ const Container = styled.div<ContainerProps>`
   height: ${(props) => props.height}px;
 `;
 const Handle = () => {};
-// eslint-disable-next-line react-hooks/rules-of-hooks
-const [content, setContent] = useState<string>('');
-const handleContent = (e: ChangeEvent<HTMLInputElement>) => {
-  // console.log('value',typeof(e.target.value));
-  setContent(e.target.value);
-};
 
 export const Example = () => {
+  const [content, setContent] = useState<string>('');
+  const handleContent = (e: ChangeEvent<HTMLInputElement>) => {
+    setContent(e.target.value);
+  };
   return (
     <>
       <Navigation />
