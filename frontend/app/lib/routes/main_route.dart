@@ -1,4 +1,5 @@
 import 'package:app/screens/lock/lock_screen.dart';
+import 'package:app/screens/main/main_screen.dart';
 import 'package:app/screens/test_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,9 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
 
     case '/test':
       return MaterialPageRoute(builder: (context) => const TestScreen());
+
+    case '/main':
+      return MaterialPageRoute(builder: (context) => MainScreen());
 
     default:
       debugPrint('Route Error');
