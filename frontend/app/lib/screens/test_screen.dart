@@ -4,7 +4,7 @@ import 'package:app/widgets/common_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/navigator/common_navigation_bar.dart';
 import 'package:app/widgets/inputbox/common_smallinputbox.dart';
-
+import 'package:app/widgets/card/common_card.dart';
 class TestScreen extends StatefulWidget {
   const TestScreen({super.key});
 
@@ -68,6 +68,9 @@ class _TestScreenState extends State<TestScreen> {
                 ),
                 const MyCustomForm(
                   hintText: '로그인',
+                ),
+                const CommonCard(
+
                 )
               ],
             ),
