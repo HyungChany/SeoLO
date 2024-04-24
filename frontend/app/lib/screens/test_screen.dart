@@ -3,7 +3,7 @@ import 'package:app/widgets/common_icon_button.dart';
 import 'package:app/widgets/common_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/common_navigation_bar.dart';
-
+import 'package:app/screens/main/main_screen.dart';
 class TestScreen extends StatefulWidget {
   const TestScreen({super.key});
 
@@ -13,11 +13,15 @@ class TestScreen extends StatefulWidget {
 
 class _TestScreenState extends State<TestScreen> {
   int _selectedIndex = 0;  // 현재 선택된 탭의 인덱스를 저장하는 변수
-
-  void _onItemTapped(int index) {  // 탭이 눌렸을 때 호출할 메소드
+  void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;  // 선택된 탭의 인덱스를 업데이트
     });
+
+    if (index == 0) { // 'Home' 탭이 선택될 때
+      Navigator.pushNamed(context, '/main');
+      // MainScreen으로 이동하며, 현재 스택을 MainScreen으로 대체합니다.
+    }
   }
   @override
   Widget build(BuildContext context) {

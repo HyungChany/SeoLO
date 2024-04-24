@@ -12,7 +12,7 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const TestScreen());
 
     case '/main':
-      return MaterialPageRoute(builder: (context) => MainScreen());
+      return MaterialPageRoute(builder: (context) => const MainScreen());
 
     default:
       debugPrint('Route Error');
