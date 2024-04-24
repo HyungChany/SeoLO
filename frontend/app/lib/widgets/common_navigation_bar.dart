@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../main.dart';
+
 class CustomBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;
