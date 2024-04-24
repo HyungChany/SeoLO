@@ -1,5 +1,7 @@
 package com.c104.seolo.global.exception;
 
+import com.c104.seolo.domain.checklist.exception.CheckListErrorCode;
+import com.c104.seolo.domain.company.exception.CompanyErrorCode;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -9,8 +11,13 @@ public class CommonException extends RuntimeException {
     private final String message;
     private final HttpStatus httpStatus;
 
-    public CommonException(final String message, final HttpStatus httpStatus) {
-        this.message = message;
-        this.httpStatus = httpStatus;
+    public CommonException(CheckListErrorCode errorCode) {
+        this.message = errorCode.getMessage();
+        this.httpStatus = errorCode.getHttpStatus();
+    }
+
+    public CommonException(CompanyErrorCode errorCode) {
+        this.message = errorCode.getMessage();
+        this.httpStatus = errorCode.getHttpStatus();
     }
 }

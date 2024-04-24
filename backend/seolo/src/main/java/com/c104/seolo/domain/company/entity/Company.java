@@ -18,23 +18,23 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Entity
 public class Company extends BaseEntity {
-    @GeneratedValue(strategy=IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "company_id")
     @Id
     private Long id;
 
-    @Column(name="company_code", length=10)
+    @Column(name = "company_code", length = 10)
     private String companyCode;
 
-    @Column(name="company_name", length=60)
+    @Column(name = "company_name", length = 60)
     private String companyName;
 
-    @Column(name="company_logo", length=255)
+    @Column(name = "company_logo", length = 255)
     private String companyLogo;
 
-    @Column(name="company_registration_num", length=255)
+    @Column(name = "company_registration_num", length = 255)
     private String companyRegistrationNum;
 
-    @Column(name="company_accident_manage_num", length=255)
+    @Column(name = "company_accident_manage_num", length = 255)
     private String companyAccidentManageNum;
 }
