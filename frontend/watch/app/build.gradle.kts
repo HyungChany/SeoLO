@@ -51,6 +51,7 @@ android {
 dependencies {
     implementation("androidx.constraintlayout:constraintlayout:2.1.3")
     implementation ("androidx.viewpager2:viewpager2:1.0.0")
+    implementation ("androidx.appcompat:appcompat:1.3.0")
     implementation(libs.play.services.wearable)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
