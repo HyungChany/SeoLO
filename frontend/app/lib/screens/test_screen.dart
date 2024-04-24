@@ -43,6 +43,12 @@ class _TestScreenState extends State<TestScreen> {
                   },
                   child: const Text('잠금화면'),
                 ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/main');
+                  },
+                  child: const Text('메인화면'),
+                ),
               ],
             ),
           ),
