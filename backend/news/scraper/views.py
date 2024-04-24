@@ -11,8 +11,7 @@ class ScratchNews(APIView):
         news_data_redis = conn.get('news')
 
         if news_data_redis:
-            news_data = json.loads(news_data_redis.decode('utf-8'))
-            return Response(news_data, status=status.HTTP_200_OK)
+            return Response(json.loads(news_data_redis.decode('utf-8')), status=status.HTTP_200_OK)
         else:
             news_data = [
                 {
@@ -33,7 +32,6 @@ class ScratchNews(APIView):
                 }
             ]
 
-            conn.set('news', json.dumps(news_data, ensure_ascii=False))
+            conn.set('news', json.dumps(news_data))
             conn.expire('news', 10800)
-
-            return Response(news_data, status=status.HTTP_200_OK)
+            return Response(json.loads(conn.get('news').decode('utf-8')), status=status.HTTP_200_OK)

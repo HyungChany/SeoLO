@@ -1,10 +1,10 @@
 import requests, redis, json
 from bs4 import BeautifulSoup
-from django.conf import settings
 
 def scrape():
+
     news_data = []
-    conn = redis.StrictRedis.from_url(settings.CACHES["default"]["LOCATION"])
+    conn = redis.StrictRedis.from_url("redis://127.0.0.1:6379")
 
     url = 'https://search.daum.net/search?w=news&nil_search=btn&DA=STC&enc=utf8&cluster=y&cluster_page=1&q=%EC%95%88%EC%A0%84&p=1&sort=accuracy'
     response = requests.get(url)
@@ -37,16 +37,10 @@ def scrape():
         # print("신문사:", source)
         # print()
         
-        news_data.append({
-            'title': title,
-            'preview': preview,
-            'author': source,
-            'date': date,
-            'thum': thumbnail,
-            'link': link
-        })
+        news_data.append({'title': title, 'preview': preview, 'author': source, 'date': date, 'thum': thumbnail, 'link': link})
     
     conn.set('news', json.dumps(news_data, ensure_ascii=False))
     conn.expire('news', 10800)
+    print(json.loads(conn.get('news').decode('utf-8')))
 
 scrape()
