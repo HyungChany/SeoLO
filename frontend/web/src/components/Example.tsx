@@ -12,7 +12,7 @@ import Footer from '@/components/footer/Footer.tsx';
 import Navigation from './navigation/Navigation.tsx';
 
 import Dropdown from './dropdown/DropDown.tsx';
-import Card from '@/components/card/Card.tsx';
+import Card from '@/components/card/Cards.tsx';
 
 // import Dropdown from '@/components/dropdown/DropDown.tsx';
 
