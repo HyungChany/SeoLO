@@ -19,6 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "watch"
+rootProject.name = "SeoLo"
 include(":app")
- 
