@@ -2,8 +2,9 @@ import 'package:app/services/test_service.dart';
 import 'package:app/widgets/common_icon_button.dart';
 import 'package:app/widgets/common_text_button.dart';
 import 'package:flutter/material.dart';
-import 'package:app/widgets/common_navigation_bar.dart';
-import 'package:app/screens/main/main_screen.dart';
+import 'package:app/widgets/navigator/common_navigation_bar.dart';
+import 'package:app/widgets/inputbox/common_smallinputbox.dart';
+
 class TestScreen extends StatefulWidget {
   const TestScreen({super.key});
 
@@ -64,6 +65,9 @@ class _TestScreenState extends State<TestScreen> {
                 CustomBottomNavigationBar(
                   selectedIndex: _selectedIndex,  // 현재 선택된 인덱스를 전달
                   onItemTapped: _onItemTapped,  // 탭 선택 이벤트 처리 메소드를 전달
+                ),
+                const MyCustomForm(
+                  hintText: '로그인',
                 )
               ],
             ),
