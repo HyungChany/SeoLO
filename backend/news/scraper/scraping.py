@@ -33,14 +33,6 @@ def scrape():
 
             date_tag = article.find('span', class_='gem-subinfo').find('span') if article.find('span', class_='gem-subinfo') else None
             date = date_tag.text.strip() if date_tag else None
-            # 결과 출력
-            # print("제목:", title)
-            # print("프리뷰:", preview)
-            # print("링크:", link)
-            # print("썸네일:", thumbnail)
-            # print("시간:", date)
-            # print("신문사:", source)
-            # print()
             
             news_data.append({
                 'title': title,
@@ -55,6 +47,6 @@ def scrape():
     
     conn.set('news', json.dumps(news_data, ensure_ascii=False))
     conn.expire('news', 10800)
-    print(json.loads(conn.get('news').decode('utf-8')))
+    # print(json.loads(conn.get('news').decode('utf-8')))
 
 scrape()
