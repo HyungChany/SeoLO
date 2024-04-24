@@ -2,9 +2,8 @@ import requests, redis, json
 from bs4 import BeautifulSoup
 
 def scrape():
-
     news_data = []
-    conn = redis.StrictRedis.from_url("redis://127.0.0.1:6379")
+    conn = redis.StrictRedis.from_url('redis://127.0.0.1:6379')
 
     url = 'https://search.daum.net/search?w=news&nil_search=btn&DA=STC&enc=utf8&cluster=y&cluster_page=1&q=%EC%95%88%EC%A0%84&p=1&sort=accuracy'
     response = requests.get(url)
@@ -14,30 +13,45 @@ def scrape():
 
     articles = articles_list.find_all('li')
 
-    for article in articles[:5]:
-        thumbnail_tag = article.find('div', class_='item-thumb').find('img')
-        thumbnail = thumbnail_tag['data-original-src'] if thumbnail_tag else None
-        
-        source = article.find('span', class_='txt_info').text.strip()
-        
-        content_div = article.find('div', class_='item-title')
-        title = content_div.find('a').text.strip()
-        link = content_div.find('a')['href']
+    cnt = 0
+    for article in articles:
+        if article.has_attr('data-docid'):
+            cnt += 1
+            thumbnail_tag = article.find('div', class_='item-thumb')
+            thumbnail = thumbnail_tag.find('img')['data-original-src'] if thumbnail_tag and thumbnail_tag.find('img') else None
+            
+            source_tag = article.find('span', class_='txt_info')
+            source = source_tag.text.strip() if source_tag else None
+            
+            content_div = article.find('div', class_='item-title')
+            title_tag = content_div.find('a') if content_div else None
+            title = title_tag.text.strip() if title_tag else None
+            link = title_tag['href'] if title_tag and 'href' in title_tag.attrs else None
 
-        preview = article.find('div', class_='item-contents').find('p').text.strip()
+            preview_tag = article.find('div', class_='item-contents')
+            preview = preview_tag.find('p').text.strip() if preview_tag and preview_tag.find('p') else None
 
-        date = article.find('span', class_='gem-subinfo').find('span').text.strip()
-
-        # 결과 출력
-        # print("제목:", title)
-        # print("프리뷰:", preview)
-        # print("링크:", link)
-        # print("썸네일:", thumbnail)
-        # print("시간:", date)
-        # print("신문사:", source)
-        # print()
-        
-        news_data.append({'title': title, 'preview': preview, 'author': source, 'date': date, 'thum': thumbnail, 'link': link})
+            date_tag = article.find('span', class_='gem-subinfo').find('span') if article.find('span', class_='gem-subinfo') else None
+            date = date_tag.text.strip() if date_tag else None
+            # 결과 출력
+            # print("제목:", title)
+            # print("프리뷰:", preview)
+            # print("링크:", link)
+            # print("썸네일:", thumbnail)
+            # print("시간:", date)
+            # print("신문사:", source)
+            # print()
+            
+            news_data.append({
+                'title': title,
+                'preview': preview,
+                'author': source,
+                'date': date,
+                'thum': thumbnail,
+                'link': link
+            })
+            if cnt > 4:
+                break
     
     conn.set('news', json.dumps(news_data, ensure_ascii=False))
     conn.expire('news', 10800)
