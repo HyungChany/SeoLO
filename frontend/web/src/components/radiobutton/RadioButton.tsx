@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import React from 'react';
 import * as Color from '@/config/color/Color.ts';
 
 type DataItem = {
@@ -34,7 +33,6 @@ const StyledDiv = styled.div<CustomRadioButtonProps>`
 
 const StyledButton = styled.button<StyledButtonProps>`
   flex: 1;
-  height: 30vh;
   border: 1px solid ${Color.GRAY400};
   border-radius: 10vw; // 반응형 웹 디자인을 위해 vw 사용
   justify-content: center;

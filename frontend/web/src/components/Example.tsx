@@ -14,7 +14,7 @@ import Dropdown from './dropdown/DropDown.tsx';
 import Card from '@/components/card/Cards.tsx';
 import InputBox from '@/components/inputbox/InputBox.tsx';
 import { ChangeEvent, useState } from 'react';
-import CustomRadioButton from './radiobutton/radiobutton.tsx';
+import CustomRadioButton from '@/components/radiobutton/RadioButton.tsx';
 
 // import Dropdown from '@/components/dropdown/DropDown.tsx';
 
@@ -64,7 +64,9 @@ export const Example = () => {
         value={content}
         placeholder="테스트지롱~"
       ></InputBox>
-      <CustomRadioButton data={radioData} />
+      <div>
+        <CustomRadioButton data={radioData} width={10} />
+      </div>
       <Dropdown />
       <Typo.H1 color={Color.BLACK}>헤더1</Typo.H1>
       <Typo.H2 color={Color.RED500}>헤더2</Typo.H2>
