@@ -1,4 +1,4 @@
-import 'package:app/widgets/main/welcome_seolo.dart';
+import 'package:app/widgets/main/welcome_banner.dart';
 import 'package:flutter/material.dart';
 
 class MainScreen extends StatelessWidget {
@@ -10,7 +10,7 @@ class MainScreen extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.85,
           child: Column(
             children: [
-              WelcomeSeolo(),
+              WelcomeBanner(),
             ],
           ),
         ),

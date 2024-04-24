@@ -1,14 +1,14 @@
 import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 
-class WelcomeSeolo extends StatefulWidget {
-  const WelcomeSeolo({super.key});
+class WelcomeBanner extends StatefulWidget {
+  const WelcomeBanner({super.key});
 
   @override
-  _WelcomeSeoloState createState() => _WelcomeSeoloState();
+  _WelcomeBannerState createState() => _WelcomeBannerState();
 }
 
-class _WelcomeSeoloState extends State<WelcomeSeolo> {
+class _WelcomeBannerState extends State<WelcomeBanner> {
 
   content() {
     return RichText(
