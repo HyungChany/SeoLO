@@ -2,6 +2,7 @@ import 'package:app/widgets/checklist/check_list.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/checklist/check_banner.dart';
+import 'package:app/widgets/common_text_button.dart';
 
 // import 'package:app/widgets/checklist/check_list.dart';
 class CheckScreen extends StatefulWidget {
@@ -27,11 +28,16 @@ class _CheckScreenState extends State<CheckScreen> {
       ),
       body: Center(
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.95,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width * 0.95,
           child: Column(
             children: [
               CheckBanner(),
-              SizedBox(height: 20,),
+              SizedBox(
+                height: 20,
+              ),
               Expanded(
                 // Column 내에 ListView를 사용할 경우 Expanded 필요
                 child: ListView.builder(
@@ -43,10 +49,15 @@ class _CheckScreenState extends State<CheckScreen> {
                   },
                 ),
               ),
+              CommonTextButton(text: '다음 단계', onTap: () {
+                Navigator.pushNamed(context, '/main');
+              }),
+              SizedBox(height: 20,)
             ],
           ),
         ),
       ),
+
     );
   }
 }
