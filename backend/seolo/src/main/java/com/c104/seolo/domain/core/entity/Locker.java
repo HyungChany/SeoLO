@@ -3,7 +3,6 @@ package com.c104.seolo.domain.core.entity;
 import com.c104.seolo.global.common.BaseEntity;
 import com.c104.seolo.headquarter.company.entity.Company;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
