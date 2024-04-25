@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 @ToString
@@ -32,7 +34,7 @@ public class Employee extends BaseEntity {
     private String employeeTeam;
 
     @Column(name = "employee_birthday", nullable = false)
-    private Date employeeBirthday;
+    private LocalDate employeeBirthday;
     
     // 나중에 기본썸네일 넣어주기
     @Column(name = "employee_thum", length = 255, nullable = false)
@@ -43,6 +45,13 @@ public class Employee extends BaseEntity {
 
     @Column(name = "employee_leave_date")
     private Date employeeLeaveDate;
+
+    public String getBirthdayMonthDay() {
+        if (employeeBirthday == null) {
+            throw new IllegalStateException("Employee birthday is not set");
+        }
+        return employeeBirthday.format(DateTimeFormatter.ofPattern("MMdd"));
+    }
 
     // JPA 프록시 객체 생성을 위한 기본생성자
     protected Employee() {}

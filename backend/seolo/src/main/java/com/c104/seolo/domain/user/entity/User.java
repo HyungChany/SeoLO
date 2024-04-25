@@ -46,7 +46,7 @@ public class User extends BaseEntity implements UserDetails {
     // 기본값으로 사용자의 '월일 ex 0223 으로 지정한다'
     private String PIN;
 
-    @Column(name = "isLocked")
+    @Column(name = "user_isLocked")
     private Boolean isLocked;
 
     @Override
@@ -93,25 +93,44 @@ public class User extends BaseEntity implements UserDetails {
     // JPA 프록시 객체 생성을 위한 기본생성자
     protected User() {}
 
+    // 빌더 생성자 -> 빌더 객체로부터 값을 받아 초기화
+    public User(Builder builder) {
+        this.employee = builder.employee;
+        this.role = builder.role;
+        this.statusCode = builder.statusCode;
+        this.password = builder.password;
+        this.PIN = builder.PIN;
+        this.isLocked = builder.isLocked;
+    }
+
     public static class Builder {
         private Employee employee;
         private Role role;
-        private Code statusCode;
+        private Code statusCode = Code.INIT;
         private String password;
         private String PIN;
         private boolean isLocked = false;
 
         public Builder employee(Employee employee) {
+            if (employee == null) {
+                throw new IllegalArgumentException("Employee cannot be null");
+            }
             this.employee = employee;
             return this;
         }
 
         public Builder role(Role role) {
+            if (role == null) {
+                throw new IllegalArgumentException("Role cannot be null");
+            }
             this.role = role;
             return this;
         }
 
         public Builder statusCode(Code statusCode) {
+            if (password == null) {
+                throw new IllegalArgumentException("Password cannot be null");
+            }
             this.statusCode = statusCode;
             return this;
         }
@@ -132,6 +151,9 @@ public class User extends BaseEntity implements UserDetails {
         }
 
         public User build() {
+            if (employee == null || role == null || password == null) {
+                throw new IllegalStateException("Cannot build User object, one or more required fields are not set");
+            }
             return new User(this);
         }
     }
@@ -139,15 +161,5 @@ public class User extends BaseEntity implements UserDetails {
     // 정적 팩토리 메서드
     public static Builder builder() {
         return new Builder();
-    }
-
-    // 빌더 생성자 -> 빌더 객체로부터 값을 받아 초기화
-    public User(Builder builder) {
-        this.employee = builder.employee;
-        this.role = builder.role;
-        this.statusCode = builder.statusCode;
-        this.password = builder.password;
-        this.PIN = builder.PIN;
-        this.isLocked = builder.isLocked;
     }
 }
