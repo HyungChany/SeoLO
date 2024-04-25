@@ -8,12 +8,12 @@ import lombok.ToString;
 
 import java.util.Date;
 
-@Entity
-@Getter
 @ToString
+@Getter
+@Entity
 @Table(name = "employee")
 public class Employee extends BaseEntity {
-
+    // 외부 DB에서 불러온다는 가정하에 생성자 생성안했음
     @Id
     @Column(name = "employee_num", length = 15, nullable = false)
     private String employeeNum;
@@ -33,8 +33,9 @@ public class Employee extends BaseEntity {
 
     @Column(name = "employee_birthday", nullable = false)
     private Date employeeBirthday;
-
-    @Column(name = "employee_thum", length = 255)
+    
+    // 나중에 기본썸네일 넣어주기
+    @Column(name = "employee_thum", length = 255, nullable = false)
     private String employeeThum;
 
     @Column(name = "employee_join_date", nullable = false)
@@ -43,4 +44,6 @@ public class Employee extends BaseEntity {
     @Column(name = "employee_leave_date")
     private Date employeeLeaveDate;
 
+    // JPA 프록시 객체 생성을 위한 기본생성자
+    protected Employee() {}
 }

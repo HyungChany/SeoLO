@@ -5,18 +5,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@ToString
 @Getter
 @Entity
 @Table(name = "company")
 public class Company extends BaseEntity {
+    // 외부 DB에서 불러온다는 가정하에 생성자 생성안했음
     @Id
     @Column(name = "company_code", length = 10 , nullable = false)
     private String companyCode;
@@ -32,4 +29,7 @@ public class Company extends BaseEntity {
 
     @Column(name = "company_accident_manage_num", nullable = false, length = 255)
     private String companyAccidentManageNum;
+
+    // JPA 프록시 객체 생성을 위한 기본생성자
+    protected Company() {}
 }
