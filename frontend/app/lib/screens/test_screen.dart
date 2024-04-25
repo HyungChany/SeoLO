@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:app/widgets/navigator/common_navigation_bar.dart';
 import 'package:app/widgets/inputbox/common_smallinputbox.dart';
 import 'package:app/widgets/card/common_card.dart';
+import 'package:app/widgets/checklist/common_list.dart';
 class TestScreen extends StatefulWidget {
   const TestScreen({super.key});
 
@@ -35,19 +36,7 @@ class _TestScreenState extends State<TestScreen> {
               runSpacing: 16,
               alignment: WrapAlignment.start,
               children: [
-                CommonIconButton(
-                    text: 'NFC 태그',
-                    iconImage: 'assets/images/nfc_tag_icon.png',
-                    shape: BoxShape.rectangle,
-                    onTap: () {
-                      TestService testService = TestService();
-                      testService.getTest();
-                    }),
-                CommonIconButton(
-                    text: '정비',
-                    iconImage: 'assets/images/maintenance_icon.png',
-                    shape: BoxShape.circle,
-                    onTap: () {}),
+
                 CommonTextButton(text: '다음 단계', onTap: () {}),
                 ElevatedButton(
                   onPressed: () {
@@ -69,9 +58,8 @@ class _TestScreenState extends State<TestScreen> {
                 const MyCustomForm(
                   hintText: '로그인',
                 ),
-                const CommonCard(
-
-                )
+                const CommonCard(),
+                const CheckBoxList(title: '체크리스트 확인사항',),
               ],
             ),
           ),
