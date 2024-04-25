@@ -1,4 +1,4 @@
-package com.c104.seolo.domain.company.entity;
+package com.c104.seolo.headquarter.company.entity;
 
 import com.c104.seolo.global.common.BaseEntity;
 import jakarta.persistence.Column;

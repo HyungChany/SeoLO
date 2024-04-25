@@ -1,4 +1,4 @@
-package com.c104.seolo.domain.company.exception;
+package com.c104.seolo.headquarter.company.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

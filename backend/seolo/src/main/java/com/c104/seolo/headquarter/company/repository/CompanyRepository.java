@@ -1,6 +1,6 @@
-package com.c104.seolo.domain.company.repository;
+package com.c104.seolo.headquarter.company.repository;
 
-import com.c104.seolo.domain.company.entity.Company;
+import com.c104.seolo.headquarter.company.entity.Company;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
