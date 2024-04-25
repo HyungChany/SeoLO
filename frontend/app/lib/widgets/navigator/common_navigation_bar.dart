@@ -30,6 +30,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
       ],
       currentIndex: selectedIndex,
       selectedItemColor: samsungBlue,
+      selectedLabelStyle: const TextStyle(
+        fontWeight: FontWeight.bold
+      ),
       onTap: onItemTapped,
     );
   }
