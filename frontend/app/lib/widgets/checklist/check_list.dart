@@ -4,6 +4,7 @@ import '../../main.dart';
 class CheckBoxList extends StatefulWidget {
 
   final String title;
+
   const CheckBoxList({super.key,required this.title});
   @override
   State<CheckBoxList> createState() =>
@@ -12,6 +13,7 @@ class CheckBoxList extends StatefulWidget {
 
 class _CheckBoxListState extends State<CheckBoxList> {
   bool _isChecked = false;
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -26,6 +28,7 @@ class _CheckBoxListState extends State<CheckBoxList> {
           checkColor: snow,
           activeColor: samsungBlue,
         ),
+
       );
 
   }

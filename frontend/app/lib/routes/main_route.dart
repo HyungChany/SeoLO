@@ -2,6 +2,7 @@ import 'package:app/screens/lock/lock_screen.dart';
 import 'package:app/screens/main/main_screen.dart';
 import 'package:app/screens/test_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:app/screens/lotolock/checklist_screen.dart';
 
 Route<dynamic> generateMainRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -13,7 +14,8 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
 
     case '/main':
       return MaterialPageRoute(builder: (context) => const MainScreen());
-
+    case '/checklist':
+      return MaterialPageRoute(builder: (context) => CheckScreen());
     default:
       debugPrint('Route Error');
       return MaterialPageRoute(builder: (context) => const TestScreen());
