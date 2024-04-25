@@ -2,12 +2,13 @@ import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 
 const FooterContainer = styled.footer`
-  height: 5rem;
+  height: 4rem;
+  width: 100%;
   background: #353935;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 47rem;
+  gap: 500px;
   overflow-x: hidden;
 `;
 
@@ -21,9 +22,9 @@ const LinksContainer = styled.div`
 `;
 
 const Link = styled.a`
-  font-family: 'NYJGothicM', sans-serif;
+  font-family: 'NYJGothicR', sans-serif;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 300;
   font-size: 1rem;
   color: ${Color.SNOW};
   cursor: pointer;
@@ -32,10 +33,10 @@ const Link = styled.a`
 `;
 
 const Copyright = styled.div`
-  flex-grow: 1;
+  /* flex-grow: 1; */
   display: flex;
   padding-right: 3rem;
-  font-family: 'NYJGothicM', sans-serif;
+  font-family: 'NYJGothicR', sans-serif;
   font-style: normal;
   font-weight: 500;
   font-size: 1rem;
