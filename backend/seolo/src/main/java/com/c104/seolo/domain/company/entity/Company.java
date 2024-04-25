@@ -18,11 +18,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Getter
 @Entity
 public class Company extends BaseEntity {
-    @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "company_id")
     @Id
-    private Long id;
-
     @Column(name = "company_code", length = 10)
     private String companyCode;
 
