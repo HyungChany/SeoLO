@@ -65,6 +65,7 @@ class _MainNewsBannerState extends State<MainNewsBanner> {
 
   @override
   Widget build(BuildContext context) {
+    // var viewModel = Provider.of<PlayerViewModel>(context);
     return Container(
         height: MediaQuery
             .of(context)
