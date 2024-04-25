@@ -14,6 +14,6 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
     @Query("select new com.c104.seolo.domain.checklist.dto.info.CheckListInfo( " +
             "c.id, c.checkListContext ) " +
             "FROM CheckList c " +
-            "WHERE c.company.companyCode == :company_code")
-    Optional<List<CheckListInfo>> findByCompany(String company_code);
+            "WHERE c.company.companyCode = :company_code")
+    Optional<List<CheckListInfo>> findByCompanyEquals(String company_code);
 }
