@@ -3,34 +3,33 @@ package com.c104.seolo.headquarter.company.entity;
 import com.c104.seolo.global.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Getter
 @Entity
+@Table(name = "company")
 public class Company extends BaseEntity {
     @Id
-    @Column(name = "company_code", length = 10)
+    @Column(name = "company_code", length = 10 , nullable = false)
     private String companyCode;
 
-    @Column(name = "company_name", length = 60)
+    @Column(name = "company_name", nullable = false ,length = 60)
     private String companyName;
 
-    @Column(name = "company_logo", length = 255)
+    @Column(name = "company_logo", nullable = false, length = 255)
     private String companyLogo;
 
-    @Column(name = "company_registration_num", length = 255)
+    @Column(name = "company_registration_num", nullable = false, length = 255)
     private String companyRegistrationNum;
 
-    @Column(name = "company_accident_manage_num", length = 255)
+    @Column(name = "company_accident_manage_num", nullable = false, length = 255)
     private String companyAccidentManageNum;
 }
