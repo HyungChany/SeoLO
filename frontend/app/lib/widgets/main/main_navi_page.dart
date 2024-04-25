@@ -23,23 +23,25 @@ class _MainNaviPageState extends State<MainNaviPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height * 0.5,
-      decoration: BoxDecoration(
-          color: Color.fromRGBO(255, 250, 250, 1),
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [shadow]),
-      child: GridView.count(
-          crossAxisCount: 2,
-          children: List.generate(
-              pageIcon.length,
-              (index) => CommonIconButton(
-                  text: pageText[index],
-                  iconImage: pageIcon[index],
-                  shape: BoxShape.rectangle,
-                  onTap: () {
-                    Navigator.pushNamed(context, pageTap[index]);
-                  }))),
+    return Center(
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.4,
+        decoration: BoxDecoration(
+            color: Color.fromRGBO(255, 250, 250, 1),
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: [shadow]),
+        child: GridView.count(
+            crossAxisCount: 2,
+            children: List.generate(
+                pageIcon.length,
+                (index) => CommonIconButton(
+                    text: pageText[index],
+                    iconImage: pageIcon[index],
+                    shape: BoxShape.rectangle,
+                    onTap: () {
+                      Navigator.pushNamed(context, pageTap[index]);
+                    }))),
+      ),
     );
   }
 }
