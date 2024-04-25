@@ -1,7 +1,7 @@
 package com.c104.seolo.global.exception;
 
 import com.c104.seolo.domain.checklist.exception.CheckListErrorCode;
-import com.c104.seolo.domain.company.exception.CompanyErrorCode;
+import com.c104.seolo.headquarter.company.exception.CompanyErrorCode;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 

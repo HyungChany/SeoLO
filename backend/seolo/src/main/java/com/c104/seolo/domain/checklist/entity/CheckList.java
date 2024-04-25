@@ -1,6 +1,6 @@
 package com.c104.seolo.domain.checklist.entity;
 
-import com.c104.seolo.domain.company.entity.Company;
+import com.c104.seolo.headquarter.company.entity.Company;
 import com.c104.seolo.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
