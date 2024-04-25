@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import '../../main.dart';
 
-class CheckBanner extends StatelessWidget{
-  const CheckBanner({super.key});
+class CheckBanner extends StatelessWidget {
+  final String word;
+  final String content;
+
+  const CheckBanner({super.key,required this.word, required this.content});
 
   @override
-  Widget build(BuildContext context){
-    return RichText(text : const TextSpan(
-        style: TextStyle(
-            fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
-        children: [
-          TextSpan(text: '체크리스트', style: TextStyle(color: red300)),
-          TextSpan(text: '의 모든 항목을 확인해주세요 ')
+  Widget build(BuildContext context) {
+    return RichText(
+        text:  TextSpan(
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+            children: [
+          TextSpan(text: word, style: TextStyle(color: red300)),
+          TextSpan(text: content)
         ]));
   }
 }
