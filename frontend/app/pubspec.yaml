@@ -76,6 +76,7 @@ flutter:
     - assets/images/loto_lock_icon.png
     - assets/images/loto_process_icon.png
     - assets/images/work_report_icon.png
+    - assets/images/loading_icon.gif
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
