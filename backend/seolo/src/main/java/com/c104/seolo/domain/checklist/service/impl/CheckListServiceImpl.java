@@ -49,7 +49,7 @@ public class CheckListServiceImpl implements CheckListService {
     @Override
     public GetCheckListResponse getCheckListByCompany(String company_code) {
         List<CheckListTemplateInfo> basicList = checkListTemplateRepository.getCheckListTemplates();
-        Optional<List<CheckListInfo>> checklists = checkListRepository.findByCompany(company_code);
+        Optional<List<CheckListInfo>> checklists = checkListRepository.findByCompanyEquals(company_code);
 
         List<CheckListTemplateDto> checkListTemplateDtos = getCheckListTemplates(basicList);
         List<CheckListDto> checkListDtos = getCheckLists(checklists);

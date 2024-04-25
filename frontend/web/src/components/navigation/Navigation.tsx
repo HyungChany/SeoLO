@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const NavigatorBox = styled.div`
   box-sizing: border-box;
   width: 100%;
-  height: 7rem;
+  height: 6rem;
   padding: 3rem;
   display: flex;
   justify-content: center;
