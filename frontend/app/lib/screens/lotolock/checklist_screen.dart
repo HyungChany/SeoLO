@@ -28,13 +28,13 @@ class _CheckScreenState extends State<CheckScreen> {
       ),
       body: Center(
         child: SizedBox(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width * 0.95,
+          width: MediaQuery.of(context).size.width * 0.95,
           child: Column(
             children: [
-              CheckBanner(),
+              CheckBanner(
+                word: '체크리스트',
+                content: '의 모든 항목을 확인해주세요',
+              ),
               SizedBox(
                 height: 20,
               ),
@@ -49,15 +49,18 @@ class _CheckScreenState extends State<CheckScreen> {
                   },
                 ),
               ),
-              CommonTextButton(text: '다음 단계', onTap: () {
-                Navigator.pushNamed(context, '/main');
-              }),
-              SizedBox(height: 20,)
+              CommonTextButton(
+                  text: '다음 단계',
+                  onTap: () {
+                    Navigator.pushNamed(context, '/main');
+                  }),
+              SizedBox(
+                height: 20,
+              )
             ],
           ),
         ),
       ),
-
     );
   }
 }
