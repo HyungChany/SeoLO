@@ -116,6 +116,7 @@ public class User extends BaseEntity implements UserDetails {
                 throw new IllegalArgumentException("Employee cannot be null");
             }
             this.employee = employee;
+            this.PIN = employee.getBirthdayMonthDay();
             return this;
         }
 
