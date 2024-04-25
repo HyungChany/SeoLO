@@ -1,26 +1,31 @@
 package com.c104.seolo.global.common;
 
+import com.c104.seolo.global.exception.CommonException;
+import com.c104.seolo.headquarter.company.exception.CompanyErrorCode;
+import com.c104.seolo.headquarter.company.repository.CompanyRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.NonNull;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 public class CCodeInterceptor implements HandlerInterceptor {
+    private final CompanyRepository companyRepository;
+    // 생성자를 통한 의존성 주입
+    public CCodeInterceptor(CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
+    }
+
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) {
         String companyCode = request.getHeader("Company-Code");
         if (companyCode == null || companyCode.isEmpty()) {
-//            throw new CommonException("코드 보내세요")
-//            NO_COMPANY_CODE("회사 코드를 보내지 않았습니다.", HttpStatus.BAD_REQUEST),;
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            return false; // 인터셉트 중지
+            // 헤더에 회사코드를 안보냈거나 NULL을 보낸 경우
+            throw new CommonException(CompanyErrorCode.NO_COMPANY_CODE);
+        } else if (companyRepository.findByCompanyCodeEquals(companyCode) == null) {
+            // 회사코드를 보냈지만, 테이블에서 찾을 수 없는 경우
+            throw new CommonException(CompanyErrorCode.NOT_EXIST_COMPANY_CODE);
         }
-        // Company-Code 헤더가 있는 경우 처리할 로직
-        // Company Table의 값과 equals(완전일치)하는 값이 있는지 검증
-        // 완전일치하는 코드 없으면 CommonException
-//        NOT_EXIST_COMPANY_CODE("해당 회사가 존재하지 않습니다.", HttpStatus.BAD_REQUEST),
-//        return false
-
-//        일치하는 값이 있으면
+        // 일치하는 값이 있으면 controller 실행하도록
         return true; // 다음 인터셉터 또는 핸들러 실행
     }
 
