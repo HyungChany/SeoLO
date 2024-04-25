@@ -2,3 +2,11 @@
 	path = backend/seolo/src/main/resources/confidence
 	url = https://github.com/makeUgreat/seolo-config.git
 	branch = master
+[submodule "backend/seolo/backend/seolo/src/main/resources/confidence"]
+	path = backend/seolo/backend/seolo/src/main/resources/confidence
+	url = https://github.com/makeUgreat/seolo-config.git
+	branch = master
+[submodule "backend/backend/seolo/src/main/resources/confidence"]
+	path = backend/backend/seolo/src/main/resources/confidence
+	url = https://github.com/makeUgreat/seolo-config.git
+	branch = master

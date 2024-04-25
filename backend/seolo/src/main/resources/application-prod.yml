@@ -1,6 +1,6 @@
 spring:
   config:
-    import: "classpath:confidence/application-secret.yml"
+    import: "./confidence/application-secret.yml"
     activate:
       on-profile: prod
 

@@ -42,3 +42,15 @@ tzlocal==5.2
 urllib3==2.2.1
 
 ```
+
+### Locust
+
+- 차트
+  ![LOCUST GRAPH](imgs/total_requests_per_second_1713936120.272.png)
+- 통계
+  ![Alt text](imgs/locust_dash.PNG)
+- 실패
+  ![Alt text](imgs/locust_failures.PNG)
+
+=> ConnectionRefusedError(10061, '[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다.')
+이외에는 실패없이 news값을 받을 수 있었음.

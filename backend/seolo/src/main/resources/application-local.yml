@@ -1,7 +1,7 @@
 # 각자 환경에서  개발
 spring:
   config:
-    import: "classpath:confidence/application-secret.yml"
+    import: "./confidence/application-secret.yml"
     activate:
       on-profile: local
   security:
