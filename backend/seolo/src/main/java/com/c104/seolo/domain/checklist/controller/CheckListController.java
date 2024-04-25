@@ -26,7 +26,7 @@ public class CheckListController {
     public ResponseEntity<GetCheckListResponse> getAllCheckLists(
             @RequestHeader("Company-Code") String companyCode
     ) {
-        Company company = companyRepository.findByCompanyCode(companyCode);
+        Company company = companyRepository.findByCompanyCodeEquals(companyCode);
         if (company != null) {
             return ResponseEntity.ok(checkListService.getCheckListByCompany(companyCode));
         } else {
