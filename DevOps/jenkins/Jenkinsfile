@@ -4,10 +4,11 @@ pipeline {
         // 환경 변수 정의
         DOCKER_COMPOSE_FILE = 'DevOps/docker-compose.yml'
         REPO_URL = 'https://lab.ssafy.com/s10-final/S10P31C104.git'
-        BRANCH_NAME = 'feature/be-secretkey'
+        BRANCH_NAME = 'develop'
         CREDENTIALS_ID = 'seolo-git-token'
         GITHUB_CREDENTIALS_ID = 'seolo-github-token'
         GITHUB_REPO_URL = 'https://github.com/makeUgreat/seolo-config.git'
+        PROFILES_ACTIVE = 'dev'
     }
 
     stages {
@@ -29,6 +30,10 @@ pipeline {
 
                     // SECRET KEY 저장소 clone
                     dir('backend/seolo/src/main/resources') {
+
+                        // dev로 profile 변경
+                        sh "sed -i 's/spring.profiles.active: local/spring.profiles.active: ${env.PROFILES_ACTIVE}/' application.yml"
+
                         sh 'mkdir -p confidence'
                         dir('confidence') {
                             git branch: 'master', credentialsId: env.GITHUB_CREDENTIALS_ID, url: env.GITHUB_REPO_URL
