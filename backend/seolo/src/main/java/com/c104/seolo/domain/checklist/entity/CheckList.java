@@ -7,12 +7,11 @@ import lombok.*;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-@NoArgsConstructor
 @Getter
 @Setter
 @ToString
 @Entity
-@Table(name = "checklist")
+@Table(name = "check_list")
 public class CheckList extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "check_list_id")
@@ -32,4 +31,6 @@ public class CheckList extends BaseEntity {
         this.company = company;
         this.checkListContext = checkListContext;
     }
+
+    public CheckList() {}
 }
