@@ -33,7 +33,7 @@ services:
       context: ../frontend/web
       dockerfile: Dockerfile
     volumes:
-      - ../frontend/web/dist:./dist
+      - ../frontend/web/dist:/FRONTEND/web/dist
 
 networks:
   jenkins-network:
