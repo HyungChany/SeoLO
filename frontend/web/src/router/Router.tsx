@@ -18,7 +18,7 @@ const Content = styled.div`
   overflow-y: auto;
 `;
 
-const With = (element) => (
+const With = (element : any) => (
   <Container>
     <Navigation />
     <Content>{element}</Content>
