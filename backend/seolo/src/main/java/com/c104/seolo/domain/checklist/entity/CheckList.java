@@ -3,17 +3,14 @@ package com.c104.seolo.domain.checklist.entity;
 import com.c104.seolo.headquarter.company.entity.Company;
 import com.c104.seolo.global.common.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Getter
+@Setter
+@ToString
 @Entity
 @Table(name = "checklist")
 public class CheckList extends BaseEntity {
@@ -28,4 +25,11 @@ public class CheckList extends BaseEntity {
 
     @Column(name = "check_list_context", length = 255)
     private String checkListContext;
+
+    @Builder
+    private CheckList(Long id, Company company, String checkListContext) {
+        this.id = id;
+        this.company = company;
+        this.checkListContext = checkListContext;
+    }
 }
