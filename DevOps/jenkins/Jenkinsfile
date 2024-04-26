@@ -9,13 +9,14 @@ pipeline {
         GITHUB_CREDENTIALS_ID = 'seolo-github-token'
         GITHUB_REPO_URL = 'https://github.com/makeUgreat/seolo-config.git'
         PROFILES_ACTIVE = 'dev'
+        FRONTEND_DIR = 'frontend/web' // 프론트엔드 디렉토리 경로
+        NGINX_HTML_DIR = '/usr/share/nginx/html' // Nginx가 정적 파일을 서빙할 경로
     }
 
     stages {
         stage('Prepare Workspace') {
             steps {
                 script {
-                    // Mattermost에 빌드 시작 메시지 보내기
                     def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
                     def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
                     mattermostSend(color: 'warning',
@@ -24,7 +25,6 @@ pipeline {
                         channel: 'C104Build'
                     )
 
-                    // 현재 작업 공간 전체를 정리
                     echo "Cleaning the workspace..."
                     deleteDir() // 현재 작업 공간의 모든 내용을 삭제
                 }
@@ -34,13 +34,9 @@ pipeline {
         stage('Clone Repository') {
             steps {
                 script {
-                    // Git 저장소에서 develop 브랜치 클론
                     git branch: env.BRANCH_NAME, credentialsId: env.CREDENTIALS_ID, url: env.REPO_URL
 
-                    // SECRET KEY 저장소 clone
                     dir('backend/seolo/src/main/resources') {
-
-                        // dev로 profile 변경
                         sh "sed -i 's/spring.profiles.active: local/spring.profiles.active: ${env.PROFILES_ACTIVE}/' application.yml"
 
                         sh 'mkdir -p confidence'
@@ -52,10 +48,36 @@ pipeline {
             }
         }
 
+        stage('Frontend Build and Serving') {
+            steps {
+                script {
+                    dir(env.FRONTEND_DIR) {
+                        sh '''
+                        if ! command -v node &> /dev/null
+                        then
+                            echo "Installing Node.js..."
+                            curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+                            sudo apt-get install -y nodejs
+                        else
+                            echo "Node.js is already installed."
+                        fi
+
+                        npm install
+                        npm run build
+                        '''
+
+                        sh """
+                        rm -rf ${env.NGINX_HTML_DIR}/*
+                        cp -R dist/* ${env.NGINX_HTML_DIR}/
+                        """
+                    }
+                }
+            }
+        }
+
         stage('Shutdown Existing Services') {
             steps {
                 script {
-                    // 이미 실행 중인 서비스를 종료
                     sh "docker-compose -f ${env.DOCKER_COMPOSE_FILE} down"
                 }
             }
@@ -64,12 +86,11 @@ pipeline {
         stage('Prepare Docker Compose') {
             steps {
                 script {
-                    // docker-compose 설치 확인 및 설치
                     sh '''
                     if ! command -v docker-compose &> /dev/null
                     then
                         echo "Installing docker-compose..."
-                        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-\$(uname -s)-\$(uname -m)" -o /usr/local/bin/docker-compose
+                        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
                         sudo chmod +x /usr/local/bin/docker-compose
                     else
                         echo "docker-compose is already installed."
@@ -79,28 +100,11 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Backend Build and Deploy') {
             steps {
                 script {
-                    // Docker Compose를 사용하여 이미지 빌드
-                    def profile = ''
-                    if (env.BRANCH_NAME == 'master') {
-                        profile = 'prod'
-                    } else {
-                        profile = 'dev'
-                    }
-
-                    // Docker Compose를 사용하여 이미지 빌드할 때 선택한 프로파일 적용
+                    def profile = env.BRANCH_NAME == 'master' ? 'prod' : 'dev'
                     sh "docker-compose -f ${env.DOCKER_COMPOSE_FILE} build --build-arg SPRING_PROFILES_ACTIVE=${profile}"
-                }
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                script {
-                    // Docker Compose를 사용하여 서비스 배포
-                    sh 'pwd'
                     sh "docker-compose -f ${env.DOCKER_COMPOSE_FILE} up -d"
                 }
             }
@@ -109,7 +113,6 @@ pipeline {
         stage('Cleanup') {
             steps {
                 script {
-                    // 미사용 Docker 이미지 정리
                     sh 'docker image prune --force --filter "until=24h"'
                 }
             }
@@ -121,10 +124,10 @@ pipeline {
             script {
                 def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
                 def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
-                mattermostSend (color: 'good',
-                message: "빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
-                endpoint: 'https://meeting.ssafy.com/hooks/xc1nh4iaw7dofr9sooojdhx6qh',
-                channel: 'C104Build'
+                mattermostSend(color: 'good',
+                    message: "빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                    endpoint: 'https://meeting.ssafy.com/hooks/xc1nh4iaw7dofr9sooojdhx6qh',
+                    channel: 'C104Build'
                 )
             }
         }
@@ -132,10 +135,10 @@ pipeline {
             script {
                 def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
                 def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
-                mattermostSend (color: 'danger',
-                message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
-                endpoint: 'https://meeting.ssafy.com/hooks/xc1nh4iaw7dofr9sooojdhx6qh',
-                channel: 'C104Build'
+                mattermostSend(color: 'danger',
+                    message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                    endpoint: 'https://meeting.ssafy.com/hooks/xc1nh4iaw7dofr9sooojdhx6qh',
+                    channel: 'C104Build'
                 )
             }
         }
