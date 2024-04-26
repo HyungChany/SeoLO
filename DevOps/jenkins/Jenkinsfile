@@ -16,8 +16,8 @@ pipeline {
             steps {
                 script {
                     // 권한 설정
-                    sh 'sudo chmod -R 777 /var/jenkins_home/workspace/release-test'
-                    echo "Permissions have been set to 777 for all files in release-test."
+                    sh 'sudo chmod -R 777 /var/jenkins_home/workspace'
+                    echo "Permissions have been set to 777 for all files in workspace."
                 }
             }
         }
@@ -99,6 +99,15 @@ pipeline {
             }
         }
 
+        stage('Build Nginx & Frontend') {
+            steps {
+                script {
+                        sh "docker build -t seolo-nginx/front:latest ../frontend/web"
+                    }
+                }
+            }
+        }
+
         stage('Compose') {
             steps {
                 script {
@@ -107,17 +116,6 @@ pipeline {
             }
         }
 
-        stage('Build Frontend') {
-            steps {
-                script {
-                    dir('frontend/web') {
-                        sh 'npm install'
-                        sh 'npm run build'
-                        echo "Frontend built successfully, files are ready to be served by Nginx."
-                    }
-                }
-            }
-        }
 
         stage('Cleanup') {
             steps {

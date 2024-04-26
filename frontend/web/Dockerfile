@@ -1,23 +1,29 @@
-# 미사용
-# 젠킨스로 직접 build
-
-# Node.js 이미지를 사용
-FROM node:lts-alpine
+# 기본 이미지로 Node.js 버전 20.11.0 사용
+FROM node:20.11.0 as build
 
 # 작업 디렉토리 설정
-WORKDIR /build
+WORKDIR /usr/src/app
 
-# package.json과 package-lock.json을 먼저 복사
+# package.json 및 package-lock.json을 복사하여 종속성 설치
 COPY package*.json ./
 
-# 프로젝트 의존성 설치
+# 종속성 설치
 RUN npm install
 
-# 프로젝트 소스 복사
+# 나머지 애플리케이션 코드 복사
 COPY . .
 
-# Vite를 사용한 프론트엔드 프로젝트 빌드
+# 프론트엔드 코드 빌드
 RUN npm run build
 
-# CMD를 제거하거나, Nginx에서 서빙할 준비를 명시적으로 표시
-CMD ["echo", "Front-end build complete"]
+# NGINX 이미지 생성
+FROM nginx:latest
+
+# NGINX에서 작업 디렉토리 설정
+WORKDIR /usr/share/nginx/html
+
+# 기본 NGINX 정적 콘텐츠 제거
+RUN rm -rf ./*
+
+# Node.js 빌드 단계에서 빌드된 프론트엔드 코드 복사
+COPY --from=build /usr/src/app/dist/ .
