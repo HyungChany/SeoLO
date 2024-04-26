@@ -2,7 +2,7 @@
 FROM node:lts-alpine
 
 # 작업 디렉토리 설정
-WORKDIR /FRONTEND/web
+WORKDIR /web
 
 # package.json과 package-lock.json을 먼저 복사
 COPY package*.json ./
