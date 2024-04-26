@@ -40,7 +40,7 @@ const Title = styled(Link)`
 `;
 const Menu = styled.div`
   display: flex;
-  gap: 6rem;
+  gap: 2.5rem;
 `;
 
 const MenuLink = styled(Link)`
@@ -57,10 +57,16 @@ const Navigation = () => {
             <Typo.H3>LOTO 일지</Typo.H3>
           </MenuLink>
           <MenuLink to="/2">
-            <Typo.H3>체크리스트 관리</Typo.H3>
+            <Typo.H3>LOTO 현황</Typo.H3>
           </MenuLink>
           <MenuLink to="/3">
-            <Typo.H3>사업장 정보조회/수정</Typo.H3>
+            <Typo.H3>체크리스트 관리</Typo.H3>
+          </MenuLink>
+          <MenuLink to="/1">
+            <Typo.H3>사업장 정보</Typo.H3>
+          </MenuLink>
+          <MenuLink to="/1">
+            <Typo.H3>작업장 정보</Typo.H3>
           </MenuLink>
         </Menu>
       </NavigatorContent>
