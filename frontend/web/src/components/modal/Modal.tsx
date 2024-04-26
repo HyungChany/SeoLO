@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
-import React from 'react';
 
 // 타입 정의
 interface ModalProps {
