@@ -20,7 +20,7 @@ class MyCustomForm extends StatelessWidget {
         SizedBox(
           width: width,
           height: height,
-          child: TextField(
+          child: TextFormField(
               textAlignVertical: TextAlignVertical.bottom,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
