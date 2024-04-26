@@ -10,7 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-@Data
 public class CheckListTemplateDto {
     private Long id;
     private String context;
