@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 public class CheckListTemplateInfo {
     private Long id;
