@@ -107,17 +107,17 @@ pipeline {
             }
         }
 
-//         stage('Build Frontend') {
-//             steps {
-//                 script {
-//                     dir('frontend/web') {
-//                         sh 'npm install'
-//                         sh 'npm run build'
-//                         echo "Frontend built successfully, files are ready to be served by Nginx."
-//                     }
-//                 }
-//             }
-//         }
+        stage('Build Frontend') {
+            steps {
+                script {
+                    dir('frontend/web') {
+                        sh 'npm install'
+                        sh 'npm run build'
+                        echo "Frontend built successfully, files are ready to be served by Nginx."
+                    }
+                }
+            }
+        }
 
         stage('Cleanup') {
             steps {
