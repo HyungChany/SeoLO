@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import React from 'react';
 import { Divider } from '@/components/basic/Divider.tsx';
 import * as Color from '@/config/color/Color.ts';
 import EnterIcon from '@/../assets/icons/Enter.svg?react';

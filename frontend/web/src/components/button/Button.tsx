@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import React from 'react';
 
 // 타입 정의
 interface ButtonProps {

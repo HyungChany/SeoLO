@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
-import React from 'react';
 interface CardProps {
   width: number;
   height: number;
