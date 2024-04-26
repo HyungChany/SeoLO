@@ -32,6 +32,8 @@ services:
     build:
       context: ../frontend/web
       dockerfile: Dockerfile
+    volumes:
+      - ./frontend/web/dist:/FRONTEND/web/dist
 
 networks:
   jenkins-network:
