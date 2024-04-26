@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../main.dart';
@@ -14,27 +15,32 @@ import '../main.dart';
 // shape: BoxShape.rectangle,
 // onTap: () {})
 
-class CommonIconButton extends StatelessWidget {
+class CommonIconButton extends StatefulWidget {
+  @override
+  _CommonIconButtonState createState() => _CommonIconButtonState();
   // final => 더이상 변경되지 않는 값
   // 필수가 아니라면 뒤에 ?
   final String text; // 버튼 내용
   final String iconImage; // 아이콘 이미지 경로
   final BoxShape shape; // 버튼의 모양
   final VoidCallback onTap; // 클릭 이벤트
+  final bool isSelected;
 
   // 필수가 아니라면 required 빼기
   const CommonIconButton({
     super.key,
+    this.isSelected = false,
     required this.text,
     required this.iconImage,
     required this.shape,
     required this.onTap,
   });
-
+}
+class _CommonIconButtonState extends State<CommonIconButton>{
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Column(
         // 가운데 정렬
         mainAxisAlignment: MainAxisAlignment.center,
@@ -42,25 +48,31 @@ class CommonIconButton extends StatelessWidget {
         children: [
           // 아이콘이 있는 부분
           Container(
-            height: shape == BoxShape.rectangle ? 120 : 100,
-            width: shape == BoxShape.rectangle ? 120 : 100,
+            height: widget.shape == BoxShape.rectangle ? 120 : 100,
+            width: widget.shape == BoxShape.rectangle ? 120 : 100,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: shape == BoxShape.rectangle ? mint200 : gray100,
-                shape: shape,
-                borderRadius: shape == BoxShape.rectangle
+                color: widget.shape == BoxShape.rectangle ? mint200 : gray100,
+                shape: widget.shape,
+                border:Border.all(
+                  color: widget.isSelected ? samsungBlue : Colors.white,
+                  width: 2
+                ),
+                borderRadius: widget.shape == BoxShape.rectangle
                     ? BorderRadius.circular(15.0)
                     : null,
                 boxShadow: const [shadow],
                 image: DecorationImage(
-                  image: AssetImage(iconImage),
+                  image: AssetImage(widget.iconImage),
                 )),
           ),
+          SizedBox(height: 10,),
           // 텍스트 부분
           Text(
-            text,
+            widget.text,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
+              color: widget.isSelected ? samsungBlue : Colors.black,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
