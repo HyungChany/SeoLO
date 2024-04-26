@@ -19,6 +19,6 @@ public interface CheckListRepository extends JpaRepository<CheckList, Long> {
     Optional<List<CheckListInfo>> findByCompanyEquals(String company_code);
 
     @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM CheckList c " +
-            "WHERE LOWER(c.checkListContext) = LOWER(:checkListContext) and c.company.companyCode = :company_code")
+            "WHERE c.checkListContext = :checkListContext and c.company.companyCode = :company_code")
     boolean existsByCheckListContextIgnoreCase(@Param("checkListContext") String checkListContext, @Param("company_code") String company_code);
 }

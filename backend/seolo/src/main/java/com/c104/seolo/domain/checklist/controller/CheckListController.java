@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
+
 @RestController
 @RequestMapping("checklist")
 @RequiredArgsConstructor
@@ -28,7 +30,18 @@ public class CheckListController {
             @RequestBody CheckListRequest checkListRequest
             ) {
         checkListService.createCheckList(checkListRequest, companyCode);
-        return ResponseEntity.ok().build();
+        URI location = URI.create("/checklist");
+        return ResponseEntity.created(location).build();
+    }
+
+    @PatchMapping("/{check_list_id}")
+    public ResponseEntity<Void> updateCheckList(
+            @RequestHeader("Company-Code") String companyCode,
+            @RequestBody CheckListRequest checkListRequest,
+            @PathVariable("check_list_id") Long checkListId
+    ) {
+        checkListService.updateCheckList(checkListRequest, checkListId, companyCode);
+        return ResponseEntity.accepted().build();
     }
 
     @DeleteMapping("/{check_list_id}")
