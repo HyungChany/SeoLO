@@ -26,7 +26,10 @@ SECRET_KEY = SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = HOST
+CORS_ALLOW_METHODS = (
+    'GET'
+)
 
 
 # Application definition
@@ -99,7 +102,13 @@ WSGI_APPLICATION = 'news.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = DATABASES
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.dummy',
+    }
+}
+
+MIGRATION_MODULES = {}
 
 
 # Password validation

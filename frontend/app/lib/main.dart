@@ -14,6 +14,8 @@ const Color gray200 = Color.fromRGBO(228, 231, 236, 1);
 const Color samsungBlue = Color.fromRGBO(20, 40, 160, 1);
 const Color safetyBlue = Color.fromRGBO(0, 0, 255, 1);
 const Color snow = Color.fromRGBO(255, 250, 250, 1);
+const Color green400 = Color.fromRGBO(93, 210, 122, 1);
+const Color red300 = Color.fromRGBO(241, 38, 13, 1);
 // 그림자
 const BoxShadow shadow = BoxShadow(
     color: Color.fromRGBO(0, 0, 0, 0.25),
@@ -42,7 +44,9 @@ class MyApp extends StatelessWidget {
       // debugShowCheckedModeBanner: false,
       theme: ThemeData(
           primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity),
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          fontFamily: 'font'),
+
       home: const TestScreen(),
       onGenerateRoute: generateMainRoute,
     );

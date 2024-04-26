@@ -40,6 +40,7 @@ dependencies:
   local_auth: ^2.2.0 # 생체인증 (지문)
   dio: ^5.4.3+1 # http 통신
   flutter_dotenv: ^5.1.0 # .env파일
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +64,13 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  fonts:
+    - family: font
+      fonts:
+        - asset: assets/fonts/font_bold.ttf
+        - asset: assets/fonts/font_extrabold.ttf
+        - asset: assets/fonts/font_light.ttf
+        - asset: assets/fonts/font_medium.ttf
 
   # To add assets to your application, add an assets section, like this:
   assets:
