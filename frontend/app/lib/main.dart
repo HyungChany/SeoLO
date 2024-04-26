@@ -4,7 +4,7 @@ import 'package:app/view_models/main/news_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_localization/flutter_localization.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 // main.dart import 후 color: blue100 이러한 방식으로 사용
 // 참고로 color: blue100하고 tab 누르면 알아서 import 됨
 const Color blue100 = Color.fromRGBO(135, 185, 231, 1);
@@ -41,7 +41,8 @@ class MyApp extends StatefulWidget {
   _MyAppState createState()=> _MyAppState();
 }
 class _MyAppState extends State<MyApp>{
-  final FlutterLocalization _localization = FlutterLocalization.instance;
+
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -50,6 +51,14 @@ class _MyAppState extends State<MyApp>{
           ChangeNotifierProvider(create: (_) => NewsViewModel()),
         ],
         child: MaterialApp(
+          localizationsDelegates:  [
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en', ''), // English, no country code
+            Locale('ko', ''), // Korean, no country code
+          ],
           // supportedLocales: _localization.supportedLocales,
           // localizationsDelegates: _localization.localizationsDelegates,
           title: 'SeoLo',
