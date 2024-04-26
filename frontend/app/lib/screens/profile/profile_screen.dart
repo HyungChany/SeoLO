@@ -1,3 +1,4 @@
+import 'package:app/widgets/card/common_card.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/profile/icon_with_text.dart';
 import 'package:app/widgets/profile/logout_button.dart';
@@ -45,12 +46,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 SizedBox(height: 10,),
                 IconWithText(icon: Icon(Icons.edit_document, size: 35,), text: '비밀번호 재설정', naviPage: '',),
-                SizedBox(height: 5,),
                 IconWithText(icon: Icon(Icons.password, size: 35,), text: 'PIN 번호 재설정', naviPage: '',)
               ],
             ),
           ),
           Divider(color: Colors.grey, thickness: 1.0,),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Text('나의 LOTO', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
+          ),
+          CommonCard(facility: '검사', machine: '장비sssssssssssssssssssssssssssssssssssssss', start: '24.04.24 11:30', end: '24.04.24 11:30'),
         ],
       ),
     );

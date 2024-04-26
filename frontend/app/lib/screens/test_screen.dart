@@ -39,7 +39,6 @@ class _TestScreenState extends State<TestScreen> {
               runSpacing: 16,
               alignment: WrapAlignment.start,
               children: [
-
                 CommonTextButton(text: '다음 단계', onTap: () {}),
                 ElevatedButton(
                   onPressed: () {
@@ -47,7 +46,6 @@ class _TestScreenState extends State<TestScreen> {
                   },
                   child: const Text('잠금화면'),
                 ),
-
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/main');
@@ -61,7 +59,7 @@ class _TestScreenState extends State<TestScreen> {
                 const MyCustomForm(
                   hintText: '로그인',
                 ),
-                const CommonCard(),
+                // const CommonCard(),
                 const CheckBoxList(title: '체크리스트 확인사항',),
               ],
             ),

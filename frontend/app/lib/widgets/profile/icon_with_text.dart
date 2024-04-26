@@ -18,14 +18,17 @@ class IconWithText extends StatelessWidget {
       onTap: () {
         Navigator.pushNamed(context, naviPage);
       },
-      child: Row(
-        children: [
-          icon,
-          SizedBox(
-            width: 10,
-          ),
-          Text(text, style: TextStyle(fontSize: 23.0, fontWeight: FontWeight.w400),),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Row(
+          children: [
+            icon,
+            SizedBox(
+              width: 10,
+            ),
+            Text(text, style: TextStyle(fontSize: 23.0, fontWeight: FontWeight.w400),),
+          ],
+        ),
       ),
     );
   }
