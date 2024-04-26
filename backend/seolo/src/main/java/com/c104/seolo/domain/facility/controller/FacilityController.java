@@ -1,6 +1,5 @@
 package com.c104.seolo.domain.facility.controller;
 
-import com.c104.seolo.domain.facility.repository.FacilityRepository;
 import com.c104.seolo.domain.facility.service.FacilityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
