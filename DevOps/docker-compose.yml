@@ -29,6 +29,12 @@ services:
     networks:
       - jenkins-network
 
+  front:
+    container_name: seolo-front-build
+    build:
+      context: ../frontend/web
+      dockerfile: Dockerfile
+
 networks:
   jenkins-network:
     external: true
