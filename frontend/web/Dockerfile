@@ -17,4 +17,4 @@ COPY . .
 RUN npm run build
 
 # 런타임 이미지 (실제 서버가 필요하지 않기 때문에 작업을 완료하고 종료합니다)
-CMD echo "Front-end build complete."
+CMD echo "Front-end build complete"
