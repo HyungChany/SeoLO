@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.core.splashscreen)
     implementation(libs.constraintlayout)
     implementation(libs.appcompat)
+    implementation(libs.viewpager2)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
