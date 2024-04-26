@@ -24,6 +24,8 @@ pipeline {
         stage('Prepare Workspace') {
             steps {
                 script {
+                    PROFILE = (env.BRANCH_NAME == 'master') ? 'prod' : 'dev'
+
                     // 현재 작업 공간 전체를 정리
                     echo "Attempting to clean the workspace..."
                     sh 'pwd'
@@ -112,9 +114,9 @@ pipeline {
             steps {
                 script {
                     def profile = (env.BRANCH_NAME == 'master') ? 'prod' : 'dev'
-                    withEnv(["SPRING_PROFILES_ACTIVE=${profile}"]) {
-                        sh "docker-compose -f ${env.DOCKER_COMPOSE_FILE} build"
-                    }
+                    sh "echo SPRING_PROFILES_ACTIVE=${profile}"
+                    sh "SPRING_PROFILES_ACTIVE=${profile} docker-compose -f ${env.DOCKER_COMPOSE_FILE} build"
+
                 }
             }
         }
@@ -122,9 +124,9 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    // Docker Compose를 사용하여 서비스 배포
-                    sh 'pwd'
-                    sh "docker-compose -f ${env.DOCKER_COMPOSE_FILE} up -d"
+                    def profile = (env.BRANCH_NAME == 'master') ? 'prod' : 'dev'
+                    sh "echo SPRING_PROFILES_ACTIVE=${profile}"
+                    sh "SPRING_PROFILES_ACTIVE=${profile} docker-compose -f ${env.DOCKER_COMPOSE_FILE} up -d"
                 }
             }
         }

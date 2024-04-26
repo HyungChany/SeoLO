@@ -12,8 +12,8 @@ COPY settings.gradle .
 COPY src src
 
 RUN chmod +x ./gradlew
-ARG SPRING_PROFILES_ACTIVE
-RUN ./gradlew bootJar -Pprofile=${SPRING_PROFILES_ACTIVE}
+# bootJar를 통해 테스트없이 빌드 수행
+RUN ./gradlew bootJar
 
 # 2단계: Java Runtime 이미지 안에 빌드 결과물을 넣어 실행
 FROM azul/zulu-openjdk:17

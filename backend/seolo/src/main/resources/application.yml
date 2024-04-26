@@ -4,4 +4,4 @@ server:
 
 spring:
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE:default}
+    active: local
