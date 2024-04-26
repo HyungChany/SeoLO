@@ -1,21 +1,24 @@
 import 'package:app/models/main/news_model.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 
 class NewsService {
   final _dio = Dio();
 
-  Future<Map<String, dynamic>> getNews() async {
+  Future<List<NewsModel>> getNews() async {
     try {
       final response = await _dio.get('http://192.168.100.139:8000/news');
 
       if (response.statusCode == 200) {
-        NewsModel news = NewsModel.fromJson(response.data);
-        return {'success': true, 'news': news,};
+        List<dynamic> responseData = response.data;
+        List<NewsModel> newsList = responseData.map((data) => NewsModel.fromJson(data)).toList();
+        return newsList;
       } else {
-        return {'success': false, 'statusCode': response.statusCode};
+        throw Exception('Failed to load news');
       }
     } on DioError catch (e) {
-      return {'success': false, 'statusCode': e.response?.statusCode};
+      throw Exception('Failed to load news: ${e.response?.statusCode}');
     }
   }
+
 }
