@@ -24,7 +24,7 @@ services:
       context: ../backend/seolo
       dockerfile: Dockerfile
       args:
-        SPRING_PROFILES_ACTIVE: ${profile}
+        SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
     restart: on-failure
     ports:
       - "8080:8080"

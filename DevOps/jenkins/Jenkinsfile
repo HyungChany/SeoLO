@@ -12,12 +12,29 @@ pipeline {
     }
 
     stages {
+        stage('Set Permissions') {
+            steps {
+                script {
+                    // 권한 설정
+                    sh 'sudo chmod -R 777 /var/jenkins_home/workspace/release-test'
+                    echo "Permissions have been set to 777 for all files in release-test."
+                }
+            }
+        }
         stage('Prepare Workspace') {
             steps {
                 script {
                     // 현재 작업 공간 전체를 정리
-                    echo "Cleaning the workspace..."
-                    deleteDir() // 현재 작업 공간의 모든 내용을 삭제
+                    echo "Attempting to clean the workspace..."
+                    sh 'pwd'
+                    try {
+                        deleteDir()
+                        echo "Workspace cleaned successfully."
+                    } catch (Exception e) {
+                        echo "Failed to clean the workspace."
+                        echo "Error: ${e.getMessage()}"
+                        sh 'ls -la'  // 현재 디렉토리의 파일 목록과 권한을 출력
+                    }
                 }
             }
         }
@@ -94,16 +111,10 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    // Docker Compose를 사용하여 이미지 빌드
-                    def profile = ''
-                    if (env.BRANCH_NAME == 'master') {
-                        profile = 'prod'
-                    } else {
-                        profile = 'dev'
+                    def profile = (env.BRANCH_NAME == 'master') ? 'prod' : 'dev'
+                    withEnv(["SPRING_PROFILES_ACTIVE=${profile}"]) {
+                        sh "docker-compose -f ${env.DOCKER_COMPOSE_FILE} build"
                     }
-
-                    // Docker Compose를 사용하여 이미지 빌드할 때 선택한 프로파일 적용
-                    sh "docker-compose -f ${env.DOCKER_COMPOSE_FILE} build --build-arg SPRING_PROFILES_ACTIVE=${profile}"
                 }
             }
         }
