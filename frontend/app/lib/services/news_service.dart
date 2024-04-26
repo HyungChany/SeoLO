@@ -13,7 +13,7 @@ class NewsService {
       if (response.statusCode == 200) {
         List<dynamic> responseData = response.data;
         List<NewsModel> newsList = responseData.map((data) => NewsModel.fromJson(data)).toList();
-        debugPrint('$newsList');
+        // debugPrint('$newsList');
         return newsList;
       } else {
         throw Exception('뉴스 로드 실패');
