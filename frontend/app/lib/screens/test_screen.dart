@@ -24,6 +24,9 @@ class _TestScreenState extends State<TestScreen> {
       Navigator.pushNamed(context, '/main');
       // MainScreen으로 이동하며, 현재 스택을 MainScreen으로 대체합니다.
     }
+    if (index == 2) {
+      Navigator.pushNamed(context, '/profile');
+    }
   }
   @override
   Widget build(BuildContext context) {
