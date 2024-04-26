@@ -15,6 +15,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Builder
 @Getter
 @Entity
+@Table(name = "checklist")
 public class CheckList extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "check_list_id")
@@ -22,7 +23,7 @@ public class CheckList extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "company_id", nullable = false)
+    @JoinColumn(name = "company_code", nullable = false)
     private Company company;
 
     @Column(name = "check_list_context", length = 255)
