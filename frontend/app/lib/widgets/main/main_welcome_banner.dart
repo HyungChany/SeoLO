@@ -35,7 +35,7 @@ class _MainWelcomeBannerState extends State<MainWelcomeBanner> {
         children: [
           content(),
           Text(' '),
-          const Image(image: AssetImage('assets/images/seolo_character.png'))
+          Image.asset('assets/images/seolo_character.png', width: 30, height: 50,)
         ],
       ),
     );
