@@ -1,7 +1,9 @@
 import 'package:app/routes/main_route.dart';
 import 'package:app/screens/test_screen.dart';
+import 'package:app/view_models/main/news_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 
 // main.dart import 후 color: blue100 이러한 방식으로 사용
 // 참고로 color: blue100하고 tab 누르면 알아서 import 됨
@@ -18,13 +20,10 @@ const Color green400 = Color.fromRGBO(93, 210, 122, 1);
 const Color red300 = Color.fromRGBO(241, 38, 13, 1);
 // 그림자
 const BoxShadow shadow = BoxShadow(
-    color: Color.fromRGBO(0, 0, 0, 0.25),
-    blurRadius: 4.0,
-    spreadRadius: 4.0,
-    offset: Offset(
-      3,
-      3,
-    ));
+  color: Color.fromRGBO(0, 0, 0, 0.25), // 그림자 확산 범위
+  blurRadius: 5, // 그림자 흐림 정도
+  offset: Offset(0, 2), // 그림자 위치
+);
 
 void main() async {
   // WidgetsBinding widgetsBinding =
@@ -39,16 +38,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'SeoLo',
-      // debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          fontFamily: 'font'),
-
-      home: const TestScreen(),
-      onGenerateRoute: generateMainRoute,
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => NewsViewModel()),
+        ],
+        child: MaterialApp(
+          title: 'SeoLo',
+          // debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+              primarySwatch: Colors.blue,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+              fontFamily: 'font'),
+          home: const TestScreen(),
+          onGenerateRoute: generateMainRoute,
+        ));
   }
 }

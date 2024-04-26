@@ -21,7 +21,7 @@ class NewsModel {
       preview: json['preview'],
       author: json['author'],
       date: json['date'],
-      thum: json['thum'],
+      thum: json['thum'] != null ? json['thum'] as String? : null,
       link: json['link'],
     );
   }

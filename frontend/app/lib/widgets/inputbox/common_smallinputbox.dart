@@ -1,12 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
-class MyCustomForm extends StatelessWidget {
+class SmallInputBox extends StatelessWidget {
   final String hintText;  // 외부에서 받아오는 hintText 값을 저장할 변수를 선언
 
   // 생성자에서 hintText를 required 키워드와 함께 요구하여, 이 값을 반드시 제공해야 하도록 합니다.
-  const MyCustomForm({super.key, required this.hintText});
+  const SmallInputBox({super.key, required this.hintText});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +18,7 @@ class MyCustomForm extends StatelessWidget {
         SizedBox(
           width: width,
           height: height,
-          child: TextField(
+          child: TextFormField(
               textAlignVertical: TextAlignVertical.bottom,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
