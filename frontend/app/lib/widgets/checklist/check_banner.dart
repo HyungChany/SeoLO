@@ -11,10 +11,10 @@ class CheckBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
         text:  TextSpan(
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
             children: [
-          TextSpan(text: word, style: TextStyle(color: red300)),
+          TextSpan(text: word, style: const TextStyle(color: red300)),
           TextSpan(text: content)
         ]));
   }
