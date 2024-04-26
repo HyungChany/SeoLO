@@ -24,6 +24,9 @@ class _TestScreenState extends State<TestScreen> {
       Navigator.pushNamed(context, '/main');
       // MainScreen으로 이동하며, 현재 스택을 MainScreen으로 대체합니다.
     }
+    if (index == 2) {
+      Navigator.pushNamed(context, '/profile');
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -36,7 +39,6 @@ class _TestScreenState extends State<TestScreen> {
               runSpacing: 16,
               alignment: WrapAlignment.start,
               children: [
-
                 CommonTextButton(text: '다음 단계', onTap: () {}),
                 ElevatedButton(
                   onPressed: () {
@@ -44,7 +46,6 @@ class _TestScreenState extends State<TestScreen> {
                   },
                   child: const Text('잠금화면'),
                 ),
-
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/main');
@@ -58,7 +59,7 @@ class _TestScreenState extends State<TestScreen> {
                 const MyCustomForm(
                   hintText: '로그인',
                 ),
-                const CommonCard(),
+                // const CommonCard(),
                 const CheckBoxList(title: '체크리스트 확인사항',),
               ],
             ),
