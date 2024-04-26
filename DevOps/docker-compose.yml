@@ -44,3 +44,6 @@ services:
 networks:
   jenkins-network:
     external: true
+
+volumes:
+  front-web-dist:
