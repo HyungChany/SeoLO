@@ -12,5 +12,9 @@ RUN npm install
 # 프로젝트 소스 복사
 COPY . .
 
-# 애플리케이션 실행
-CMD ["npm", "run", "build"]
+# Vite를 사용한 프론트엔드 프로젝트 빌드
+# Vite 빌드 결과는 /usr/src/app/dist 폴더에 위치
+RUN npm run build
+
+# 런타임 이미지 (실제 서버가 필요하지 않기 때문에 작업을 완료하고 종료합니다)
+CMD echo "Front-end build complete."
