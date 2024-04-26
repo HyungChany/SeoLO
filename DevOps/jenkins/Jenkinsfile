@@ -102,7 +102,9 @@ pipeline {
         stage('Build Nginx & Frontend') {
             steps {
                 script {
-                        sh "docker build -t seolo-nginx/front:latest ../frontend/web"
+                    dir('frontend/web') {
+                    sh "pwd"
+                    sh "docker build -t seolo-nginx/front:latest ."
                     }
                 }
             }
