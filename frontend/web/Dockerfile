@@ -1,3 +1,6 @@
+# 미사용
+# 젠킨스로 직접 build
+
 # Node.js 이미지를 사용
 FROM node:lts-alpine
 
