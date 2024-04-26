@@ -4,14 +4,14 @@ import com.c104.seolo.domain.checklist.dto.CheckListDto;
 import com.c104.seolo.domain.checklist.dto.CheckListTemplateDto;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.util.List;
 
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@NoArgsConstructor
-@AllArgsConstructor
 @ToString
 @Getter
 public class GetCheckListResponse {

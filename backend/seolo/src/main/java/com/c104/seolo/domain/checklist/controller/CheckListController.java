@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.checklist.controller;
 
+import com.c104.seolo.domain.checklist.dto.request.CheckListRequest;
 import com.c104.seolo.domain.checklist.dto.response.GetCheckListResponse;
 import com.c104.seolo.domain.checklist.service.CheckListService;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,15 @@ public class CheckListController {
             @RequestHeader("Company-Code") String companyCode
     ) {
         return ResponseEntity.ok(checkListService.getCheckListByCompany(companyCode));
+    }
+
+    @PostMapping()
+    public ResponseEntity<Void> createCheckList(
+            @RequestHeader("Company-Code") String companyCode,
+            @RequestBody CheckListRequest checkListRequest
+            ) {
+        checkListService.createCheckList(checkListRequest, companyCode);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{check_list_id}")
