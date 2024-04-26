@@ -3,6 +3,7 @@ import 'package:app/view_models/main/news_view_model.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MainNewsBanner extends StatefulWidget {
   const MainNewsBanner({super.key});
@@ -28,7 +29,7 @@ class _MainNewsBannerState extends State<MainNewsBanner> {
   Widget sliderWidget() {
     return CarouselSlider(
       carouselController: _controller,
-      items: [0,1,2,3,4].map(
+      items: [0, 1, 2, 3, 4].map(
         (index) {
           return Builder(
             builder: (context) {
@@ -37,79 +38,96 @@ class _MainNewsBannerState extends State<MainNewsBanner> {
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
                     width: MediaQuery.of(context).size.width,
-                    child: viewModel.news.length == 0
+                    child: viewModel.news.isEmpty
                         ? Image.asset('assets/images/loading_icon.png')
-                        : Column(
-                            children: [
-                              Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Flexible(
-                                          child: RichText(
-                                        overflow: TextOverflow.ellipsis,
-                                        maxLines: 1,
-                                        text: TextSpan(
-                                            text: viewModel.news[index].title,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.black,
-                                                fontSize: 18)),
-                                      ))
-                                    ],
-                                  )),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: [
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.6,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Flexible(
-                                                  child: RichText(
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 3,
-                                                text: TextSpan(
-                                                    text: viewModel
-                                                        .news[index].preview,
-                                                    style: TextStyle(
-                                                        color: Colors.black)),
-                                              ))
-                                            ],
-                                          )),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Row(
-                                        children: [
-                                          Text(viewModel.news[index].author),
-                                          Text(' · '),
-                                          Text(viewModel.news[index].date)
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                  Image.network(
-                                    viewModel.news[index].thum!,
-                                    width: 85,
-                                    height: 100,
-                                  )
-                                ],
-                              ),
-                            ],
+                        : InkWell(
+                            onTap: () async {
+                              // debugPrint('${viewModel.news[index].link}클릭');
+                              final url = Uri.parse(
+                                viewModel.news[index].link,
+                              );
+                              if (await canLaunchUrl(url)) {
+                                launchUrl(url);
+                              } else {
+                                debugPrint("Can't launch $url");
+                              }
+                            },
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Flexible(
+                                            child: RichText(
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          text: TextSpan(
+                                              text: viewModel.news[index].title,
+                                              style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black,
+                                                  fontSize: 18)),
+                                        ))
+                                      ],
+                                    )),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                Row(
+                                  children: [
+                                    Column(
+                                      children: [
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.6,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Flexible(
+                                                    child: RichText(
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 3,
+                                                  text: TextSpan(
+                                                      text: viewModel
+                                                          .news[index].preview,
+                                                      style: const TextStyle(
+                                                          color: Colors.black)),
+                                                ))
+                                              ],
+                                            )),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(viewModel.news[index].author),
+                                            const Text(' · '),
+                                            Text(viewModel.news[index].date)
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                    Image.network(
+                                      viewModel.news[index].thum == null
+                                          ? 'https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg'
+                                          : viewModel.news[index].thum!,
+                                      width: 85,
+                                      height: 100,
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
                           )),
               );
             },

@@ -1,23 +1,25 @@
 import 'package:app/models/main/news_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class NewsService {
   final _dio = Dio();
-
+  final baseUrl = dotenv.get('API_URL2') ?? '';
   Future<List<NewsModel>> getNews() async {
     try {
-      final response = await _dio.get('http://192.168.100.139:8000/news');
+      final response = await _dio.get('$baseUrl/news');
 
       if (response.statusCode == 200) {
         List<dynamic> responseData = response.data;
         List<NewsModel> newsList = responseData.map((data) => NewsModel.fromJson(data)).toList();
+        debugPrint('$newsList');
         return newsList;
       } else {
-        throw Exception('Failed to load news');
+        throw Exception('뉴스 로드 실패');
       }
     } on DioError catch (e) {
-      throw Exception('Failed to load news: ${e.response?.statusCode}');
+      throw Exception('뉴스 로드 실패: ${e.response?.statusCode}');
     }
   }
 
