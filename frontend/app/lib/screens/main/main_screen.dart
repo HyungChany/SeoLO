@@ -16,6 +16,7 @@ class MainScreen extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.85,
           child: const Column(
             children: [
+              SizedBox(height: 20,),
               MainWelcomeBanner(),
               SizedBox(height: 20,),
               MainNewsBanner(),

@@ -1,7 +1,9 @@
 import 'package:app/routes/main_route.dart';
 import 'package:app/screens/test_screen.dart';
+import 'package:app/view_models/main/news_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
 
 // main.dart import 후 color: blue100 이러한 방식으로 사용
 // 참고로 color: blue100하고 tab 누르면 알아서 import 됨
@@ -39,16 +41,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'SeoLo',
-      // debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          fontFamily: 'font'),
-
-      home: const TestScreen(),
-      onGenerateRoute: generateMainRoute,
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => NewsViewModel()),
+        ],
+        child: MaterialApp(
+          title: 'SeoLo',
+          // debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+              primarySwatch: Colors.blue,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+              fontFamily: 'font'),
+          home: const TestScreen(),
+          onGenerateRoute: generateMainRoute,
+        ));
   }
 }

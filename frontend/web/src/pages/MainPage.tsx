@@ -1,5 +1,4 @@
 import * as Color from '@/config/color/Color.ts';
-import * as Typo from '@/components/typography/Typography.tsx';
 import styled from 'styled-components';
 import Card from '@/components/card/Card.tsx';
 

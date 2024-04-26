@@ -40,7 +40,8 @@ dependencies:
   local_auth: ^2.2.0 # 생체인증 (지문)
   dio: ^5.4.3+1 # http 통신
   flutter_dotenv: ^5.1.0 # .env파일
-  carousel_slider: ^4.2.1
+  carousel_slider: ^4.2.1 # 뉴스 캐러셀
+  url_launcher: ^6.2.6 # 뉴스 링크
 
 dev_dependencies:
   flutter_test:
@@ -88,7 +89,7 @@ flutter:
     - assets/images/repair_icon.png
     - assets/images/etc_icon.png
     - assets/images/clean_icon.png
-
+    - assets/images/loading_icon.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

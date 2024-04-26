@@ -43,7 +43,7 @@ class _CommonIconButtonState extends State<CommonIconButton>{
       onTap: widget.onTap,
       child: Column(
         // 가운데 정렬
-        mainAxisAlignment: MainAxisAlignment.center,
+        // mainAxisAlignment: MainAxisAlignment.center,
         // 세로로 세울 애들이 누구인지
         children: [
           // 아이콘이 있는 부분
