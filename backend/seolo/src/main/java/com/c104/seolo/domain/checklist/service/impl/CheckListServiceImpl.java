@@ -5,9 +5,12 @@ import com.c104.seolo.domain.checklist.dto.CheckListTemplateDto;
 import com.c104.seolo.domain.checklist.dto.info.CheckListInfo;
 import com.c104.seolo.domain.checklist.dto.info.CheckListTemplateInfo;
 import com.c104.seolo.domain.checklist.dto.response.GetCheckListResponse;
+import com.c104.seolo.domain.checklist.entity.CheckList;
+import com.c104.seolo.domain.checklist.exception.CheckListErrorCode;
 import com.c104.seolo.domain.checklist.repository.CheckListRepository;
 import com.c104.seolo.domain.checklist.repository.CheckListTemplateRepository;
 import com.c104.seolo.domain.checklist.service.CheckListService;
+import com.c104.seolo.global.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -58,5 +61,16 @@ public class CheckListServiceImpl implements CheckListService {
                 .basic_checklists(checkListTemplateDtos)
                 .checklists(checkListDtos)
                 .build();
+    }
+
+    @Override
+    public void deleteCheckListByCompany(String company_code, Long check_list_id) {
+        CheckList checkList = checkListRepository.findById(check_list_id)
+                .orElseThrow(() -> new CommonException(CheckListErrorCode.NOT_EXIST_CHECK_LIST));
+
+        if (!checkList.getCompany().getCompanyCode().equals(company_code)) {
+            throw new CommonException(CheckListErrorCode.NOT_COMPANY_CHECK_LIST);
+        }
+        checkListRepository.delete(checkList);
     }
 }

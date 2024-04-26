@@ -6,4 +6,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface CheckListService {
     GetCheckListResponse getCheckListByCompany(String company_code);
+    void deleteCheckListByCompany(String company_code, Long checklist_id);
 }

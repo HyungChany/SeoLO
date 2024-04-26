@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.checklist.repository;
 
+import com.c104.seolo.domain.checklist.dto.CheckListDto;
 import com.c104.seolo.domain.checklist.dto.info.CheckListInfo;
 import com.c104.seolo.domain.checklist.entity.CheckList;
 import org.springframework.data.jpa.repository.JpaRepository;

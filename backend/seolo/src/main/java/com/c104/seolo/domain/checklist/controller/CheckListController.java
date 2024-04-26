@@ -5,10 +5,7 @@ import com.c104.seolo.domain.checklist.service.CheckListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("checklist")
@@ -22,5 +19,14 @@ public class CheckListController {
             @RequestHeader("Company-Code") String companyCode
     ) {
         return ResponseEntity.ok(checkListService.getCheckListByCompany(companyCode));
+    }
+
+    @DeleteMapping("/{check_list_id}")
+    public ResponseEntity<Void> deleteCheckList(
+            @RequestHeader("Company-Code") String companyCode,
+            @PathVariable("check_list_id") Long checkListId
+    ) {
+        checkListService.deleteCheckListByCompany(companyCode, checkListId);
+        return ResponseEntity.noContent().build();
     }
 }
