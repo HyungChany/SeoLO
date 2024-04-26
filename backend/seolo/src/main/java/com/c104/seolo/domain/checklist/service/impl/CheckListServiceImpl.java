@@ -85,7 +85,7 @@ public class CheckListServiceImpl implements CheckListService {
         CheckList checkList = checkListRepository.findById(checklist_id)
                 .orElseThrow(() -> new CommonException(CheckListErrorCode.NOT_EXIST_CHECK_LIST));
 
-        if (!checkList.getCheckListContext().equals(checkListRequest.getContext())) {
+        if (checkList.getCheckListContext().equals(checkListRequest.getContext())) {
             throw new CommonException(CheckListErrorCode.CHECK_LIST_ALREADY_EXISTS);
         }
 

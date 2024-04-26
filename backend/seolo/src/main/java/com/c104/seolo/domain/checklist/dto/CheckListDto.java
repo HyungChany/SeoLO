@@ -6,8 +6,6 @@ import lombok.*;
 
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class CheckListDto {
