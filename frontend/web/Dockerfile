@@ -13,4 +13,4 @@ RUN npm install
 COPY . .
 
 # 애플리케이션 실행
-CMD ["npm", "run", "--", "--host"]
+CMD ["npm", "run", "build"]
