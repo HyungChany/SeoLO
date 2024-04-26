@@ -41,6 +41,11 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:taskAffinity="">
         </activity>
+
+        <activity android:name=".presentation.CarouselActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:taskAffinity="" />
     </application>
 
 </manifest>

@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
-import React from 'react';
 interface CardProps {
   width: number;
   height: number;
@@ -8,8 +7,8 @@ interface CardProps {
   onClick: () => void;
 }
 const CardContainer = styled.div<CardProps>`
-  width: ${(props) => props.width}rem;
-  height: ${(props) => props.height}rem;
+  width: ${(props) => props.width}px;
+  height: ${(props) => props.height}px;
   background-color: ${Color.SNOW};
   display: flex;
   border-radius: 1.25rem;

@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
         // 버튼을 통해 ExampleActivity로 전환
         val button: Button = findViewById(R.id.button_example)
         button.setOnClickListener {
-            val intent = Intent(this, ExampleActivity::class.java)
+            val intent = Intent(this, CarouselActivity::class.java)
             startActivity(intent)
         }
     }

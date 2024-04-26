@@ -18,7 +18,7 @@ const Content = styled.div`
   overflow-y: auto;
 `;
 
-const With = (element : any) => (
+const With = (element: JSX.Element) => (
   <Container>
     <Navigation />
     <Content>{element}</Content>
@@ -26,12 +26,13 @@ const With = (element : any) => (
   </Container>
 );
 
-const mainRoutes = [
-  { path: '/', element: With(<MainPage />) },
-];
+const mainRoutes = [{ path: '/', element: With(<MainPage />) }];
 
 const loginRoute = { path: '/login', element: <LoginPage /> };
-const informationRoute = { path: '/information', element: <CompanyInformation /> };
+const informationRoute = {
+  path: '/information',
+  element: <CompanyInformation />,
+};
 const exampleRoute = { path: '/example', element: <Example /> };
 
 const routes = [informationRoute, ...mainRoutes, loginRoute, exampleRoute];
