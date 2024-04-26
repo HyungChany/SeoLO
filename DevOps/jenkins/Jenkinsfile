@@ -24,7 +24,7 @@ pipeline {
         stage('Prepare Workspace') {
             steps {
                 script {
-                    PROFILES_ACTIVE = (env.BRANCH_NAME == 'master') ? 'prod' : 'dev'
+                    env.PROFILES_ACTIVE = (env.BRANCH_NAME == 'master') ? 'prod' : 'dev'
 
                     // 현재 작업 공간 전체를 정리
                     echo "Attempting to clean the workspace..."
@@ -58,10 +58,11 @@ pipeline {
 
                     // SECRET KEY 저장소 clone
                     dir('backend/seolo/src/main/resources') {
+                        echo "Active profile is ${env.PROFILES_ACTIVE}"
 
                         // dev로 profile 변경
-                        sh "sed -i 's/spring.profiles.active: local/spring.profiles.active: ${env.PROFILES_ACTIVE}/' application.yml"
-
+                        sh "sed -i 's/active: local/active: ${env.PROFILES_ACTIVE}/' application.yml"
+                        sh "cat application.yml"
                         sh 'mkdir -p confidence'
                         dir('confidence') {
                             git branch: 'master', credentialsId: env.GITHUB_CREDENTIALS_ID, url: env.GITHUB_REPO_URL
