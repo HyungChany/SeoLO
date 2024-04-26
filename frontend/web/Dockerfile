@@ -26,4 +26,4 @@ WORKDIR /usr/share/nginx/html
 RUN rm -rf ./*
 
 # Node.js 빌드 단계에서 빌드된 프론트엔드 코드 복사
-COPY --from=build /usr/src/app/dist/ /usr/share/nginx/html
+COPY --from=build /usr/src/app/dist/ .
