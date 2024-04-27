@@ -15,7 +15,7 @@ import lombok.ToString;
 public class Company extends BaseEntity {
     // 외부 DB에서 불러온다는 가정하에 생성자 생성안했음
     @Id
-    @Column(name = "company_code", length = 10 , nullable = false)
+    @Column(name = "company_code", length = 9 , nullable = false)
     private String companyCode;
 
     @Column(name = "company_name", nullable = false ,length = 60)

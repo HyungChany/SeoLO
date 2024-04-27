@@ -47,7 +47,7 @@ public class User extends BaseEntity implements UserDetails {
     private String PIN;
 
     @Column(name = "user_isLocked")
-    private Boolean isLocked;
+    private boolean isLocked;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -77,7 +77,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return isLocked == null ? true : !isLocked;
+        return !isLocked;
     }
 
     @Override
@@ -129,14 +129,14 @@ public class User extends BaseEntity implements UserDetails {
         }
 
         public Builder statusCode(Code statusCode) {
-            if (password == null) {
-                throw new IllegalArgumentException("Password cannot be null");
-            }
             this.statusCode = statusCode;
             return this;
         }
 
         public Builder password(String password) {
+            if (password == null) {
+                throw new IllegalArgumentException("Password cannot be null");
+            }
             this.password = password;
             return this;
         }
@@ -146,7 +146,7 @@ public class User extends BaseEntity implements UserDetails {
             return this;
         }
 
-        public Builder isLocked(Boolean isLocked) {
+        public Builder isLocked(boolean isLocked) {
             this.isLocked = isLocked;
             return this;
         }
@@ -160,6 +160,7 @@ public class User extends BaseEntity implements UserDetails {
     }
     
     // 정적 팩토리 메서드
+    // new Builder() 대신 클래스.builder() 처럼 사용해서 인스턴스를 만들기위해서
     public static Builder builder() {
         return new Builder();
     }
