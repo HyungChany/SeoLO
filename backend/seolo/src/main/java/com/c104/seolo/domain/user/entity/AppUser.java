@@ -1,7 +1,7 @@
 package com.c104.seolo.domain.user.entity;
 
-import com.c104.seolo.domain.core.enums.Code;
-import com.c104.seolo.domain.user.enums.Role;
+import com.c104.seolo.domain.core.enums.CODE;
+import com.c104.seolo.domain.user.enums.ROLES;
 import com.c104.seolo.global.common.BaseEntity;
 import com.c104.seolo.headquarter.employee.entity.Employee;
 import jakarta.persistence.*;
@@ -20,7 +20,7 @@ import java.util.Collections;
 @Getter
 @Entity
 @Table(name = "app_user")
-public class User extends BaseEntity implements UserDetails {
+public class AppUser extends BaseEntity implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,11 +33,11 @@ public class User extends BaseEntity implements UserDetails {
 
     @Column(name = "user_role", length = 30, nullable = false)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private ROLES ROLES;
 
     @Column(name = "user_stat", length = 15, nullable = false)
     @Enumerated(EnumType.STRING)
-    private Code statusCode;
+    private CODE statusCODE;
 
     @Column(name = "user_pwd", length = 72, nullable = false)
     private String password;
@@ -51,7 +51,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(this.role.name()));
+        return Collections.singletonList(new SimpleGrantedAuthority(this.ROLES.name()));
     }
 
     @Override
@@ -91,13 +91,13 @@ public class User extends BaseEntity implements UserDetails {
     }
 
     // JPA 프록시 객체 생성을 위한 기본생성자
-    protected User() {}
+    protected AppUser() {}
 
     // 빌더 생성자 -> 빌더 객체로부터 값을 받아 초기화
-    public User(Builder builder) {
+    public AppUser(Builder builder) {
         this.employee = builder.employee;
-        this.role = builder.role;
-        this.statusCode = builder.statusCode;
+        this.ROLES = builder.ROLES;
+        this.statusCODE = builder.statusCODE;
         this.password = builder.password;
         this.PIN = builder.PIN;
         this.isLocked = builder.isLocked;
@@ -105,8 +105,8 @@ public class User extends BaseEntity implements UserDetails {
 
     public static class Builder {
         private Employee employee;
-        private Role role;
-        private Code statusCode = Code.INIT;
+        private ROLES ROLES;
+        private CODE statusCODE = CODE.INIT;
         private String password;
         private String PIN;
         private boolean isLocked = false;
@@ -120,16 +120,16 @@ public class User extends BaseEntity implements UserDetails {
             return this;
         }
 
-        public Builder role(Role role) {
-            if (role == null) {
+        public Builder role(ROLES ROLES) {
+            if (ROLES == null) {
                 throw new IllegalArgumentException("Role cannot be null");
             }
-            this.role = role;
+            this.ROLES = ROLES;
             return this;
         }
 
-        public Builder statusCode(Code statusCode) {
-            this.statusCode = statusCode;
+        public Builder statusCode(CODE statusCODE) {
+            this.statusCODE = statusCODE;
             return this;
         }
 
@@ -151,11 +151,11 @@ public class User extends BaseEntity implements UserDetails {
             return this;
         }
 
-        public User build() {
-            if (employee == null || role == null || password == null) {
+        public AppUser build() {
+            if (employee == null || ROLES == null || password == null) {
                 throw new IllegalStateException("Cannot build User object, one or more required fields are not set");
             }
-            return new User(this);
+            return new AppUser(this);
         }
     }
     

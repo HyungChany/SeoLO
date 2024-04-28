@@ -29,13 +29,4 @@ public class CCodeInterceptor implements HandlerInterceptor {
         return true; // 다음 인터셉터 또는 핸들러 실행
     }
 
-//    @Override
-//    public void postHandle (HttpServletRequest request, HttpServletResponse response, Object handler,ModelAndView mav) throws Exception{
-//        return super.postHandle (request,response,handler,mav);
-//    }
-//
-//    @Override
-//    public void afterCompletion (HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception{
-//        return super.afterCompletion (request,response,handler,ex);
-//    }
 }

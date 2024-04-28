@@ -2,10 +2,13 @@ INSERT INTO COMPANY (company_code, company_name, company_logo, company_registrat
 VALUES ('SFY001KOR', 'SSAFY', 'dummy', '123-45-67890', '123-45-67890-1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('SAM001KOR', 'SAMSUNG', 'dummy', '177-77-77777', '177-77-77777-7', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+INSERT INTO app_user ()
+values
+
 INSERT INTO employee (employee_num, company_code, employee_name, employee_title, employee_team, employee_birthday, employee_thum, employee_join_date, employee_leave_date, created_at, updated_at)
 VALUES
-    ('202100001', 'SFY001KOR', '정재명', '대리', '영업팀', '1999-07-14', 'default', '2021-07-12', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('202000001', 'SFY001KOR', '윤재명', '사원', '경영지원팀', '1975-06-08', 'default', '2020-12-11', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('202100001', 'SFY001KOR', '김진명', '대리', '개발팀', '1996-02-23', 'default', '2021-07-12', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('202000001', 'SFY001KOR', '오유진', '사원', '개발팀', '1975-06-08', 'default', '2023-12-11', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('199500001', 'SFY001KOR', '최부진', '사원', '영업팀', '1963-08-23', 'default', '1995-09-08', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('200500001', 'SFY001KOR', '한지훈', '사원', '영업팀', '1967-03-12', 'default', '2005-11-20', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('201500001', 'SFY001KOR', '장정민', '사원', '개발팀', '1996-08-20', 'default', '2015-09-20', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -155,3 +158,5 @@ VALUES
     ('202200010', 'SFY001KOR', '최하은', '차장', '개발팀', '2004-06-20', 'default', '2022-07-01', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('202200011', 'SFY001KOR', '정재명', '대리', '생산기술팀', '1972-09-11', 'default', '2022-10-21', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ;
+
+
