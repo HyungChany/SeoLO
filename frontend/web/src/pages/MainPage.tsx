@@ -8,6 +8,7 @@ import { Menu } from '@/components/menu/Menu.tsx';
 import Position from '@/../assets/icons/Position.svg?react';
 import CheckList from '@/../assets/icons/CheckList.svg?react';
 import ListModify from '@/../assets/icons/ListModify.svg?react';
+import { Button } from '@/components/button/Button.tsx';
 
 const Background = styled.div`
   box-sizing: border-box;
@@ -20,18 +21,18 @@ const Background = styled.div`
 `;
 const MainContainer = styled.div`
   width: 95%;
-  height: 90%;
+  min-height: 75vh;
   display: flex;
   justify-content: space-between;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
 `;
 
 const LeftContainer = styled.div`
   width: 20%;
-  height: 100%;
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  padding-right: 1rem;
 `;
 
 const HeaderContainer = styled.div`
@@ -66,6 +67,10 @@ const SideMenuBox = styled.div`
   flex-grow: 1;
   width: 100%;
 `;
+const RowContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 
 const LogoutBtn = styled.button`
   display: flex;
@@ -91,7 +96,8 @@ const PositionIcon = styled(Position)`
 const CheckListIcon = styled(CheckList)`
   width: 2rem;
   height: 2rem;
-`;const ListModifyIcon = styled(ListModify)`
+`;
+const ListModifyIcon = styled(ListModify)`
   width: 2rem;
   height: 2rem;
 `;
@@ -157,6 +163,33 @@ const MainPage = () => {
                 <Typo.Body1B color={Color.ONYX}>작업장 편집</Typo.Body1B>
               </Menu>
               <Spacer space={'1.5rem'} />
+              <RowContainer>
+                <Button
+                  onClick={() => console.log()}
+                  width={3.5}
+                  height={1}
+                  $backgroundColor={Color.GRAY100}
+                  $borderColor={Color.GRAY100}
+                  $borderRadius={0.3}
+                  $hoverBackgroundColor={Color.RED100}
+                  $hoverBorderColor={Color.GRAY300}
+                >
+                  <Typo.Detail0>취소</Typo.Detail0>
+                </Button>
+                <Spacer space={'1rem'} horizontal={true} />
+                <Button
+                  onClick={() => console.log()}
+                  width={3.5}
+                  height={1}
+                  $backgroundColor={Color.GRAY100}
+                  $borderColor={Color.GRAY100}
+                  $borderRadius={0.3}
+                  $hoverBackgroundColor={Color.GREEN400}
+                  $hoverBorderColor={Color.GRAY300}
+                >
+                  <Typo.Detail0>완료</Typo.Detail0>
+                </Button>
+              </RowContainer>
             </SideMenuBox>
             <LogoutBtn onClick={() => console.log('클릭')}>
               <LogoutIcon src={logoutIcon} />

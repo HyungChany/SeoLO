@@ -16,7 +16,7 @@ const CardContainer = styled.div<CardProps>`
   background-color: ${Color.SNOW};
   display: flex;
   border-radius: 1.25rem;
-  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.25);
 `;
 
 const Card = (props: CardProps) => {
