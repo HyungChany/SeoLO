@@ -21,19 +21,29 @@ public class Locker extends BaseEntity {
     @JoinColumn(name = "company_code", referencedColumnName = "company_code", nullable = false)
     private Company company;
 
+    @Column(name = "locker_uid", length = 8, nullable = false)
+    private String uid;
+
     @Column(name = "locker_isLocked")
     private boolean isLocked;
+
+    @Column(name = "locker_battery", nullable = false, columnDefinition = "BOOLEAN DEFAULT 100")
+    private int battery;
 
     protected Locker () {}
 
     public Locker(Builder builder) {
         this.company = builder.company;
+        this.uid = builder.uid;
         this.isLocked = builder.isLocked;
+        this.battery = builder.battery;
     }
 
     public static class Builder {
         private Company company;
+        private String uid;
         private boolean isLocked = false;
+        private int battery;
 
         public Builder company(Company company) {
             if (company == null) {
@@ -43,8 +53,21 @@ public class Locker extends BaseEntity {
             return this;
         }
 
+        public Builder uid(String uid) {
+            if (uid == null) {
+                throw new IllegalArgumentException("Uid cannot be null");
+            }
+            this.uid = uid;
+            return this;
+        }
+
         public Builder isLocked(boolean isLocked) {
             this.isLocked = isLocked;
+            return this;
+        }
+
+        public Builder battery(int battery) {
+            this.battery = battery;
             return this;
         }
 
