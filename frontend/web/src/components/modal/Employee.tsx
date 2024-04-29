@@ -63,24 +63,24 @@ const EquipmentModal = ({ onClick }: EquipmentModalProps) => {
       </ButtonBox>
       <MainBox>
         <ContentBox>
-          <Chapter>작업장</Chapter>
-          <Content>싸피</Content>
-        </ContentBox>
-        <ContentBox>
-          <Chapter>장비 명</Chapter>
-          <Content>kw-2322</Content>
-        </ContentBox>
-        <ContentBox>
-          <Chapter>장비번호</Chapter>
-          <Content>lw123124442</Content>
-        </ContentBox>
-        <ContentBox>
-          <Chapter>도입 일자</Chapter>
-          <Content>2024.04.02</Content>
-        </ContentBox>
-        <ContentBox>
-          <Chapter>담당자</Chapter>
+          <Chapter>이름</Chapter>
           <Content>오정민</Content>
+        </ContentBox>
+        <ContentBox>
+          <Chapter>사번</Chapter>
+          <Content>1014826</Content>
+        </ContentBox>
+        <ContentBox>
+          <Chapter>소속부서</Chapter>
+          <Content>해외사업부</Content>
+        </ContentBox>
+        <ContentBox>
+          <Chapter>직급</Chapter>
+          <Content>대리</Content>
+        </ContentBox>
+        <ContentBox>
+          <Chapter>LOTO 시행 횟수</Chapter>
+          <Content>4</Content>
         </ContentBox>
       </MainBox>
     </Modal>
