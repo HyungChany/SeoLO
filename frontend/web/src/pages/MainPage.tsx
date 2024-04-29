@@ -125,10 +125,24 @@ const Handle = () => {};
 
 const MainPage = () => {
   const [modifyMode, setModifyMode] = useState<boolean>(false);
+  const [imageFile, setImageFile] = useState<string | null>(null);
 
+  // 작업장 편집모드 활성화, 비활성화
   const changeModifyMode = () => {
     setModifyMode((prevMode) => !prevMode);
     console.log(modifyMode);
+  };
+
+  // 작업장 추가
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files ? event.target.files[0] : null;
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImageFile(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -153,14 +167,22 @@ const MainPage = () => {
                 <Typo.Body1B color={Color.ONYX}>작업장 위치 선택</Typo.Body1B>
               </Menu>
               <Spacer space={'1.5rem'} />
-              <Menu
-                onClick={() => console.log('클릭')}
-                width={'100%'}
-                $enterSize={1}
-              >
-                <CheckListIcon />
-                <Typo.Body1B color={Color.ONYX}>새 작업장 추가</Typo.Body1B>
-              </Menu>
+              <input
+                type="file"
+                onChange={handleImageChange}
+                style={{ display: 'none' }}
+                id="fileInput"
+              />
+              <label htmlFor="fileInput">
+                <Menu
+                  width={'100%'}
+                  $enterSize={1}
+                  onClick={() => console.log()}
+                >
+                  <CheckListIcon />
+                  <Typo.Body1B color={Color.ONYX}>새 작업장 추가</Typo.Body1B>
+                </Menu>
+              </label>
               <Spacer space={'1.5rem'} />
               <Menu onClick={changeModifyMode} width={'100%'} $enterSize={1}>
                 <ListModifyIcon />
@@ -203,13 +225,23 @@ const MainPage = () => {
             </LogoutBtn>
           </LeftContainer>
           <RightContainer>
-            <Card
-              width={'100%'}
-              height={'45vh'}
-              onClick={() => console.log('클릭')}
-            >
-              도면
-            </Card>
+            {imageFile ? (
+              <Card width={'100%'} height={'45vh'}>
+                <img
+                  src={imageFile}
+                  alt="Uploaded blueprint"
+                  style={{ width: '100%', height: '100%' }}
+                />
+              </Card>
+            ) : (
+              <Card
+                width={'100%'}
+                height={'45vh'}
+                onClick={() => console.log('클릭')}
+              >
+                도면
+              </Card>
+            )}
             <Spacer space={'2rem'} />
             <Cards>
               <Card width={'14vw'} height={'14vw'} onClick={Handle}>
