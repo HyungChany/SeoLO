@@ -3,31 +3,34 @@ import * as Typo from '@/components/typography/Typography.tsx';
 import styled from 'styled-components';
 import Card from '@/components/card/Card.tsx';
 import logoutIcon from '@/../assets/icons/Logout.png';
+import { Spacer } from '@/components/basic/Spacer.tsx';
 
 const Background = styled.div`
   box-sizing: border-box;
   min-width: 100%;
-  height: 100%;
+  min-height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: ${Color.GRAY200};
 `;
-const Box = styled.div`
-  min-width: 85rem;
-  height: 34rem;
+const MainContainer = styled.div`
+  width: 95%;
+  height: 90%;
   display: flex;
   justify-content: space-between;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 `;
 
-const LeftBox = styled.div`
-  width: 28%;
+const LeftContainer = styled.div`
+  width: 20%;
   height: 100%;
   display: flex;
   flex-direction: column;
 `;
 
-const MainName = styled.div`
+const HeaderContainer = styled.div`
   position: relative;
   text-align: end;
 `;
@@ -40,13 +43,13 @@ const Line = styled.div`
   background-color: black;
 `;
 
-const MenuBox = styled.div`
+const BannerContainer = styled.div`
   position: relative;
   margin-top: -5%;
   margin-left: 10%;
 `;
 
-const Menu = styled.span`
+const Banner = styled.span`
   font-family: NYJGothicB;
   color: ${Color.BLUE100};
   font-size: 2rem;
@@ -58,7 +61,7 @@ const SideMenuBox = styled.div`
   flex-grow: 1;
 `;
 
-const LogoutBtn = styled.div`
+const LogoutBtn = styled.button`
   display: flex;
   width: 12rem;
   font-family: NYJGothicB;
@@ -69,7 +72,6 @@ const LogoutBtn = styled.div`
   border-radius: 0.625rem;
   border: 2px solid rgba(0, 0, 0, 0.2);
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  margin-top: auto;
   margin: 0 auto;
 `;
 
@@ -77,23 +79,16 @@ const LogoutIcon = styled.img`
   width: 50px;
 `;
 
-const RightBox = styled.div`
-  width: 70%;
+const RightContainer = styled.div`
+  width: 78%;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* background-color: aqua; */
-`;
-const Blueprint = styled.div`
-  width: 100%;
-  height: 65%;
-  border-radius: 0.625rem;
-  box-shadow: 0px 5px 5px 1px rgba(0, 0, 0, 0.2);
-  background-color: #ffffff;
 `;
 const Cards = styled.div`
   width: 100%;
+  height: 20%;
   display: flex;
   justify-content: space-between;
   /* background-color: blueviolet; */
@@ -104,42 +99,49 @@ const MainPage = () => {
   return (
     <>
       <Background>
-        <Box>
-          <LeftBox>
-            <MainName>
+        <MainContainer>
+          <LeftContainer>
+            <HeaderContainer>
               <Typo.H3 color={Color.BLACK}>1공장 조립 라인</Typo.H3>
-            </MainName>
+            </HeaderContainer>
             <Line />
-            <MenuBox>
-              <Menu>Menu</Menu>
-            </MenuBox>
+            <BannerContainer>
+              <Banner>Menu</Banner>
+            </BannerContainer>
             <SideMenuBox></SideMenuBox>
-            <LogoutBtn>
+            <LogoutBtn onClick={() => console.log('클릭')}>
               <LogoutIcon src={logoutIcon} />
               로그아웃
             </LogoutBtn>
-          </LeftBox>
-          <RightBox>
-            <Blueprint></Blueprint>
+          </LeftContainer>
+          <RightContainer>
+            <Card
+              width={'100%'}
+              height={'70vh'}
+              onClick={() => console.log('클릭')}
+            >
+              도면
+            </Card>
+            <Spacer space={'2rem'} />
             <Cards>
-              <Card width={170} height={170} onClick={Handle}>
-                gdg
+              <Card width={'14vw'} height={'14vw'} onClick={Handle}>
+                <Typo.H1>등록 장비</Typo.H1>
               </Card>
-              <Card width={170} height={170} onClick={Handle}>
+              <Card width={'14vw'} height={'14vw'} onClick={Handle}>
                 gdgdgd
               </Card>
-              <Card width={170} height={170} onClick={Handle}>
+              <Card width={'14vw'} height={'14vw'} onClick={Handle}>
                 gdgdgd
               </Card>
-              <Card width={170} height={170} onClick={Handle}>
+              <Card width={'14vw'} height={'14vw'} onClick={Handle}>
                 gdgdgd
               </Card>
-              <Card width={170} height={170} onClick={Handle}>
+              <Card width={'14vw'} height={'14vw'} onClick={Handle}>
                 gdgdgd
               </Card>
             </Cards>
-          </RightBox>
-        </Box>
+          </RightContainer>
+        </MainContainer>
       </Background>
     </>
   );

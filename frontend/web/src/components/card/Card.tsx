@@ -1,14 +1,18 @@
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
+import React from 'react';
+
 interface CardProps {
-  width: number;
-  height: number;
+  width: number | string;
+  height: number | string;
   children: React.ReactNode;
   onClick: () => void;
 }
 const CardContainer = styled.div<CardProps>`
-  width: ${(props) => props.width}px;
-  height: ${(props) => props.height}px;
+  width: ${(props) =>
+    typeof props.width === 'number' ? `${props.width}rem` : props.width};
+  height: ${(props) =>
+    typeof props.height === 'number' ? `${props.height}rem` : props.height};
   background-color: ${Color.SNOW};
   display: flex;
   border-radius: 1.25rem;
