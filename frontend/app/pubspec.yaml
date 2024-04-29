@@ -42,6 +42,8 @@ dependencies:
   flutter_dotenv: ^5.1.0 # .env파일
   carousel_slider: ^4.2.1 # 뉴스 캐러셀
   url_launcher: ^6.2.6 # 뉴스 링크
+  intl: ^0.18.1
+  flutter_localization: ^0.2.0
 
 dev_dependencies:
   flutter_test:

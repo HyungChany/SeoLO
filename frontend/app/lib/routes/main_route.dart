@@ -1,4 +1,5 @@
 import 'package:app/screens/lock/lock_screen.dart';
+import 'package:app/screens/lotolock/day_select_screen.dart';
 import 'package:app/screens/main/main_screen.dart';
 import 'package:app/screens/profile/change_password_screen.dart';
 import 'package:app/screens/profile/profile_screen.dart';
@@ -8,6 +9,7 @@ import 'package:app/screens/lotolock/checklist_screen.dart';
 import 'package:app/screens/lotolock/workplace_select_screen.dart';
 import 'package:app/screens/lotolock/facility_select_screen.dart';
 import 'package:app/screens/lotolock/worklist_select_screen.dart';
+import 'package:app/screens/lotolock/day_select_screen.dart';
 Route<dynamic> generateMainRoute(RouteSettings settings) {
   switch (settings.name) {
     case '/lock':

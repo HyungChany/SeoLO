@@ -6,6 +6,7 @@ import Footer from '@/components/footer/Footer.tsx';
 import Navigation from '@/components/navigation/Navigation.tsx';
 import LoginPage from '@/pages/LoginPage.tsx';
 import MainPage from '@/pages/MainPage.tsx';
+import React from 'react';
 
 const Container = styled.div`
   display: flex;
