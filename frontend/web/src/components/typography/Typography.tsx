@@ -16,7 +16,7 @@ const StyledHeaderTypography = styled.div<FontProps>`
   font-size: ${(props) => `${props.fontSize}rem`};
   color: ${(props) => props.color || 'black'};
   /* line-height: ${(props) => `${props.fontSize * 1.5}rem`}; */
-  white-space: nowrap;
+  white-space: normal;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
