@@ -30,6 +30,10 @@ public class Company extends BaseEntity {
     @Column(name = "company_accident_manage_num", nullable = false, length = 14, columnDefinition = "CHAR(14)")
     private String companyAccidentManageNum;
 
+    public boolean isMatchingCompanyCode(String companyCode) {
+        return this.companyCode.equals(companyCode);
+    }
+
     // JPA 프록시 객체 생성을 위한 기본생성자
     protected Company() {}
 }

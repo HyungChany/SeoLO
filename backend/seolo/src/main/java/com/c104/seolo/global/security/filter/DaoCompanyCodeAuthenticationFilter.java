@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationServiceExceptio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.util.Assert;
 
@@ -18,10 +19,11 @@ public class DaoCompanyCodeAuthenticationFilter extends UsernamePasswordAuthenti
 
     private static final String SPRING_SECURITY_FORM_COMPANY_CODE_KEY = "companyCode";
     private String companyCodeParameter = SPRING_SECURITY_FORM_COMPANY_CODE_KEY;
-    private boolean postOnly = true;
+    private boolean postOnly = false;
 
-    public DaoCompanyCodeAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationFailureHandler failureHandler) {
+    public DaoCompanyCodeAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationSuccessHandler successHandler, AuthenticationFailureHandler failureHandler) {
         super.setAuthenticationManager(authenticationManager);
+        setAuthenticationSuccessHandler(successHandler);
         setAuthenticationFailureHandler(failureHandler);
         setFilterProcessesUrl("/login");
     }
@@ -31,7 +33,7 @@ public class DaoCompanyCodeAuthenticationFilter extends UsernamePasswordAuthenti
         if (this.postOnly && !request.getMethod().equals("POST")) {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         }
-        log.debug("DaoCompnayfilter 진입 확인");
+        log.debug("DaoCompanyfilter 진입 확인");
         String username = obtainUsername(request);
         username = (username != null) ? username.trim() : "";
         String password = obtainPassword(request);

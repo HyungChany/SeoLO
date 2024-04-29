@@ -53,6 +53,10 @@ public class Employee extends BaseEntity {
         return employeeBirthday.format(DateTimeFormatter.ofPattern("MMdd"));
     }
 
+    public boolean isMatchingCompanyCode(String companyCode) {
+        return this.getCompany().isMatchingCompanyCode(companyCode);
+    }
+
     // JPA 프록시 객체 생성을 위한 기본생성자
     protected Employee() {}
 }

@@ -17,19 +17,20 @@ import java.io.IOException;
 
 @Slf4j
 @Component
-public class SeoloFailureHandler implements AuthenticationFailureHandler {
+public class SeoloLoginFailureHandler implements AuthenticationFailureHandler {
     private ObjectMapper objectMapper;
 
     @Autowired
-    public SeoloFailureHandler(ObjectMapper objectMapper) {
+    public SeoloLoginFailureHandler(ObjectMapper objectMapper) {
         this.objectMapper = objectMapper;
     }
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        response.setContentType("application/json");
+        response.setContentType("application/json;charset=UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
+        log.debug(exception.toString());
 
         if (exception instanceof AuthException) {
             // 사용자가 정의한 AuthException 처리
@@ -54,7 +55,7 @@ public class SeoloFailureHandler implements AuthenticationFailureHandler {
                     SeoloErrorResponse.builder()
                             .httpStatus(HttpStatus.UNAUTHORIZED)
                             .errorCode("AUTH_FAILURE")
-                            .message("Authentication failure")
+                            .message(exception.getMessage())
                             .build()
                     )
             );

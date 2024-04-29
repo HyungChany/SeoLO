@@ -90,6 +90,10 @@ public class AppUser extends BaseEntity implements UserDetails {
         return true;
     }
 
+    public boolean isMatchingCompanyCode(String companyCode) {
+        return this.employee.isMatchingCompanyCode(companyCode);
+    }
+
     // JPA 프록시 객체 생성을 위한 기본생성자
     protected AppUser() {}
 
