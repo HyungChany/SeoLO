@@ -1,6 +1,6 @@
 import { Example } from '@/components/Example.tsx';
 import styled from 'styled-components';
-import CompanyInformation from '@/pages/CompanyInformation.tsx';
+import CompanyInformation from '@/pages/Information.tsx';
 import { createBrowserRouter } from 'react-router-dom';
 import Footer from '@/components/footer/Footer.tsx';
 import Navigation from '@/components/navigation/Navigation.tsx';
@@ -31,7 +31,7 @@ const mainRoutes = [{ path: '/', element: With(<MainPage />) }];
 const loginRoute = { path: '/login', element: <LoginPage /> };
 const informationRoute = {
   path: '/information',
-  element: <CompanyInformation />,
+  element: With(<CompanyInformation />),
 };
 const exampleRoute = { path: '/example', element: <Example /> };
 
