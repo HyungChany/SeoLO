@@ -63,10 +63,10 @@ const Navigation = () => {
             <Typo.H3>체크리스트 관리</Typo.H3>
           </MenuLink>
           <MenuLink to="/information">
-            <Typo.H3>사업장 정보</Typo.H3>
+            <Typo.H3>작업장 정보</Typo.H3>
           </MenuLink>
           <MenuLink to="/1">
-            <Typo.H3>작업자 정보</Typo.H3>
+            <Typo.H3>임직원 정보</Typo.H3>
           </MenuLink>
         </Menu>
       </NavigatorContent>
