@@ -9,6 +9,7 @@ import { Menu } from '@/components/menu/Menu.tsx';
 import * as Typo from '@/components/typography/Typography.tsx';
 import * as Color from '@/config/color/Color.ts';
 import styled from 'styled-components';
+import { useState } from 'react';
 
 const Background = styled.div`
   box-sizing: border-box;
@@ -123,6 +124,13 @@ const InnerContainer = styled.div`
 const Handle = () => {};
 
 const MainPage = () => {
+  const [modifyMode, setModifyMode] = useState<boolean>(false);
+
+  const changeModifyMode = () => {
+    setModifyMode((prevMode) => !prevMode);
+    console.log(modifyMode);
+  };
+
   return (
     <>
       <Background>
@@ -154,42 +162,40 @@ const MainPage = () => {
                 <Typo.Body1B color={Color.ONYX}>새 작업장 추가</Typo.Body1B>
               </Menu>
               <Spacer space={'1.5rem'} />
-              <Menu
-                onClick={() => console.log('클릭')}
-                width={'100%'}
-                $enterSize={1}
-              >
+              <Menu onClick={changeModifyMode} width={'100%'} $enterSize={1}>
                 <ListModifyIcon />
                 <Typo.Body1B color={Color.ONYX}>작업장 편집</Typo.Body1B>
               </Menu>
               <Spacer space={'1.5rem'} />
-              <RowContainer>
-                <Button
-                  onClick={() => console.log()}
-                  width={3.5}
-                  height={1}
-                  $backgroundColor={Color.GRAY100}
-                  $borderColor={Color.GRAY100}
-                  $borderRadius={0.3}
-                  $hoverBackgroundColor={Color.RED100}
-                  $hoverBorderColor={Color.GRAY300}
-                >
-                  <Typo.Detail0>취소</Typo.Detail0>
-                </Button>
-                <Spacer space={'1rem'} horizontal={true} />
-                <Button
-                  onClick={() => console.log()}
-                  width={3.5}
-                  height={1}
-                  $backgroundColor={Color.GRAY100}
-                  $borderColor={Color.GRAY100}
-                  $borderRadius={0.3}
-                  $hoverBackgroundColor={Color.GREEN400}
-                  $hoverBorderColor={Color.GRAY300}
-                >
-                  <Typo.Detail0>완료</Typo.Detail0>
-                </Button>
-              </RowContainer>
+              {modifyMode && (
+                <RowContainer>
+                  <Button
+                    onClick={changeModifyMode}
+                    width={3.5}
+                    height={1}
+                    $backgroundColor={Color.GRAY100}
+                    $borderColor={Color.GRAY100}
+                    $borderRadius={0.3}
+                    $hoverBackgroundColor={Color.RED100}
+                    $hoverBorderColor={Color.GRAY300}
+                  >
+                    <Typo.Detail0>취소</Typo.Detail0>
+                  </Button>
+                  <Spacer space={'1rem'} horizontal={true} />
+                  <Button
+                    onClick={changeModifyMode}
+                    width={3.5}
+                    height={1}
+                    $backgroundColor={Color.GRAY100}
+                    $borderColor={Color.GRAY100}
+                    $borderRadius={0.3}
+                    $hoverBackgroundColor={Color.GREEN400}
+                    $hoverBorderColor={Color.GRAY300}
+                  >
+                    <Typo.Detail0>완료</Typo.Detail0>
+                  </Button>
+                </RowContainer>
+              )}
             </SideMenuBox>
             <LogoutBtn onClick={() => console.log('클릭')}>
               <LogoutIcon src={logoutIcon} />
