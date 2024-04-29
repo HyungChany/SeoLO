@@ -14,8 +14,9 @@ const InputBoxContainer = styled.input<InputBoxProps>`
   width: ${(props) => props.width}rem;
   height: ${(props) => props.height}rem;
   box-sizing: border-box;
-  border: 1px solid ${Color.GRAY400};
+  border: 1px solid ${Color.GRAY200};
   border-radius: 8px;
+  padding-left: 0.69rem;
 `;
 
 const InputBox = (props: InputBoxProps) => {
