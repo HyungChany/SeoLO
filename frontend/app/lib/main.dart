@@ -20,13 +20,10 @@ const Color green400 = Color.fromRGBO(93, 210, 122, 1);
 const Color red300 = Color.fromRGBO(241, 38, 13, 1);
 // 그림자
 const BoxShadow shadow = BoxShadow(
-    color: Color.fromRGBO(0, 0, 0, 0.25),
-    blurRadius: 4.0,
-    spreadRadius: 4.0,
-    offset: Offset(
-      3,
-      3,
-    ));
+  color: Color.fromRGBO(0, 0, 0, 0.25), // 그림자 확산 범위
+  blurRadius: 5, // 그림자 흐림 정도
+  offset: Offset(0, 2), // 그림자 위치
+);
 
 void main() async {
   // WidgetsBinding widgetsBinding =

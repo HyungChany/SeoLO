@@ -22,7 +22,7 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(cCodeInterceptor())
                 .addPathPatterns("/**") // 모든 URL에 인터셉터를 적용
-                .excludePathPatterns("/public/**"); // 예외 처리할 URL 패턴 지정
+                .excludePathPatterns("/login","/error"); // 예외 처리할 URL 패턴 지정
     }
 
     @Bean

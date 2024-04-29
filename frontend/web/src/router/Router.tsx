@@ -19,7 +19,7 @@ const Content = styled.div`
   overflow-y: auto;
 `;
 
-const With = (element: React.ReactNode): React.ReactNode => (
+const With = (element: JSX.Element) => (
   <Container>
     <Navigation />
     <Content>{element}</Content>

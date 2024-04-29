@@ -10,16 +10,16 @@ class NewsService {
     try {
       final response = await _dio.get('$baseUrl/news');
 
-      if (response.statusCode == 200) {
+      if (response.statusCODE == 200) {
         List<dynamic> responseData = response.data;
         List<NewsModel> newsList = responseData.map((data) => NewsModel.fromJson(data)).toList();
-        debugPrint('$newsList');
+        // debugPrint('$newsList');
         return newsList;
       } else {
         throw Exception('뉴스 로드 실패');
       }
     } on DioError catch (e) {
-      throw Exception('뉴스 로드 실패: ${e.response?.statusCode}');
+      throw Exception('뉴스 로드 실패: ${e.response?.statusCODE}');
     }
   }
 

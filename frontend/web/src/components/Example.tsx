@@ -1,6 +1,6 @@
 import * as Typo from '@/components/typography/Typography.tsx';
 import * as Color from '@/config/color/Color.ts';
-import Exam from '../../assets/icons/Exam.svg?react';
+import Exam from '@/../assets/icons/Exam.svg?react';
 import styled from 'styled-components';
 import { Divider } from '@/components/basic/Divider.tsx';
 import { Spacer } from '@/components/basic/Spacer.tsx';
@@ -9,8 +9,8 @@ import { Menu } from '@/components/menu/Menu.tsx';
 import CheckList from '@/../assets/icons/CheckList.svg?react';
 import { Modal } from '@/components/modal/Modal.tsx';
 import Footer from '@/components/footer/Footer.tsx';
-import Navigation from './navigation/Navigation.tsx';
-import Dropdown from './dropdown/DropDown.tsx';
+import Navigation from '@/components/navigation/Navigation.tsx';
+import Dropdown from '@/components/dropdown/DropDown.tsx';
 import Card from '@/components/card/Card.tsx';
 import InputBox from '@/components/inputbox/InputBox.tsx';
 import { ChangeEvent, useState } from 'react';
