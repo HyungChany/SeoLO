@@ -5,24 +5,14 @@ import Position from '@/../assets/icons/Position.svg?react';
 import { Spacer } from '@/components/basic/Spacer.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import Card from '@/components/card/Card.tsx';
+import { Leaflet } from '@/components/leaflet/Leafet.tsx';
 import { Menu } from '@/components/menu/Menu.tsx';
 import * as Typo from '@/components/typography/Typography.tsx';
 import * as Color from '@/config/color/Color.ts';
-import styled from 'styled-components';
-import { useEffect, useState } from 'react';
-import {
-  ImageOverlay,
-  MapContainer,
-  Marker,
-  useMap,
-  useMapEvents,
-} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import L from 'leaflet';
-
-interface ImageMapProps {
-  imageFile: string | null;
-}
+import { useState } from 'react';
+import { MapContainer } from 'react-leaflet';
+import styled from 'styled-components';
 
 const Background = styled.div`
   box-sizing: border-box;
@@ -149,47 +139,6 @@ const InnerContainer = styled.div`
 
 const Handle = () => {};
 
-const ImageMap = ({ imageFile }: ImageMapProps): JSX.Element | null => {
-  const [bounds, setBounds] = useState<L.LatLngBounds | null>(null);
-  const [markers, setMarkers] = useState<L.LatLng[]>([]);
-  const map = useMap();
-
-  useEffect(() => {
-    if (imageFile) {
-      const img = new Image();
-      img.onload = () => {
-        const imgWidth = img.naturalWidth / 2;
-        const imgHeight = img.naturalHeight / 2;
-        const newBounds = L.latLngBounds(
-          [-imgHeight, -imgWidth],
-          [imgHeight, imgWidth],
-        );
-        setBounds(newBounds);
-        map.fitBounds(newBounds);
-      };
-      img.src = imageFile;
-    }
-  }, [imageFile, map]);
-
-  useMapEvents({
-    click: (e) => {
-      const newMarker = e.latlng;
-      setMarkers((currentMarkers) => [...currentMarkers, newMarker]);
-    },
-  });
-
-  if (!imageFile || !bounds) return null;
-
-  return (
-    <>
-      <ImageOverlay url={imageFile} bounds={bounds} />
-      {markers.map((marker, idx) => (
-        <Marker key={idx} position={marker} />
-      ))}
-    </>
-  );
-};
-
 const MainPage = () => {
   const [modifyMode, setModifyMode] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<string | null>(null);
@@ -301,7 +250,7 @@ const MainPage = () => {
                   style={{ height: '100%', width: '100%', overflow: 'hidden' }}
                   attributionControl={false}
                 >
-                  {imageFile && <ImageMap imageFile={imageFile} />}
+                  {imageFile && <Leaflet imageFile={imageFile} />}
                 </MapContainer>
               </CardDrawing>
             ) : (
