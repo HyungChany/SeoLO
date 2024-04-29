@@ -10,7 +10,13 @@ import * as Typo from '@/components/typography/Typography.tsx';
 import * as Color from '@/config/color/Color.ts';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { ImageOverlay, MapContainer, useMap } from 'react-leaflet';
+import {
+  ImageOverlay,
+  MapContainer,
+  Marker,
+  useMap,
+  useMapEvents,
+} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -145,21 +151,18 @@ const Handle = () => {};
 
 const ImageMap = ({ imageFile }: ImageMapProps): JSX.Element | null => {
   const [bounds, setBounds] = useState<L.LatLngBounds | null>(null);
+  const [markers, setMarkers] = useState<L.LatLng[]>([]);
   const map = useMap();
 
   useEffect(() => {
     if (imageFile) {
       const img = new Image();
       img.onload = () => {
-        // 이미지 로드 완료 후 크기를 기반으로 bounds 설정
         const imgWidth = img.naturalWidth / 2;
         const imgHeight = img.naturalHeight / 2;
-        // 이미지의 실제 픽셀 크기를 사용하여 bounds 설정
         const newBounds = L.latLngBounds(
-          // 좌측 하단 좌표
           [-imgHeight, -imgWidth],
-          // 우측 상단 좌표
-          [imgHeight, imgWidth]
+          [imgHeight, imgWidth],
         );
         setBounds(newBounds);
         map.fitBounds(newBounds);
@@ -168,9 +171,23 @@ const ImageMap = ({ imageFile }: ImageMapProps): JSX.Element | null => {
     }
   }, [imageFile, map]);
 
+  useMapEvents({
+    click: (e) => {
+      const newMarker = e.latlng;
+      setMarkers((currentMarkers) => [...currentMarkers, newMarker]);
+    },
+  });
+
   if (!imageFile || !bounds) return null;
 
-  return <ImageOverlay url={imageFile} bounds={bounds} />;
+  return (
+    <>
+      <ImageOverlay url={imageFile} bounds={bounds} />
+      {markers.map((marker, idx) => (
+        <Marker key={idx} position={marker} />
+      ))}
+    </>
+  );
 };
 
 const MainPage = () => {
