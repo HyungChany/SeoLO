@@ -12,7 +12,7 @@ public enum LockerType {
 
     private final String selectType;
 
-    private LockerType(String selectType) {
+    LockerType(String selectType) {
         this.selectType = selectType;
     }
 }
