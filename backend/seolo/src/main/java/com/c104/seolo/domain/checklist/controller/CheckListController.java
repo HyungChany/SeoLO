@@ -28,7 +28,7 @@ public class CheckListController {
     public ResponseEntity<Void> createCheckList(
             @RequestHeader("Company-Code") String companyCode,
             @RequestBody CheckListRequest checkListRequest
-            ) {
+    ) {
         checkListService.createCheckList(checkListRequest, companyCode);
         URI location = URI.create("/checklist");
         return ResponseEntity.created(location).build();
