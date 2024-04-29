@@ -33,4 +33,13 @@ public class FacilityController {
         URI location = URI.create("/facilities");
         return ResponseEntity.created(location).build();
     }
+
+    @DeleteMapping("/{facilityId}")
+    public ResponseEntity<Void> deleteFacility(
+            @RequestHeader("Company-Code") String companyCode,
+            @PathVariable("facilityId") Long facilityId
+    ) {
+        facilityService.deleteFacility(companyCode, facilityId);
+        return ResponseEntity.noContent().build();
+    }
 }

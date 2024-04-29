@@ -34,20 +34,20 @@ public class CheckListController {
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping("/{check_list_id}")
+    @PatchMapping("/{checkListId}")
     public ResponseEntity<Void> updateCheckList(
             @RequestHeader("Company-Code") String companyCode,
             @RequestBody CheckListRequest checkListRequest,
-            @PathVariable("check_list_id") Long checkListId
+            @PathVariable("checkListId") Long checkListId
     ) {
         checkListService.updateCheckList(checkListRequest, checkListId, companyCode);
         return ResponseEntity.accepted().build();
     }
 
-    @DeleteMapping("/{check_list_id}")
+    @DeleteMapping("/{checkListId}")
     public ResponseEntity<Void> deleteCheckList(
             @RequestHeader("Company-Code") String companyCode,
-            @PathVariable("check_list_id") Long checkListId
+            @PathVariable("checkListId") Long checkListId
     ) {
         checkListService.deleteCheckListByCompany(companyCode, checkListId);
         return ResponseEntity.noContent().build();

@@ -60,4 +60,15 @@ public class FacilityServiceImpl implements FacilityService {
                 .build();
         facilityRepository.save(facility);
     }
+
+    @Override
+    public void deleteFacility(String company_code, Long facility_id) {
+        Facility facility = facilityRepository.findById(facility_id)
+                .orElseThrow(() -> new CommonException(FacilityErrorCode.NOT_EXIST_FACILITY));
+
+        if (!facility.getCompany().getCompanyCode().equals(company_code)) {
+            throw new CommonException(FacilityErrorCode.NOT_COMPANY_FACILITY);
+        }
+        facilityRepository.delete(facility);
+    }
 }
