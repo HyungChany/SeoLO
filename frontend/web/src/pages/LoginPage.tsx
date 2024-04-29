@@ -1,7 +1,10 @@
-// import * as Typo from '@/components/typography/Typography.tsx';
 import * as Color from '@/config/color/Color.ts';
 import styled from 'styled-components';
-
+import Company from '/assets/icons/Company.svg';
+import InputBox from '@/components/inputbox/InputBox.tsx';
+import { ChangeEvent, useState } from 'react';
+import User from '/assets/icons/Id.svg';
+import Lock from '/assets/icons/Lock.svg';
 const Background = styled.div`
   width: 100dvw;
   height: 100dvh;
@@ -44,10 +47,18 @@ const NameEng = styled.div`
   color: ${Color.BLUE100};
 `;
 
-const InputBox = styled.div`
-  width: 28.5rem;
-  height: 10rem;
-  background-color: #56ff6c;
+const InputContainer = styled.div`
+  width: 25rem;
+  height: 13rem;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+`;
+const InputContent = styled.div`
+  width: 25rem;
+  height: 3.125rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const ButtonBox = styled.div`
@@ -75,6 +86,18 @@ const ButtonBox = styled.div`
   }
 `;
 const LoginPage = () => {
+  const [companyNumber, setCompanyNumber] = useState<string>('');
+  const [loginId, setLoginId] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const handleCompanyNumber = (e: ChangeEvent<HTMLInputElement>) => {
+    setCompanyNumber(e.target.value);
+  };
+  const handleLoginId = (e: ChangeEvent<HTMLInputElement>) => {
+    setLoginId(e.target.value);
+  };
+  const handlePassword = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
   return (
     <>
       <Background>
@@ -83,7 +106,38 @@ const LoginPage = () => {
             <NameKor>서로</NameKor>
             <NameEng>SeoLO</NameEng>
           </NameBox>
-          <InputBox>여기에 입력창 넣으셈</InputBox>
+          <InputContainer>
+            <InputContent>
+              <img src={Company} alt="company" />
+              <InputBox
+                width={21.25}
+                height={3.125}
+                value={companyNumber}
+                placeholder="회사번호"
+                onChange={handleCompanyNumber}
+              />
+            </InputContent>
+            <InputContent>
+              <img src={User} alt="User" style={{ marginLeft: '0.3rem' }} />
+              <InputBox
+                width={21.25}
+                height={3.125}
+                value={loginId}
+                placeholder="아이디"
+                onChange={handleLoginId}
+              />
+            </InputContent>
+            <InputContent>
+              <img src={Lock} alt="Lock" style={{ marginLeft: '0.3rem' }} />
+              <InputBox
+                width={21.25}
+                height={3.125}
+                value={password}
+                placeholder="비밀번호"
+                onChange={handlePassword}
+              />
+            </InputContent>
+          </InputContainer>
           <ButtonBox>로그인</ButtonBox>
         </LoginBox>
       </Background>
