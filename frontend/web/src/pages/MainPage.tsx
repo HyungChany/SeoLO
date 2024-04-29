@@ -5,11 +5,14 @@ import Position from '@/../assets/icons/Position.svg?react';
 import { Spacer } from '@/components/basic/Spacer.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import Card from '@/components/card/Card.tsx';
+import { Leaflet } from '@/components/leaflet/Leafet.tsx';
 import { Menu } from '@/components/menu/Menu.tsx';
 import * as Typo from '@/components/typography/Typography.tsx';
 import * as Color from '@/config/color/Color.ts';
-import styled from 'styled-components';
+import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
+import { MapContainer } from 'react-leaflet';
+import styled from 'styled-components';
 
 const Background = styled.div`
   box-sizing: border-box;
@@ -239,16 +242,16 @@ const MainPage = () => {
           </LeftContainer>
           <RightContainer>
             {imageFile ? (
-              <CardDrawing onClick={() => console.log('클릭')}>
-                <img
-                  src={imageFile}
-                  alt="Uploaded blueprint"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                />
+              <CardDrawing>
+                <MapContainer
+                  center={[0, 0]}
+                  zoom={1}
+                  scrollWheelZoom={true}
+                  style={{ height: '100%', width: '100%', overflow: 'hidden' }}
+                  attributionControl={false}
+                >
+                  {imageFile && <Leaflet imageFile={imageFile} />}
+                </MapContainer>
               </CardDrawing>
             ) : (
               <CardDrawing onClick={() => console.log('클릭')}>
