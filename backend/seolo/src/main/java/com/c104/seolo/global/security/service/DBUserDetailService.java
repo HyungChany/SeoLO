@@ -1,4 +1,4 @@
-package com.c104.seolo.global.security.service.impl;
+package com.c104.seolo.global.security.service;
 
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.domain.user.repository.UserRepository;
@@ -20,7 +20,7 @@ public class DBUserDetailService implements UserDetailsService {
     // UserRepository 조회 로직필요
     @Override
     public AppUser loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmployee_EmployeeNum(username)
+        return userRepository.findAppUserByEmployeeNum(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with employee number: " + username));
     }
 }

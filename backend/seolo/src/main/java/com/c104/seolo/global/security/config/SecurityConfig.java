@@ -86,7 +86,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(au -> au
-                .requestMatchers("/error","/join", "/login", "/test/login").permitAll()
+                .requestMatchers("/error","/join", "/login", "/test/login","/test").permitAll()
                 .anyRequest().hasRole(ROLES.MANAGER.name())
         );
 
