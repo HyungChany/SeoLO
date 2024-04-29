@@ -1,6 +1,6 @@
 // font-size
 export const F_SIZE_XXXXL: number = 2.5; // 40px
-export const F_SIZE_XXXL: number = 1.875; // 30px
+export const F_SIZE_XXXL: number = 2; // 32px
 export const F_SIZE_XXL: number = 1.75; // 28px
 export const F_SIZE_XL: number = 1.5; // 24px
 export const F_SIZE_L: number = 1.375; // 22px

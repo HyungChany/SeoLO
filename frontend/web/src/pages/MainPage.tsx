@@ -71,7 +71,7 @@ const LogoutBtn = styled.button`
   background-color: ${Color.GRAY100};
   border-radius: 0.625rem;
   border: 2px solid rgba(0, 0, 0, 0.2);
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   margin: 0 auto;
 `;
 
@@ -91,8 +91,13 @@ const Cards = styled.div`
   height: 20%;
   display: flex;
   justify-content: space-between;
-  /* background-color: blueviolet; */
 `;
+const InnerContainer = styled.div`
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+`;
+
 const Handle = () => {};
 
 const MainPage = () => {
@@ -117,7 +122,7 @@ const MainPage = () => {
           <RightContainer>
             <Card
               width={'100%'}
-              height={'70vh'}
+              height={'45vh'}
               onClick={() => console.log('클릭')}
             >
               도면
@@ -125,19 +130,38 @@ const MainPage = () => {
             <Spacer space={'2rem'} />
             <Cards>
               <Card width={'14vw'} height={'14vw'} onClick={Handle}>
-                <Typo.H1>등록 장비</Typo.H1>
+                <InnerContainer>
+                  <Typo.H3>등록 장비</Typo.H3>
+                </InnerContainer>
               </Card>
               <Card width={'14vw'} height={'14vw'} onClick={Handle}>
-                gdgdgd
+                <InnerContainer>
+                  <Typo.H3>등록 LOTO</Typo.H3>
+                </InnerContainer>
               </Card>
               <Card width={'14vw'} height={'14vw'} onClick={Handle}>
-                gdgdgd
+                <InnerContainer>
+                  <Typo.H3>
+                    오늘의 <Typo.H1 color={Color.RED100}>LOTO</Typo.H1>
+                  </Typo.H3>
+                  <Typo.H3>사용현황</Typo.H3>
+                </InnerContainer>
               </Card>
               <Card width={'14vw'} height={'14vw'} onClick={Handle}>
-                gdgdgd
+                <InnerContainer>
+                  <Typo.H3>
+                    이번주 <Typo.H1 color={Color.RED100}>LOTO</Typo.H1>
+                  </Typo.H3>
+                  <Typo.H3>사용현황</Typo.H3>
+                </InnerContainer>
               </Card>
               <Card width={'14vw'} height={'14vw'} onClick={Handle}>
-                gdgdgd
+                <InnerContainer>
+                  <Typo.H3>
+                    이번 달 <Typo.H1 color={Color.RED100}>재해</Typo.H1>
+                  </Typo.H3>
+                  <Typo.H3>발생현황</Typo.H3>
+                </InnerContainer>
               </Card>
             </Cards>
           </RightContainer>
