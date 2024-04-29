@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Modal } from './Modal.tsx';
-
+import { Button } from '../button/Button.tsx';
+import * as Color from '@/config/color/Color.ts';
 const Chapter = styled.div`
   border-bottom: 1px solid black;
 `;
@@ -20,7 +21,7 @@ const MainBox = styled.div`
   display: flex;
   width: 100%;
   height: 100%;
-  padding: 0 1.5rem;
+  padding: 1.5rem;
   box-sizing: border-box;
   overflow-y: auto;
 `;
@@ -31,10 +32,31 @@ const Content = styled.div`
   font-size: 1.5rem;
   font-weight: 700;
 `;
+
+const ButtonBox = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: flex-end;
+`;
 const EquipmentModal = () => {
-  //   const List = ['이름', '사번', '소속부서', '직급', 'LOTO 시행 횟수'];
+  const handleButtonClick = () => {};
   return (
     <Modal>
+      <ButtonBox>
+        <Button
+          onClick={handleButtonClick}
+          width={5}
+          height={2.5}
+          $backgroundColor={Color.GRAY100}
+          $borderColor={Color.GRAY100}
+          $borderRadius={2.5}
+          $hoverBackgroundColor={Color.SAFETY_YELLOW}
+          $hoverBorderColor={Color.SAFETY_YELLOW}
+        >
+          등록
+        </Button>
+      </ButtonBox>
       <MainBox>
         <ContentBox>
           <Chapter>이름</Chapter>
