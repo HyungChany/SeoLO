@@ -115,6 +115,19 @@ const Cards = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+
+const CardDrawing = styled.div`
+  width: 100%;
+  height: 45vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: ${Color.SNOW};
+  border-radius: 1.25rem;
+  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+`;
+
 const InnerContainer = styled.div`
   padding: 1rem;
   display: flex;
@@ -226,21 +239,21 @@ const MainPage = () => {
           </LeftContainer>
           <RightContainer>
             {imageFile ? (
-              <Card width={'100%'} height={'45vh'}>
+              <CardDrawing onClick={() => console.log('클릭')}>
                 <img
                   src={imageFile}
                   alt="Uploaded blueprint"
-                  style={{ width: '100%', height: '100%' }}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
                 />
-              </Card>
+              </CardDrawing>
             ) : (
-              <Card
-                width={'100%'}
-                height={'45vh'}
-                onClick={() => console.log('클릭')}
-              >
+              <CardDrawing onClick={() => console.log('클릭')}>
                 도면
-              </Card>
+              </CardDrawing>
             )}
             <Spacer space={'2rem'} />
             <Cards>
