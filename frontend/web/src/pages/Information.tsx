@@ -7,6 +7,7 @@ import Equipment from '/assets/images/equipment.png';
 import People from '/assets/images/people.png';
 import Dropdown from '@/components/dropdown/DropDown.tsx';
 import EquipmentModal from '@/components/modal/EquipmentModal.tsx';
+import Employee from '@/components/modal/Employee.tsx';
 import React, { useState } from 'react';
 
 const Background = styled.div`
@@ -38,13 +39,18 @@ const Overlay = styled.div`
 `;
 const CompanyInformation = () => {
   const [equipModal, setEquipModal] = useState<boolean>(false);
+  const [employeeModal, setEmployeeModal] = useState<boolean>(false);
   const handleEquipmentClick = () => {
     setEquipModal(true);
+  };
+  const handleEmployeeClick = () => {
+    setEmployeeModal(true);
   };
   const handleCloseModal = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     setEquipModal(false);
+    setEmployeeModal(false);
     e.stopPropagation();
   };
   const handleModalClick = (
@@ -57,6 +63,11 @@ const CompanyInformation = () => {
       {equipModal && (
         <Overlay onClick={handleCloseModal}>
           <EquipmentModal onClick={handleModalClick} />
+        </Overlay>
+      )}
+      {employeeModal && (
+        <Overlay onClick={handleCloseModal}>
+          <Employee onClick={handleModalClick} />
         </Overlay>
       )}
       <Card
@@ -89,6 +100,7 @@ const CompanyInformation = () => {
         justifyContent={'space-between'}
         flexDirection={'column'}
         alignItems="center"
+        onClick={handleEmployeeClick}
       >
         <Typo.H3 color={Color.BLACK}>등록 임직원현황</Typo.H3>
         <ImgBox src={People} />
