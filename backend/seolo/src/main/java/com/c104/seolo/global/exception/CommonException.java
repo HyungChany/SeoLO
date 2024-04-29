@@ -1,6 +1,7 @@
 package com.c104.seolo.global.exception;
 
 import com.c104.seolo.domain.checklist.exception.CheckListErrorCode;
+import com.c104.seolo.domain.core.exception.LockerErrorCode;
 import com.c104.seolo.domain.user.exception.UserErrorCode;
 import com.c104.seolo.headquarter.company.exception.CompanyErrorCode;
 import lombok.Getter;
@@ -30,4 +31,9 @@ public class CommonException extends RuntimeException {
         this.httpStatus = e.getHttpStatus();
     }
 
+    public CommonException(LockerErrorCode e) {
+        this.message = e.getMessage();
+        this.errorCode = e.getErrorCode();
+        this.httpStatus = e.getHttpStatus();
+    }
 }
