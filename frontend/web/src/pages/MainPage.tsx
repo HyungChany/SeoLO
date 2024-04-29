@@ -10,6 +10,13 @@ import * as Typo from '@/components/typography/Typography.tsx';
 import * as Color from '@/config/color/Color.ts';
 import styled from 'styled-components';
 import { useState } from 'react';
+import { MapContainer, ImageOverlay, useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+
+interface ImageMapProps {
+  imageFile: string | null;
+}
 
 const Background = styled.div`
   box-sizing: border-box;
@@ -136,6 +143,33 @@ const InnerContainer = styled.div`
 
 const Handle = () => {};
 
+const ImageMap = ({ imageFile }: ImageMapProps): JSX.Element | null => {
+  const map = useMap();
+
+  if (!imageFile) return null;
+
+  map.setMaxBounds(
+    new L.LatLngBounds(new L.LatLng(-90, -180), new L.LatLng(90, 180)),
+  );
+
+  return (
+    <MapContainer
+      center={[0, 0]}
+      zoom={1}
+      scrollWheelZoom={true}
+      style={{ height: '100%', width: '100%' }}
+    >
+      <ImageOverlay
+        url={imageFile}
+        bounds={[
+          [0, 0],
+          [100, 100],
+        ]}
+      />
+    </MapContainer>
+  );
+};
+
 const MainPage = () => {
   const [modifyMode, setModifyMode] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<string | null>(null);
@@ -239,16 +273,15 @@ const MainPage = () => {
           </LeftContainer>
           <RightContainer>
             {imageFile ? (
-              <CardDrawing onClick={() => console.log('클릭')}>
-                <img
-                  src={imageFile}
-                  alt="Uploaded blueprint"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                  }}
-                />
+              <CardDrawing>
+                <MapContainer
+                  center={[0, 0]}
+                  zoom={1}
+                  scrollWheelZoom={true}
+                  style={{ height: '100%', width: '100%' }}
+                >
+                  {imageFile && <ImageMap imageFile={imageFile} />}
+                </MapContainer>
               </CardDrawing>
             ) : (
               <CardDrawing onClick={() => console.log('클릭')}>
