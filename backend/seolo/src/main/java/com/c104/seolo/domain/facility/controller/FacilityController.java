@@ -34,6 +34,16 @@ public class FacilityController {
         return ResponseEntity.created(location).build();
     }
 
+    @PatchMapping("/{facilityId}")
+    public ResponseEntity<Void> updateFacility(
+            @RequestHeader("Company-Code") String companyCode,
+            @PathVariable("facilityId") Long facilityId,
+            @RequestBody FacilityRequest facilityRequest
+    ) {
+        facilityService.updateFacility(facilityRequest, companyCode, facilityId);
+        return ResponseEntity.accepted().build();
+    }
+
     @DeleteMapping("/{facilityId}")
     public ResponseEntity<Void> deleteFacility(
             @RequestHeader("Company-Code") String companyCode,

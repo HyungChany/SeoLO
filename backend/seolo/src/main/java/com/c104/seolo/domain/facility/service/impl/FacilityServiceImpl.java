@@ -62,6 +62,22 @@ public class FacilityServiceImpl implements FacilityService {
     }
 
     @Override
+    public void updateFacility(FacilityRequest facilityRequest, String company_code, Long facility_id) {
+        Facility facility = facilityRepository.findById(facility_id)
+                .orElseThrow(() -> new CommonException(FacilityErrorCode.NOT_EXIST_FACILITY));
+
+        if (facility.getFacilityName().equals(facilityRequest.getName())) {
+            throw new CommonException(FacilityErrorCode.FACILITY_ALREADY_EXISTS);
+        }
+
+        facility.setFacilityName(facilityRequest.getName());
+        facility.setFacilityAddress(facilityRequest.getAddress());
+        facility.setFacilityLayout(facility.getFacilityLayout());
+        facility.setFacilityThum(facility.getFacilityThum());
+        facilityRepository.save(facility);
+    }
+
+    @Override
     public void deleteFacility(String company_code, Long facility_id) {
         Facility facility = facilityRepository.findById(facility_id)
                 .orElseThrow(() -> new CommonException(FacilityErrorCode.NOT_EXIST_FACILITY));

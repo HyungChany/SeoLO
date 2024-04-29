@@ -7,5 +7,6 @@ import com.c104.seolo.domain.facility.entity.Facility;
 public interface FacilityService {
     FacilityResponse findFacilityByCompany(String company_code);
     void createFacility(FacilityRequest facilityRequest, String company_code);
+    void updateFacility(FacilityRequest facilityRequest, String company_code, Long facility_id);
     void deleteFacility(String company_code, Long facility_id);
 }
