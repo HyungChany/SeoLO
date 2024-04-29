@@ -4,7 +4,7 @@ import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.exception.AuthException;
 import com.c104.seolo.global.security.entity.DaoCompanycodeToken;
 import com.c104.seolo.global.security.exception.AuthErrorCode;
-import com.c104.seolo.global.security.service.impl.DBUserDetailService;
+import com.c104.seolo.global.security.service.DBUserDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -44,7 +44,7 @@ public class DaoCompanyCodeProvider implements AuthenticationProvider {
                 appUser = dbUserDetailService.loadUserByUsername(inputUsername);
 
             } catch (UsernameNotFoundException e) {
-                throw new AuthException(AuthErrorCode.NOT_EXIST_USER);
+                throw new AuthException(AuthErrorCode.NOT_EXIST_EMPLOYEE);
             }
 
             if (passwordEncoder.matches(inputPassword, appUser.getPassword())) {

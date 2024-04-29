@@ -2,9 +2,6 @@ INSERT INTO COMPANY (company_code, company_name, company_logo, company_registrat
 VALUES ('SFY001KOR', 'SSAFY', 'dummy', '123-45-67890', '123-45-67890-1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('SAM001KOR', 'SAMSUNG', 'dummy', '177-77-77777', '177-77-77777-7', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-INSERT INTO app_user ()
-values
-
 INSERT INTO employee (employee_num, company_code, employee_name, employee_title, employee_team, employee_birthday, employee_thum, employee_join_date, employee_leave_date, created_at, updated_at)
 VALUES
     ('202100001', 'SFY001KOR', '김진명', '대리', '개발팀', '1996-02-23', 'default', '2021-07-12', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
