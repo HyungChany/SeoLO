@@ -1,5 +1,5 @@
 import { RecoilRoot } from 'recoil';
-import '../public/font/fonts.css';
+import './font/fonts.css';
 import Router from './router/Router.tsx';
 import { RouterProvider } from 'react-router-dom';
 // import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
