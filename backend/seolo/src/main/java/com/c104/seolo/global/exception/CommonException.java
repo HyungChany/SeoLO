@@ -7,17 +7,19 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 public class CommonException extends RuntimeException {
-
     private final String message;
+    private final String errorCode;
     private final HttpStatus httpStatus;
 
-    public CommonException(CheckListErrorCode errorCode) {
-        this.message = errorCode.getMessage();
-        this.httpStatus = errorCode.getHttpStatus();
+    public CommonException(CheckListErrorCode e) {
+        this.message = e.getMessage();
+        this.errorCode = e.getErrorCode();
+        this.httpStatus = e.getHttpStatus();
     }
 
-    public CommonException(CompanyErrorCode errorCode) {
-        this.message = errorCode.getMessage();
-        this.httpStatus = errorCode.getHttpStatus();
+    public CommonException(CompanyErrorCode e) {
+        this.message = e.getMessage();
+        this.errorCode = e.getErrorCode();
+        this.httpStatus = e.getHttpStatus();
     }
 }
