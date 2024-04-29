@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.ToString;
 
 @Builder
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ToString
 @Getter
 public class CheckListRequest {
