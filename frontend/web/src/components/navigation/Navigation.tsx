@@ -40,7 +40,7 @@ const Title = styled(Link)`
 `;
 const Menu = styled.div`
   display: flex;
-  gap: 2.5rem;
+  gap: 3rem;
 `;
 
 const MenuLink = styled(Link)`
