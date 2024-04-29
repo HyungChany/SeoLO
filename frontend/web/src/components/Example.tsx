@@ -7,7 +7,7 @@ import { Spacer } from '@/components/basic/Spacer.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import { Menu } from '@/components/menu/Menu.tsx';
 import CheckList from '@/../assets/icons/CheckList.svg?react';
-import { Modal } from '@/components/modal/Modal.tsx';
+// import { Modal } from '@/components/modal/Modal.tsx';
 import Footer from '@/components/footer/Footer.tsx';
 import Navigation from '@/components/navigation/Navigation.tsx';
 import Dropdown from '@/components/dropdown/DropDown.tsx';
@@ -112,9 +112,10 @@ export const Example = () => {
         <Spacer space={'20px'} horizontal={true} />
         <Typo.Body1B color={Color.ONYX}>새 작업장 추가</Typo.Body1B>
       </Menu>
-      <Modal $maxHeight={30} $maxWidth={40}>
+      {/* <Modal $maxHeight={30} $maxWidth={40}>
         <Typo.Body1B color={Color.ONYX}>모달입니다.</Typo.Body1B>
-      </Modal>
+      </Modal> */}
+
       <Footer />
     </>
   );
