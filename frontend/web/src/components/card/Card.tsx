@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
-import React from 'react';
-
 interface CardProps {
   width: number | string;
   height: number | string;
   children: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
+  justifyContent?: string;
+  flexDirection?: string;
+  alignItems?: string;
 }
 const CardContainer = styled.div<CardProps>`
   width: ${(props) =>
@@ -16,7 +17,11 @@ const CardContainer = styled.div<CardProps>`
   background-color: ${Color.SNOW};
   display: flex;
   border-radius: 1.25rem;
-  box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
+  justify-content: ${(props) => props.justifyContent};
+  flex-direction: ${(props) => props.flexDirection};
+  align-items: ${(props) => props.alignItems};
+  padding: 1rem;
 `;
 
 const Card = (props: CardProps) => {
@@ -25,6 +30,9 @@ const Card = (props: CardProps) => {
       width={props.width}
       height={props.height}
       onClick={props.onClick}
+      justifyContent={props.justifyContent}
+      flexDirection={props.flexDirection}
+      alignItems={props.alignItems}
     >
       {props.children}
     </CardContainer>

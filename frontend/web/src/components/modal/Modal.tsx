@@ -3,17 +3,16 @@ import * as Color from '@/config/color/Color.ts';
 
 // 타입 정의
 interface ModalProps {
-  $maxWidth: number;
-  $maxHeight: number;
+  // $maxWidth: number;
+  // $maxHeight: number;
   children: React.ReactNode;
+  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 // 스타일 정의
 const ModalContainer = styled.div<ModalProps>`
-  width: 100%;
-  max-width: ${(props) => props.$maxWidth || 62.5}rem;
-  height: auto;
-  max-height: ${(props) => props.$maxHeight || 37.5}rem;
+  width: 50%;
+  height: 37.5rem;
   border-radius: 3.125rem;
   border: 1px solid ${Color.GRAY100};
   background-color: ${Color.GRAY300};
@@ -47,8 +46,6 @@ const ModalContainer = styled.div<ModalProps>`
  */
 
 // 컴포넌트 정의
-export const Modal = ({ children, $maxWidth, $maxHeight }: ModalProps) => (
-  <ModalContainer $maxWidth={$maxWidth} $maxHeight={$maxHeight}>
-    {children}
-  </ModalContainer>
+export const Modal = ({ children, onClick }: ModalProps) => (
+  <ModalContainer onClick={onClick}>{children}</ModalContainer>
 );

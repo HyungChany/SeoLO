@@ -15,11 +15,10 @@ const StyledHeaderTypography = styled.div<FontProps>`
   font-family: ${(props) => props.fontFamily};
   font-size: ${(props) => `${props.fontSize}rem`};
   color: ${(props) => props.color || 'black'};
-  line-height: ${(props) => `${props.fontSize * 1.5}rem`};
+  /* line-height: ${(props) => `${props.fontSize * 1.5}rem`}; */
   white-space: normal;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: inline;
 `;
 
 const StyledTypography = styled.div<FontProps>`
@@ -28,6 +27,18 @@ const StyledTypography = styled.div<FontProps>`
   color: ${(props) => props.color || 'black'};
   line-height: ${(props) => `${props.fontSize * 1.5}rem`};
 `;
+
+export const H0 = (props: TypographyProps) => {
+  return (
+    <StyledHeaderTypography
+      fontFamily={FontStyle.F_PRIMARY_EB}
+      fontSize={FontStyle.F_SIZE_XXXXXXL}
+      color={props.color}
+    >
+      {props.children}
+    </StyledHeaderTypography>
+  );
+};
 
 export const H1 = (props: TypographyProps) => {
   return (

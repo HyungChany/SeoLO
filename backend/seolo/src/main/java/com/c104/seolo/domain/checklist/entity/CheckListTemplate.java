@@ -17,12 +17,12 @@ public class CheckListTemplate {
     private Long id;
 
     @Column(name = "check_list_template_context", length = 255)
-    private String checkListTemplateContext;
+    private String context;
 
     @Builder
     private CheckListTemplate(Long id, String checkListTemplateContext) {
         this.id = id;
-        this.checkListTemplateContext = checkListTemplateContext;
+        this.context = checkListTemplateContext;
     }
 
     public CheckListTemplate() {}
