@@ -10,13 +10,11 @@ import java.time.LocalDateTime;
 public class MachineListInfo {
     private Long facilityId;
     private String facilityName;
-
     private Long id;
     private String machineName;
     private String machineCode;
     private LocalDateTime introductionDate;
-
-    private Long ManagerId;
-    private String ManagerName;
-    private String ManagerRole;
+    private Long managerId;
+    private String managerName;
+    private String managerRole;
 }
