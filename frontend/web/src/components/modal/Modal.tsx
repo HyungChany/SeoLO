@@ -6,6 +6,7 @@ interface ModalProps {
   // $maxWidth: number;
   // $maxHeight: number;
   children: React.ReactNode;
+  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
 // 스타일 정의
@@ -45,6 +46,6 @@ const ModalContainer = styled.div<ModalProps>`
  */
 
 // 컴포넌트 정의
-export const Modal = ({ children }: ModalProps) => (
-  <ModalContainer>{children}</ModalContainer>
+export const Modal = ({ children, onClick }: ModalProps) => (
+  <ModalContainer onClick={onClick}>{children}</ModalContainer>
 );

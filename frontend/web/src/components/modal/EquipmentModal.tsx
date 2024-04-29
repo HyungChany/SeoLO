@@ -2,6 +2,10 @@ import styled from 'styled-components';
 import { Modal } from './Modal.tsx';
 import { Button } from '../button/Button.tsx';
 import * as Color from '@/config/color/Color.ts';
+interface EquipmentModalProps {
+  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+}
+
 const Chapter = styled.div`
   border-bottom: 1px solid black;
 `;
@@ -39,10 +43,10 @@ const ButtonBox = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
-const EquipmentModal = () => {
+const EquipmentModal = ({ onClick }: EquipmentModalProps) => {
   const handleButtonClick = () => {};
   return (
-    <Modal>
+    <Modal onClick={onClick}>
       <ButtonBox>
         <Button
           onClick={handleButtonClick}
