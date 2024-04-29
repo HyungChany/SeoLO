@@ -8,26 +8,33 @@ interface InputBoxProps {
   value: string | number;
   placeholder: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  isPassword?: boolean;
 }
 
 const InputBoxContainer = styled.input<InputBoxProps>`
   width: ${(props) => props.width}rem;
   height: ${(props) => props.height}rem;
   box-sizing: border-box;
-  border: 1px solid ${Color.GRAY200};
+  border: 1px solid ${Color.GRAY400};
   border-radius: 8px;
-  padding-left: 0.69rem;
+  padding-left: 0.7rem;
+  font-size: 1.1rem;
+
+  &::placeholder {
+    color: ${Color.GRAY400};
+  }
 `;
 
 const InputBox = (props: InputBoxProps) => {
+  const { isPassword, ...rest } = props;
   return (
-    <InputBoxContainer
-      width={props.width}
-      height={props.height}
-      placeholder={props.placeholder}
-      value={props.value}
-      onChange={props.onChange}
-    ></InputBoxContainer>
+    <>
+      {isPassword ? (
+        <InputBoxContainer type="password" {...rest} />
+      ) : (
+        <InputBoxContainer {...props} />
+      )}
+    </>
   );
 };
 

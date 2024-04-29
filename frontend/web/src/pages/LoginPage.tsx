@@ -16,15 +16,15 @@ const Background = styled.div`
 
 const LoginBox = styled.div`
   box-sizing: border-box;
-  width: 28.5rem;
-  height: 41rem;
+  width: 28rem;
+  height: 38rem;
   border-radius: 0.625rem;
   background-color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
-  padding: 5% 0;
+  padding: 3rem 0;
 `;
 
 const NameBox = styled.div`
@@ -48,26 +48,27 @@ const NameEng = styled.div`
 `;
 
 const InputContainer = styled.div`
-  width: 25rem;
-  height: 13rem;
+  width: 80%;
+  height: 40%;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+  /* background-color: aqua; */
 `;
 const InputContent = styled.div`
-  width: 25rem;
   height: 3.125rem;
   display: flex;
   justify-content: space-between;
 `;
 
 const ButtonBox = styled.div`
-  width: 25rem;
-  height: 3.125rem;
+  width: 81%;
+  height: 3.3rem;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
+  margin-bottom: 1%;
   font-family: NYJGothicM;
   font-size: 1.1rem;
   border-radius: 0.5rem;
@@ -108,9 +109,9 @@ const LoginPage = () => {
           </NameBox>
           <InputContainer>
             <InputContent>
-              <img src={Company} alt="company" />
+              <img src={Company} alt="Company" />
               <InputBox
-                width={21.25}
+                width={19}
                 height={3.125}
                 value={companyNumber}
                 placeholder="회사번호"
@@ -118,9 +119,9 @@ const LoginPage = () => {
               />
             </InputContent>
             <InputContent>
-              <img src={User} alt="User" style={{ marginLeft: '0.3rem' }} />
+              <img src={User} alt="User" />
               <InputBox
-                width={21.25}
+                width={19}
                 height={3.125}
                 value={loginId}
                 placeholder="아이디"
@@ -128,13 +129,14 @@ const LoginPage = () => {
               />
             </InputContent>
             <InputContent>
-              <img src={Lock} alt="Lock" style={{ marginLeft: '0.3rem' }} />
+              <img src={Lock} alt="Lock" />
               <InputBox
-                width={21.25}
+                width={19}
                 height={3.125}
                 value={password}
                 placeholder="비밀번호"
                 onChange={handlePassword}
+                isPassword
               />
             </InputContent>
           </InputContainer>
