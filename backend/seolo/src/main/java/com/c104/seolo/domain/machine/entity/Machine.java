@@ -3,6 +3,7 @@ package com.c104.seolo.domain.machine.entity;
 import com.c104.seolo.domain.machine.enums.LockerType;
 import com.c104.seolo.global.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -44,4 +45,17 @@ public class Machine extends BaseEntity {
 
     @Column(name = "machine_locker_type", length = 30, nullable = false)
     private LockerType lockerType;
+
+    @Builder
+    private Machine(Long id, MachineSubcategory machineSubcategory, String name, String number, Float longitude, Float latitude, LockerType lockerType) {
+        this.id = id;
+        this.machineSubcategory = machineSubcategory;
+        this.name = name;
+        this.number = number;
+        this.longitude = longitude;
+        this.latitude = latitude;
+        this.lockerType = lockerType;
+    }
+
+    public Machine() {}
 }

@@ -2,6 +2,7 @@ package com.c104.seolo.domain.machine.entity;
 
 import com.c104.seolo.global.common.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,4 +22,12 @@ public class MachineSubcategory {
 
     @Column(name = "machine_subcategory", length = 40, nullable = false)
     private String subcategory;
+
+    @Builder
+    private MachineSubcategory(Long id, String subcategory) {
+        this.id = id;
+        this.subcategory = subcategory;
+    }
+
+    public MachineSubcategory(String subcategory) {}
 }
