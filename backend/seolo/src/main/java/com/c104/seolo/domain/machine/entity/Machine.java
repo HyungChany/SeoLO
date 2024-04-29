@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.machine.entity;
 
+import com.c104.seolo.domain.facility.entity.Facility;
 import com.c104.seolo.domain.machine.enums.LockerType;
 import com.c104.seolo.global.common.BaseEntity;
 import jakarta.persistence.*;
@@ -20,6 +21,10 @@ public class Machine extends BaseEntity {
     @Column(name = "machine_id", nullable = false)
     @Id
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "facility_id", nullable = false)
+    private Facility facility;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "machine_subcategory", nullable = false)
@@ -47,8 +52,9 @@ public class Machine extends BaseEntity {
     private LockerType lockerType;
 
     @Builder
-    private Machine(Long id, MachineSubcategory machineSubcategory, String name, String number, Float longitude, Float latitude, LockerType lockerType) {
+    private Machine(Long id, Facility facility, MachineSubcategory machineSubcategory, String name, String number, Float longitude, Float latitude, LockerType lockerType) {
         this.id = id;
+        this.facility = facility;
         this.machineSubcategory = machineSubcategory;
         this.name = name;
         this.number = number;
