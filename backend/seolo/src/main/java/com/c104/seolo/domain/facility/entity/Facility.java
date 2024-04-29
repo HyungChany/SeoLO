@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.facility.entity;
 
+import com.c104.seolo.domain.facility.dto.FacilityDto;
 import com.c104.seolo.global.common.BaseEntity;
 import com.c104.seolo.headquarter.company.entity.Company;
 import jakarta.persistence.*;
