@@ -9,8 +9,8 @@ import { Menu } from '@/components/menu/Menu.tsx';
 import * as Typo from '@/components/typography/Typography.tsx';
 import * as Color from '@/config/color/Color.ts';
 import styled from 'styled-components';
-import { useState } from 'react';
-import { MapContainer, ImageOverlay, useMap } from 'react-leaflet';
+import { useEffect, useState } from 'react';
+import { ImageOverlay, MapContainer, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 
@@ -144,30 +144,33 @@ const InnerContainer = styled.div`
 const Handle = () => {};
 
 const ImageMap = ({ imageFile }: ImageMapProps): JSX.Element | null => {
+  const [bounds, setBounds] = useState<L.LatLngBounds | null>(null);
   const map = useMap();
 
-  if (!imageFile) return null;
+  useEffect(() => {
+    if (imageFile) {
+      const img = new Image();
+      img.onload = () => {
+        // 이미지 로드 완료 후 크기를 기반으로 bounds 설정
+        const imgWidth = img.naturalWidth / 2;
+        const imgHeight = img.naturalHeight / 2;
+        // 이미지의 실제 픽셀 크기를 사용하여 bounds 설정
+        const newBounds = L.latLngBounds(
+          // 좌측 하단 좌표
+          [-imgHeight, -imgWidth],
+          // 우측 상단 좌표
+          [imgHeight, imgWidth]
+        );
+        setBounds(newBounds);
+        map.fitBounds(newBounds);
+      };
+      img.src = imageFile;
+    }
+  }, [imageFile, map]);
 
-  map.setMaxBounds(
-    new L.LatLngBounds(new L.LatLng(-90, -180), new L.LatLng(90, 180)),
-  );
+  if (!imageFile || !bounds) return null;
 
-  return (
-    <MapContainer
-      center={[0, 0]}
-      zoom={1}
-      scrollWheelZoom={true}
-      style={{ height: '100%', width: '100%' }}
-    >
-      <ImageOverlay
-        url={imageFile}
-        bounds={[
-          [0, 0],
-          [100, 100],
-        ]}
-      />
-    </MapContainer>
-  );
+  return <ImageOverlay url={imageFile} bounds={bounds} />;
 };
 
 const MainPage = () => {
@@ -278,7 +281,8 @@ const MainPage = () => {
                   center={[0, 0]}
                   zoom={1}
                   scrollWheelZoom={true}
-                  style={{ height: '100%', width: '100%' }}
+                  style={{ height: '100%', width: '100%', overflow: 'hidden' }}
+                  attributionControl={false}
                 >
                   {imageFile && <ImageMap imageFile={imageFile} />}
                 </MapContainer>
