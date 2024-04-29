@@ -64,7 +64,17 @@ const StyledSelect = styled(Select<OptionType>).attrs({
     font-weight: 600;
   }
 `;
-const Dropdown: React.FC = () => {
+const Dropdown: React.FC<{
+  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+}> = ({ onClick }) => {
+  const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    // 클릭 이벤트 전파를 중지
+    event.stopPropagation();
+    // 추가적인 onClick 로직이 있다면 실행
+    if (onClick) {
+      onClick(event);
+    }
+  };
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
   const handleOptionChange = (
@@ -88,7 +98,7 @@ const Dropdown: React.FC = () => {
     { value: '11공장', label: '11공장' },
   ];
   return (
-    <DropDownBox>
+    <DropDownBox onClick={handleClick}>
       {/* <DropDownContent onClick={onToggle}></DropDownContent>
        */}
       <StyledSelect
