@@ -15,7 +15,7 @@ const ModalContainer = styled.div<ModalProps>`
   height: 37.5rem;
   border-radius: 3.125rem;
   border: 1px solid ${Color.GRAY100};
-  background-color: ${Color.GRAY300};
+  background-color: ${Color.GRAY50};
   padding: 0.7rem;
   display: flex;
   flex-direction: column;

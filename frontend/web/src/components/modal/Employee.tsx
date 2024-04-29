@@ -52,7 +52,7 @@ const EquipmentModal = ({ onClick }: EquipmentModalProps) => {
           onClick={handleButtonClick}
           width={5}
           height={2.5}
-          $backgroundColor={Color.GRAY100}
+          $backgroundColor={Color.WHITE}
           $borderColor={Color.GRAY100}
           $borderRadius={2.5}
           $hoverBackgroundColor={Color.SAFETY_YELLOW}
