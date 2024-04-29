@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Slf4j
 public class FacilityController {
-    private final FacilityService facilityService;
+//    private final FacilityService facilityService;
 }
