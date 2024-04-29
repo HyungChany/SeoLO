@@ -1,4 +1,4 @@
-package com.c104.seolo.global.security.exception;
+package com.c104.seolo.global.exception;
 
 import lombok.Getter;
 import lombok.Setter;
