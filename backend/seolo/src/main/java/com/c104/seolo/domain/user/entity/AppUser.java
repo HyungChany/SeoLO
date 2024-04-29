@@ -5,6 +5,7 @@ import com.c104.seolo.domain.user.enums.ROLES;
 import com.c104.seolo.global.common.BaseEntity;
 import com.c104.seolo.headquarter.employee.entity.Employee;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;

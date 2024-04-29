@@ -3,6 +3,7 @@ package com.c104.seolo.headquarter.employee.entity;
 import com.c104.seolo.global.common.BaseEntity;
 import com.c104.seolo.headquarter.company.entity.Company;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.ToString;
 
