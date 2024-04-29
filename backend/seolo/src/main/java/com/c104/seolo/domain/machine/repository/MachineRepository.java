@@ -13,7 +13,8 @@ import java.util.Optional;
 public interface MachineRepository extends JpaRepository<Machine, Integer> {
     @Query("SELECT new com.c104.seolo.domain.machine.dto.info.MachineListInfo( " +
             "f.id, f.facilityName, " +
-            "m.id, m.name, m.number, m.machineCode, m.createdAt, " + // Add m.machineCode
+            "m.machineSubcategory.subcategory, " +
+            "m.id, m.name, m.number, m.createdAt, " +
             "mm.user.id, mm.user.employee.employeeName, mm.mm_role " +
             ") FROM Machine m " +
             "JOIN m.facility f " +
