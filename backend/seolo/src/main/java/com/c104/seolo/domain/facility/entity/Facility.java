@@ -39,8 +39,9 @@ public class Facility extends BaseEntity {
     private String facilityThum;
 
     @Builder
-    private Facility(Long id, String facilityName, String facilityAddress, String facilityLayout, String facilityThum) {
+    private Facility(Long id, Company company, String facilityName, String facilityAddress, String facilityLayout, String facilityThum) {
         this.id = id;
+        this.company = company;
         this.facilityName = facilityName;
         this.facilityAddress = facilityAddress;
         this.facilityLayout = facilityLayout;

@@ -20,4 +20,7 @@ public interface FacilityRepository extends JpaRepository<Facility, Long> {
             "WHERE f.company.companyCode = :company_code")
     boolean existsByCompany(@Param("company_code") String company_code);
 
+    @Query("SELECT CASE WHEN COUNT(f) > 0 THEN true ELSE false END FROM Facility f " +
+            "WHERE f.facilityName = :facility_name")
+    boolean existsFacilitiesByName(@Param("facility_name") String facility_name);
 }
