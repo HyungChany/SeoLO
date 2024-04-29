@@ -4,6 +4,10 @@ import styled from 'styled-components';
 import Card from '@/components/card/Card.tsx';
 import logoutIcon from '@/../assets/icons/Logout.png';
 import { Spacer } from '@/components/basic/Spacer.tsx';
+import { Menu } from '@/components/menu/Menu.tsx';
+import Position from '@/../assets/icons/Position.svg?react';
+import CheckList from '@/../assets/icons/CheckList.svg?react';
+import ListModify from '@/../assets/icons/ListModify.svg?react';
 
 const Background = styled.div`
   box-sizing: border-box;
@@ -58,7 +62,9 @@ const Banner = styled.span`
 
 const SideMenuBox = styled.div`
   display: flex;
+  flex-direction: column;
   flex-grow: 1;
+  width: 100%;
 `;
 
 const LogoutBtn = styled.button`
@@ -78,7 +84,17 @@ const LogoutBtn = styled.button`
 const LogoutIcon = styled.img`
   width: 50px;
 `;
-
+const PositionIcon = styled(Position)`
+  width: 2rem;
+  height: 2rem;
+`;
+const CheckListIcon = styled(CheckList)`
+  width: 2rem;
+  height: 2rem;
+`;const ListModifyIcon = styled(ListModify)`
+  width: 2rem;
+  height: 2rem;
+`;
 const RightContainer = styled.div`
   width: 78%;
   height: 100%;
@@ -113,7 +129,35 @@ const MainPage = () => {
             <BannerContainer>
               <Banner>Menu</Banner>
             </BannerContainer>
-            <SideMenuBox></SideMenuBox>
+            <SideMenuBox>
+              <Menu
+                onClick={() => console.log('클릭')}
+                width={'100%'}
+                $enterSize={1}
+              >
+                <PositionIcon />
+                <Typo.Body1B color={Color.ONYX}>작업장 위치 선택</Typo.Body1B>
+              </Menu>
+              <Spacer space={'1.5rem'} />
+              <Menu
+                onClick={() => console.log('클릭')}
+                width={'100%'}
+                $enterSize={1}
+              >
+                <CheckListIcon />
+                <Typo.Body1B color={Color.ONYX}>새 작업장 추가</Typo.Body1B>
+              </Menu>
+              <Spacer space={'1.5rem'} />
+              <Menu
+                onClick={() => console.log('클릭')}
+                width={'100%'}
+                $enterSize={1}
+              >
+                <ListModifyIcon />
+                <Typo.Body1B color={Color.ONYX}>작업장 편집</Typo.Body1B>
+              </Menu>
+              <Spacer space={'1.5rem'} />
+            </SideMenuBox>
             <LogoutBtn onClick={() => console.log('클릭')}>
               <LogoutIcon src={logoutIcon} />
               로그아웃
