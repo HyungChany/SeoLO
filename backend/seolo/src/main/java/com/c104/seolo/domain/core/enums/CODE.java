@@ -1,6 +1,6 @@
 package com.c104.seolo.domain.core.enums;
 
-public enum Code {
+public enum CODE {
     // 상태코드
     INIT,
     LOCKED,

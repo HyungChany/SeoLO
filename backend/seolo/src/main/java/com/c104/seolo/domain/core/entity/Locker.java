@@ -22,7 +22,40 @@ public class Locker extends BaseEntity {
     private Company company;
 
     @Column(name = "locker_isLocked")
-    private Boolean isLocked;
+    private boolean isLocked;
 
     protected Locker () {}
+
+    public Locker(Builder builder) {
+        this.company = builder.company;
+        this.isLocked = builder.isLocked;
+    }
+
+    public static class Builder {
+        private Company company;
+        private boolean isLocked = false;
+
+        public Builder company(Company company) {
+            if (company == null) {
+                throw new IllegalArgumentException("Company cannot be null");
+            }
+            this.company = company;
+            return this;
+        }
+
+        public Builder isLocked(boolean isLocked) {
+            this.isLocked = isLocked;
+            return this;
+        }
+
+        public Locker build() {
+            if (company == null) {
+                throw new IllegalStateException("Cannot build Locker object, one or more required fields are not set");
+            }
+            return new Locker(this);
+        }
+    }
+    public static Builder builder() {
+        return new Builder();
+    }
 }
