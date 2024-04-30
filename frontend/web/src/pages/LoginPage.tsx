@@ -5,6 +5,8 @@ import InputBox from '@/components/inputbox/InputBox.tsx';
 import { ChangeEvent, useState } from 'react';
 import User from '/assets/icons/Id.svg';
 import Lock from '/assets/icons/Lock.svg';
+import { useNavigate } from 'react-router-dom';
+import { userLogin } from '@/apis/Login.ts';
 const Background = styled.div`
   width: 100dvw;
   height: 100dvh;
@@ -90,6 +92,24 @@ const LoginPage = () => {
   const [companyNumber, setCompanyNumber] = useState<string>('');
   const [loginId, setLoginId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const navigate = useNavigate();
+  const handleLogin = async () => {
+    try {
+      const loginData = {
+        companyCode: companyNumber,
+        username: loginId,
+        password: password,
+      };
+      const responseData = await userLogin(loginData);
+      console.log('로그인 성공:', responseData);
+      navigate('/');
+    } catch (error) {
+      console.error('로그인 실패:', error);
+      // 로그인 실패 시 사용자에게 알림, 예: 알림창 띄우기
+      alert('로그인 실패');
+    }
+  };
+
   const handleCompanyNumber = (e: ChangeEvent<HTMLInputElement>) => {
     setCompanyNumber(e.target.value);
   };
@@ -140,7 +160,7 @@ const LoginPage = () => {
               />
             </InputContent>
           </InputContainer>
-          <ButtonBox>로그인</ButtonBox>
+          <ButtonBox onClick={handleLogin}>로그인</ButtonBox>
         </LoginBox>
       </Background>
     </>
