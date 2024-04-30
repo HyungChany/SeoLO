@@ -3,6 +3,7 @@ package com.c104.seolo.headquarter.employee.entity;
 import com.c104.seolo.global.common.BaseEntity;
 import com.c104.seolo.headquarter.company.entity.Company;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -51,6 +52,10 @@ public class Employee extends BaseEntity {
             throw new IllegalStateException("Employee birthday is not set");
         }
         return employeeBirthday.format(DateTimeFormatter.ofPattern("MMdd"));
+    }
+
+    public boolean isMatchingCompanyCode(String companyCode) {
+        return this.getCompany().isMatchingCompanyCode(companyCode);
     }
 
     // JPA 프록시 객체 생성을 위한 기본생성자
