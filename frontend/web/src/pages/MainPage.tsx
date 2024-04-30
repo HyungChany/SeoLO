@@ -16,32 +16,35 @@ import styled from 'styled-components';
 
 const Background = styled.div`
   box-sizing: border-box;
-  min-width: 100%;
+  width: 100%;
   min-height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
   background-color: ${Color.GRAY200};
+  overflow-x: auto;
+  position: relative;
 `;
 const MainContainer = styled.div`
-  width: 95%;
-  min-height: 75vh;
+  box-sizing: content-box;
+  min-width: 1280px;
+  height: 34rem;
   display: flex;
   justify-content: space-between;
+  margin: 0 auto;
 `;
 
 const LeftContainer = styled.div`
-  width: 20%;
-  flex-grow: 1;
+  width: 23%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding-right: 1rem;
 `;
 
 const HeaderContainer = styled.div`
   position: relative;
   text-align: end;
+  margin: 7% 1% 3%;
 `;
 
 const Line = styled.div`
@@ -54,8 +57,7 @@ const Line = styled.div`
 
 const BannerContainer = styled.div`
   position: relative;
-  margin-top: -5%;
-  margin-left: 10%;
+  margin: -6% 0% 5% 7%;
 `;
 
 const Banner = styled.span`
@@ -94,19 +96,19 @@ const LogoutIcon = styled.img`
   width: 50px;
 `;
 const PositionIcon = styled(Position)`
-  width: 2rem;
-  height: 2rem;
+  width: 2.5rem;
+  margin-right: 5%;
 `;
 const CheckListIcon = styled(CheckList)`
-  width: 2rem;
-  height: 2rem;
+  width: 2.5rem;
+  margin-right: 5%;
 `;
 const ListModifyIcon = styled(ListModify)`
-  width: 2rem;
-  height: 2rem;
+  width: 2.5rem;
+  margin-right: 5%;
 `;
 const RightContainer = styled.div`
-  width: 78%;
+  width: 75%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -114,14 +116,13 @@ const RightContainer = styled.div`
 `;
 const Cards = styled.div`
   width: 100%;
-  height: 20%;
   display: flex;
   justify-content: space-between;
 `;
 
 const CardDrawing = styled.div`
   width: 100%;
-  height: 45vh;
+  height: 65%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -132,8 +133,6 @@ const CardDrawing = styled.div`
 `;
 
 const InnerContainer = styled.div`
-  padding: 1rem;
-  display: flex;
   flex-direction: column;
 `;
 
@@ -167,7 +166,7 @@ const MainPage = () => {
         <MainContainer>
           <LeftContainer>
             <HeaderContainer>
-              <Typo.H3 color={Color.BLACK}>1공장 조립 라인</Typo.H3>
+              <Typo.H4 color={Color.BLACK}>1공장 조립 라인</Typo.H4>
             </HeaderContainer>
             <Line />
             <BannerContainer>
@@ -182,7 +181,7 @@ const MainPage = () => {
                 <PositionIcon />
                 <Typo.Body1B color={Color.ONYX}>작업장 위치 선택</Typo.Body1B>
               </Menu>
-              <Spacer space={'1.5rem'} />
+              <Spacer space={'1rem'} />
               <input
                 type="file"
                 onChange={handleImageChange}
@@ -199,12 +198,12 @@ const MainPage = () => {
                   <Typo.Body1B color={Color.ONYX}>새 작업장 추가</Typo.Body1B>
                 </Menu>
               </label>
-              <Spacer space={'1.5rem'} />
+              <Spacer space={'1rem'} />
               <Menu onClick={changeModifyMode} width={'100%'} $enterSize={1}>
                 <ListModifyIcon />
                 <Typo.Body1B color={Color.ONYX}>작업장 편집</Typo.Body1B>
               </Menu>
-              <Spacer space={'1.5rem'} />
+              <Spacer space={'1rem'} />
               {modifyMode && (
                 <RowContainer>
                   <Button
@@ -254,7 +253,7 @@ const MainPage = () => {
                 </MapContainer>
               </CardDrawing>
             ) : (
-              <>
+              <CardDrawing onClick={() => console.log('클릭')}>
                 <input
                   type="file"
                   onChange={handleImageChange}
@@ -262,48 +261,58 @@ const MainPage = () => {
                   id="fileInput"
                 />
                 <label htmlFor="fileInput">
-                  <CardDrawing onClick={() => console.log('클릭')}>
-                    <Typo.Body0B color={Color.GRAY400}>
-                      저장된 도면이 없습니다. 도면을 추가하세요.
-                    </Typo.Body0B>
-                  </CardDrawing>
+                  <Typo.Body0B color={Color.GRAY400}>
+                    저장된 도면이 없습니다. 도면을 추가하세요.
+                  </Typo.Body0B>
                 </label>
-              </>
+              </CardDrawing>
             )}
-            <Spacer space={'2rem'} />
             <Cards>
-              <Card width={'14vw'} height={'14vw'} onClick={Handle}>
+              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
-                  <Typo.H3>등록 장비</Typo.H3>
+                  <Typo.H4>
+                    <div style={{ marginTop:'0.5rem' }}>등록 장비</div>
+                  </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'14vw'} height={'14vw'} onClick={Handle}>
+              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
-                  <Typo.H3>등록 LOTO</Typo.H3>
+                <Typo.H4>
+                    <div style={{ marginTop:'0.5rem' }}>등록 LOTO</div>
+                  </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'14vw'} height={'14vw'} onClick={Handle}>
+              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
-                  <Typo.H3>
-                    오늘의 <Typo.H1 color={Color.RED100}>LOTO</Typo.H1>
-                  </Typo.H3>
-                  <Typo.H3>사용현황</Typo.H3>
+                  <Typo.H4>
+                    <div style={{ display: 'flex', justifyContent: 'space-between'}}>
+                      <div style={{ margin:'0.5rem 0.5rem 0 0' }}>오늘의</div>
+                      <Typo.H2 color={Color.RED100}>LOTO</Typo.H2>
+                    </div>
+                    사용현황
+                  </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'14vw'} height={'14vw'} onClick={Handle}>
+              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
-                  <Typo.H3>
-                    이번주 <Typo.H1 color={Color.RED100}>LOTO</Typo.H1>
-                  </Typo.H3>
-                  <Typo.H3>사용현황</Typo.H3>
+                  <Typo.H4>
+                    <div style={{ display: 'flex', justifyContent: 'space-between'}}>
+                      <div style={{ margin:'0.5rem 0.3rem 0 0' }}>이번 주</div>
+                      <Typo.H2 color={Color.RED100}>LOTO</Typo.H2>
+                    </div>
+                    사용현황
+                  </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'14vw'} height={'14vw'} onClick={Handle}>
+              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
-                  <Typo.H3>
-                    이번 달 <Typo.H1 color={Color.RED100}>재해</Typo.H1>
-                  </Typo.H3>
-                  <Typo.H3>발생현황</Typo.H3>
+                  <Typo.H4>
+                    <div style={{ display: 'flex', justifyContent: 'space-between'}}>
+                      <div style={{ margin:'0.5rem 0.5rem 0 0' }}>이번 달</div>
+                      <Typo.H2 color={Color.RED100}>재해</Typo.H2>
+                    </div>
+                    발생현황
+                  </Typo.H4>
                 </InnerContainer>
               </Card>
             </Cards>
