@@ -39,6 +39,10 @@ const informationRoute = [
     path: '/currentloto',
     element: With(<CurrentLOTO />),
   },
+  {
+    path: '/checklist',
+    element: With(<CurrentLOTO />),
+  },
 ];
 const exampleRoute = { path: '/example', element: <Example /> };
 
