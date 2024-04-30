@@ -4,7 +4,7 @@ pipeline {
         // 환경 변수 정의
         DOCKER_COMPOSE_FILE = 'DevOps/docker-compose.yml'
         REPO_URL = 'https://lab.ssafy.com/s10-final/S10P31C104.git'
-        BRANCH_NAME = 'feature/be-auth'
+        BRANCH_NAME = 'develop'
         CREDENTIALS_ID = 'seolo-git-token'
         GITHUB_CREDENTIALS_ID = 'seolo-github-token'
         GITHUB_REPO_URL = 'https://github.com/makeUgreat/seolo-config.git'
@@ -99,7 +99,6 @@ pipeline {
             }
         }
 
-
         stage('Build Nginx & Frontend') {
             steps {
                 script {
@@ -142,7 +141,6 @@ pipeline {
                 )
             }
         }
-
         failure {
             script {
                 def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
