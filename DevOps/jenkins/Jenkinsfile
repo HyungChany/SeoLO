@@ -114,7 +114,7 @@ pipeline {
         stage('Compose') {
             steps {
                 script {
-                    sh "docker-compose -f ${env.DOCKER_COMPOSE_FILE} up -d"
+                    sh "docker-compose -f ${env.DOCKER_COMPOSE_FILE} up -d --build"
                 }
             }
         }

@@ -13,7 +13,7 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
 logging:
   level:
     org.springframework.web: DEBUG
