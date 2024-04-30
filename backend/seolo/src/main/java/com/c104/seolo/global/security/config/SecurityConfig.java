@@ -36,9 +36,8 @@ public class SecurityConfig {
     @Bean
     public RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-
         // MANAGER는 WORKER의 인가 권한을 모두 가지고 있다.
-        // WORKER에게도 인가를 열어주고 싶은 메서드는 @Secured("hasRole('WORKER')") 를 붙인다.
+        // MANAGER에게만 인가를 열어주고 싶은 메서드는 @Secured("ROLE_MANAGER") 를 붙인다.
         roleHierarchy.setHierarchy(AuthorityConfig.getHierarchy());
         return roleHierarchy;
     }
@@ -95,7 +94,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(au -> au
                 .requestMatchers("/error","/join", "/login", "/test/login","/test","/test/**").permitAll()
-                .anyRequest().hasRole("MANAGER")
+                .anyRequest().hasRole("WORKER")
         );
 
         return http.build();

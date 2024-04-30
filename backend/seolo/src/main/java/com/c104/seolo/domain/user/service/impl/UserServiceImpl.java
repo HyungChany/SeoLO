@@ -1,6 +1,7 @@
 package com.c104.seolo.domain.user.service.impl;
 
 import com.c104.seolo.domain.user.dto.request.UserJoinRequest;
+import com.c104.seolo.domain.user.dto.response.UserInfoResponse;
 import com.c104.seolo.domain.user.dto.response.UserJoinResponse;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.domain.user.enums.ROLES;
@@ -62,7 +63,15 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserJoinResponse getUserInfo(AppUser appUser) {
-        return null;
+    public UserInfoResponse getUserInfo(AppUser appUser) {
+        UserInfoResponse res = UserInfoResponse.builder()
+                .id(appUser.getId())
+                .employee(appUser.getEmployee())
+                .ROLES(appUser.getROLES())
+                .statusCODE(appUser.getStatusCODE())
+                .PIN(appUser.getPIN())
+                .isLocked(appUser.isLocked())
+                .build();
+        return res;
     }
 }

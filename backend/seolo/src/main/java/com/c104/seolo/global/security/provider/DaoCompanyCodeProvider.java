@@ -48,6 +48,7 @@ public class DaoCompanyCodeProvider implements AuthenticationProvider {
                         appUser.getAuthorities(),
                         inputCompanyCode);
                 log.info("인증완료된 DaoToken : {}",authenticatedDaoCCToken);
+
                 return authenticatedDaoCCToken;
 
             } else {
