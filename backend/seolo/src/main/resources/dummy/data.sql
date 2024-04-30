@@ -2,6 +2,17 @@ INSERT INTO COMPANY (company_code, company_name, company_logo, company_registrat
 VALUES ('SFY001KOR', 'SSAFY', 'dummy', '123-45-67890', '123-45-67890-1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('SAM001KOR', 'SAMSUNG', 'dummy', '177-77-77777', '177-77-77777-7', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+INSERT INTO CHECK_LIST_TEMPLATE(CHECK_LIST_TEMPLATE_CONTEXT)
+values ('LOTO에 대해 작업자 교육이 이루어졌는가?'),
+       ('해당 기계 혹은 설비의 전원을 차단하였는가?'),
+       ('LOTO가 해당 기계·설비에 부착되어 있는가?'),
+       ('LOTO 사용 시 해당 기계·설비 권한이 있는 작업자를 지정·공유하였는가?'),
+       ('LOTO 표지가 잘 부착되어 있는가?'),
+       ('작업자는 기계·설비의 전원을 차단하는 등 LOTO 작업절차를 준수하고 있는가?'),
+       ('작업자 눈에 잘 띄는 위치에 표지판을 단단히 고정하여 경고하였는가?'),
+       ('LOTO를 해재하기 전 다른 작업자들이 안전하게 위치하고 있는지 확인하였는가?'),
+       ('모든 작업자들에게 LOTO 제거를 공지하였는가?');
+
 INSERT INTO employee (employee_num, company_code, employee_name, employee_title, employee_team, employee_birthday, employee_thum, employee_join_date, employee_leave_date, created_at, updated_at)
 VALUES
     ('202100001', 'SFY001KOR', '김진명', '대리', '개발팀', '1996-02-23', 'default', '2021-07-12', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
