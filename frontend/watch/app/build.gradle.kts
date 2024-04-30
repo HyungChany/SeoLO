@@ -61,6 +61,7 @@ dependencies {
     implementation(libs.constraintlayout)
     implementation(libs.appcompat)
     implementation(libs.viewpager2)
+    implementation(libs.material)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
     debugImplementation(libs.ui.tooling)
