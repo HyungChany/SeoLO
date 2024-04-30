@@ -21,7 +21,6 @@ public class GlobalExceptionHandler {
                         .build());
     }
 
-
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> runtimeExceptionHandler(RuntimeException e){
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)

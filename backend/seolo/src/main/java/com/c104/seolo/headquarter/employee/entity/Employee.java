@@ -21,7 +21,7 @@ public class Employee extends BaseEntity {
     @Column(name = "employee_num", length = 15, nullable = false)
     private String employeeNum;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_code", referencedColumnName = "company_code", nullable = false)
     private Company company;
 

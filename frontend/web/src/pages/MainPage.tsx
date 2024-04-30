@@ -254,9 +254,21 @@ const MainPage = () => {
                 </MapContainer>
               </CardDrawing>
             ) : (
-              <CardDrawing onClick={() => console.log('클릭')}>
-                도면
-              </CardDrawing>
+              <>
+                <input
+                  type="file"
+                  onChange={handleImageChange}
+                  style={{ display: 'none' }}
+                  id="fileInput"
+                />
+                <label htmlFor="fileInput">
+                  <CardDrawing onClick={() => console.log('클릭')}>
+                    <Typo.Body0B color={Color.GRAY400}>
+                      저장된 도면이 없습니다. 도면을 추가하세요.
+                    </Typo.Body0B>
+                  </CardDrawing>
+                </label>
+              </>
             )}
             <Spacer space={'2rem'} />
             <Cards>

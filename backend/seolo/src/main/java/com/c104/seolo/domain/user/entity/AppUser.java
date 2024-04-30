@@ -28,7 +28,7 @@ public class AppUser extends BaseEntity implements UserDetails {
     @Column(name = "user_id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_num", referencedColumnName = "employee_num", nullable = false)
     private Employee employee;
 
