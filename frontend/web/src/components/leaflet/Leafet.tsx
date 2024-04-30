@@ -1,6 +1,13 @@
 import L from 'leaflet';
 import { useEffect, useState } from 'react';
-import { ImageOverlay, Marker, useMap, useMapEvents } from 'react-leaflet';
+import {
+  ImageOverlay,
+  Marker,
+  Popup,
+  useMap,
+  useMapEvents,
+} from 'react-leaflet';
+import * as Typo from '@/components/typography/Typography.tsx'
 
 interface ImageMapProps {
   imageFile: string | null;
@@ -45,7 +52,13 @@ export const Leaflet = ({ imageFile }: ImageMapProps): JSX.Element | null => {
     <>
       <ImageOverlay url={imageFile} bounds={bounds} />
       {markers.map((marker, idx) => (
-        <Marker key={idx} position={marker} />
+        <Marker key={idx} position={marker}>
+          <Popup>
+            <Typo.Detail0>장비번호:123456</Typo.Detail0>
+            <Typo.Detail0>작업자:김철수</Typo.Detail0>
+            <Typo.Detail0>종료 예상 시간: mm.dd - hh.mm</Typo.Detail0>
+          </Popup>
+        </Marker>
       ))}
     </>
   );
