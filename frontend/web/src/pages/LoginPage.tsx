@@ -1,7 +1,10 @@
-// import * as Typo from '@/components/typography/Typography.tsx';
 import * as Color from '@/config/color/Color.ts';
 import styled from 'styled-components';
-
+import Company from '/assets/icons/Company.svg';
+import InputBox from '@/components/inputbox/InputBox.tsx';
+import { ChangeEvent, useState } from 'react';
+import User from '/assets/icons/Id.svg';
+import Lock from '/assets/icons/Lock.svg';
 const Background = styled.div`
   width: 100dvw;
   height: 100dvh;
@@ -13,15 +16,15 @@ const Background = styled.div`
 
 const LoginBox = styled.div`
   box-sizing: border-box;
-  width: 28.5rem;
-  height: 41rem;
+  width: 28rem;
+  height: 38rem;
   border-radius: 0.625rem;
   background-color: white;
   display: flex;
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
-  padding: 5% 0;
+  padding: 3rem 0;
 `;
 
 const NameBox = styled.div`
@@ -44,19 +47,28 @@ const NameEng = styled.div`
   color: ${Color.BLUE100};
 `;
 
-const InputBox = styled.div`
-  width: 28.5rem;
-  height: 10rem;
-  background-color: #56ff6c;
+const InputContainer = styled.div`
+  width: 80%;
+  height: 40%;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  /* background-color: aqua; */
+`;
+const InputContent = styled.div`
+  height: 3.125rem;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const ButtonBox = styled.div`
-  width: 25rem;
-  height: 3.125rem;
+  width: 81%;
+  height: 3.3rem;
   display: flex;
   justify-content: center;
   align-items: center;
   color: white;
+  margin-bottom: 1%;
   font-family: NYJGothicM;
   font-size: 1.1rem;
   border-radius: 0.5rem;
@@ -75,6 +87,18 @@ const ButtonBox = styled.div`
   }
 `;
 const LoginPage = () => {
+  const [companyNumber, setCompanyNumber] = useState<string>('');
+  const [loginId, setLoginId] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const handleCompanyNumber = (e: ChangeEvent<HTMLInputElement>) => {
+    setCompanyNumber(e.target.value);
+  };
+  const handleLoginId = (e: ChangeEvent<HTMLInputElement>) => {
+    setLoginId(e.target.value);
+  };
+  const handlePassword = (e: ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
   return (
     <>
       <Background>
@@ -83,7 +107,39 @@ const LoginPage = () => {
             <NameKor>서로</NameKor>
             <NameEng>SeoLO</NameEng>
           </NameBox>
-          <InputBox>여기에 입력창 넣으셈</InputBox>
+          <InputContainer>
+            <InputContent>
+              <img src={Company} alt="Company" />
+              <InputBox
+                width={19}
+                height={3.125}
+                value={companyNumber}
+                placeholder="회사번호"
+                onChange={handleCompanyNumber}
+              />
+            </InputContent>
+            <InputContent>
+              <img src={User} alt="User" />
+              <InputBox
+                width={19}
+                height={3.125}
+                value={loginId}
+                placeholder="아이디"
+                onChange={handleLoginId}
+              />
+            </InputContent>
+            <InputContent>
+              <img src={Lock} alt="Lock" />
+              <InputBox
+                width={19}
+                height={3.125}
+                value={password}
+                placeholder="비밀번호"
+                onChange={handlePassword}
+                isPassword
+              />
+            </InputContent>
+          </InputContainer>
           <ButtonBox>로그인</ButtonBox>
         </LoginBox>
       </Background>

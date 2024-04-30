@@ -1,0 +1,17 @@
+package com.c104.seolo.domain.core.repository;
+
+import com.c104.seolo.domain.core.dto.info.LockerInfo;
+import com.c104.seolo.domain.core.entity.Locker;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface LockerRepository extends CrudRepository<Locker, Long> {
+    @Query("SELECT new com.c104.seolo.domain.core.dto.info.LockerInfo( " +
+            "l.id, l.uid, l.isLocked, l.battery) FROM Locker l " +
+            "WHERE l.company.companyCode = :companyCode")
+    List<LockerInfo> findAllByCompanyCode(String companyCode);
+}

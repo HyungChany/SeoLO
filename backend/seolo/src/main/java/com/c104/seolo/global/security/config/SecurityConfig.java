@@ -2,8 +2,9 @@ package com.c104.seolo.global.security.config;
 
 import com.c104.seolo.domain.user.enums.ROLES;
 import com.c104.seolo.global.security.filter.DaoCompanyCodeAuthenticationFilter;
-import com.c104.seolo.global.security.handler.SeoloFailureHandler;
-import com.c104.seolo.global.security.handler.SeoloSuccessHandler;
+import com.c104.seolo.global.security.handler.SeoloLoginFailureHandler;
+import com.c104.seolo.global.security.handler.SeoloLoginSuccessHandler;
+import com.c104.seolo.global.security.handler.SeoloLogoutSuccessHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,16 +27,18 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import java.util.Collections;
 
 @Configuration
-@EnableWebSecurity(debug = false)
+@EnableWebSecurity(debug = true)
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
-    private final SeoloSuccessHandler seoloSuccessHandler;
-    private final SeoloFailureHandler seoloFailureHandler;
+    private final SeoloLoginSuccessHandler seoloLoginSuccessHandler;
+    private final SeoloLoginFailureHandler seoloLoginFailureHandler;
+    private final SeoloLogoutSuccessHandler seoloLogoutSuccessHandler;
 
     @Autowired
-    public SecurityConfig(SeoloSuccessHandler seoloSuccessHandler, SeoloFailureHandler seoloFailureHandler) {
-        this.seoloSuccessHandler = seoloSuccessHandler;
-        this.seoloFailureHandler = seoloFailureHandler;
+    public SecurityConfig(SeoloLoginSuccessHandler seoloLoginSuccessHandler, SeoloLoginFailureHandler seoloLoginFailureHandler, SeoloLogoutSuccessHandler seoloLogoutSuccessHandler) {
+        this.seoloLoginSuccessHandler = seoloLoginSuccessHandler;
+        this.seoloLoginFailureHandler = seoloLoginFailureHandler;
+        this.seoloLogoutSuccessHandler = seoloLogoutSuccessHandler;
     }
 
 
@@ -59,21 +62,25 @@ public class SecurityConfig {
         http
             .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfig()))
             .csrf(AbstractHttpConfigurer::disable)
-            .addFilterBefore(new DaoCompanyCodeAuthenticationFilter(authenticationManager, seoloFailureHandler), UsernamePasswordAuthenticationFilter.class);
-
-        http.formLogin(f ->
-                f.loginPage("/test/login")
-                .loginProcessingUrl("/login")
-                .usernameParameter("username")
-                .passwordParameter("password")
-        );
+            .addFilterBefore(new DaoCompanyCodeAuthenticationFilter(authenticationManager, seoloLoginSuccessHandler, seoloLoginFailureHandler), UsernamePasswordAuthenticationFilter.class);
 
         // 영구 로그인 인증
         http.rememberMe(re ->
                 re.alwaysRemember(true)
                 .key("persistenceKey")
-                .authenticationSuccessHandler(seoloSuccessHandler)
+                .authenticationSuccessHandler(seoloLoginSuccessHandler)
         );
+
+        // 로그아웃 설정 추가
+        http.logout(logout -> logout
+                .logoutUrl("/logout") // 로그아웃 처리 URL 지정
+                .logoutSuccessHandler(seoloLogoutSuccessHandler)
+                .invalidateHttpSession(true) // 세션 무효화
+                .deleteCookies("JSESSIONID") // JSESSIONID 쿠키 삭제
+                .clearAuthentication(true) // 인증 정보 클리어
+        );
+
+        // 로그아웃
 
         // 동시 세션 제어
         http
@@ -86,7 +93,7 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(au -> au
-                .requestMatchers("/error","/join", "/login", "/test/login").permitAll()
+                .requestMatchers("/error","/join", "/login", "/test/login","/test").permitAll()
                 .anyRequest().hasRole(ROLES.MANAGER.name())
         );
 
