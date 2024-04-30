@@ -132,11 +132,11 @@ const CardDrawing = styled.div`
   overflow: hidden;
   transition: background-color 0.3s;
   &:hover {
-    background-color: ${Color.GRAY200};
+    background-color: ${Color.GRAY100};
     cursor: pointer;
   }
   &:active {
-    background-color: ${Color.GRAY300};
+    background-color: ${Color.GRAY200};
   }
 `;
 
@@ -316,7 +316,7 @@ const MainPage = () => {
                 <InnerContainer>
                   <Typo.H4>
                     <div style={{ display: 'flex', justifyContent: 'space-between'}}>
-                      <div style={{ margin:'0.5rem 0.5rem 0 0' }}>이번 달</div>
+                      <div style={{ margin:'0.5rem 0.8rem 0 0' }}>이번 달</div>
                       <Typo.H2 color={Color.RED100}>재해</Typo.H2>
                     </div>
                     발생현황
