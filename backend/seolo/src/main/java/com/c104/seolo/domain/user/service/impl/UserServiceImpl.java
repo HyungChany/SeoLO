@@ -16,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -30,7 +28,6 @@ public class UserServiceImpl implements UserService {
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
     }
-
 
 
     @Override
@@ -58,9 +55,14 @@ public class UserServiceImpl implements UserService {
     public AppUser createAppUser(Employee employee, String password) {
         return AppUser.builder()
                 .employee(employee)
-                .role(ROLES.WORKER)
+                .role(ROLES.ROLE_WORKER)
                 .password(passwordEncoder.encode(password))
                 .build();
     }
 
+
+    @Override
+    public UserJoinResponse getUserInfo(AppUser appUser) {
+        return null;
+    }
 }

@@ -9,6 +9,7 @@ public class DaoCompanycodeToken extends UsernamePasswordAuthenticationToken {
 
     private String companyCode;
 
+
     public DaoCompanycodeToken(Object principal, Object credentials, String companyCode) {
         super(principal, credentials);
         this.companyCode = companyCode;

@@ -9,4 +9,5 @@ public interface UserService {
 
     UserJoinResponse registUser(UserJoinRequest userJoinRequest);
     AppUser createAppUser(Employee employee, String password);
+    UserJoinResponse getUserInfo(AppUser appUser);
 }

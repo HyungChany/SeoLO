@@ -27,7 +27,7 @@ public class DaoCompanyCodeProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-
+        log.info("인증 전 DaoToken provider 진입 : {}", authentication.getPrincipal().toString());
         if (authentication instanceof DaoCompanycodeToken) {
             DaoCompanycodeToken token = (DaoCompanycodeToken) authentication;
 
@@ -42,12 +42,14 @@ public class DaoCompanyCodeProvider implements AuthenticationProvider {
             }
 
             if (passwordEncoder.matches(inputPassword, appUser.getPassword())) {
-                return new DaoCompanycodeToken(
-                        appUser.getUsername(),
+                DaoCompanycodeToken authenticatedDaoCCToken = new DaoCompanycodeToken(
+                        appUser,
                         null,
                         appUser.getAuthorities(),
-                        inputCompanyCode
-                        );
+                        inputCompanyCode);
+                log.info("인증완료된 DaoToken : {}",authenticatedDaoCCToken);
+                return authenticatedDaoCCToken;
+
             } else {
                 throw new AuthException(AuthErrorCode.INVALID_PASSWORD);
             }
