@@ -15,7 +15,10 @@ public interface MachineRepository extends JpaRepository<Machine, Integer> {
             "f.id, f.facilityName, " +
             "m.machineSubcategory.subcategory, " +
             "m.id, m.name, m.number, m.createdAt, " +
-            "mm.user.id, mm.user.employee.employeeName, mm.mm_role " +
+            "CASE WHEN mm.mm_role = 'Main' THEN mm.user.id ELSE null END, " +
+            "CASE WHEN mm.mm_role = 'Main' THEN mm.user.employee.employeeName ELSE null END, " +
+            "CASE WHEN mm.mm_role = 'Sub' THEN mm.user.id ELSE null END, " +
+            "CASE WHEN mm.mm_role = 'Sub' THEN mm.user.employee.employeeName ELSE null END" +
             ") FROM Machine m " +
             "JOIN m.facility f " +
             "LEFT JOIN MachineManager mm ON m.id = mm.machine.id " +

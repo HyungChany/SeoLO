@@ -20,6 +20,8 @@ public class MachineListDto {
     private String machineName;
     private String machineCode;
     private LocalDateTime introductionDate;
-    private Long ManagerId;
-    private String ManagerName;
+    private Long mainManagerId;
+    private String mainManagerName;
+    private Long subManagerId;
+    private String subManagerName;
 }

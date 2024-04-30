@@ -30,8 +30,10 @@ public class MachineServiceImpl implements MachineService {
                                 .machineName(info.getMachineName())
                                 .machineCode(info.getMachineCode())
                                 .introductionDate(info.getIntroductionDate())
-                                .ManagerId(info.getManagerId())
-                                .ManagerName(info.getManagerName())
+                                .mainManagerId(info.getMainManagerId())
+                                .mainManagerName(info.getMainManagerName())
+                                .subManagerId(info.getSubManagerId())
+                                .subManagerName(info.getSubManagerName())
                                 .build())
                         .collect(Collectors.toList()))
                 .orElse(Collections.emptyList());

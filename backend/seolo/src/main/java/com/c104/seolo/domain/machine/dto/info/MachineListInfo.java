@@ -18,7 +18,9 @@ public class MachineListInfo {
     private String machineCode;
     private LocalDateTime introductionDate;
 
-    private Long managerId;
-    private String managerName;
-    private String managerRole;
+    private Long mainManagerId;
+    private String mainManagerName;
+
+    private Long subManagerId;
+    private String subManagerName;
 }
