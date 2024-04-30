@@ -43,7 +43,7 @@ export const Leaflet = ({ imageFile }: ImageMapProps): JSX.Element | null => {
   });
 
   const customIcon = L.icon({
-    iconUrl: '@/../assets/icons/Position.svg',
+    iconUrl: '@/../assets/icons/Position.png',
     iconSize: [30, 42],
     iconAnchor: [15, 42], // 아이콘의 앵커 포인트를 아이콘의 하단 중앙으로 설정
   });
