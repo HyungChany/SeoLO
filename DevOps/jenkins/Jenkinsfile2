@@ -1,0 +1,156 @@
+pipeline {
+    agent any
+    environment {
+        // 환경 변수 정의
+        DOCKER_COMPOSE_FILE = 'DevOps/docker-compose.yml'
+        REPO_URL = 'https://lab.ssafy.com/s10-final/S10P31C104.git'
+        BRANCH_NAME = 'develop'
+        CREDENTIALS_ID = 'seolo-git-token'
+        GITHUB_CREDENTIALS_ID = 'seolo-github-token'
+        GITHUB_REPO_URL = 'https://github.com/makeUgreat/seolo-config.git'
+        PROFILES_ACTIVE = 'dev'
+    }
+
+    stages {
+        stage('Set Permissions') {
+            steps {
+                script {
+                    // 권한 설정
+                    sh 'sudo chmod -R 777 /var/jenkins_home/workspace'
+                    echo "Permissions have been set to 777 for all files in workspace."
+                }
+            }
+        }
+        stage('Prepare Workspace') {
+            steps {
+                script {
+                    env.PROFILES_ACTIVE = (env.BRANCH_NAME == 'master') ? 'prod' : 'dev'
+
+                    // 현재 작업 공간 전체를 정리
+                    echo "Attempting to clean the workspace..."
+                    sh 'pwd'
+                    try {
+                        deleteDir()
+                        echo "Workspace cleaned successfully."
+                    } catch (Exception e) {
+                        echo "Failed to clean the workspace."
+                        echo "Error: ${e.getMessage()}"
+                        sh 'ls -la'  // 현재 디렉토리의 파일 목록과 권한을 출력
+                    }
+                }
+            }
+        }
+
+        stage('Clone Repository') {
+            steps {
+                script {
+                    // Git 저장소에서 develop 브랜치 클론
+                    git branch: env.BRANCH_NAME, credentialsId: env.CREDENTIALS_ID, url: env.REPO_URL
+
+                    // Mattermost에 빌드 시작 메시지 보내기
+                    def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                    def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                    mattermostSend(color: 'warning',
+                        message: "빌드 시작: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                        endpoint: 'https://meeting.ssafy.com/hooks/xc1nh4iaw7dofr9sooojdhx6qh',
+                        channel: 'C104Build'
+                    )
+
+                    // SECRET KEY 저장소 clone
+                    dir('backend/seolo/src/main/resources') {
+                        echo "Active profile is ${env.PROFILES_ACTIVE}"
+
+                        // dev로 profile 변경
+                        sh "sed -i 's/active: local/active: ${env.PROFILES_ACTIVE}/' application.yml"
+                        sh "cat application.yml"
+                        sh 'mkdir -p confidence'
+                        dir('confidence') {
+                            git branch: 'master', credentialsId: env.GITHUB_CREDENTIALS_ID, url: env.GITHUB_REPO_URL
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Prepare Docker Compose') {
+            steps {
+                script {
+                    // docker-compose 설치 확인 및 설치
+                    sh '''
+                    if ! command -v docker-compose &> /dev/null
+                    then
+                        echo "Installing docker-compose..."
+                        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-\$(uname -s)-\$(uname -m)" -o /usr/local/bin/docker-compose
+                        sudo chmod +x /usr/local/bin/docker-compose
+                    else
+                        echo "docker-compose is already installed."
+                    fi
+                    '''
+                }
+            }
+        }
+
+        stage('Shutdown Existing Services') {
+            steps {
+                script {
+                    // 이미 실행 중인 서비스를 종료
+                    sh "docker-compose -f ${env.DOCKER_COMPOSE_FILE} down"
+                }
+            }
+        }
+
+        stage('Build Nginx & Frontend') {
+            steps {
+                script {
+                    dir('frontend/web') {
+                    sh "pwd"
+                    sh "docker build -t seolo-nginx/front:latest ."
+                    }
+                }
+            }
+        }
+
+        stage('Compose') {
+            steps {
+                script {
+                    sh "docker-compose -f ${env.DOCKER_COMPOSE_FILE} up -d"
+                }
+            }
+        }
+
+
+        stage('Cleanup') {
+            steps {
+                script {
+                    // 미사용 Docker 이미지 정리
+                    sh 'docker image prune --force --filter "until=24h"'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            script {
+                def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                mattermostSend (color: 'good',
+                message: "빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                endpoint: 'https://meeting.ssafy.com/hooks/xc1nh4iaw7dofr9sooojdhx6qh',
+                channel: 'C104Build'
+                )
+            }
+        }
+        failure {
+            script {
+                def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                mattermostSend (color: 'danger',
+                message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                endpoint: 'https://meeting.ssafy.com/hooks/xc1nh4iaw7dofr9sooojdhx6qh',
+                channel: 'C104Build'
+                )
+            }
+        }
+    }
+}
