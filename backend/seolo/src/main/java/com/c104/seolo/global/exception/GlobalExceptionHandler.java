@@ -2,10 +2,12 @@ package com.c104.seolo.global.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.nio.file.AccessDeniedException;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
@@ -20,7 +22,6 @@ public class GlobalExceptionHandler {
                         .message(e.getMessage())
                         .build());
     }
-
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> runtimeExceptionHandler(RuntimeException e){
@@ -61,5 +62,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<?> handleAccessDeniedException(AccessDeniedException e) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(SeoloErrorResponse.builder()
+                        .httpStatus(HttpStatus.FORBIDDEN)
+                        .errorCode("ACCESS_DENIED")
+                        .message("해당 사용자의 권한으로는 접근할 수 없습니다.")
+                        .build());
+    }
 
 }
