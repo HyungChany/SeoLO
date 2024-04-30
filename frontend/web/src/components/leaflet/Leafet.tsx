@@ -42,11 +42,11 @@ export const Leaflet = ({ imageFile }: ImageMapProps): JSX.Element | null => {
     },
   });
 
-  const customIcon = L.icon({
-    iconUrl: '@/../assets/icons/Position.png',
-    iconSize: [30, 42],
-    iconAnchor: [15, 42], // 아이콘의 앵커 포인트를 아이콘의 하단 중앙으로 설정
-  });
+  // const customIcon = L.icon({
+  //   iconUrl: '@/../assets/icons/Position.png',
+  //   iconSize: [30, 42],
+  //   iconAnchor: [15, 42], // 아이콘의 앵커 포인트를 아이콘의 하단 중앙으로 설정
+  // });
 
   if (!imageFile || !bounds) return null;
 
@@ -54,7 +54,7 @@ export const Leaflet = ({ imageFile }: ImageMapProps): JSX.Element | null => {
     <>
       <ImageOverlay url={imageFile} bounds={bounds} />
       {markers.map((marker, idx) => (
-        <Marker key={idx} position={marker} icon={customIcon}>
+        <Marker key={idx} position={marker} /* icon={customIcon} */>
           <Popup>
             <Typo.Detail0>장비번호:123456</Typo.Detail0>
             <Typo.Detail0>작업자:김철수</Typo.Detail0>
