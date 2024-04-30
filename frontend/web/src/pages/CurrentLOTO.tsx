@@ -1,4 +1,3 @@
-import React from 'react';
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 interface ContentBoxProps {
