@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Builder
@@ -14,11 +15,11 @@ import java.util.Date;
 @Setter
 public class MachineListDto {
     private Long id;
-    private String facilityId;
+    private Long facilityId;
     private String facilityName;
     private String machineName;
     private String machineCode;
-    private Date introductionDate;
+    private LocalDateTime introductionDate;
     private Long ManagerId;
     private String ManagerName;
 }

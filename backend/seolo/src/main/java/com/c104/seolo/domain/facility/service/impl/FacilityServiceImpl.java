@@ -26,7 +26,7 @@ public class FacilityServiceImpl implements FacilityService {
 
     @Override
     public FacilityResponse findFacilityByCompany(String company_code) {
-        if (facilityRepository.existsByCompany(company_code)) {
+        if (!facilityRepository.existsByCompany(company_code)) {
             throw new CommonException(FacilityErrorCode.NOT_EXIST_FACILITY);
         }
 
