@@ -247,11 +247,7 @@ const MainPage = () => {
                   center={[0, 0]}
                   zoom={1}
                   scrollWheelZoom={true}
-                  style={{
-                    height: '100vh',
-                    width: '100vw',
-                    overflow: 'hidden',
-                  }}
+                  style={{ height: '100%', width: '100%', overflow: 'hidden' }}
                   attributionControl={false}
                 >
                   {imageFile && <Leaflet imageFile={imageFile} />}
