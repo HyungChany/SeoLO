@@ -130,6 +130,14 @@ const CardDrawing = styled.div`
   border-radius: 1.25rem;
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.25);
   overflow: hidden;
+  transition: background-color 0.3s;
+  &:hover {
+    background-color: ${Color.GRAY200};
+    cursor: pointer;
+  }
+  &:active {
+    background-color: ${Color.GRAY300};
+  }
 `;
 
 const InnerContainer = styled.div`
