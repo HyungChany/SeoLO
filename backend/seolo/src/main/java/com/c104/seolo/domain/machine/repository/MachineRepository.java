@@ -21,5 +21,4 @@ public interface MachineRepository extends JpaRepository<Machine, Integer> {
             "LEFT JOIN MachineManager mm ON m.id = mm.machine.id " +
             "WHERE f.id = :facilityId AND f.company.companyCode = :companyCode")
     Optional<List<MachineListInfo>> getMachinesByFacilityIdAndCompany(Long facilityId, String companyCode);
-
 }
