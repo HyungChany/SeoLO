@@ -60,6 +60,7 @@ public class AppUser extends BaseEntity implements UserDetails {
         return this.employee.getEmployeeNum(); // 사번을 username 으로한다.
     }
 
+
     @Override
     public boolean isAccountNonExpired() {
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("Asia/Seoul"));
