@@ -7,20 +7,19 @@ class NewsService {
   final _dio = Dio();
   final baseUrl = dotenv.get('API_URL2') ?? '';
   Future<List<NewsModel>> getNews() async {
-    try {
+    // try {
       final response = await _dio.get('$baseUrl/news');
 
-      if (response.statusCODE == 200) {
+      // if (response.statusCODE == 200) {
         List<dynamic> responseData = response.data;
         List<NewsModel> newsList = responseData.map((data) => NewsModel.fromJson(data)).toList();
         // debugPrint('$newsList');
         return newsList;
-      } else {
+      // } else {
         throw Exception('뉴스 로드 실패');
-      }
-    } on DioError catch (e) {
-      throw Exception('뉴스 로드 실패: ${e.response?.statusCODE}');
-    }
+      // }
+    // } on DioError catch (e) {
+    //   throw Exception('뉴스 로드 실패: ${e.response?.statusCODE}');
+    // }
   }
-
 }
