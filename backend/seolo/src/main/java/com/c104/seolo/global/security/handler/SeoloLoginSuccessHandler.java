@@ -10,8 +10,14 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.context.DelegatingSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -21,16 +27,28 @@ import java.util.Map;
 @Component
 public class SeoloLoginSuccessHandler implements AuthenticationSuccessHandler {
     private ObjectMapper objectMapper;
+    private final SecurityContextRepository securityContextRepository;
 
     @Autowired
-    public SeoloLoginSuccessHandler(ObjectMapper objectMapper) {
+    public SeoloLoginSuccessHandler(SecurityContextRepository securityContextRepository, ObjectMapper objectMapper) {
+        this.securityContextRepository = securityContextRepository;
         this.objectMapper = objectMapper;
     }
+
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         DaoCompanycodeToken authToken = (DaoCompanycodeToken) authentication;
-        log.debug("인증성공객체 : {}", authToken);
+        log.debug("인증성공객체 successHandler 진입 : {}", authToken);
+        log.debug("인증성공객체 successHandler 진입 : {}", authentication);
+
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        log.debug("context 정보 1: {}", context);
+        context.setAuthentication(authToken);
+        log.debug("context 정보 2: {}", context);
+        SecurityContextHolder.setContext(context);
+//        RequestContextHolder.currentRequestAttributes().setAttribute("SPRING_SECURITY_CONTEXT", context, RequestAttributes.SCOPE_SESSION);
+        securityContextRepository.saveContext(context, request, response);
 
         AuthSuccessResponse res = AuthSuccessResponse.builder()
                 .username(authToken.getName())

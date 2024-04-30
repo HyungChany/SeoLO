@@ -1,6 +1,7 @@
 package com.c104.seolo.domain.user.service.impl;
 
 import com.c104.seolo.domain.user.dto.request.UserJoinRequest;
+import com.c104.seolo.domain.user.dto.response.UserInfoResponse;
 import com.c104.seolo.domain.user.dto.response.UserJoinResponse;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.domain.user.enums.ROLES;
@@ -16,8 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
@@ -30,7 +29,6 @@ public class UserServiceImpl implements UserService {
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
     }
-
 
 
     @Override
@@ -58,9 +56,22 @@ public class UserServiceImpl implements UserService {
     public AppUser createAppUser(Employee employee, String password) {
         return AppUser.builder()
                 .employee(employee)
-                .role(ROLES.WORKER)
+                .role(ROLES.ROLE_WORKER)
                 .password(passwordEncoder.encode(password))
                 .build();
     }
 
+
+    @Override
+    public UserInfoResponse getUserInfo(AppUser appUser) {
+        UserInfoResponse res = UserInfoResponse.builder()
+                .id(appUser.getId())
+                .employee(appUser.getEmployee())
+                .ROLES(appUser.getROLES())
+                .statusCODE(appUser.getStatusCODE())
+                .PIN(appUser.getPIN())
+                .isLocked(appUser.isLocked())
+                .build();
+        return res;
+    }
 }
