@@ -13,6 +13,11 @@ const BackGround = styled.div`
   justify-content: center;
   display: flex;
   overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Box = styled.div`
