@@ -38,24 +38,28 @@
         <activity
             android:name=".presentation.ExampleActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-            android:taskAffinity="">
-        </activity>
+            android:taskAffinity=""
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"></activity>
 
-        <activity android:name=".presentation.CarouselActivity"
+        <activity
+            android:name=".presentation.CarouselActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-            android:taskAffinity="" />
+            android:taskAffinity=""
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
-        <activity android:name=".presentation.LockActivity"
+        <activity
+            android:name=".presentation.LockActivity"
             android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-            android:taskAffinity="" />
+            android:taskAffinity=""
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
-        <activity android:name=".presentation.PasswordActivity"
+        <activity
+            android:name=".presentation.PasswordActivity"
             android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-            android:taskAffinity="" />
+            android:windowSoftInputMode="stateAlwaysVisible" />
+
 
     </application>
 
