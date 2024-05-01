@@ -1,15 +1,55 @@
 package com.c104.seolo.domain.facility.controller;
 
+import com.c104.seolo.domain.facility.dto.request.FacilityRequest;
+import com.c104.seolo.domain.facility.dto.response.FacilityResponse;
 import com.c104.seolo.domain.facility.service.FacilityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping("facilities")
 @RequiredArgsConstructor
 @Slf4j
 public class FacilityController {
-//    private final FacilityService facilityService;
+    private final FacilityService facilityService;
+
+    @GetMapping
+    public ResponseEntity<FacilityResponse> getFacilities(
+            @RequestHeader("Company-Code") String companyCode
+    ) {
+        return ResponseEntity.ok(facilityService.findFacilityByCompany(companyCode));
+    }
+
+    @PostMapping
+    public ResponseEntity<Void> createFacility(
+            @RequestHeader("Company-Code") String companyCode,
+            @RequestBody FacilityRequest facilityRequest
+    ) {
+        facilityService.createFacility(facilityRequest, companyCode);
+        URI location = URI.create("/facilities");
+        return ResponseEntity.created(location).build();
+    }
+
+    @PatchMapping("/{facilityId}")
+    public ResponseEntity<Void> updateFacility(
+            @RequestHeader("Company-Code") String companyCode,
+            @PathVariable("facilityId") Long facilityId,
+            @RequestBody FacilityRequest facilityRequest
+    ) {
+        facilityService.updateFacility(facilityRequest, companyCode, facilityId);
+        return ResponseEntity.accepted().build();
+    }
+
+    @DeleteMapping("/{facilityId}")
+    public ResponseEntity<Void> deleteFacility(
+            @RequestHeader("Company-Code") String companyCode,
+            @PathVariable("facilityId") Long facilityId
+    ) {
+        facilityService.deleteFacility(companyCode, facilityId);
+        return ResponseEntity.noContent().build();
+    }
 }
