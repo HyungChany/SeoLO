@@ -28,7 +28,7 @@ public class AppUser extends BaseEntity implements UserDetails {
     @Column(name = "user_id", nullable = false)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_num", referencedColumnName = "employee_num", nullable = false)
     private Employee employee;
 
@@ -59,6 +59,7 @@ public class AppUser extends BaseEntity implements UserDetails {
     public String getUsername() {
         return this.employee.getEmployeeNum(); // 사번을 username 으로한다.
     }
+
 
     @Override
     public boolean isAccountNonExpired() {
