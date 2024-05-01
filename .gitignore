@@ -236,11 +236,12 @@ replay_pid*
 logs
 **/*.backup.*
 **/*.back.*
-
+.env
 node_modules
 bower_components
 
 *.sublime*
+
 
 psd
 thumb
