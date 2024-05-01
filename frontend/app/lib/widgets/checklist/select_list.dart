@@ -14,7 +14,7 @@ class _SelectListState extends State<SelectList>{
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.pushNamed(context, '/main');
+        Navigator.pushNamed(context, '/worklist');
       },
       child: Container(
         height: 60,

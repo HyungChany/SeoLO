@@ -21,10 +21,10 @@ class _TestScreenState extends State<TestScreen> {
     });
 
     if (index == 0) { // 'Home' 탭이 선택될 때
-      Navigator.pushNamed(context, '/main');
+      Navigator.pushNamed(context, '/dayselect');
     }
     if (index == 1) {
-      Navigator.pushNamed(context, '/nfc');
+      Navigator.pushNamed(context, '/facility');
     }
     if (index == 2) {
       Navigator.pushNamed(context, '/profile');
