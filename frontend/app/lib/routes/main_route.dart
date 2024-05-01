@@ -11,6 +11,7 @@ import 'package:app/screens/lotolock/facility_select_screen.dart';
 import 'package:app/screens/lotolock/worklist_select_screen.dart';
 import 'package:app/screens/lotolock/day_select_screen.dart';
 import 'package:app/screens/lotolock/time_select_screen.dart';
+import 'package:app/screens/lotolock/worklist_check_screen.dart';
 
 Route<dynamic> generateMainRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -41,6 +42,8 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => DaySelect());
     case '/timeselect':
       return MaterialPageRoute(builder: (context) => TimeSelect());
+    case '/worklistcheck':
+      return MaterialPageRoute(builder: (context)=> WorkListCheckScreen());
     default:
       debugPrint('Route Error');
       return MaterialPageRoute(builder: (context) => const TestScreen());

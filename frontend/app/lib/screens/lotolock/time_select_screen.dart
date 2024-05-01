@@ -35,7 +35,7 @@ class _TimeSelectState extends State<TimeSelect> {
             child: CommonTextButton(
               text: '다음 단계',
               onTap: () {
-                Navigator.pushNamed(context, '/main');
+                Navigator.pushNamed(context, '/worklistcheck');
               },
             ),
           ),
