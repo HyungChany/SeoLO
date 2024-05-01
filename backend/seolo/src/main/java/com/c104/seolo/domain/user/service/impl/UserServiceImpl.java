@@ -62,6 +62,7 @@ public class UserServiceImpl implements UserService {
                 .employee(employee)
                 .role(ROLES.ROLE_WORKER)
                 .password(passwordEncoder.encode(password))
+                .PIN(passwordEncoder.encode(employee.getBirthdayMonthDay())) // PIN 기본값으로 생년월일 암호화 저장
                 .build();
     }
 

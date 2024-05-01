@@ -40,8 +40,8 @@ public class UserController {
 
     @PatchMapping("/users/pwd")
     public void changeUserPwd(@AuthenticationPrincipal AppUser user, @Valid @RequestBody UserPwdResetRequest userPwdResetRequest) {
-        log.info("{}",userPwdResetRequest.getNewPassword());
-        log.info("{}", userPwdResetRequest.getCheckNewPassword());
+        log.debug("{}",userPwdResetRequest.getNewPassword());
+        log.debug("{}", userPwdResetRequest.getCheckNewPassword());
         userService.resetUserPassword(user, userPwdResetRequest);
     }
 

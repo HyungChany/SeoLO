@@ -43,7 +43,7 @@ public class AppUser extends BaseEntity implements UserDetails {
     @Column(name = "user_pwd", length = 72, nullable = false)
     private String password;
 
-    @Column(name = "user_pin", length = 4, nullable = false)
+    @Column(name = "user_pin", length = 72, nullable = false)
     // 기본값으로 사용자의 '월일 ex 0223 으로 지정한다'
     private String PIN;
 
@@ -126,7 +126,6 @@ public class AppUser extends BaseEntity implements UserDetails {
                 throw new IllegalArgumentException("Employee cannot be null");
             }
             this.employee = employee;
-            this.PIN = employee.getBirthdayMonthDay();
             return this;
         }
 
@@ -152,6 +151,9 @@ public class AppUser extends BaseEntity implements UserDetails {
         }
 
         public Builder PIN(String PIN) {
+            if (ROLES == null) {
+                throw new IllegalArgumentException("PIN cannot be null");
+            }
             this.PIN = PIN;
             return this;
         }
