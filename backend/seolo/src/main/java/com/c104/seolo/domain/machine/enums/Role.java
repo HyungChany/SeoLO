@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum Role {
     Main("정"),
-    Deputy("부");
+    Sub("부");
 
     private final String selectRole;
     Role(String role) {

@@ -17,7 +17,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @Table(name = "machine_manager")
 public class MachineManager {
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "machine_id", nullable = false)
+    @Column(name = "machine_manager_id", nullable = false)
     @Id
     private Long id;
 

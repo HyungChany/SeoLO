@@ -23,13 +23,13 @@ public class CheckList extends BaseEntity {
     private Company company;
 
     @Column(name = "check_list_context", length = 255, nullable = false)
-    private String checkListContext;
+    private String context;
 
     @Builder
     private CheckList(Long id, Company company, String checkListContext) {
         this.id = id;
         this.company = company;
-        this.checkListContext = checkListContext;
+        this.context = checkListContext;
     }
 
     public CheckList() {}

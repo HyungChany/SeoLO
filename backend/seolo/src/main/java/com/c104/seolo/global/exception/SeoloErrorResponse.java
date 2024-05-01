@@ -1,11 +1,14 @@
-package com.c104.seolo.global.security.exception;
+package com.c104.seolo.global.exception;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 @Getter
 @Setter
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class SeoloErrorResponse {
     private final HttpStatus httpStatus;
     private final String errorCode;

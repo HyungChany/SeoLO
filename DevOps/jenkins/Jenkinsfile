@@ -99,8 +99,7 @@ pipeline {
             }
         }
 
-
-        stage('Build Nginx & Frontend!') {
+        stage('Build Nginx & Frontend') {
             steps {
                 script {
                     dir('frontend/web') {

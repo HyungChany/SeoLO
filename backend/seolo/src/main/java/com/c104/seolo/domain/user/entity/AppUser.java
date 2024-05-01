@@ -5,6 +5,7 @@ import com.c104.seolo.domain.user.enums.ROLES;
 import com.c104.seolo.global.common.BaseEntity;
 import com.c104.seolo.headquarter.employee.entity.Employee;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 import lombok.Getter;
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
@@ -88,6 +89,10 @@ public class AppUser extends BaseEntity implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public boolean isMatchingCompanyCode(String companyCode) {
+        return this.employee.isMatchingCompanyCode(companyCode);
     }
 
     // JPA 프록시 객체 생성을 위한 기본생성자

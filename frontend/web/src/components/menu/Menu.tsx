@@ -6,14 +6,15 @@ import EnterIcon from '@/../assets/icons/Enter.svg?react';
 // 타입 정의
 interface MenuProps {
   onClick: () => void;
-  width: number;
+  width: number | string;
   $enterSize: number;
   children: React.ReactNode;
 }
 
 // 스타일 정의
 const Container = styled.div<Pick<MenuProps, 'width'>>`
-  width: ${(props) => props.width}rem;
+  width: ${(props) => (typeof props.width === 'number' ? `${props.width}rem` : props.width)}
+  }rem;
 `;
 
 const MenuContainer = styled.div`
