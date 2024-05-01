@@ -36,13 +36,9 @@ class MainActivity : ComponentActivity() {
 
         // 버튼을 통해 ExampleActivity로 전환
         val button: Button = findViewById(R.id.button_example)
-//        button.setOnClickListener {
-//            val intent = Intent(this, CarouselActivity::class.java)
-//            startActivity(intent)
-//        button.setOnClickListener {
-//            val intent = Intent(this, LockActivity::class.java)
-//            startActivity(intent)
         button.setOnClickListener {
+//            val intent = Intent(this, CarouselActivity::class.java)
+//            val intent = Intent(this, LockActivity::class.java)
             val intent = Intent(this, PasswordActivity::class.java)
             startActivity(intent)
     }
