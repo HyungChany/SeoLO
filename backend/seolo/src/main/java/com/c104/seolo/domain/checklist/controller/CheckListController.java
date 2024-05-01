@@ -6,6 +6,7 @@ import com.c104.seolo.domain.checklist.service.CheckListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -24,6 +25,7 @@ public class CheckListController {
         return ResponseEntity.ok(checkListService.getCheckListByCompany(companyCode));
     }
 
+    @Secured("ROLE_MANAGER")
     @PostMapping()
     public ResponseEntity<Void> createCheckList(
             @RequestHeader("Company-Code") String companyCode,
@@ -34,6 +36,7 @@ public class CheckListController {
         return ResponseEntity.created(location).build();
     }
 
+    @Secured("ROLE_MANAGER")
     @PatchMapping("/{checkListId}")
     public ResponseEntity<Void> updateCheckList(
             @RequestHeader("Company-Code") String companyCode,
@@ -44,6 +47,7 @@ public class CheckListController {
         return ResponseEntity.accepted().build();
     }
 
+    @Secured("ROLE_MANAGER")
     @DeleteMapping("/{checkListId}")
     public ResponseEntity<Void> deleteCheckList(
             @RequestHeader("Company-Code") String companyCode,

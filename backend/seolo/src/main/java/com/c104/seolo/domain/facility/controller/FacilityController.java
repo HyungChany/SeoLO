@@ -6,6 +6,7 @@ import com.c104.seolo.domain.facility.service.FacilityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -17,6 +18,7 @@ import java.net.URI;
 public class FacilityController {
     private final FacilityService facilityService;
 
+    @Secured("ROLE_MANAGER")
     @GetMapping
     public ResponseEntity<FacilityResponse> getFacilities(
             @RequestHeader("Company-Code") String companyCode
@@ -24,6 +26,7 @@ public class FacilityController {
         return ResponseEntity.ok(facilityService.findFacilityByCompany(companyCode));
     }
 
+    @Secured("ROLE_MANAGER")
     @PostMapping
     public ResponseEntity<Void> createFacility(
             @RequestHeader("Company-Code") String companyCode,
@@ -34,6 +37,7 @@ public class FacilityController {
         return ResponseEntity.created(location).build();
     }
 
+    @Secured("ROLE_MANAGER")
     @PatchMapping("/{facilityId}")
     public ResponseEntity<Void> updateFacility(
             @RequestHeader("Company-Code") String companyCode,
@@ -44,6 +48,7 @@ public class FacilityController {
         return ResponseEntity.accepted().build();
     }
 
+    @Secured("ROLE_MANAGER")
     @DeleteMapping("/{facilityId}")
     public ResponseEntity<Void> deleteFacility(
             @RequestHeader("Company-Code") String companyCode,
