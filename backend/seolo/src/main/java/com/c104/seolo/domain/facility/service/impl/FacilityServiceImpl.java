@@ -66,7 +66,8 @@ public class FacilityServiceImpl implements FacilityService {
         Facility facility = facilityRepository.findById(facility_id)
                 .orElseThrow(() -> new CommonException(FacilityErrorCode.NOT_EXIST_FACILITY));
 
-        if (facility.getFacilityName().equals(facilityRequest.getName())) {
+        boolean existsWithName = facilityRepository.existsByNameAndCompanyCodeNot(facilityRequest.getName(), company_code, facility_id);
+        if (existsWithName) {
             throw new CommonException(FacilityErrorCode.FACILITY_ALREADY_EXISTS);
         }
 

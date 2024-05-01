@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.machine.controller;
 
+import com.c104.seolo.domain.machine.dto.MachineDto;
 import com.c104.seolo.domain.machine.dto.response.MachineListResponse;
 import com.c104.seolo.domain.machine.service.MachineService;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class MachineController {
     private final MachineService machineService;
+    @GetMapping("/{machineId}")
+    public ResponseEntity<MachineDto> getMachine(
+            @RequestHeader("Company-Code") String companyCode,
+            @PathVariable Long machineId
+    ) {
+        return ResponseEntity.ok(machineService.findMachineByMachineId(companyCode, machineId));
+    }
 
     @GetMapping("/facility/{facilityId}")
     public ResponseEntity<MachineListResponse> getMachineList(

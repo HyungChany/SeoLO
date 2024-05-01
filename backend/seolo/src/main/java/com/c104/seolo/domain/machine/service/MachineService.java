@@ -4,6 +4,6 @@ import com.c104.seolo.domain.machine.dto.MachineDto;
 import com.c104.seolo.domain.machine.dto.response.MachineListResponse;
 
 public interface MachineService {
-    MachineDto findMachineByMachineId(String machineId);
+    MachineDto findMachineByMachineId(String companyCode, Long machineId);
     MachineListResponse findMachineByCompanyAndFacility(String companyCode, Long facilityId);
 }

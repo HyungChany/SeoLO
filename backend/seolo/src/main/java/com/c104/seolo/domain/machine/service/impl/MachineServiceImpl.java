@@ -2,9 +2,10 @@ package com.c104.seolo.domain.machine.service.impl;
 
 import com.c104.seolo.domain.machine.dto.MachineDto;
 import com.c104.seolo.domain.machine.dto.MachineListDto;
+import com.c104.seolo.domain.machine.dto.info.MachineInfo;
 import com.c104.seolo.domain.machine.dto.info.MachineListInfo;
 import com.c104.seolo.domain.machine.dto.response.MachineListResponse;
-import com.c104.seolo.domain.machine.entity.Machine;
+import com.c104.seolo.domain.machine.exception.MachineErrorCode;
 import com.c104.seolo.domain.machine.repository.MachineRepository;
 import com.c104.seolo.domain.machine.service.MachineService;
 import com.c104.seolo.global.exception.CommonException;
@@ -24,11 +25,28 @@ public class MachineServiceImpl implements MachineService {
     private final MachineRepository machineRepository;
 
     @Override
-    public MachineDto findMachineByMachineId(String machineId) {
-        Optional<Machine> machine = machineRepository.findById(machineId);
-        if (!machine.isPresent()) {
-            throw new CommonException(MachineErrorCode.);
+    public MachineDto findMachineByMachineId(String companyCode, Long machineId) {
+        Optional<MachineInfo> machineOptional = machineRepository.findById(machineId);
+        MachineInfo machine = machineOptional.orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
+
+
+        if (!machine.getCompanyCode().equals(companyCode)) {
+            throw new CommonException(MachineErrorCode.NOT_COMPANY_MACHINE);
         }
+
+        return MachineDto.builder()
+                .id(machine.getId())
+                .facilityId(machine.getFacilityId())
+                .facilityName(machine.getFacilityName())
+                .machineName(machine.getMachineName())
+                .machineCode(machine.getMachineCode())
+                .machineThumbnail(machine.getMachineThumbnail())
+                .introductionDate(machine.getIntroductionDate())
+                .mainManagerId(machine.getMainManagerId())
+                .mainManagerName(machine.getMainManagerName())
+                .subManagerId(machine.getSubManagerId())
+                .subManagerName(machine.getSubManagerName())
+                .build();
     }
 
     private List<MachineListDto> getMachineListDto(Optional<List<MachineListInfo>> machineListOptional) {
