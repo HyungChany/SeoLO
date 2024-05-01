@@ -6,6 +6,7 @@ import com.c104.seolo.domain.machine.service.MachineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class MachineController {
     private final MachineService machineService;
+
+    @Secured("ROLE_MANAGER")
     @GetMapping("/{machineId}")
     public ResponseEntity<MachineDto> getMachine(
             @RequestHeader("Company-Code") String companyCode,
@@ -22,6 +25,7 @@ public class MachineController {
         return ResponseEntity.ok(machineService.findMachineByMachineId(companyCode, machineId));
     }
 
+    @Secured("ROLE_MANAGER")
     @GetMapping("/facility/{facilityId}")
     public ResponseEntity<MachineListResponse> getMachineList(
             @RequestHeader("Company-Code") String companyCode,

@@ -6,6 +6,7 @@ import com.c104.seolo.domain.core.service.LockerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class LockerController {
     private final LockerService lockerService;
 
+    @Secured("ROLE_MANAGER")
     @GetMapping
     public ResponseEntity<LockerResponse> getCompanyLockers(
             @RequestHeader("Company-Code") String companyCode
