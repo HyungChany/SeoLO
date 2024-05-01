@@ -1,6 +1,7 @@
 package com.c104.seolo.domain.user.controller;
 
 import com.c104.seolo.domain.user.dto.request.UserJoinRequest;
+import com.c104.seolo.domain.user.dto.request.UserPwdResetRequest;
 import com.c104.seolo.domain.user.dto.response.UserInfoResponse;
 import com.c104.seolo.domain.user.dto.response.UserJoinResponse;
 import com.c104.seolo.domain.user.entity.AppUser;
@@ -30,10 +31,18 @@ public class UserController {
         return userService.registUser(userJoinRequest);
     }
 
-    @Secured("ROLE_MANAGER")
+//    @Secured("ROLE_MANAGER")
     @GetMapping("/users/profile")
     public UserInfoResponse getUserInfo(@AuthenticationPrincipal AppUser user) {
-        log.info("현재 로그인 유저의 authentication : {}", SecurityContextHolder.getContext().getAuthentication());
+        log.debug("현재 로그인 유저의 authentication : {}", SecurityContextHolder.getContext().getAuthentication());
         return userService.getUserInfo(user);
     }
+
+    @PatchMapping("/users/pwd")
+    public void changeUserPwd(@AuthenticationPrincipal AppUser user, @Valid @RequestBody UserPwdResetRequest userPwdResetRequest) {
+        log.info("{}",userPwdResetRequest.getNewPassword());
+        log.info("{}", userPwdResetRequest.getCheckNewPassword());
+        userService.resetUserPassword(user, userPwdResetRequest);
+    }
+
 }

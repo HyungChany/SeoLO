@@ -1,10 +1,8 @@
 package com.c104.seolo.global.security.service;
 
 import com.c104.seolo.domain.user.entity.AppUser;
-import com.c104.seolo.domain.user.exception.UserErrorCode;
 import com.c104.seolo.domain.user.repository.UserRepository;
 import com.c104.seolo.global.exception.AuthException;
-import com.c104.seolo.global.exception.CommonException;
 import com.c104.seolo.global.security.exception.AuthErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -10,10 +10,17 @@ spring:
     url: jdbc:mysql://k10c104.p.ssafy.io:${dev.datasource.port}/seolo?serverTimezone=Asia/Seoul
     username: ${dev.datasource.username}
     password: ${dev.datasource.password}
+
+  sql:
+    init:
+      mode: always
+#      data-locations: "classpath:/dummy/data.sql"
+      data-locations: "file:../../dummy/data.sql"
+
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
 logging:
   level:
     org.springframework.web: DEBUG

@@ -11,6 +11,7 @@ public enum AuthErrorCode {
     INVALID_PASSWORD("AH02", "아이디 또는 비밀번호가 다릅니다.", HttpStatus.BAD_REQUEST),
     NOT_EXIST_APPUSER("AH03","아이디 또는 비밀번호가 다릅니다.",HttpStatus.BAD_REQUEST),
     NOT_EQUAL_COMPNAY_CODE("AH04","회사코드가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
+    NOT_SAME_AS_CHECKPWD("AH05", "비밀번호와 확인 비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
     ;
 
     private final String errorCode;
