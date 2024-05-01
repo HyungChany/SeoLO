@@ -7,16 +7,15 @@ import java.time.LocalDateTime;
 
 @Builder
 @Getter
-public class MachineListInfo {
+public class MachineInfo {
     private Long facilityId;
     private String facilityName;
-
-    private String machineSubcategory;
 
     private Long id;
     private String machineName;
     private String machineCode;
     private LocalDateTime introductionDate;
+    private String machineThum;
 
     private Long mainManagerId;
     private String mainManagerName;

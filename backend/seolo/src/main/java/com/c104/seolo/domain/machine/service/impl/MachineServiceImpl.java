@@ -1,10 +1,13 @@
 package com.c104.seolo.domain.machine.service.impl;
 
+import com.c104.seolo.domain.machine.dto.MachineDto;
 import com.c104.seolo.domain.machine.dto.MachineListDto;
 import com.c104.seolo.domain.machine.dto.info.MachineListInfo;
 import com.c104.seolo.domain.machine.dto.response.MachineListResponse;
+import com.c104.seolo.domain.machine.entity.Machine;
 import com.c104.seolo.domain.machine.repository.MachineRepository;
 import com.c104.seolo.domain.machine.service.MachineService;
+import com.c104.seolo.global.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,14 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MachineServiceImpl implements MachineService {
     private final MachineRepository machineRepository;
+
+    @Override
+    public MachineDto findMachineByMachineId(String machineId) {
+        Optional<Machine> machine = machineRepository.findById(machineId);
+        if (!machine.isPresent()) {
+            throw new CommonException(MachineErrorCode.);
+        }
+    }
 
     private List<MachineListDto> getMachineListDto(Optional<List<MachineListInfo>> machineListOptional) {
         return machineListOptional.map(machineList ->
