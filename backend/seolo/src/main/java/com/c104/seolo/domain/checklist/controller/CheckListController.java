@@ -6,6 +6,7 @@ import com.c104.seolo.domain.checklist.service.CheckListService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -24,30 +25,33 @@ public class CheckListController {
         return ResponseEntity.ok(checkListService.getCheckListByCompany(companyCode));
     }
 
+    @Secured("ROLE_MANAGER")
     @PostMapping()
     public ResponseEntity<Void> createCheckList(
             @RequestHeader("Company-Code") String companyCode,
             @RequestBody CheckListRequest checkListRequest
-            ) {
+    ) {
         checkListService.createCheckList(checkListRequest, companyCode);
         URI location = URI.create("/checklist");
         return ResponseEntity.created(location).build();
     }
 
-    @PatchMapping("/{check_list_id}")
+    @Secured("ROLE_MANAGER")
+    @PatchMapping("/{checkListId}")
     public ResponseEntity<Void> updateCheckList(
             @RequestHeader("Company-Code") String companyCode,
             @RequestBody CheckListRequest checkListRequest,
-            @PathVariable("check_list_id") Long checkListId
+            @PathVariable("checkListId") Long checkListId
     ) {
         checkListService.updateCheckList(checkListRequest, checkListId, companyCode);
         return ResponseEntity.accepted().build();
     }
 
-    @DeleteMapping("/{check_list_id}")
+    @Secured("ROLE_MANAGER")
+    @DeleteMapping("/{checkListId}")
     public ResponseEntity<Void> deleteCheckList(
             @RequestHeader("Company-Code") String companyCode,
-            @PathVariable("check_list_id") Long checkListId
+            @PathVariable("checkListId") Long checkListId
     ) {
         checkListService.deleteCheckListByCompany(companyCode, checkListId);
         return ResponseEntity.noContent().build();

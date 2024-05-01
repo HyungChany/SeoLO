@@ -1,10 +1,8 @@
-import 'package:app/services/test_service.dart';
-import 'package:app/widgets/common_icon_button.dart';
+
 import 'package:app/widgets/common_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/navigator/common_navigation_bar.dart';
-import 'package:app/widgets/inputbox/common_smallinputbox.dart';
-import 'package:app/widgets/card/common_card.dart';
+
 import 'package:app/widgets/checklist/check_list.dart';
 class TestScreen extends StatefulWidget {
   const TestScreen({super.key});
@@ -21,10 +19,10 @@ class _TestScreenState extends State<TestScreen> {
     });
 
     if (index == 0) { // 'Home' 탭이 선택될 때
-      Navigator.pushNamed(context, '/main');
+      Navigator.pushNamed(context, '/dayselect');
     }
     if (index == 1) {
-      Navigator.pushNamed(context, '/nfc');
+      Navigator.pushNamed(context, '/otherworklistcheck');
     }
     if (index == 2) {
       Navigator.pushNamed(context, '/profile');

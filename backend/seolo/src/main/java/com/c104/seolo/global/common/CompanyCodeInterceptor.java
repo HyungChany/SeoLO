@@ -8,10 +8,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-public class CCodeInterceptor implements HandlerInterceptor {
+public class CompanyCodeInterceptor implements HandlerInterceptor {
     private final CompanyRepository companyRepository;
     // 생성자를 통한 의존성 주입
-    public CCodeInterceptor(CompanyRepository companyRepository) {
+    public CompanyCodeInterceptor(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
     }
 
