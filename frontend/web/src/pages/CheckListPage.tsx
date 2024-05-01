@@ -3,6 +3,7 @@ import * as Color from '@/config/color/Color.ts';
 import { Button } from '@/components/button/Button.tsx';
 import { useState } from 'react';
 import CheckListModal from '@/components/modal/CheckListModal.tsx';
+import DeleteCheckListModal from '@/components/modal/DeleteCheckListModal.tsx';
 
 const BackGround = styled.div`
   width: 100%;
@@ -40,13 +41,27 @@ const ContentBox = styled.div`
   width: 80%;
   height: 100%;
   flex-shrink: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+  display: flex;
   align-items: center;
   font-size: 1.75rem;
   font-weight: 900;
   font-family: NYJGothicEB;
+`;
+
+const ContentWrapper = styled.div`
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+`;
+
+const Content = styled.div`
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const PlusContent = styled.div`
@@ -75,13 +90,19 @@ const Overlay = styled.div`
 
 const CheckListPage = () => {
   const [checkListModal, setCheckListModal] = useState<boolean>(false);
+  const [deleteCheckListModal, setDeleteCheckListModal] =
+    useState<boolean>(false);
   const handleCheckListClick = () => {
     setCheckListModal(true);
+  };
+  const handleDeleteCheckListClick = () => {
+    setDeleteCheckListModal(true);
   };
   const handleCloseModal = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     setCheckListModal(false);
+    setDeleteCheckListModal(false);
     e.stopPropagation();
   };
   const handleModalClick = (
@@ -108,10 +129,19 @@ const CheckListPage = () => {
             <CheckListModal onClick={handleModalClick} />
           </Overlay>
         )}
+        {deleteCheckListModal && (
+          <Overlay onClick={handleCloseModal}>
+            <DeleteCheckListModal onClick={handleModalClick} />
+          </Overlay>
+        )}
         <Box>
           {lists.map((list) => (
             <ListBox>
-              <ContentBox key={list.id}>{list.content}</ContentBox>
+              <ContentBox key={list.id}>
+                <ContentWrapper>
+                  <Content>{list.content}</Content>
+                </ContentWrapper>
+              </ContentBox>
               <Button
                 onClick={handleCheckListClick}
                 width={3.5}
@@ -124,7 +154,7 @@ const CheckListPage = () => {
                 children={'수정'}
               ></Button>
               <Button
-                onClick={() => console.log()}
+                onClick={handleDeleteCheckListClick}
                 width={3.5}
                 height={1.5625}
                 $backgroundColor={Color.GRAY100}
