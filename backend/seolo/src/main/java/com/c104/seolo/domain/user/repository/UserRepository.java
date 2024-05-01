@@ -13,4 +13,6 @@ public interface UserRepository extends JpaRepository<AppUser, Long> {
 
     @Query("SELECT u FROM AppUser u WHERE u.employee.employeeNum = :employeeNum")
     Optional<AppUser> findAppUserByEmployeeNum(@Param("employeeNum") String employeeNum);
+
+
 }

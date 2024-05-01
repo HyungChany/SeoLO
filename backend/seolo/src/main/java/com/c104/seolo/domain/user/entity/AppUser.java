@@ -60,6 +60,10 @@ public class AppUser extends BaseEntity implements UserDetails {
         return this.employee.getEmployeeNum(); // 사번을 username 으로한다.
     }
 
+    public void changePassword(String newPassword) {
+        this.password = newPassword;
+    }
+
 
     @Override
     public boolean isAccountNonExpired() {
