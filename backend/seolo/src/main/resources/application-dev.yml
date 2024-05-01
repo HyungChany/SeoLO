@@ -15,7 +15,7 @@ spring:
     init:
       mode: always
 #      data-locations: "classpath:/dummy/data.sql"
-      data-locations: "file:../../dummy/data.sql"
+      data-locations: "./dummy/data.sql"
 
   jpa:
     show-sql: true
