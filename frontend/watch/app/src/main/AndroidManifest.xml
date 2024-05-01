@@ -51,6 +51,12 @@
             android:exported="false"
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:taskAffinity="" />
+
+        <activity android:name=".presentation.PasswordActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:taskAffinity="" />
+
     </application>
 
 </manifest>
