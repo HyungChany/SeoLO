@@ -1,7 +1,9 @@
 package com.c104.seolo.global.security.service;
 
+import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.security.dto.request.PINLoginRequest;
+import com.c104.seolo.global.security.dto.response.PINLoginResponse;
 
 public interface AuthService {
-    void pinLogin(PINLoginRequest pinLoginRequest);
+    PINLoginResponse pinLogin(AppUser appUser, PINLoginRequest pinLoginRequest);
 }

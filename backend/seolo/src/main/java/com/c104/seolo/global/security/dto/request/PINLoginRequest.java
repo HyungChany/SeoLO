@@ -10,6 +10,5 @@ import lombok.ToString;
 @Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class PINLoginRequest {
-
     String PIN;
 }

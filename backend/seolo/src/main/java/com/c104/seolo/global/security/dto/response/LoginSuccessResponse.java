@@ -9,14 +9,14 @@ import lombok.ToString;
 @ToString
 @Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class AuthSuccessResponse {
+public class LoginSuccessResponse {
     private String username;
     private String companyCode;
     private String JSESSIONID;
 
 
     @Builder
-    public AuthSuccessResponse(String username, String companyCode, String JSESSIONID) {
+    public LoginSuccessResponse(String username, String companyCode, String JSESSIONID) {
         this.username = username;
         this.companyCode = companyCode;
         this.JSESSIONID = JSESSIONID;
