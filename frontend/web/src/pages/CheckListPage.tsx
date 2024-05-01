@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 import { Button } from '@/components/button/Button.tsx';
+import { useState } from 'react';
+import CheckListModal from '@/components/modal/CheckListModal.tsx';
 
 const BackGround = styled.div`
   width: 100%;
@@ -35,33 +37,17 @@ const ListBox = styled.div`
 `;
 
 const ContentBox = styled.div`
-  /* display: flex; */
   width: 80%;
   height: 100%;
-  /* flex-direction: column; */
-  /* justify-content: center; */
   flex-shrink: 0;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  /* word-break: break-all; */
   align-items: center;
   font-size: 1.75rem;
   font-weight: 900;
+  font-family: NYJGothicEB;
 `;
-
-// const Content = styled.div`
-//   width: 100%;
-//   height: 100%;
-//   display: flex;
-//   align-items: center;
-//   font-size: 1.75rem;
-//   font-weight: 900;
-//   overflow: hidden;
-//   white-space: nowrap;
-//   text-overflow: ellipsis;
-//   /* word-break: break-all; */
-// `;
 
 const PlusContent = styled.div`
   width: 100%;
@@ -71,9 +57,38 @@ const PlusContent = styled.div`
   font-size: 2.5rem;
   font-weight: 900;
   justify-content: center;
+  font-family: NYJGothicEB;
+`;
+
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); // 반투명 검은색 배경
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
 `;
 
 const CheckListPage = () => {
+  const [checkListModal, setCheckListModal] = useState<boolean>(false);
+  const handleCheckListClick = () => {
+    setCheckListModal(true);
+  };
+  const handleCloseModal = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    setCheckListModal(false);
+    e.stopPropagation();
+  };
+  const handleModalClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    e.stopPropagation();
+  };
   const lists = [
     { id: 1, content: '체크리스트 1' },
     { id: 2, content: '체크리스트 2' },
@@ -88,12 +103,17 @@ const CheckListPage = () => {
   return (
     <>
       <BackGround>
+        {checkListModal && (
+          <Overlay onClick={handleCloseModal}>
+            <CheckListModal onClick={handleModalClick} />
+          </Overlay>
+        )}
         <Box>
           {lists.map((list) => (
             <ListBox>
               <ContentBox key={list.id}>{list.content}</ContentBox>
               <Button
-                onClick={() => console.log()}
+                onClick={handleCheckListClick}
                 width={3.5}
                 height={1.5625}
                 $backgroundColor={Color.GRAY100}
@@ -117,7 +137,7 @@ const CheckListPage = () => {
             </ListBox>
           ))}
           <ListBox>
-            <PlusContent>+</PlusContent>
+            <PlusContent onClick={handleCheckListClick}>+</PlusContent>
           </ListBox>
         </Box>
       </BackGround>
