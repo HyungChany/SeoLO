@@ -22,7 +22,7 @@ class _TestScreenState extends State<TestScreen> {
       Navigator.pushNamed(context, '/dayselect');
     }
     if (index == 1) {
-      Navigator.pushNamed(context, '/worklistcheck');
+      Navigator.pushNamed(context, '/otherworklistcheck');
     }
     if (index == 2) {
       Navigator.pushNamed(context, '/profile');
