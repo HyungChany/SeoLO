@@ -12,7 +12,7 @@ import lombok.ToString;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class LoginFailureResponse {
     private final SeoloErrorResponse seoloErrorResponse;
-    private Integer failCount;
+    private final Integer failCount;
 
     @Builder
     public LoginFailureResponse(SeoloErrorResponse seoloErrorResponse, Integer failCount) {

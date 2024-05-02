@@ -4,7 +4,6 @@ import com.c104.seolo.global.security.filter.DaoCompanyCodeAuthenticationFilter;
 import com.c104.seolo.global.security.handler.SeoloLoginFailureHandler;
 import com.c104.seolo.global.security.handler.SeoloLoginSuccessHandler;
 import com.c104.seolo.global.security.handler.SeoloLogoutSuccessHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
