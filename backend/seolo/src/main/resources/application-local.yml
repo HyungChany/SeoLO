@@ -34,6 +34,6 @@ server:
       cookie:
         name: JSESSIONID
         path: /
-        http-only: false
+        http-only: true
         secure: false # 개발 환경에서는 false로 설정
         same-site: Lax
