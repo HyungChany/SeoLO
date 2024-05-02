@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -17,9 +17,7 @@ public class MachineRequest {
     private String machineName;
     private String machineCode;
     private String machineThum;
-    private LocalDateTime introductionDate;
+    private Date introductionDate;
     private Long mainManagerId;
-    private String mainManagerName;
     private Long subManagerId;
-    private String subManagerName;
 }

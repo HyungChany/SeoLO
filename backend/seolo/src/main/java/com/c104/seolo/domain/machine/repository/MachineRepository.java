@@ -15,7 +15,7 @@ public interface MachineRepository extends JpaRepository<Machine, Integer> {
     @Query("SELECT new com.c104.seolo.domain.machine.dto.info.MachineListInfo( " +
             "f.id, f.facilityName, " +
             "sc.subcategory, " +
-            "m.id, m.name, m.number, m.createdAt, " +
+            "m.id, m.name, m.number, m.introductionDate, " +
             "CASE WHEN mm.mm_role = com.c104.seolo.domain.machine.enums.Role.Main THEN mm.user.id ELSE null END, " +
             "CASE WHEN mm.mm_role = com.c104.seolo.domain.machine.enums.Role.Main THEN mm.user.employee.employeeName ELSE null END, " +
             "CASE WHEN mm.mm_role = com.c104.seolo.domain.machine.enums.Role.Sub THEN mm.user.id ELSE null END, " +
@@ -28,7 +28,7 @@ public interface MachineRepository extends JpaRepository<Machine, Integer> {
     Optional<List<MachineListInfo>> getMachinesByFacilityIdAndCompany(Long facilityId, String companyCode);
 
     @Query("SELECT new com.c104.seolo.domain.machine.dto.info.MachineInfo( " +
-            "m.id, m.facility.company.companyCode, m.facility.id, m.facility.facilityName, m.name, m.number, m.thum, m.createdAt, " +
+            "m.id, m.facility.company.companyCode, m.facility.id, m.facility.facilityName, m.name, m.number, m.thum, m.introductionDate, " +
             "CASE WHEN mm.mm_role = com.c104.seolo.domain.machine.enums.Role.Main THEN mm.user.id ELSE null END, " +
             "CASE WHEN mm.mm_role = com.c104.seolo.domain.machine.enums.Role.Main THEN mm.user.employee.employeeName ELSE null END, " +
             "CASE WHEN mm.mm_role = com.c104.seolo.domain.machine.enums.Role.Sub THEN mm.user.id ELSE null END, " +
