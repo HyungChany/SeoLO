@@ -36,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // 1. PIN 번호 일치 검증
-        if (!passwordEncoder.matches(pinLoginRequest.getPIN(), user.getPassword())) {
+        if (!passwordEncoder.matches(pinLoginRequest.getPin(), user.getPIN())) {
             // 실패 카운트 증가
             Integer thisUserFailCount = user.upFailCount();
             userRepository.save(user);

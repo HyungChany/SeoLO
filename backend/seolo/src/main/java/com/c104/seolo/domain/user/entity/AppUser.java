@@ -69,6 +69,10 @@ public class AppUser extends BaseEntity implements UserDetails {
     }
 
     public Integer upFailCount() {
+        if (this.failCount == null) {
+            this.failCount = 0;
+        }
+
         this.failCount++;
 
         if (this.failCount >= 5) {
