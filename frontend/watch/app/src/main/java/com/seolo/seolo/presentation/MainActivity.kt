@@ -39,7 +39,8 @@ class MainActivity : ComponentActivity() {
         button.setOnClickListener {
 //            val intent = Intent(this, CarouselActivity::class.java)
 //            val intent = Intent(this, LockActivity::class.java)
-            val intent = Intent(this, PasswordActivity::class.java)
+//            val intent = Intent(this, RealMainActivity::class.java)
+            val intent = Intent(this, CheckListActivity::class.java)
             startActivity(intent)
     }
 }
