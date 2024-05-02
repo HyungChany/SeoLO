@@ -80,8 +80,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                 .maximumSessions(1)
-                .maxSessionsPreventsLogin(true) // 기존 사용자 종료
-                .expiredUrl("/test/login")
+                .maxSessionsPreventsLogin(false) // 기존 사용자 종료
+                .expiredUrl("/login")
         );
 
         http
