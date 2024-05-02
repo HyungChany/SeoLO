@@ -40,7 +40,7 @@ class MainActivity : ComponentActivity() {
 //            val intent = Intent(this, CarouselActivity::class.java)
 //            val intent = Intent(this, LockActivity::class.java)
 //            val intent = Intent(this, RealMainActivity::class.java)
-            val intent = Intent(this, CheckListActivity::class.java)
+            val intent = Intent(this, LocationActivity::class.java)
             startActivity(intent)
     }
 }
