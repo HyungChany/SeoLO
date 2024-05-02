@@ -7,7 +7,7 @@ import com.seolo.seolo.adapters.LocationAdapter
 import sh.tyy.wheelpicker.core.WheelPickerRecyclerView
 
 class LocationActivity : AppCompatActivity() {
-    private val locations = listOf("서울", "부산", "인천", "대구", "광주", "대전", "울산", "세종")
+    private val locations = listOf(" ","rkskdkaskddsa", "rkskdkaskddsa", "rkskdkaskddsa", "rkskdkaskddsa", "rkskdkaskddsa", "rkskdkaskddsa", "rkskdkaskddsa", "rkskdkaskddsa"," ")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
@@ -19,6 +19,8 @@ class LocationActivity : AppCompatActivity() {
         val locationAdapter = LocationAdapter(locations)
         locationPicker.adapter = locationAdapter
 
+        locationPicker.post {
+            locationPicker.layoutManager?.scrollToPosition(3)
+        }
     }
-
 }
