@@ -6,6 +6,9 @@ import com.c104.seolo.domain.user.dto.response.UserInfoResponse;
 import com.c104.seolo.domain.user.dto.response.UserJoinResponse;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.domain.user.service.UserService;
+import com.c104.seolo.global.security.dto.request.PINLoginRequest;
+import com.c104.seolo.global.security.dto.response.PINLoginResponse;
+import com.c104.seolo.global.security.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +23,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping
 public class UserController {
     private final UserService userService;
+    private final AuthService authService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, AuthService authService) {
         this.userService = userService;
+        this.authService = authService;
     }
 
     @PostMapping("/join")
@@ -43,6 +48,11 @@ public class UserController {
         log.debug("{}",userPwdResetRequest.getNewPassword());
         log.debug("{}", userPwdResetRequest.getCheckNewPassword());
         userService.resetUserPassword(user, userPwdResetRequest);
+    }
+
+    @PostMapping("/users/pin")
+    public PINLoginResponse authPin(@AuthenticationPrincipal AppUser appUser, @RequestBody PINLoginRequest pinLoginRequest) {
+        return authService.pinLogin(appUser, pinLoginRequest);
     }
 
 }

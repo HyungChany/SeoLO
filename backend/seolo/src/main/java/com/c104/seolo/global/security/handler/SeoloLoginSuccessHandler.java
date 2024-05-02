@@ -1,37 +1,37 @@
 package com.c104.seolo.global.security.handler;
 
-import com.c104.seolo.global.security.dto.response.AuthSuccessResponse;
+import com.c104.seolo.domain.user.entity.AppUser;
+import com.c104.seolo.domain.user.repository.UserRepository;
+import com.c104.seolo.global.exception.AuthException;
+import com.c104.seolo.global.security.dto.response.LoginSuccessResponse;
 import com.c104.seolo.global.security.entity.DaoCompanycodeToken;
+import com.c104.seolo.global.security.exception.AuthErrorCode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.context.DelegatingSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
-import org.springframework.web.context.request.RequestContextHolder;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Slf4j
 @Component
 public class SeoloLoginSuccessHandler implements AuthenticationSuccessHandler {
     private ObjectMapper objectMapper;
     private final SecurityContextRepository securityContextRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public SeoloLoginSuccessHandler(SecurityContextRepository securityContextRepository, ObjectMapper objectMapper) {
+    public SeoloLoginSuccessHandler(SecurityContextRepository securityContextRepository, UserRepository userRepository, ObjectMapper objectMapper) {
         this.securityContextRepository = securityContextRepository;
+        this.userRepository = userRepository;
         this.objectMapper = objectMapper;
     }
 
@@ -39,6 +39,15 @@ public class SeoloLoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         DaoCompanycodeToken authToken = (DaoCompanycodeToken) authentication;
+        
+        // isLocked 체크
+        AppUser user = userRepository.findAppUserByEmployeeNum(authToken.getName())
+                .orElseThrow(() -> new AuthException(AuthErrorCode.NOT_EXIST_APPUSER));
+        if (user.isLocked()) {
+            throw new AuthException(AuthErrorCode.TOO_MANY_TRY_WRONG_LOGIN);
+        }
+
+
         log.debug("인증성공객체 successHandler 진입 : {}", authToken);
         log.debug("인증성공객체 successHandler 진입 : {}", authentication);
 
@@ -47,10 +56,9 @@ public class SeoloLoginSuccessHandler implements AuthenticationSuccessHandler {
         context.setAuthentication(authToken);
         log.debug("context 정보 2: {}", context);
         SecurityContextHolder.setContext(context);
-//        RequestContextHolder.currentRequestAttributes().setAttribute("SPRING_SECURITY_CONTEXT", context, RequestAttributes.SCOPE_SESSION);
         securityContextRepository.saveContext(context, request, response);
 
-        AuthSuccessResponse res = AuthSuccessResponse.builder()
+        LoginSuccessResponse res = LoginSuccessResponse.builder()
                 .username(authToken.getName())
                 .companyCode(authToken.getCompanyCode())
                 .JSESSIONID(request.getSession(true).getId())
