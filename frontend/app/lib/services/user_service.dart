@@ -13,10 +13,10 @@ class UserService {
   UserService() {
     _dio.interceptors.add(Dio.InterceptorsWrapper(
       onRequest: (options, handler) async {
-        String? cookie = await _storage.read(key: 'jsessionid');
+        String? jsessionid = await _storage.read(key: 'jsessionid');
         String? companyCode = await _storage.read(key: 'companyCode');
-        if (cookie != null) {
-          options.headers['Cookie'] = 'JSESSIONID=$cookie';
+        if (jsessionid != null) {
+          options.headers['Cookie'] = 'JSESSIONID=$jsessionid';
           options.headers['Company-Code'] = companyCode;
         }
         return handler.next(options);
@@ -35,16 +35,21 @@ class UserService {
 
     try {
       Dio.Response response = await _dio.post('$baseUrl/login', data: formData);
-
       if (response.statusCode == 200) {
-        String? cookie = response.data['jsessionid'];
+        String? jsessionid = response.data['jsessionid'];
         String? companyCode = loginModel.companyCode.toString();
-        if (cookie != null) {
+        String? username = loginModel.username.toString();
+        String? password = loginModel.password.toString();
+        if (jsessionid != null) {
           await _storage.delete(key: 'jsessionid');
           await _storage.delete(key: 'companyCode');
-          await _storage.write(key: 'jsessionid', value: cookie);
+          await _storage.delete(key: 'username');
+          await _storage.delete(key: 'password');
+          await _storage.write(key: 'jsessionid', value: jsessionid);
           await _storage.write(key: 'companyCode', value: companyCode);
-          return {'success': true};
+          await _storage.write(key: 'username', value: username);
+          await _storage.write(key: 'password', value: password);
+          return {'success': true, 'jsessionid': jsessionid};
         } else {
           return {'success': false};
         }
@@ -57,7 +62,7 @@ class UserService {
       }
     } on Dio.DioException catch (e) {
       debugPrint(e.message);
-      return {'success': false, 'statusCode': e.response?.statusCode};
+      return {'success': false, 'statusCode': e.response?.statusCode, 'message': '무언가 잘못 되었습니다.'};
     }
   }
 
@@ -70,6 +75,8 @@ class UserService {
     if (response.statusCode == 200) {
       await _storage.delete(key: 'jsessionid');
       await _storage.delete(key: 'companyCode');
+      await _storage.delete(key: 'username');
+      await _storage.delete(key: 'password');
     }
   }
 
@@ -77,47 +84,50 @@ class UserService {
   Future<Map<String, dynamic>> pinLogin(PinLoginModel pinLoginModel) async {
     try {
       Dio.Response response = await _dio.post(
-        '$baseUrl/users/pin', data: pinLoginModel.toJson(),
+        '$baseUrl/users/pin',
+        data: pinLoginModel.toJson(),
       );
       if (response.statusCode == 200) {
         if (response.data['authenticated'] == true) {
           return {'success': true};
         } else {
-          return {'success': false, 'message': 'pin 번호 틀림'};
+          return {'success': false, 'message': 'pin 번호를 다시 입력해 주세요.'};
         }
       } else {
-        return {'success': false, 'message': '무언가 잘못되었다'};
+        return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
       }
     } on Dio.DioException catch (e) {
       debugPrint(e.message);
-      return {'success': false, 'statusCode': e.response?.statusCode, 'message': '잘못되었음'};
+      return {
+        'success': false,
+        'statusCode': e.response?.statusCode,
+        'message': 'jsessionid 잘못 되었음'
+      };
     }
   }
 }
 
 class LoggingInterceptor extends Dio.Interceptor {
   @override
-  void onRequest(Dio.RequestOptions options,
-      Dio.RequestInterceptorHandler handler) {
+  void onRequest(
+      Dio.RequestOptions options, Dio.RequestInterceptorHandler handler) {
     debugPrint("REQUEST[${options.method}] => PATH: ${options.path}");
     debugPrint("Request Header: ${options.headers}");
     super.onRequest(options, handler);
   }
 
   @override
-  void onResponse(Dio.Response response,
-      Dio.ResponseInterceptorHandler handler) {
+  void onResponse(
+      Dio.Response response, Dio.ResponseInterceptorHandler handler) {
     debugPrint(
-        "RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions
-            .path}");
+        "RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}");
     super.onResponse(response, handler);
   }
 
   @override
   void onError(Dio.DioError err, Dio.ErrorInterceptorHandler handler) {
     debugPrint(
-        "ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions
-            .path}");
+        "ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}");
     super.onError(err, handler);
   }
 }

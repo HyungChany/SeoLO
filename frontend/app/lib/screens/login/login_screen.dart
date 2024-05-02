@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
       offset: Offset(5.29, -5.29));
 
   loginBox() {
-    final viewModel = Provider.of<LoginViewModel>(context);
+    final viewModel = Provider.of<LoginViewModel>(context, listen: false);
     return Container(
       width: MediaQuery.of(context).size.width * 0.9,
       height: MediaQuery.of(context).size.height * 0.6,
@@ -62,11 +62,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   if (viewModel.errorMessage == null) {
                     Navigator.pushReplacementNamed(context, '/main');
                   } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(viewModel.errorMessage!),
-                        ),
-                      );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(viewModel.errorMessage!),
+                      ),
+                    );
                   }
                 });
               }
@@ -80,7 +80,18 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _asyncMethod() async {
+    final viewModel = Provider.of<LoginViewModel>(context, listen: false);
     String? jsessionid = await _storage.read(key: 'jsessionid');
+    viewModel.login().then((_) {
+      debugPrint('원래 id : $jsessionid');
+      debugPrint('새로운 id : ${viewModel.jsessionid}');
+      // login screen에서 login api 요청을 보내서 storage에 저장된 값이랑 비교
+      // 만약 다르다면 storage에 있는 값 업데이트
+      if (viewModel.jsessionid != jsessionid) {
+        _storage.delete(key: 'jsessionid');
+        _storage.write(key: 'jsessionid', value: viewModel.jsessionid);
+      }
+    });
     if (jsessionid != null) {
       if (!mounted) return;
       Navigator.pushReplacementNamed(context, '/lock');
