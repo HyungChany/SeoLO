@@ -3,6 +3,7 @@ import 'package:app/screens/login/login_screen.dart';
 import 'package:app/screens/test_screen.dart';
 import 'package:app/view_models/main/news_view_model.dart';
 import 'package:app/view_models/user/login_view_model.dart';
+import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/view_models/user/user_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -52,6 +53,7 @@ class _MyAppState extends State<MyApp>{
           ChangeNotifierProvider(create: (_) => NewsViewModel()),
           ChangeNotifierProvider(create: (_) => LoginViewModel()),
           ChangeNotifierProvider(create: (_) => UserViewModel()),
+          ChangeNotifierProvider(create: (_) => PinLoginViewModel()),
         ],
         child: MaterialApp(
           localizationsDelegates:  [

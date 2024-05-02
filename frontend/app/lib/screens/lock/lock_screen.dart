@@ -1,6 +1,8 @@
 import 'package:app/main.dart';
+import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/widgets/lock/key_board_key.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LockScreen extends StatefulWidget {
   @override
@@ -26,20 +28,26 @@ class _LockScreenState extends State<LockScreen> {
   ];
 
   onNumberPress(val) {
+    final viewModel = Provider.of<PinLoginViewModel>(context, listen: false);
     setState(() {
       pin = pin + val;
+      viewModel.setPin(pin);
     });
 
-    // debugPrint(pin);
-    // pin 길이가 처음으로 4가 되면 content 내용 변경
-    if (pin != '1234' && pin.length == 4) content = '암호를 다시 입력해주세요.';
-    // pin이 1234면 뒤로가기
-    // pin 길이가 4인데 1234가 아니면 pin 초기화
-    pin == '1234'
-        ? Navigator.pushReplacementNamed(context, '/main')
-        : pin.length == 4
-            ? pin = ''
-            : null;
+    if (pin.length == 4) {
+      if (!viewModel.isLoading) {
+        viewModel.pinLogin().then((_) {
+          if (viewModel.errorMessage == null) {
+            Navigator.pushReplacementNamed(context, '/main');
+          } else {
+            setState(() {
+              pin = '';
+              content = viewModel.errorMessage!;
+            });
+          }
+        });
+      }
+    }
   }
 
   onBackspacePress(val) {
