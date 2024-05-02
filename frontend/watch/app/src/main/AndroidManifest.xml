@@ -40,6 +40,10 @@
             android:exported="true"
             android:taskAffinity=""
             android:theme="@style/MainActivityTheme.Starting">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
 
@@ -62,7 +66,7 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
         <activity
-            android:name=".presentation.PasswordActivity"
+            android:name=".presentation.RealMainActivity"
             android:exported="false"
             android:taskAffinity=""
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
