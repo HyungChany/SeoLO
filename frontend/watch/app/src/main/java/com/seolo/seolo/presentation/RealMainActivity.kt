@@ -22,7 +22,7 @@ class RealMainActivity : AppCompatActivity() {
 
         Glide.with(this)
             .asGif()
-            .load(R.drawable.fadsfsad)
+            .load(R.drawable.main_sample0)
             .into(binding.mainView)
     }
 }
