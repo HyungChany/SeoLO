@@ -1,11 +1,9 @@
 package com.c104.seolo.global.security.config;
 
-import com.c104.seolo.domain.user.enums.ROLES;
 import com.c104.seolo.global.security.filter.DaoCompanyCodeAuthenticationFilter;
 import com.c104.seolo.global.security.handler.SeoloLoginFailureHandler;
 import com.c104.seolo.global.security.handler.SeoloLoginSuccessHandler;
 import com.c104.seolo.global.security.handler.SeoloLogoutSuccessHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
@@ -21,33 +19,25 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.DelegatingSecurityContextRepository;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = false)
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
-    private final SeoloLoginSuccessHandler seoloLoginSuccessHandler;
-    private final SeoloLoginFailureHandler seoloLoginFailureHandler;
-    private final SeoloLogoutSuccessHandler seoloLogoutSuccessHandler;
-
-    @Autowired
-    public SecurityConfig(SeoloLoginSuccessHandler seoloLoginSuccessHandler, SeoloLoginFailureHandler seoloLoginFailureHandler, SeoloLogoutSuccessHandler seoloLogoutSuccessHandler) {
-        this.seoloLoginSuccessHandler = seoloLoginSuccessHandler;
-        this.seoloLoginFailureHandler = seoloLoginFailureHandler;
-        this.seoloLogoutSuccessHandler = seoloLogoutSuccessHandler;
-    }
-
 
     @Bean
     public RoleHierarchy roleHierarchy() {
         RoleHierarchyImpl roleHierarchy = new RoleHierarchyImpl();
-
         // MANAGER는 WORKER의 인가 권한을 모두 가지고 있다.
-        // WORKER에게도 인가를 열어주고 싶은 메서드는 @Secured("hasRole('WORKER')") 를 붙인다.
+        // MANAGER에게만 인가를 열어주고 싶은 메서드는 @Secured("ROLE_MANAGER") 를 붙인다.
         roleHierarchy.setHierarchy(AuthorityConfig.getHierarchy());
         return roleHierarchy;
     }
@@ -57,19 +47,24 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http,
+                                    AuthenticationManager authenticationManager,
+                                    SeoloLoginSuccessHandler seoloLoginSuccessHandler,
+                                    SeoloLoginFailureHandler seoloLoginFailureHandler,
+                                    SeoloLogoutSuccessHandler seoloLogoutSuccessHandler) throws Exception {
         http
             .cors(corsConfigurer -> corsConfigurer.configurationSource(corsConfig()))
             .csrf(AbstractHttpConfigurer::disable)
             .addFilterBefore(new DaoCompanyCodeAuthenticationFilter(authenticationManager, seoloLoginSuccessHandler, seoloLoginFailureHandler), UsernamePasswordAuthenticationFilter.class);
 
         // 영구 로그인 인증
-        http.rememberMe(re ->
-                re.alwaysRemember(true)
-                .key("persistenceKey")
-                .authenticationSuccessHandler(seoloLoginSuccessHandler)
-        );
+//        http.rememberMe(re ->
+//                re.alwaysRemember(true)
+//                .key("persistenceKey")
+//                .authenticationSuccessHandler(seoloLoginSuccessHandler)
+//        );
 
         // 로그아웃 설정 추가
         http.logout(logout -> logout
@@ -79,9 +74,7 @@ public class SecurityConfig {
                 .deleteCookies("JSESSIONID") // JSESSIONID 쿠키 삭제
                 .clearAuthentication(true) // 인증 정보 클리어
         );
-
-        // 로그아웃
-
+        
         // 동시 세션 제어
         http
                 .sessionManagement(session -> session
@@ -92,14 +85,28 @@ public class SecurityConfig {
         );
 
         http
+                .securityContext((securityContext) -> {
+                    securityContext.securityContextRepository(delegatingSecurityContextRepository());
+                    securityContext.requireExplicitSave(true);
+        });
+        
+        // 인증,인가 커버리지 설정
+        http
                 .authorizeHttpRequests(au -> au
-                .requestMatchers("/error","/join", "/login", "/test/login","/test").permitAll()
-                .anyRequest().hasRole(ROLES.MANAGER.name())
+                .requestMatchers("/error","/join", "/login", "/test/login","/test","/test/**").permitAll()
+                .anyRequest().hasRole("WORKER")
         );
 
         return http.build();
     }
 
+    @Bean
+    public DelegatingSecurityContextRepository delegatingSecurityContextRepository() {
+        return new DelegatingSecurityContextRepository(
+                new RequestAttributeSecurityContextRepository(),
+                new HttpSessionSecurityContextRepository()
+        );
+    }
 
     public CorsConfigurationSource corsConfig() {
         return request -> {

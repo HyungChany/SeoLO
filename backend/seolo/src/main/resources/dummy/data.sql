@@ -2,11 +2,12 @@ INSERT INTO company (company_code, company_name, company_logo, company_registrat
 VALUES ('SFY001KOR', 'SSAFY', 'dummy', '123-45-67890', '123-45-67890-1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('SAM001KOR', 'SAMSUNG', 'dummy', '177-77-77777', '177-77-77777-7', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
+
 INSERT INTO employee (employee_num, company_code, employee_name, employee_title, employee_team, employee_birthday, employee_thum, employee_join_date, employee_leave_date, created_at, updated_at)
 VALUES
     ('202100001', 'SFY001KOR', '김진명', '대리', '개발팀', '1996-02-23', 'default', '2021-07-12', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('202000001', 'SFY001KOR', '오유진', '사원', '개발팀', '1975-06-08', 'default', '2023-12-11', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('199500001', 'SFY001KOR', '최부진', '사원', '영업팀', '1963-08-23', 'default', '1995-09-08', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('199500001', 'SFY001KOR', '오민상', '과장', '생산기술팀', '1994-01-22', 'default', '2018-09-08', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('200500001', 'SFY001KOR', '한지훈', '사원', '영업팀', '1967-03-12', 'default', '2005-11-20', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('201500001', 'SFY001KOR', '장정민', '사원', '개발팀', '1996-08-20', 'default', '2015-09-20', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('200500002', 'SFY001KOR', '김영철', '대리', '품질관리팀', '1970-12-01', 'default', '2005-06-25', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -156,4 +157,17 @@ VALUES
     ('202200011', 'SFY001KOR', '정재명', '대리', '생산기술팀', '1972-09-11', 'default', '2022-10-21', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ;
 
+INSERT INTO app_user (USER_IS_LOCKED, USER_PIN, CREATED_AT, UPDATED_AT, USER_ID, EMPLOYEE_NUM, USER_STAT, USER_ROLE, USER_PWD) VALUES
+    (false, '$2a$10$l1FAI5aM0A9ocigVa7L34eU6IvWO/nu0Vln5/ZawHkCdDtcVXBZvm', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, '202100001', 'INIT', 'ROLE_MANAGER', '$2a$10$pT.Qqif0f1VbpAT2OSCvCe88qQqYWX2//YXi.T722zEKj/N9gr3Ue'),
+    (false, '$2a$10$FXTUrU8805Vnxtzv3cH2aO82F4h3nyAQe/C/NWTRBdxD2beWkusLS', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, '199500001', 'INIT', 'ROLE_WORKER', '$2a$10$8lOqas3sQFbrpesrOM80oO14xs4finryPmroZMnbu/mKdh7VZhZ9q');
 
+INSERT INTO check_list_template(check_list_template_context)
+values ('LOTO에 대해 작업자 교육이 이루어졌는가?'),
+       ('해당 기계 혹은 설비의 전원을 차단하였는가?'),
+       ('LOTO가 해당 기계·설비에 부착되어 있는가?'),
+       ('LOTO 사용 시 해당 기계·설비 권한이 있는 작업자를 지정·공유하였는가?'),
+       ('LOTO 표지가 잘 부착되어 있는가?'),
+       ('작업자는 기계·설비의 전원을 차단하는 등 LOTO 작업절차를 준수하고 있는가?'),
+       ('작업자 눈에 잘 띄는 위치에 표지판을 단단히 고정하여 경고하였는가?'),
+       ('LOTO를 해재하기 전 다른 작업자들이 안전하게 위치하고 있는지 확인하였는가?'),
+       ('모든 작업자들에게 LOTO 제거를 공지하였는가?');

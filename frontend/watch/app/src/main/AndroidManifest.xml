@@ -24,7 +24,7 @@
             android:value="true" />
 
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".presentation.SplashActivity"
             android:exported="true"
             android:taskAffinity=""
             android:theme="@style/MainActivityTheme.Starting">
@@ -36,16 +36,49 @@
         </activity>
 
         <activity
-            android:name=".presentation.ExampleActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-            android:taskAffinity="">
+            android:name=".presentation.MainActivity"
+            android:exported="true"
+            android:taskAffinity=""
+            android:theme="@style/MainActivityTheme.Starting">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.CarouselActivity"
+
+        <activity
+            android:name=".presentation.ExampleActivity"
             android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name=".presentation.CarouselActivity"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name=".presentation.LockActivity"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name=".presentation.CheckListActivity"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name=".presentation.RealMainActivity"
+            android:exported="false"
+            android:taskAffinity=""
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-            android:taskAffinity="" />
+            android:windowSoftInputMode="stateAlwaysVisible" />
+
+
     </application>
 
 </manifest>
