@@ -2,6 +2,7 @@ package com.c104.seolo.global.security.handler;
 
 import com.c104.seolo.global.exception.AuthException;
 import com.c104.seolo.global.exception.SeoloErrorResponse;
+import com.c104.seolo.global.security.dto.response.LoginFailureResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -39,14 +40,13 @@ public class SeoloLoginFailureHandler implements AuthenticationFailureHandler {
             log.error("Authentication failed with status: {} error code: {} and message: {}",
                     e.getHttpStatus(), e.getErrorCode(), e.getMessage());
 
-            response.getWriter().write(objectMapper.writeValueAsString(
-                    SeoloErrorResponse.builder()
-                            .httpStatus(e.getHttpStatus())
-                            .errorCode(e.getErrorCode())
-                            .message(e.getMessage())
-                            .build()
-                    )
-            );
+            SeoloErrorResponse errorRes = SeoloErrorResponse.builder()
+                    .httpStatus(e.getHttpStatus())
+                    .errorCode(e.getErrorCode())
+                    .message(e.getMessage())
+                    .build();
+
+            response.getWriter().write(objectMapper.writeValueAsString(errorRes));
         } else {
             // 사용자가만든 AuthException 예외가 아니라면 스프링이 정해준 기본설정대로
             log.error("Authentication failure", exception);
