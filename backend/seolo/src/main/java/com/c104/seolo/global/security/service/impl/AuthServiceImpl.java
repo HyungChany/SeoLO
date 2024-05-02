@@ -4,6 +4,7 @@ import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.domain.user.repository.UserRepository;
 import com.c104.seolo.global.exception.AuthException;
 import com.c104.seolo.global.security.dto.request.PINLoginRequest;
+import com.c104.seolo.global.security.dto.request.PINResetRequest;
 import com.c104.seolo.global.security.dto.response.PINLoginResponse;
 import com.c104.seolo.global.security.dto.response.PINLoginFailureResponse;
 import com.c104.seolo.global.security.exception.AuthErrorCode;
@@ -61,5 +62,14 @@ public class AuthServiceImpl implements AuthService {
         return PINLoginResponse.builder()
                 .isAuthenticated(true)
                 .build();
+    }
+
+    @Override
+    public void resetPin(AppUser appUser, PINResetRequest pinResetRequest) {
+        AppUser user = userRepository.findById(appUser.getId())
+                .orElseThrow(() -> new AuthException(AuthErrorCode.NOT_EXIST_APPUSER));
+
+        user.changePin(passwordEncoder.encode(pinResetRequest.getNewPin()));
+        userRepository.save(user);
     }
 }

@@ -68,6 +68,8 @@ public class AppUser extends BaseEntity implements UserDetails {
         this.password = newPassword;
     }
 
+    public void changePin(String newPin) { this.PIN = newPin; }
+
     public Integer upFailCount() {
         if (this.failCount == null) {
             this.failCount = 0;

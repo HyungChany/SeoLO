@@ -7,6 +7,7 @@ import com.c104.seolo.domain.user.dto.response.UserJoinResponse;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.domain.user.service.UserService;
 import com.c104.seolo.global.security.dto.request.PINLoginRequest;
+import com.c104.seolo.global.security.dto.request.PINResetRequest;
 import com.c104.seolo.global.security.dto.response.PINLoginResponse;
 import com.c104.seolo.global.security.service.AuthService;
 import jakarta.validation.Valid;
@@ -51,8 +52,14 @@ public class UserController {
     }
 
     @PostMapping("/users/pin")
-    public PINLoginResponse authPin(@AuthenticationPrincipal AppUser appUser, @RequestBody PINLoginRequest pinLoginRequest) {
+    public PINLoginResponse authPin(@AuthenticationPrincipal AppUser appUser, @Valid @RequestBody PINLoginRequest pinLoginRequest) {
         return authService.pinLogin(appUser, pinLoginRequest);
+    }
+
+    @PatchMapping("/users/pin")
+    public String changeUserPin(@AuthenticationPrincipal AppUser appUser, @Valid @RequestBody PINResetRequest pinResetRequest) {
+        authService.resetPin(appUser, pinResetRequest);
+        return "PIN 변경 성공 로그아웃 시켜주세요";
     }
 
 }
