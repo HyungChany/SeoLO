@@ -47,6 +47,10 @@ public class AppUser extends BaseEntity implements UserDetails {
     // 기본값으로 사용자의 '월일 ex 0223 으로 지정한다'
     private String PIN;
 
+    @Column(name = "user_fail_count")
+    // failCount 5회 이상시 잠김
+    private Integer failCount;
+
     @Column(name = "user_isLocked")
     private boolean isLocked;
 
@@ -62,6 +66,30 @@ public class AppUser extends BaseEntity implements UserDetails {
 
     public void changePassword(String newPassword) {
         this.password = newPassword;
+    }
+
+    public void changePin(String newPin) { this.PIN = newPin; }
+
+    public Integer upFailCount() {
+        if (this.failCount == null) {
+            this.failCount = 0;
+        }
+
+        this.failCount++;
+
+        if (this.failCount >= 5) {
+            this.isLocked = true;
+        }
+        return this.failCount;
+    }
+
+    public Integer clearFailCount() {
+        this.failCount = null;
+
+        if (this.isLocked = true) {
+            this.isLocked = false;
+        }
+        return this.failCount;
     }
 
 
@@ -110,6 +138,7 @@ public class AppUser extends BaseEntity implements UserDetails {
         this.statusCODE = builder.statusCODE;
         this.password = builder.password;
         this.PIN = builder.PIN;
+        this.failCount = builder().failCount;
         this.isLocked = builder.isLocked;
     }
 
@@ -119,6 +148,7 @@ public class AppUser extends BaseEntity implements UserDetails {
         private CODE statusCODE = CODE.INIT;
         private String password;
         private String PIN;
+        private Integer failCount;
         private boolean isLocked = false;
 
         public Builder employee(Employee employee) {
@@ -155,6 +185,11 @@ public class AppUser extends BaseEntity implements UserDetails {
                 throw new IllegalArgumentException("PIN cannot be null");
             }
             this.PIN = PIN;
+            return this;
+        }
+
+        public Builder failCount(Integer failCount) {
+            this.failCount = failCount;
             return this;
         }
 

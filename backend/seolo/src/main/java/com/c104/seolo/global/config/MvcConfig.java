@@ -5,12 +5,11 @@ import com.c104.seolo.global.common.CompanyCodeInterceptor;
 import com.c104.seolo.headquarter.company.repository.CompanyRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableWebMvc
+//@EnableWebMvc
 public class MvcConfig implements WebMvcConfigurer {
     private final CompanyRepository companyRepository;
 
