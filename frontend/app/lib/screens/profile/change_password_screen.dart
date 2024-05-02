@@ -15,9 +15,9 @@ class _ChangePasswordState extends State<ChangePassword> {
       appBar: Header(title: '비밀번호 재설정', back: true),
       body: Column(
         children: [
-          SmallInputBox(hintText: '현재 비밀번호'),
-          SmallInputBox(hintText: '새 비밀번호'),
-          SmallInputBox(hintText: '새 비밀번호 확인'),
+          SmallInputBox(hintText: '현재 비밀번호', textInputAction: TextInputAction.next,),
+          SmallInputBox(hintText: '새 비밀번호', textInputAction: TextInputAction.next,),
+          SmallInputBox(hintText: '새 비밀번호 확인', textInputAction: TextInputAction.done,),
           CommonTextButton(text: '확인', onTap: () {})
         ],
       ),
