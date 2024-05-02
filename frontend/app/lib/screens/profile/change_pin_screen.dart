@@ -1,15 +1,16 @@
 import 'package:app/main.dart';
+import 'package:app/view_models/user/pin_change_view_model.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/widgets/lock/key_board_key.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PinLoginScreen extends StatefulWidget {
+class ChangePinScreen extends StatefulWidget {
   @override
-  _PinLoginScreenState createState() => _PinLoginScreenState();
+  _ChangePinScreenState createState() => _ChangePinScreenState();
 }
 
-class _PinLoginScreenState extends State<PinLoginScreen> {
+class _ChangePinScreenState extends State<ChangePinScreen> {
   String pin = '';
   String content = '';
 
@@ -17,28 +18,29 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
   void initState() {
     super.initState();
     pin = '';
-    content = '암호를 입력해주세요.';
+    content = '새로운 암호를 입력해 주세요.';
   }
 
   final keys = [
     ['1', '2', '3'],
     ['4', '5', '6'],
     ['7', '8', '9'],
-    [Icon(Icons.fingerprint), '0', Icon(Icons.backspace_outlined)],
+    ['', '0', Icon(Icons.backspace_outlined)],
   ];
 
   onNumberPress(val) {
-    final viewModel = Provider.of<PinLoginViewModel>(context, listen: false);
+    final viewModel = Provider.of<PinChangeViewModel>(context, listen: false);
     setState(() {
       pin = pin + val;
-      viewModel.setPin(pin);
+      viewModel.setNewPin(pin);
     });
 
     if (pin.length == 4) {
       if (!viewModel.isLoading) {
-        viewModel.pinLogin().then((_) {
+        viewModel.pinChange().then((_) {
           if (viewModel.errorMessage == null) {
-            Navigator.pushReplacementNamed(context, '/main');
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/login', (route) => false);
           } else {
             setState(() {
               pin = '';

@@ -1,4 +1,5 @@
 import 'package:app/models/user/login_model.dart';
+import 'package:app/models/user/pin_change_model.dart';
 import 'package:app/models/user/pin_login_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart' as Dio;
@@ -62,7 +63,11 @@ class UserService {
       }
     } on Dio.DioException catch (e) {
       debugPrint(e.message);
-      return {'success': false, 'statusCode': e.response?.statusCode, 'message': '무언가 잘못 되었습니다.'};
+      return {
+        'success': false,
+        'statusCode': e.response?.statusCode,
+        'message': '무언가 잘못 되었습니다.'
+      };
     }
   }
 
@@ -101,7 +106,30 @@ class UserService {
       return {
         'success': false,
         'statusCode': e.response?.statusCode,
-        'message': 'jsessionid 잘못 되었음'
+        'message': '오류'
+      };
+    }
+  }
+
+  ///////////////////////// pin 수정 //////////////////////////////////
+  Future<Map<String, dynamic>> pinChange(PinChangeModel pinChangeModel) async {
+    try {
+      Dio.Response response = await _dio.patch(
+        '$baseUrl/users/pin',
+        data: pinChangeModel.toJson(),
+      );
+      if (response.statusCode == 200) {
+        logout();
+        return {'success': true};
+      } else {
+        return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
+      }
+    } on Dio.DioException catch (e) {
+      debugPrint(e.message);
+      return {
+        'success': false,
+        'statusCode': e.response?.statusCode,
+        'message': '오류'
       };
     }
   }

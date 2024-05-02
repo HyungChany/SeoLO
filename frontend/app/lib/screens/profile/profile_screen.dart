@@ -46,7 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 SizedBox(height: 10,),
                 IconWithText(icon: Icon(Icons.edit_document, size: 35,), text: '비밀번호 재설정', naviPage: '/changePassword',),
-                IconWithText(icon: Icon(Icons.password, size: 35,), text: 'PIN 번호 재설정', naviPage: '',)
+                IconWithText(icon: Icon(Icons.password, size: 35,), text: 'PIN 번호 재설정', naviPage: '/checkPin',)
               ],
             ),
           ),

@@ -4,12 +4,12 @@ import 'package:app/widgets/lock/key_board_key.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class PinLoginScreen extends StatefulWidget {
+class CheckPinScreen extends StatefulWidget {
   @override
-  _PinLoginScreenState createState() => _PinLoginScreenState();
+  _CheckPinScreenState createState() => _CheckPinScreenState();
 }
 
-class _PinLoginScreenState extends State<PinLoginScreen> {
+class _CheckPinScreenState extends State<CheckPinScreen> {
   String pin = '';
   String content = '';
 
@@ -17,14 +17,14 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
   void initState() {
     super.initState();
     pin = '';
-    content = '암호를 입력해주세요.';
+    content = '기존 암호를 입력해 주세요.';
   }
 
   final keys = [
     ['1', '2', '3'],
     ['4', '5', '6'],
     ['7', '8', '9'],
-    [Icon(Icons.fingerprint), '0', Icon(Icons.backspace_outlined)],
+    ['', '0', Icon(Icons.backspace_outlined)],
   ];
 
   onNumberPress(val) {
@@ -38,7 +38,10 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
       if (!viewModel.isLoading) {
         viewModel.pinLogin().then((_) {
           if (viewModel.errorMessage == null) {
-            Navigator.pushReplacementNamed(context, '/main');
+            Navigator.pushNamed(context, '/changePin');
+            setState(() {
+              pin = '';
+            });
           } else {
             setState(() {
               pin = '';
