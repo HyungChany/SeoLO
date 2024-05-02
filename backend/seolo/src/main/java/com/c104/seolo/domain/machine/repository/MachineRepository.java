@@ -14,18 +14,10 @@ import java.util.Optional;
 @Repository
 public interface MachineRepository extends JpaRepository<Machine, Integer> {
     @Query("SELECT new com.c104.seolo.domain.machine.dto.info.MachineListInfo( " +
-            "f.id, f.facilityName, " +
-            "sc.subcategory, " +
-            "m.id, m.name, m.number, m.introductionDate, " +
-            "CASE WHEN mm.mm_role = com.c104.seolo.domain.machine.enums.Role.Main THEN mm.user.id ELSE null END, " +
-            "CASE WHEN mm.mm_role = com.c104.seolo.domain.machine.enums.Role.Main THEN mm.user.employee.employeeName ELSE null END, " +
-            "CASE WHEN mm.mm_role = com.c104.seolo.domain.machine.enums.Role.Sub THEN mm.user.id ELSE null END, " +
-            "CASE WHEN mm.mm_role = com.c104.seolo.domain.machine.enums.Role.Sub THEN mm.user.employee.employeeName ELSE null END " +
+            "m.facility.id, m.facility.facilityName, " +
+            "m.id, m.name, m.number, m.introductionDate " +
             ") FROM Machine m " +
-            "JOIN m.machineSubcategory sc " +
-            "JOIN m.facility f " +
-            "LEFT JOIN MachineManager mm ON m.id = mm.machine.id " +
-            "WHERE f.id = :facilityId AND f.company.companyCode = :companyCode")
+            "WHERE m.facility.id = :facilityId AND m.facility.company.companyCode = :companyCode")
     Optional<List<MachineListInfo>> getMachinesByFacilityIdAndCompany(@Param("facilityId")Long facilityId, @Param("companyCode") String companyCode);
 
     @Query("SELECT new com.c104.seolo.domain.machine.dto.info.MachineInfo( " +

@@ -71,22 +71,45 @@ public class MachineServiceImpl implements MachineService {
     }
 
     private List<MachineListDto> getMachineListDto(Optional<List<MachineListInfo>> machineListOptional) {
-        return machineListOptional.map(machineList ->
-                machineList.stream()
-                        .map(info -> MachineListDto.builder()
-                                .id(info.getId())
-                                .facilityId(info.getFacilityId())
-                                .facilityName(info.getFacilityName())
-                                .machineName(info.getMachineName())
-                                .machineCode(info.getMachineCode())
-                                .introductionDate(info.getIntroductionDate())
-                                .mainManagerId(info.getMainManagerId())
-                                .mainManagerName(info.getMainManagerName())
-                                .subManagerId(info.getSubManagerId())
-                                .subManagerName(info.getSubManagerName())
-                                .build())
+        return machineListOptional.map(machineList -> machineList.stream()
+                        .map(info -> {
+                            Optional<MachineManagerInfo> mainManagerOptional = machineManagerRepository.findMachineManagerInfoByMachineIdAndRole(info.getId(), Role.Main);
+                            Optional<MachineManagerInfo> subnManagerOptional = machineManagerRepository.findMachineManagerInfoByMachineIdAndRole(info.getId(), Role.Sub);
+
+                            Long mainManagerId = mainManagerOptional.map(MachineManagerInfo::getMachineManagerId).orElse(null);
+                            String mainManagerName = mainManagerOptional.map(MachineManagerInfo::getName).orElse(null);
+                            Long subManagerId = subnManagerOptional.map(MachineManagerInfo::getMachineManagerId).orElse(null);
+                            String subManagerName = subnManagerOptional.map(MachineManagerInfo::getName).orElse(null);
+
+                            return MachineListDto.builder()
+                                    .id(info.getId())
+                                    .facilityId(info.getFacilityId())
+                                    .facilityName(info.getFacilityName())
+                                    .machineName(info.getMachineName())
+                                    .machineCode(info.getMachineCode())
+                                    .introductionDate(info.getIntroductionDate())
+                                    .mainManagerId(mainManagerId)
+                                    .mainManagerName(mainManagerName)
+                                    .subManagerId(subManagerId)
+                                    .subManagerName(subManagerName)
+                                    .build();
+                        })
                         .collect(Collectors.toList()))
                 .orElse(Collections.emptyList());
+    }
+
+
+    private void createMachineManager(Long userId, Machine machine, Role role) {
+        if (userId != null) {
+            userRepository.findById(userId).ifPresent(user -> {
+                MachineManager mm = MachineManager.builder()
+                        .machine(machine)
+                        .user(user)
+                        .mm_role(role)
+                        .build();
+                machineManagerRepository.save(mm);
+            });
+        }
     }
 
     @Override
@@ -95,6 +118,9 @@ public class MachineServiceImpl implements MachineService {
         Facility facility = facilityOptional.orElseThrow(() -> new CommonException(FacilityErrorCode.NOT_EXIST_FACILITY));
         if (!facility.getCompany().getCompanyCode().equals(companyCode)) {
             throw new CommonException(FacilityErrorCode.NOT_COMPANY_FACILITY);
+        }
+        if (machineRequest.getMainManagerId().equals(machineRequest.getSubManagerId())) {
+            throw new CommonException(MachineErrorCode.CANNOT_SEND_SAME_MANAGER);
         }
 
         Machine machine = Machine.builder()
@@ -113,28 +139,21 @@ public class MachineServiceImpl implements MachineService {
         createMachineManager(machineRequest.getSubManagerId(), savedMachine, Role.Sub);
     }
 
-    private void createMachineManager(Long userId, Machine machine, Role role) {
-        if (userId != null) {
-            userRepository.findById(userId).ifPresent(user -> {
-                MachineManager mm = MachineManager.builder()
-                        .machine(machine)
-                        .user(user)
-                        .mm_role(role)
-                        .build();
-                machineManagerRepository.save(mm);
-            });
-        }
-    }
-
     @Override
     public MachineListResponse findMachineByCompanyAndFacility(String companyCode, Long facilityId) {
+        Facility facility = facilityRepository.findById(facilityId).orElseThrow(() -> new CommonException(FacilityErrorCode.NOT_EXIST_FACILITY));
+
+        if (!facility.getCompany().getCompanyCode().equals(companyCode)) {
+            throw new CommonException(FacilityErrorCode.NOT_COMPANY_FACILITY);
+        }
+
         Optional<List<MachineListInfo>> machineListOptional = machineRepository.getMachinesByFacilityIdAndCompany(facilityId, companyCode);
 
         List<MachineListDto> machineDtoList = getMachineListDto(machineListOptional);
 
         return MachineListResponse.builder()
-               .machines(Optional.of(machineDtoList))
-               .build();
+                .machines(Optional.of(machineDtoList))
+                .build();
     }
 }
 
