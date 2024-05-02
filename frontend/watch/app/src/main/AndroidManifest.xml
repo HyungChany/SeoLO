@@ -48,7 +48,7 @@
 
 
         <activity
-            android:name=".presentation.ExampleActivity"
+            android:name=".presentation.LocationActivity"
             android:exported="false"
             android:taskAffinity=""
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
