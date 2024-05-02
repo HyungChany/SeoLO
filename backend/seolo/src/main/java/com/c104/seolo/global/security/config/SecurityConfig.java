@@ -4,7 +4,6 @@ import com.c104.seolo.global.security.filter.DaoCompanyCodeAuthenticationFilter;
 import com.c104.seolo.global.security.handler.SeoloLoginFailureHandler;
 import com.c104.seolo.global.security.handler.SeoloLoginSuccessHandler;
 import com.c104.seolo.global.security.handler.SeoloLogoutSuccessHandler;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
@@ -26,6 +25,7 @@ import org.springframework.security.web.context.RequestAttributeSecurityContextR
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration

@@ -2,7 +2,6 @@ package com.c104.seolo.global.security.handler;
 
 import com.c104.seolo.global.exception.AuthException;
 import com.c104.seolo.global.exception.SeoloErrorResponse;
-import com.c104.seolo.global.security.dto.response.LoginFailureResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
