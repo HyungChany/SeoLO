@@ -10,7 +10,8 @@ class LogoutButton extends StatelessWidget {
     return InkWell(
       onTap: () {
         viewModel.logout().then((_) {
-          Navigator.pushNamed(context, '/login');
+          Navigator.pushNamedAndRemoveUntil(
+              context, '/login', (route) => false);
         });
       },
       child: Container(

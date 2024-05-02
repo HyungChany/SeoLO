@@ -36,7 +36,7 @@ class _LockScreenState extends State<LockScreen> {
     // pin이 1234면 뒤로가기
     // pin 길이가 4인데 1234가 아니면 pin 초기화
     pin == '1234'
-        ? Navigator.pop(context)
+        ? Navigator.pushReplacementNamed(context, '/main')
         : pin.length == 4
             ? pin = ''
             : null;

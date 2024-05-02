@@ -22,7 +22,10 @@ class _MainScreenState extends State<MainScreen> {
       Navigator.pushNamed(context, '/main');
     }
     if (index == 1) {
-      Navigator.pushNamed(context, '/lock');
+      Navigator.pushNamed(context, '/nfc');
+    }
+    if (index == 2) {
+      Navigator.pushNamed(context, '/profile');
     }
   }
   @override

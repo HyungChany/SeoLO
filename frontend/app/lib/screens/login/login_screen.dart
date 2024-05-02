@@ -2,6 +2,7 @@ import 'package:app/view_models/user/login_view_model.dart';
 import 'package:app/widgets/common_text_button.dart';
 import 'package:app/widgets/inputbox/common_smallinputbox.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -12,6 +13,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _storage = FlutterSecureStorage();
   final shadow1 = const BoxShadow(
       color: Color.fromRGBO(255, 255, 255, 0.25),
       blurRadius: 5.29,
@@ -58,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
               if (!viewModel.isLoading) {
                 viewModel.login().then((_) {
                   if (viewModel.errorMessage == null) {
-                    Navigator.pushNamed(context, '/');
+                    Navigator.pushReplacementNamed(context, '/main');
                   } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
@@ -75,6 +77,22 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
+  }
+
+  _asyncMethod() async {
+    String? jsessionid = await _storage.read(key: 'jsessionid');
+    if (jsessionid != null) {
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, '/lock');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _asyncMethod();
+    });
   }
 
   @override

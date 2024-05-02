@@ -1,4 +1,5 @@
 import 'package:app/routes/main_route.dart';
+import 'package:app/screens/login/login_screen.dart';
 import 'package:app/screens/test_screen.dart';
 import 'package:app/view_models/main/news_view_model.dart';
 import 'package:app/view_models/user/login_view_model.dart';
@@ -69,7 +70,7 @@ class _MyAppState extends State<MyApp>{
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
               fontFamily: 'font'),
-          home: const TestScreen(),
+          home: const LoginScreen(),
           onGenerateRoute: generateMainRoute,
         ));
   }
