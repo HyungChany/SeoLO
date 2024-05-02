@@ -1,6 +1,8 @@
 import 'package:app/routes/main_route.dart';
 import 'package:app/screens/test_screen.dart';
 import 'package:app/view_models/main/news_view_model.dart';
+import 'package:app/view_models/user/login_view_model.dart';
+import 'package:app/view_models/user/user_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -47,6 +49,8 @@ class _MyAppState extends State<MyApp>{
 
         providers: [
           ChangeNotifierProvider(create: (_) => NewsViewModel()),
+          ChangeNotifierProvider(create: (_) => LoginViewModel()),
+          ChangeNotifierProvider(create: (_) => UserViewModel()),
         ],
         child: MaterialApp(
           localizationsDelegates:  [

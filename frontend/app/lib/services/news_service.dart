@@ -5,7 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class NewsService {
   final _dio = Dio();
-  final baseUrl = dotenv.get('API_URL2') ?? '';
+  final baseUrl = dotenv.get('API_URL') ?? '';
   Future<List<NewsModel>> getNews() async {
     // try {
       final response = await _dio.get('$baseUrl/news');
