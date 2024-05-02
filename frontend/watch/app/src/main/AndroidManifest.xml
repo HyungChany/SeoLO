@@ -66,6 +66,12 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
         <activity
+            android:name=".presentation.CheckListActivity"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
             android:name=".presentation.RealMainActivity"
             android:exported="false"
             android:taskAffinity=""
