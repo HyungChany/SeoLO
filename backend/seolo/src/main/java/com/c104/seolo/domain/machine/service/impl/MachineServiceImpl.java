@@ -50,6 +50,11 @@ public class MachineServiceImpl implements MachineService {
         Optional<MachineManagerInfo> mainManagerOptional = machineManagerRepository.findMachineManagerInfoByMachineIdAndRole(machineId, Role.Main);
         Optional<MachineManagerInfo> subnManagerOptional = machineManagerRepository.findMachineManagerInfoByMachineIdAndRole(machineId, Role.Sub);
 
+        Long mainManagerId = mainManagerOptional.map(MachineManagerInfo::getMachineManagerId).orElse(null);
+        String mainManagerName = mainManagerOptional.map(MachineManagerInfo::getName).orElse(null);
+        Long subManagerId = subnManagerOptional.map(MachineManagerInfo::getMachineManagerId).orElse(null);
+        String subManagerName = subnManagerOptional.map(MachineManagerInfo::getName).orElse(null);
+
         return MachineDto.builder()
                 .id(machine.getId())
                 .facilityId(machine.getFacilityId())
@@ -58,10 +63,10 @@ public class MachineServiceImpl implements MachineService {
                 .machineCode(machine.getMachineCode())
                 .machineThumbnail(machine.getMachineThumbnail())
                 .introductionDate(machine.getIntroductionDate())
-                .mainManagerId(mainManagerOptional.get().getMachineManagerId())
-                .mainManagerName(mainManagerOptional.get().getName())
-                .subManagerId(subnManagerOptional.get().getMachineManagerId())
-                .subManagerName(subnManagerOptional.get().getName())
+                .mainManagerId(mainManagerId)
+                .mainManagerName(mainManagerName)
+                .subManagerId(subManagerId)
+                .subManagerName(subManagerName)
                 .build();
     }
 
