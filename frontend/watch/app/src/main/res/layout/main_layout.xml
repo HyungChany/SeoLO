@@ -17,4 +17,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.318" />
 
+    <TextView
+        android:id="@+id/textViewOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:text="여기에 텍스트 입력"
+        android:textColor="@android:color/black"
+        android:textSize="24sp" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,5 +24,7 @@ class RealMainActivity : AppCompatActivity() {
             .asGif()
             .load(R.drawable.main_sample0)
             .into(binding.mainView)
+        binding.textViewOverlay.text = "NFC"
+
     }
 }
