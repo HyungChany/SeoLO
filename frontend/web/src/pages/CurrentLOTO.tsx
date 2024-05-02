@@ -5,9 +5,9 @@ interface ContentBoxProps {
 }
 const BackGround = styled.div`
   width: 100%;
-  height: 100%;
+  height: auto;
+  min-height: 100%;
   justify-content: center;
-  align-items: center;
   display: flex;
 `;
 const Box = styled.div`

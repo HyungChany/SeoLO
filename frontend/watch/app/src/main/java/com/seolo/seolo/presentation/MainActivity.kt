@@ -10,8 +10,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,9 +21,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
 import com.seolo.seolo.R
 import com.seolo.seolo.presentation.theme.SeoLoTheme
 
@@ -39,10 +37,12 @@ class MainActivity : ComponentActivity() {
         // 버튼을 통해 ExampleActivity로 전환
         val button: Button = findViewById(R.id.button_example)
         button.setOnClickListener {
-            val intent = Intent(this, CarouselActivity::class.java)
+//            val intent = Intent(this, CarouselActivity::class.java)
+//            val intent = Intent(this, LockActivity::class.java)
+            val intent = Intent(this, PasswordActivity::class.java)
             startActivity(intent)
-        }
     }
+}
 }
 
 @Composable

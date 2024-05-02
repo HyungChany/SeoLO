@@ -29,7 +29,7 @@ public class Locker extends BaseEntity {
     @Column(name = "locker_isLocked")
     private boolean isLocked;
 
-    @Column(name = "locker_battery", nullable = false, columnDefinition = "BOOLEAN DEFAULT 100")
+    @Column(name = "locker_battery", nullable = false, columnDefinition = "INTEGER DEFAULT 100")
     private int battery;
 
     protected Locker () {}

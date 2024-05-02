@@ -10,10 +10,18 @@ spring:
     url: jdbc:mysql://k10c104.p.ssafy.io:${dev.datasource.port}/seolo?serverTimezone=Asia/Seoul
     username: ${dev.datasource.username}
     password: ${dev.datasource.password}
+
+  sql:
+    init:
+      mode: always
+      data-locations: "classpath:/dummy/data.sql"
+#      data-locations: "./dummy/data.sql"
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.MySQLDialect
+    defer-datasource-initialization: true # true -> ddl-auto 이후 data.sql 실행 옵션
 logging:
   level:
     org.springframework.web: DEBUG

@@ -95,12 +95,16 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const handleLogin = async () => {
     try {
-      const loginData = {
-        companyCode: companyNumber,
-        username: loginId,
-        password: password,
-      };
-      const responseData = await userLogin(loginData);
+      // const loginData = {
+      //   companyCode: companyNumber,
+      //   username: loginId,
+      //   password: password,
+      // };
+      const formData = new FormData();
+      formData.append('companyCode', companyNumber);
+      formData.append('username', loginId);
+      formData.append('password', password);
+      const responseData = await userLogin(formData);
       console.log('로그인 성공:', responseData);
       navigate('/');
     } catch (error) {

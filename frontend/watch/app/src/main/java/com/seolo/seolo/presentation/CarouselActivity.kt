@@ -8,7 +8,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.adapters.CarouselStateAdapter
 import com.seolo.seolo.fragments.CardFragment
 
-
 class CarouselActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -19,7 +19,7 @@ public class DaoCompanyCodeAuthenticationFilter extends UsernamePasswordAuthenti
 
     private static final String SPRING_SECURITY_FORM_COMPANY_CODE_KEY = "companyCode";
     private String companyCodeParameter = SPRING_SECURITY_FORM_COMPANY_CODE_KEY;
-    private boolean postOnly = false;
+    private boolean postOnly = true;
 
     public DaoCompanyCodeAuthenticationFilter(AuthenticationManager authenticationManager, AuthenticationSuccessHandler successHandler, AuthenticationFailureHandler failureHandler) {
         super.setAuthenticationManager(authenticationManager);
@@ -33,7 +33,7 @@ public class DaoCompanyCodeAuthenticationFilter extends UsernamePasswordAuthenti
         if (this.postOnly && !request.getMethod().equals("POST")) {
             throw new AuthenticationServiceException("Authentication method not supported: " + request.getMethod());
         }
-        log.debug("DaoCompanyfilter 진입 확인");
+        log.info("DaoCompanyfilter 진입 확인");
         String username = obtainUsername(request);
         username = (username != null) ? username.trim() : "";
         String password = obtainPassword(request);
@@ -43,6 +43,7 @@ public class DaoCompanyCodeAuthenticationFilter extends UsernamePasswordAuthenti
         DaoCompanycodeToken authRequest = new DaoCompanycodeToken(username, password, companyCode);
         // 요청 세부 정보 설정
         setDetails(request, authRequest);
+        log.info("인증 전 DaoToken 생성 : {}",authRequest.toString());
         // 인증 매니저에 인증 객체 전달 및 인증 시도
         return this.getAuthenticationManager().authenticate(authRequest);
     }

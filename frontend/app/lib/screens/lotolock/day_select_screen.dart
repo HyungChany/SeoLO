@@ -5,14 +5,9 @@ import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/common_text_button.dart';
 
 class DaySelect extends StatefulWidget {
-  // final void Function(DateTime) onDateTimeChanged;
-  // final String initDateStr;
+  const DaySelect({super.key});
 
-  // @override
-  // const DaySelect({super.key,
-  //   required this.onDateTimeChanged,
-  //   required this.initDateStr,
-  // });
+  @override
   _DaySelectState createState() => _DaySelectState();
 }
 
@@ -21,16 +16,15 @@ class _DaySelectState extends State<DaySelect> {
   Widget build(BuildContext context) {
     final initDate = DateFormat('yyyy-MM-dd').parse('2024-04-26');
     return Scaffold(
-      appBar: Header(title: '시간 선택', back: true),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
+      appBar: Header(title: '날짜 선택', back: true),
+      body: Stack(
+        children: [
+          Center(
+            child: Container(
               height: 300,
               child: CupertinoDatePicker(
                 maximumYear: DateTime.now().year + 10,
-                minimumYear: DateTime.now().year,
+                minimumYear: DateTime.now().year - 10,
                 initialDateTime: initDate,
                 mode: CupertinoDatePickerMode.date,
                 onDateTimeChanged: (DateTime date) {
@@ -40,14 +34,19 @@ class _DaySelectState extends State<DaySelect> {
                 },
               ),
             ),
-
-            CommonTextButton(
-                text: '다음 단계',
-                onTap: () {
-                  Navigator.pushNamed(context, '/main');
-                }),
-          ],
-        ),
+          ),
+          Positioned(
+            bottom: 20,
+            left: 50,
+            right: 50,
+            child: CommonTextButton(
+              text: '다음 단계',
+              onTap: () {
+                Navigator.pushNamed(context, '/timeselect');
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
