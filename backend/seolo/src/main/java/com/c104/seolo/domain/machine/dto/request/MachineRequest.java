@@ -1,26 +1,23 @@
-package com.c104.seolo.domain.machine.dto;
+package com.c104.seolo.domain.machine.dto.request;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
 
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@ToString
 @Getter
-@Setter
-public class MachineListDto {
-    private Long id;
+public class MachineRequest {
     private Long facilityId;
-    private String facilityName;
     private String machineName;
     private String machineCode;
+    private String machineThum;
     private Date introductionDate;
     private Long mainManagerId;
-    private String mainManagerName;
     private Long subManagerId;
-    private String subManagerName;
 }
