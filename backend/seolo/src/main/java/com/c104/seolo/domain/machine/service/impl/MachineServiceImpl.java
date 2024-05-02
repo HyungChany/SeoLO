@@ -7,6 +7,7 @@ import com.c104.seolo.domain.machine.dto.MachineDto;
 import com.c104.seolo.domain.machine.dto.MachineListDto;
 import com.c104.seolo.domain.machine.dto.info.MachineInfo;
 import com.c104.seolo.domain.machine.dto.info.MachineListInfo;
+import com.c104.seolo.domain.machine.dto.info.MachineManagerInfo;
 import com.c104.seolo.domain.machine.dto.request.MachineRequest;
 import com.c104.seolo.domain.machine.dto.response.MachineListResponse;
 import com.c104.seolo.domain.machine.entity.Machine;
@@ -39,13 +40,15 @@ public class MachineServiceImpl implements MachineService {
 
     @Override
     public MachineDto findMachineByMachineId(String companyCode, Long machineId) {
-        Optional<MachineInfo> machineOptional = machineRepository.findById(machineId);
+        Optional<MachineInfo> machineOptional = machineRepository.findById(machineId).stream().findFirst();
         MachineInfo machine = machineOptional.orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
-
 
         if (!machine.getCompanyCode().equals(companyCode)) {
             throw new CommonException(MachineErrorCode.NOT_COMPANY_MACHINE);
         }
+
+        Optional<MachineManagerInfo> mainManagerOptional = machineManagerRepository.findMachineManagerInfoByMachineIdAndRole(machineId, Role.Main);
+        Optional<MachineManagerInfo> subnManagerOptional = machineManagerRepository.findMachineManagerInfoByMachineIdAndRole(machineId, Role.Sub);
 
         return MachineDto.builder()
                 .id(machine.getId())
@@ -55,10 +58,10 @@ public class MachineServiceImpl implements MachineService {
                 .machineCode(machine.getMachineCode())
                 .machineThumbnail(machine.getMachineThumbnail())
                 .introductionDate(machine.getIntroductionDate())
-                .mainManagerId(machine.getMainManagerId())
-                .mainManagerName(machine.getMainManagerName())
-                .subManagerId(machine.getSubManagerId())
-                .subManagerName(machine.getSubManagerName())
+                .mainManagerId(mainManagerOptional.get().getMachineManagerId())
+                .mainManagerName(mainManagerOptional.get().getName())
+                .subManagerId(subnManagerOptional.get().getMachineManagerId())
+                .subManagerName(subnManagerOptional.get().getName())
                 .build();
     }
 

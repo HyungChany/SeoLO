@@ -16,8 +16,4 @@ public class MachineInfo {
     private String machineCode;
     private String machineThumbnail;
     private Date introductionDate;
-    private Long mainManagerId;
-    private String mainManagerName;
-    private Long subManagerId;
-    private String subManagerName;
 }
