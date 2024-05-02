@@ -27,3 +27,9 @@ logging:
     org.springframework.web: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type: TRACE
+
+server:
+  servlet:
+    session:
+      cookie:
+        secure: false
