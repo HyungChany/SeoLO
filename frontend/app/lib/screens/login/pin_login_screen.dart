@@ -4,12 +4,12 @@ import 'package:app/widgets/lock/key_board_key.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class LockScreen extends StatefulWidget {
+class PinLoginScreen extends StatefulWidget {
   @override
-  _LockScreenState createState() => _LockScreenState();
+  _PinLoginScreenState createState() => _PinLoginScreenState();
 }
 
-class _LockScreenState extends State<LockScreen> {
+class _PinLoginScreenState extends State<PinLoginScreen> {
   String pin = '';
   String content = '';
 
@@ -60,26 +60,26 @@ class _LockScreenState extends State<LockScreen> {
     return keys
         .map(
           (x) => Container(
-            color: blue100.withOpacity(0.5),
-            child: Row(
-              children: x.map((y) {
-                return Expanded(
-                  child: KeyboardKey(
-                    label: y,
-                    onTap: y is Widget ? onBackspacePress : onNumberPress,
-                    value: y,
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        )
+        color: blue100.withOpacity(0.5),
+        child: Row(
+          children: x.map((y) {
+            return Expanded(
+              child: KeyboardKey(
+                label: y,
+                onTap: y is Widget ? onBackspacePress : onNumberPress,
+                value: y,
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    )
         .toList();
   }
 
   renderText() {
     TextStyle styleTitle =
-        TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
+    TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
 
     TextStyle styleContent = TextStyle(
         fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black);

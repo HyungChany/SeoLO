@@ -94,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
     if (jsessionid != null) {
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, '/lock');
+      Navigator.pushReplacementNamed(context, '/pinLogin');
     }
   }
 

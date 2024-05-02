@@ -1,5 +1,5 @@
-import 'package:app/screens/lock/lock_screen.dart';
 import 'package:app/screens/login/login_screen.dart';
+import 'package:app/screens/login/pin_login_screen.dart';
 import 'package:app/screens/main/main_screen.dart';
 import 'package:app/screens/nfc/nfc_screen.dart';
 import 'package:app/screens/profile/change_password_screen.dart';
@@ -17,8 +17,8 @@ import 'package:app/screens/lotolock/other_worklist_check_screen.dart';
 
 Route<dynamic> generateMainRoute(RouteSettings settings) {
   switch (settings.name) {
-    case '/lock':
-      return MaterialPageRoute(builder: (context) => LockScreen());
+    case '/pinLogin':
+      return MaterialPageRoute(builder: (context) => PinLoginScreen());
     case '/test':
       return MaterialPageRoute(builder: (context) => const TestScreen());
     case '/main':
