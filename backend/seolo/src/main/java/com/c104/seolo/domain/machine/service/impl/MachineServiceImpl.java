@@ -40,7 +40,7 @@ public class MachineServiceImpl implements MachineService {
 
     @Override
     public MachineDto findMachineByMachineId(String companyCode, Long machineId) {
-        Optional<MachineInfo> machineOptional = machineRepository.findById(machineId).stream().findFirst();
+        Optional<MachineInfo> machineOptional = machineRepository.findInfoById(machineId);
         MachineInfo machine = machineOptional.orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
 
         if (!machine.getCompanyCode().equals(companyCode)) {
@@ -137,6 +137,19 @@ public class MachineServiceImpl implements MachineService {
 
         createMachineManager(machineRequest.getMainManagerId(), savedMachine, Role.Main);
         createMachineManager(machineRequest.getSubManagerId(), savedMachine, Role.Sub);
+    }
+
+    @Override
+    public void updateMachineSpace(Long machineId ,Float latitude, Float longitude, String companyCode) {
+        Optional<Machine> machineOptional = machineRepository.findById(machineId);
+        Machine machine = machineOptional.orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
+        if (!machine.getFacility().getCompany().getCompanyCode().equals(companyCode)) {
+            throw new CommonException(MachineErrorCode.NOT_COMPANY_MACHINE);
+        }
+
+        machine.setLatitude(latitude);
+        machine.setLongitude(longitude);
+        machineRepository.save(machine);
     }
 
     @Override

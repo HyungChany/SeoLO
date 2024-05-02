@@ -25,5 +25,8 @@ public interface MachineRepository extends JpaRepository<Machine, Integer> {
             ") FROM Machine m LEFT JOIN MachineManager mm on m.id = mm.machine.id " +
             "WHERE m.id = :machineId " +
             "order by m.id desc limit 1 ")
-    Optional<MachineInfo> findById(@Param("machineId") Long machineId);
+    Optional<MachineInfo> findInfoById(@Param("machineId") Long machineId);
+
+    @Query("SELECT Machine from Machine m where m.id = :machineId")
+    Optional<Machine> findById(Long machineId);
 }
