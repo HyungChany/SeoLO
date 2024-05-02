@@ -28,8 +28,13 @@ logging:
     org.hibernate.SQL: DEBUG
     org.hibernate.type: TRACE
 
-server:
-  servlet:
-    session:
-      cookie:
-        secure: false
+#server:
+#  servlet:
+#    session:
+#      cookie:
+#        name: JSESSIONID
+#        path: /
+#        Domain :
+#        http-only: true
+#        secure: false # 개발 환경에서는 false로 설정
+#        same-site: Lax
