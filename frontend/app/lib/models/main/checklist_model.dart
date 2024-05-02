@@ -1,12 +1,12 @@
-class checklistmodel{
+class ChecklistModel{
   final int id;
   final String context;
-  checklistmodel({
+  ChecklistModel({
     required this.id,
     required this.context
 });
-  factory checklistmodel.fromJson(Map<String, dynamic>json){
-    return checklistmodel(
+  factory ChecklistModel.fromJson(Map<String, dynamic>json){
+    return ChecklistModel(
       id: json['id'] as int,
       context: json['context'] as String
     );
