@@ -115,12 +115,6 @@ public class SecurityConfig {
             config.setAllowedMethods(Collections.singletonList("*"));
             config.setAllowedOrigins(Collections.singletonList("*")); // 모든 Origin 허용
             config.setAllowCredentials(false); // 모든 도메인을 허용할 때는 false로 설정해야 함
-
-//            config.setAllowedHeaders(Arrays.asList("Content-Type", "X-Requested-With", "Authorization","Company-Code"));
-//            config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "PATCH"));
-//            // 로컬 개발 서버의 도메인을 명확히 명시
-//            config.setAllowedOrigins(Arrays.asList("http://localhost:5173", "http://localhost:3000", "http://192.168.100.111:5173" , "http://192.168.100.111:3000"));
-//            config.setAllowCredentials(true); // 쿠키 사용을 허용
             return config;
         };
     }
