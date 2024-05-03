@@ -3,6 +3,7 @@ package com.c104.seolo.domain.task.entity;
 import com.c104.seolo.domain.machine.entity.Machine;
 import com.c104.seolo.domain.task.enums.TaskStatus;
 import com.c104.seolo.domain.user.entity.AppUser;
+import com.c104.seolo.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +19,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @ToString
 @Entity
 @Table(name = "task_history")
-public class TaskHistory {
+public class TaskHistory extends BaseEntity {
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "task_id", nullable = false)
     @Id
