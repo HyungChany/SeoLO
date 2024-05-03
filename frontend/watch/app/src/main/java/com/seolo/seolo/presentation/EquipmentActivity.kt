@@ -6,8 +6,8 @@ import com.seolo.seolo.R
 import com.seolo.seolo.adapters.WheelPickerAdapter
 import sh.tyy.wheelpicker.core.WheelPickerRecyclerView
 
-class LocationActivity : AppCompatActivity() {
-    private val locations = listOf(" ","1", "rkskdkaskddsa", "rkskdkaskddsa", "1", "3", "rkskdkaskddsa", "rkskdkaskddsa", "rkskdkaskddsa"," ")
+class EquipmentActivity : AppCompatActivity() {
+    private val equipments = listOf(" ","장비1","장비2","장비3","장비4","장비5")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
@@ -16,11 +16,11 @@ class LocationActivity : AppCompatActivity() {
 
 
         val locationPicker = findViewById<WheelPickerRecyclerView>(R.id.basic_wheel_picker_view)
-        val locationAdapter = WheelPickerAdapter(locations)
+        val locationAdapter = WheelPickerAdapter(equipments)
         locationPicker.adapter = locationAdapter
 
         locationPicker.post {
-            val middlePosition = locations.size / 2
+            val middlePosition = equipments.size / 2
             locationPicker.layoutManager?.scrollToPosition(middlePosition)
         }
     }
