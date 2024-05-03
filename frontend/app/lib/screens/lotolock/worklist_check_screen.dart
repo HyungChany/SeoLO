@@ -32,6 +32,8 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;  // 화면 너비
+    double screenHeight = MediaQuery.of(context).size.height;  // 화면 높이
     return Scaffold(
       appBar: Header(title: '작업 내역', back: true),
       body: Stack(
@@ -68,7 +70,7 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
                     child: Text('비고', style: TextStyle(fontSize: 16.0, color: samsungBlue)),
                   ),
                   Container(
-                    height: 260,
+                    height: screenHeight*0.3,
                     padding: EdgeInsets.all(16.0),
                     margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // 비고 컨테이너의 마진
                     decoration: BoxDecoration(

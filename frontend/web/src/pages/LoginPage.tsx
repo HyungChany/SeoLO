@@ -95,11 +95,6 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const handleLogin = async () => {
     try {
-      // const loginData = {
-      //   companyCode: companyNumber,
-      //   username: loginId,
-      //   password: password,
-      // };
       const formData = new FormData();
       formData.append('companyCode', companyNumber);
       formData.append('username', loginId);

@@ -11,7 +11,7 @@ interface OptionType {
 const DropDownBox = styled.div`
   display: flex;
   width: 19.375rem;
-  height: 3rem;
+  height: 5rem;
   padding: 1.125rem 0.9375rem;
   justify-content: center;
   align-items: center;
@@ -19,6 +19,7 @@ const DropDownBox = styled.div`
   border: 1px solid ${Color.GRAY300};
   background: ${Color.SNOW};
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
 `;
 
 const StyledSelect = styled(Select<OptionType>).attrs({
