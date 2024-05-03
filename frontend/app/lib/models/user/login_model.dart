@@ -14,14 +14,14 @@ class LoginModel {
     return LoginModel(
       username: json['username'],
       password: json['password'],
-      companyCode: json['companyCode'],
+      companyCode: json['company_code'],
     );
   }
 
   Map<String, dynamic> toJson() => {
     'username': username,
     'password': password,
-    'companyCode': companyCode,
+    'company_code': companyCode,
   };
 }
 

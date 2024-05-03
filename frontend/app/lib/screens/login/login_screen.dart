@@ -85,19 +85,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   _asyncMethod() async {
-    final viewModel = Provider.of<LoginViewModel>(context, listen: false);
-    String? jsessionid = await _storage.read(key: 'jsessionid');
-    if (jsessionid != null) {
-      await viewModel.login().then((_) {
-        debugPrint('원래 id : $jsessionid');
-        debugPrint('새로운 id : ${viewModel.jsessionid}');
-        // login screen에서 login api 요청을 보내서 storage에 저장된 값이랑 비교
-        // 만약 다르다면 storage에 있는 값 업데이트
-        if (viewModel.jsessionid != jsessionid) {
-          _storage.delete(key: 'jsessionid');
-          _storage.write(key: 'jsessionid', value: viewModel.jsessionid);
-        }
-      });
+    String? token = await _storage.read(key: 'token');
+    if (token != null) {
       if (!mounted) return;
       Navigator.pushReplacementNamed(context, '/pinLogin');
     }

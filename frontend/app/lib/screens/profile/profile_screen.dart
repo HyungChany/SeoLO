@@ -44,7 +44,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
-              children: [const MyInfo(), LogoutButton()],
+              children: [
+                const MyInfo(),
+                LogoutButton()],
             ),
           ),
           const Divider(

@@ -1,5 +1,4 @@
 import 'package:app/main.dart';
-import 'package:app/screens/loading/loading_screen.dart';
 import 'package:app/view_models/user/my_info_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

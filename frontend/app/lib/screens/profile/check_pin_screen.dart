@@ -1,10 +1,13 @@
 import 'package:app/main.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
+import 'package:app/widgets/dialog/dialog.dart';
 import 'package:app/widgets/lock/key_board_key.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CheckPinScreen extends StatefulWidget {
+  const CheckPinScreen({super.key});
+
   @override
   _CheckPinScreenState createState() => _CheckPinScreenState();
 }
@@ -12,6 +15,7 @@ class CheckPinScreen extends StatefulWidget {
 class _CheckPinScreenState extends State<CheckPinScreen> {
   String pin = '';
   String content = '';
+  int failCount = 0;
 
   @override
   void initState() {
@@ -41,12 +45,40 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
             Navigator.pushReplacementNamed(context, '/changePin');
             setState(() {
               pin = '';
+              failCount = 0;
             });
           } else {
             setState(() {
               pin = '';
-              content = viewModel.errorMessage!;
+              failCount = viewModel.failCount!;
+              content = '${viewModel.errorMessage!} ($failCount/5)';
             });
+            failCount == 3
+                ? showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return const CommonDialog(
+                    content: 'pin 번호를 5번 틀릴 시 계정이 잠깁니다.',
+                    buttonText: '확인',
+                  );
+                })
+                : null;
+            failCount == 5
+                ? showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return CommonDialog(
+                    content: viewModel.errorMessage!,
+                    buttonText: '확인',
+                    buttonClick: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/login', (route) => false);
+                    },
+                  );
+                })
+                : null;
           }
         });
       }

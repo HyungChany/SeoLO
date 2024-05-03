@@ -7,7 +7,7 @@ import Navigation from '@/components/navigation/Navigation.tsx';
 import LoginPage from '@/pages/LoginPage.tsx';
 import MainPage from '@/pages/MainPage.tsx';
 import CurrentLOTO from '@/pages/CurrentLOTO.tsx';
-import CheckListPage from '@/pages/CheckListPage.tsx';
+// import CheckListPage from '@/pages/CheckListPage.tsx';
 
 const Container = styled.div`
   display: flex;
@@ -40,10 +40,10 @@ const informationRoute = [
     path: '/currentloto',
     element: With(<CurrentLOTO />),
   },
-  {
-    path: '/checklist',
-    element: With(<CheckListPage />),
-  },
+  // {
+  //   path: '/checklist',
+  //   element: With(<CheckListPage />),
+  // },
 ];
 const exampleRoute = { path: '/example', element: <Example /> };
 

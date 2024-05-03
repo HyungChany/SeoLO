@@ -16,10 +16,10 @@ class UserService {
   UserService() {
     _dio.interceptors.add(Dio.InterceptorsWrapper(
       onRequest: (options, handler) async {
-        String? jsessionid = await _storage.read(key: 'jsessionid');
+        String? token = await _storage.read(key: 'token');
         String? companyCode = await _storage.read(key: 'companyCode');
-        if (jsessionid != null) {
-          options.headers['Cookie'] = 'JSESSIONID=$jsessionid';
+        if (token != null) {
+          options.headers['Authorization'] = 'Bearer $token';
           options.headers['Company-Code'] = companyCode;
         }
         return handler.next(options);
@@ -30,29 +30,18 @@ class UserService {
 
   ///////////////////////// id 로그인 //////////////////////////////////
   Future<Map<String, dynamic>> login(LoginModel loginModel) async {
-    final formData = Dio.FormData.fromMap({
-      'username': loginModel.username,
-      'password': loginModel.password,
-      'companyCode': loginModel.companyCode
-    });
-
     try {
-      Dio.Response response = await _dio.post('$baseUrl/login', data: formData);
+      Dio.Response response =
+          await _dio.post('$baseUrl/login', data: loginModel.toJson());
       if (response.statusCode == 200) {
-        String? jsessionid = response.data['jsessionid'];
+        String? token = response.data['issuedToken']['accessToken'];
         String? companyCode = loginModel.companyCode.toString();
-        String? username = loginModel.username.toString();
-        String? password = loginModel.password.toString();
-        if (jsessionid != null) {
-          await _storage.delete(key: 'jsessionid');
+        if (token != null) {
+          await _storage.delete(key: 'token');
           await _storage.delete(key: 'companyCode');
-          await _storage.delete(key: 'username');
-          await _storage.delete(key: 'password');
-          await _storage.write(key: 'jsessionid', value: jsessionid);
+          await _storage.write(key: 'token', value: token);
           await _storage.write(key: 'companyCode', value: companyCode);
-          await _storage.write(key: 'username', value: username);
-          await _storage.write(key: 'password', value: password);
-          return {'success': true, 'jsessionid': jsessionid};
+          return {'success': true};
         } else {
           return {'success': false, 'message': '로그인에 실패하였습니다.'};
         }
@@ -80,10 +69,8 @@ class UserService {
     );
 
     if (response.statusCode == 200) {
-      await _storage.delete(key: 'jsessionid');
+      await _storage.delete(key: 'token');
       await _storage.delete(key: 'companyCode');
-      await _storage.delete(key: 'username');
-      await _storage.delete(key: 'password');
     }
   }
 
@@ -98,7 +85,11 @@ class UserService {
         if (response.data['authenticated'] == true) {
           return {'success': true};
         } else {
-          return {'success': false, 'message': 'pin 번호를 다시 입력해 주세요.'};
+          return {
+            'success': false,
+            'message': 'pin 번호를 다시 입력해 주세요.',
+            'fail_count': response.data['fail_count'],
+          };
         }
       } else {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
@@ -108,6 +99,7 @@ class UserService {
         'success': false,
         'statusCode': e.response?.statusCode,
         'message': e.response?.data['message'],
+        'errorCode': e.response?.data['error_code'],
       };
     }
   }
@@ -120,7 +112,6 @@ class UserService {
         data: pinChangeModel.toJson(),
       );
       if (response.statusCode == 200) {
-        logout();
         return {'success': true};
       } else {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};

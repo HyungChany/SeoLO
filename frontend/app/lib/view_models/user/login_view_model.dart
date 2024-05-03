@@ -5,15 +5,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final UserService _userService = UserService();
-  final _storage = FlutterSecureStorage();
 
   LoginModel _loginData = LoginModel(
       username: '', password: '', companyCode: '');
   bool _isFocused = false;
   bool _isLoading = false;
   String? _errorMessage;
-  String? _jsessionid;
-  String? loginUserName = '';
+
   String get userName => _loginData.username;
 
   String get password => _loginData.password;
@@ -25,8 +23,6 @@ class LoginViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   String? get errorMessage => _errorMessage;
-
-  String? get jsessionid => _jsessionid;
 
   void setUsername(String value) {
     _loginData = LoginModel(username: value,
@@ -59,21 +55,12 @@ class LoginViewModel extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-    loginUserName = await _storage.read(key: 'username');
-    if (loginUserName != null) {
-      _loginData = LoginModel(
-          username: loginUserName!,
-          password: (await _storage.read(key: 'password'))!,
-          companyCode: (await _storage.read(key: 'companyCode'))!);
-    }
     final result = await _userService.login(_loginData);
     _isLoading = false;
 
     if (!result['success']) {
-      _jsessionid = null;
       _errorMessage = result['message'];
     } else {
-      _jsessionid = result['jsessionid'];
       _errorMessage = null;
     }
     notifyListeners();

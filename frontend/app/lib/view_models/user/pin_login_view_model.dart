@@ -8,10 +8,14 @@ class PinLoginViewModel extends ChangeNotifier {
   PinLoginModel _pinLoginData = PinLoginModel(pin: '');
   bool _isLoading = false;
   String? _errorMessage;
+  int? _failCount;
+  String? _errorCode;
 
   String get pin  => _pinLoginData.pin;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
+  int? get failCount => _failCount;
+  String? get errorCode => _errorCode;
 
   void setPin(String value) {
     _pinLoginData = PinLoginModel(pin: value);
@@ -27,8 +31,9 @@ class PinLoginViewModel extends ChangeNotifier {
     _isLoading = false;
 
     if (!result['success']) {
-      debugPrint('실패했을 때 메시지 : ${result['message']}');
       _errorMessage = result['message'];
+      _failCount = result['fail_count'];
+      _errorCode = result['errorCode'];
     } else {
       _errorMessage = null;
     }
