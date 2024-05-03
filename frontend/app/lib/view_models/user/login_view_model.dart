@@ -66,9 +66,6 @@ class LoginViewModel extends ChangeNotifier {
           password: (await _storage.read(key: 'password'))!,
           companyCode: (await _storage.read(key: 'companyCode'))!);
     }
-    debugPrint('service username: ${_loginData.username}');
-    debugPrint('service password: ${_loginData.password}');
-    debugPrint('service companyCode: ${_loginData.companyCode}');
     final result = await _userService.login(_loginData);
     _isLoading = false;
 

@@ -1,5 +1,6 @@
 import 'package:app/view_models/user/login_view_model.dart';
 import 'package:app/widgets/button/common_text_button.dart';
+import 'package:app/widgets/dialog/dialog.dart';
 import 'package:app/widgets/inputbox/common_smallinputbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -62,11 +63,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   if (viewModel.errorMessage == null) {
                     Navigator.pushReplacementNamed(context, '/main');
                   } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(viewModel.errorMessage!),
-                      ),
-                    );
+                    showDialog(
+                        context: context,
+                        barrierDismissible: true,
+                        builder: (BuildContext context) {
+                          return CommonDialog(
+                            content: viewModel.errorMessage!,
+                            buttonText: '확인',
+                          );
+                        });
                   }
                 });
               }

@@ -54,7 +54,7 @@ class UserService {
           await _storage.write(key: 'password', value: password);
           return {'success': true, 'jsessionid': jsessionid};
         } else {
-          return {'success': false};
+          return {'success': false, 'message': '로그인에 실패하였습니다.'};
         }
       } else {
         return {
@@ -64,11 +64,11 @@ class UserService {
         };
       }
     } on Dio.DioException catch (e) {
-      debugPrint(e.message);
+      // debugPrint(e.message);
       return {
         'success': false,
         'statusCode': e.response?.statusCode,
-        'message': '무언가 잘못 되었습니다.'
+        'message': e.response?.data['message'],
       };
     }
   }
@@ -104,11 +104,10 @@ class UserService {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
       }
     } on Dio.DioException catch (e) {
-      debugPrint(e.message);
       return {
         'success': false,
         'statusCode': e.response?.statusCode,
-        'message': '오류'
+        'message': e.response?.data['message'],
       };
     }
   }
@@ -127,11 +126,10 @@ class UserService {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
       }
     } on Dio.DioException catch (e) {
-      debugPrint(e.message);
       return {
         'success': false,
         'statusCode': e.response?.statusCode,
-        'message': '오류'
+        'message': e.response?.data['message'],
       };
     }
   }
@@ -151,11 +149,10 @@ class UserService {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
       }
     } on Dio.DioException catch (e) {
-      debugPrint(e.message);
       return {
         'success': false,
         'statusCode': e.response?.statusCode,
-        'message': '오류'
+        'message': e.response?.data['message'],
       };
     }
   }
@@ -179,11 +176,11 @@ class UserService {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
       }
     } on Dio.DioException catch (e) {
-      debugPrint(e.message);
+      debugPrint(e.response?.data['message']);
       return {
         'success': false,
         'statusCode': e.response?.statusCode,
-        'message': '오류'
+        'message': e.response?.data['message'],
       };
     }
   }
