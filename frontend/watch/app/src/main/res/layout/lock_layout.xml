@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Lock"
-        android:textColor="@android:color/white"
+        android:textColor="@color/SNOW"
         android:textSize="30sp"
         app:layout_constraintLeft_toLeftOf="@id/imageViewLock"
         app:layout_constraintRight_toRightOf="@id/imageViewLock"

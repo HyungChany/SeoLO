@@ -3,7 +3,7 @@ package com.seolo.seolo.presentation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.seolo.seolo.R
-import com.seolo.seolo.adapters.LocationAdapter
+import com.seolo.seolo.adapters.WheelPickerAdapter
 import sh.tyy.wheelpicker.core.WheelPickerRecyclerView
 
 class LocationActivity : AppCompatActivity() {
@@ -12,11 +12,11 @@ class LocationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
 
-        setContentView(R.layout.location_layout)
+        setContentView(R.layout.basic_wheel_picker_layout)
 
 
         val locationPicker = findViewById<WheelPickerRecyclerView>(R.id.location_view)
-        val locationAdapter = LocationAdapter(locations)
+        val locationAdapter = WheelPickerAdapter(locations)
         locationPicker.adapter = locationAdapter
 
         locationPicker.post {
