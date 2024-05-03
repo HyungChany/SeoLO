@@ -1,12 +1,12 @@
 import 'package:app/main.dart';
-import 'package:app/view_models/user/user_view_model.dart';
+import 'package:app/view_models/user/logout_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LogoutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final viewModel = Provider.of<UserViewModel>(context);
+    final viewModel = Provider.of<LogoutViewModel>(context);
     return InkWell(
       onTap: () {
         viewModel.logout().then((_) {

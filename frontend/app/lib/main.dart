@@ -1,15 +1,15 @@
 import 'package:app/routes/main_route.dart';
 import 'package:app/screens/login/login_screen.dart';
-import 'package:app/screens/test_screen.dart';
 import 'package:app/view_models/main/news_view_model.dart';
 import 'package:app/view_models/user/login_view_model.dart';
 import 'package:app/view_models/user/pin_change_view_model.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
-import 'package:app/view_models/user/user_view_model.dart';
+import 'package:app/view_models/user/logout_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
 // main.dart import 후 color: blue100 이러한 방식으로 사용
 // 참고로 color: blue100하고 tab 누르면 알아서 import 됨
 const Color blue100 = Color.fromRGBO(135, 185, 231, 1);
@@ -41,24 +41,23 @@ void main() async {
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
-  _MyAppState createState()=> _MyAppState();
+
+  _MyAppState createState() => _MyAppState();
 }
-class _MyAppState extends State<MyApp>{
 
-
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-
         providers: [
           ChangeNotifierProvider(create: (_) => NewsViewModel()),
           ChangeNotifierProvider(create: (_) => LoginViewModel()),
-          ChangeNotifierProvider(create: (_) => UserViewModel()),
+          ChangeNotifierProvider(create: (_) => LogoutViewModel()),
           ChangeNotifierProvider(create: (_) => PinLoginViewModel()),
           ChangeNotifierProvider(create: (_) => PinChangeViewModel()),
         ],
         child: MaterialApp(
-          localizationsDelegates:  [
+          localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],

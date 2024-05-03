@@ -16,27 +16,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(title: '프로필', back: false),
+      appBar: const Header(title: '프로필', back: false),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              child: Row(
-                children: [MyInfo(), LogoutButton()],
-              ),
+            child: Row(
+              children: [const MyInfo(), LogoutButton()],
             ),
           ),
-          Divider(
+          const Divider(
             color: Colors.grey,
             thickness: 1.0,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
+          const Padding(
+            padding: EdgeInsets.only(left: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -50,12 +48,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
-          Divider(color: Colors.grey, thickness: 1.0,),
-          Padding(
-            padding: const EdgeInsets.only(left: 20.0),
+          const Divider(color: Colors.grey, thickness: 1.0,),
+          const Padding(
+            padding: EdgeInsets.only(left: 20.0),
             child: Text('나의 LOTO', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
           ),
-          CommonCard(facility: '검사', machine: '장비sssssssssssssssssssssssssssssssssssssss', start: '24.04.24 11:30', end: '24.04.24 11:30'),
+          const CommonCard(facility: '검사', machine: '장비sssssssssssssssssssssssssssssssssssssss', start: '24.04.24 11:30', end: '24.04.24 11:30'),
         ],
       ),
     );

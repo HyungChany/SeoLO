@@ -1,4 +1,5 @@
 import 'package:app/models/user/login_model.dart';
+import 'package:app/models/user/my_info_model.dart';
 import 'package:app/models/user/pin_change_model.dart';
 import 'package:app/models/user/pin_login_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -120,6 +121,28 @@ class UserService {
       );
       if (response.statusCode == 200) {
         logout();
+        return {'success': true};
+      } else {
+        return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
+      }
+    } on Dio.DioException catch (e) {
+      debugPrint(e.message);
+      return {
+        'success': false,
+        'statusCode': e.response?.statusCode,
+        'message': '오류'
+      };
+    }
+  }
+
+  ///////////////////////// 나의 정보 //////////////////////////////////
+  Future<Map<String, dynamic>> myInfo(MyInfoModel myInfoModel) async {
+    try {
+      Dio.Response response = await _dio.get(
+        '$baseUrl/users/profile',
+      );
+      if (response.statusCode == 200) {
+        debugPrint('${response.data['employee']['employeeName']}');
         return {'success': true};
       } else {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
