@@ -40,6 +40,9 @@ public class DaoCompanyCodeProvider implements AuthenticationProvider {
             if (!appUser.isMatchingCompanyCode(inputCompanyCode)) {
                 throw new AuthException(AuthErrorCode.NOT_EQUAL_COMPNAY_CODE);
             }
+            if (appUser.isLocked()) {
+                throw new AuthException(AuthErrorCode.TOO_MANY_TRY_WRONG_LOGIN);
+            }
 
             if (passwordEncoder.matches(inputPassword, appUser.getPassword())) {
                 DaoCompanycodeToken authenticatedDaoCCToken = new DaoCompanycodeToken(

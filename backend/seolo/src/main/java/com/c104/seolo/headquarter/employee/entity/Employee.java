@@ -54,6 +54,10 @@ public class Employee extends BaseEntity {
         return employeeBirthday.format(DateTimeFormatter.ofPattern("MMdd"));
     }
 
+    public String getCompanycode() {
+        return this.company.getCompanyCode();
+    }
+
     public boolean isMatchingCompanyCode(String companyCode) {
         return this.getCompany().isMatchingCompanyCode(companyCode);
     }

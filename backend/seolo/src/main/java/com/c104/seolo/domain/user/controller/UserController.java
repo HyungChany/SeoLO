@@ -1,20 +1,22 @@
 package com.c104.seolo.domain.user.controller;
 
 import com.c104.seolo.domain.user.dto.request.UserJoinRequest;
+import com.c104.seolo.domain.user.dto.request.UserLoginRequest;
 import com.c104.seolo.domain.user.dto.request.UserPwdResetRequest;
 import com.c104.seolo.domain.user.dto.response.UserInfoResponse;
 import com.c104.seolo.domain.user.dto.response.UserJoinResponse;
+import com.c104.seolo.domain.user.dto.response.UserLoginResponse;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.domain.user.service.UserService;
 import com.c104.seolo.global.security.dto.request.PINLoginRequest;
 import com.c104.seolo.global.security.dto.request.PINResetRequest;
+import com.c104.seolo.global.security.dto.response.JwtLoginSuccessResponse;
 import com.c104.seolo.global.security.dto.response.PINLoginResponse;
+import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
 import com.c104.seolo.global.security.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -37,28 +39,39 @@ public class UserController {
         return userService.registUser(userJoinRequest);
     }
 
+    // JWT 토큰 전용 로그인
+    @PostMapping("/login")
+    public JwtLoginSuccessResponse userLogin(@Valid @RequestBody UserLoginRequest userLoginRequest) {
+        return authService.userLogin(userLoginRequest);
+    }
+
+    @PostMapping("/logout")
+    public void userLogout(@AuthenticationPrincipal CCodePrincipal cCodePrincipal) {
+        authService.userLogout(cCodePrincipal);
+    }
+
 //    @Secured("ROLE_MANAGER")
     @GetMapping("/users/profile")
-    public UserInfoResponse getUserInfo(@AuthenticationPrincipal AppUser user) {
+    public UserInfoResponse getUserInfo(@AuthenticationPrincipal CCodePrincipal cCodePrincipal) {
         log.debug("현재 로그인 유저의 authentication : {}", SecurityContextHolder.getContext().getAuthentication());
-        return userService.getUserInfo(user);
+        return userService.getUserInfo(cCodePrincipal);
     }
 
     @PatchMapping("/users/pwd")
-    public void changeUserPwd(@AuthenticationPrincipal AppUser user, @Valid @RequestBody UserPwdResetRequest userPwdResetRequest) {
+    public void changeUserPwd(@AuthenticationPrincipal CCodePrincipal cCodePrincipal, @Valid @RequestBody UserPwdResetRequest userPwdResetRequest) {
         log.debug("{}",userPwdResetRequest.getNewPassword());
         log.debug("{}", userPwdResetRequest.getCheckNewPassword());
-        userService.resetUserPassword(user, userPwdResetRequest);
+        userService.resetUserPassword(cCodePrincipal, userPwdResetRequest);
     }
 
     @PostMapping("/users/pin")
-    public PINLoginResponse authPin(@AuthenticationPrincipal AppUser appUser, @Valid @RequestBody PINLoginRequest pinLoginRequest) {
-        return authService.pinLogin(appUser, pinLoginRequest);
+    public PINLoginResponse authPin(@AuthenticationPrincipal CCodePrincipal cCodePrincipal, @Valid @RequestBody PINLoginRequest pinLoginRequest) {
+        return authService.pinLogin(cCodePrincipal, pinLoginRequest);
     }
 
     @PatchMapping("/users/pin")
-    public String changeUserPin(@AuthenticationPrincipal AppUser appUser, @Valid @RequestBody PINResetRequest pinResetRequest) {
-        authService.resetPin(appUser, pinResetRequest);
+    public String changeUserPin(@AuthenticationPrincipal CCodePrincipal cCodePrincipal, @Valid @RequestBody PINResetRequest pinResetRequest) {
+        authService.resetPin(cCodePrincipal, pinResetRequest);
         return "PIN 변경 성공 로그아웃 시켜주세요";
     }
 

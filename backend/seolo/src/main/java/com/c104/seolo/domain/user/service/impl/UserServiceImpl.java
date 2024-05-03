@@ -12,6 +12,8 @@ import com.c104.seolo.domain.user.service.UserService;
 import com.c104.seolo.global.exception.AuthException;
 import com.c104.seolo.global.exception.CommonException;
 import com.c104.seolo.global.security.exception.AuthErrorCode;
+import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
+import com.c104.seolo.global.security.service.DBUserDetailService;
 import com.c104.seolo.headquarter.employee.entity.Employee;
 import com.c104.seolo.headquarter.employee.repository.EmployeeRepository;
 import jakarta.transaction.Transactional;
@@ -26,12 +28,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
+    private final DBUserDetailService dbUserDetailService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, EmployeeRepository employeeRepository, PasswordEncoder passwordEncoder, DBUserDetailService dbUserDetailService) {
         this.userRepository = userRepository;
         this.employeeRepository = employeeRepository;
         this.passwordEncoder = passwordEncoder;
+        this.dbUserDetailService = dbUserDetailService;
     }
 
 
@@ -68,7 +72,9 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserInfoResponse getUserInfo(AppUser appUser) {
+    public UserInfoResponse getUserInfo(CCodePrincipal cCodePrincipal) {
+        AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
+
         UserInfoResponse res = UserInfoResponse.builder()
                 .id(appUser.getId())
                 .employee(appUser.getEmployee())
@@ -83,12 +89,11 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void resetUserPassword(AppUser appUser ,UserPwdResetRequest userPwdResetRequest) {
+    public void resetUserPassword(CCodePrincipal cCodePrincipal ,UserPwdResetRequest userPwdResetRequest) {
         String newPassword = userPwdResetRequest.getNewPassword();
 
         // 1. 유저ID를 받아서 해당 튜플을 찾는다.
-        AppUser user = userRepository.findById(appUser.getId())
-                .orElseThrow(() -> new AuthException(AuthErrorCode.NOT_EXIST_APPUSER));
+        AppUser user = dbUserDetailService.loadUserById(cCodePrincipal.getId());
 
         // 2. 새로 설정하려는 비밀번호와 체크용 비밀번호 확인 값이 일치하는지 비교한다.
         if (!newPassword.equals(userPwdResetRequest.getCheckNewPassword())) {
