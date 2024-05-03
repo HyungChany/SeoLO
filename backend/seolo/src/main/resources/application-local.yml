@@ -33,7 +33,6 @@ spring:
       host: k10c104.p.ssafy.io
       port: ${common.redis.session-store.port}
 
-
 logging:
   level:
     org.springframework.web : DEBUG
