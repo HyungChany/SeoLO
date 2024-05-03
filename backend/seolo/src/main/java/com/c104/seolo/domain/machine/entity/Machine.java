@@ -24,7 +24,7 @@ public class Machine extends BaseEntity {
     @Id
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "facility_id", nullable = false)
     private Facility facility;
 

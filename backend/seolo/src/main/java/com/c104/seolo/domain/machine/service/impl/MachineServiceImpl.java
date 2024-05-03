@@ -221,6 +221,12 @@ public class MachineServiceImpl implements MachineService {
         if (!machine.getFacility().getCompany().getCompanyCode().equals(companyCode)) {
             throw new CommonException(MachineErrorCode.NOT_COMPANY_MACHINE);
         }
+
+        MachineManager mainManager = machineManagerRepository.findMachineManagerByMachineIdAndRole(machineId, Role.Main);
+        MachineManager subManager = machineManagerRepository.findMachineManagerByMachineIdAndRole(machineId, Role.Sub);
+
+        machineManagerRepository.delete(mainManager);
+        machineManagerRepository.delete(subManager);
         machineRepository.delete(machine);
     }
 

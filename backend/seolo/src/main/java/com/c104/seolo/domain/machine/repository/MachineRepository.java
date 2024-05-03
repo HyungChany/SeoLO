@@ -26,4 +26,6 @@ public interface MachineRepository extends JpaRepository<Machine, Long> {
             "WHERE m.id = :machineId " +
             "order by m.id desc limit 1 ")
     Optional<MachineInfo> findInfoById(@Param("machineId") Long machineId);
+
+    List<Machine> findByFacilityId(Long facilityId);
 }
