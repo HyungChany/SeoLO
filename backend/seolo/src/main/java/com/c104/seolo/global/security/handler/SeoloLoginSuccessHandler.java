@@ -39,7 +39,7 @@ public class SeoloLoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         DaoCompanycodeToken authToken = (DaoCompanycodeToken) authentication;
-        
+
         // isLocked 체크
         AppUser user = userRepository.findAppUserByEmployeeNum(authToken.getName())
                 .orElseThrow(() -> new AuthException(AuthErrorCode.NOT_EXIST_APPUSER));
@@ -47,21 +47,21 @@ public class SeoloLoginSuccessHandler implements AuthenticationSuccessHandler {
             throw new AuthException(AuthErrorCode.TOO_MANY_TRY_WRONG_LOGIN);
         }
 
-
         log.debug("인증성공객체 successHandler 진입 : {}", authToken);
         log.debug("인증성공객체 successHandler 진입 : {}", authentication);
 
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        log.debug("context 정보 1: {}", context);
+//        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        SecurityContext context = SecurityContextHolder.getContext();
+        log.info("context 정보 1: {}", context);
         context.setAuthentication(authToken);
-        log.debug("context 정보 2: {}", context);
+        log.info("context 정보 2: {}", context);
         SecurityContextHolder.setContext(context);
         securityContextRepository.saveContext(context, request, response);
 
         LoginSuccessResponse res = LoginSuccessResponse.builder()
                 .username(authToken.getName())
                 .companyCode(authToken.getCompanyCode())
-                .JSESSIONID(request.getSession(true).getId())
+                .JSESSIONID(request.getSession(false).getId())
                 .build();
 
         response.setStatus(HttpServletResponse.SC_OK);
@@ -72,4 +72,5 @@ public class SeoloLoginSuccessHandler implements AuthenticationSuccessHandler {
         response.getWriter().flush();
         response.getWriter().close();
     }
+
 }

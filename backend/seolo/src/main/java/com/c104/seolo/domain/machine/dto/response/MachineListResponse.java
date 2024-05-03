@@ -15,5 +15,5 @@ import java.util.Optional;
 @ToString
 @Getter
 public class MachineListResponse {
-    Optional<List<MachineListDto>> machines;
+    private Optional<List<MachineListDto>> machines;
 }

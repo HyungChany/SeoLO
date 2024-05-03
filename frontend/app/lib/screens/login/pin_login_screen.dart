@@ -1,21 +1,29 @@
 import 'package:app/main.dart';
+import 'package:app/view_models/user/pin_login_view_model.dart';
+import 'package:app/widgets/dialog/dialog.dart';
 import 'package:app/widgets/lock/key_board_key.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 
-class LockScreen extends StatefulWidget {
+class PinLoginScreen extends StatefulWidget {
+  const PinLoginScreen({super.key});
+
   @override
-  _LockScreenState createState() => _LockScreenState();
+  _PinLoginScreenState createState() => _PinLoginScreenState();
 }
 
-class _LockScreenState extends State<LockScreen> {
+class _PinLoginScreenState extends State<PinLoginScreen> {
+  final _storage = FlutterSecureStorage();
   String pin = '';
   String content = '';
+  int failCount = 0;
 
   @override
   void initState() {
     super.initState();
     pin = '';
-    content = '암호를 입력해주세요.';
+    content = '암호를 입력해 주세요.';
   }
 
   final keys = [
@@ -26,20 +34,61 @@ class _LockScreenState extends State<LockScreen> {
   ];
 
   onNumberPress(val) {
+    final viewModel = Provider.of<PinLoginViewModel>(context, listen: false);
     setState(() {
       pin = pin + val;
+      viewModel.setPin(pin);
     });
 
-    // debugPrint(pin);
-    // pin 길이가 처음으로 4가 되면 content 내용 변경
-    if (pin != '1234' && pin.length == 4) content = '암호를 다시 입력해주세요.';
-    // pin이 1234면 뒤로가기
-    // pin 길이가 4인데 1234가 아니면 pin 초기화
-    pin == '1234'
-        ? Navigator.pop(context)
-        : pin.length == 4
-            ? pin = ''
+    if (pin.length == 4) {
+      if (viewModel.errorCode == 'AH07') {
+        viewModel.errorCode == 'AH07'
+            ? showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return CommonDialog(
+                    content: viewModel.errorMessage!,
+                    buttonText: '확인',
+                    buttonClick: () {
+                      _storage.deleteAll();
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/login', (route) => false);
+                    },
+                  );
+                })
             : null;
+      } else {
+        if (!viewModel.isLoading) {
+          viewModel.pinLogin().then((_) {
+            if (viewModel.errorMessage == null) {
+              Navigator.pushReplacementNamed(context, '/main');
+              setState(() {
+                pin = '';
+                failCount = 0;
+              });
+            } else {
+              setState(() {
+                pin = '';
+                failCount += 1;
+                content = '${viewModel.errorMessage!} ($failCount/5)';
+              });
+              failCount == 3
+                  ? showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return const CommonDialog(
+                          content: 'pin 번호를 5번 틀릴 시 계정이 잠깁니다.',
+                          buttonText: '확인',
+                        );
+                      })
+                  : null;
+            }
+          });
+        }
+      }
+    }
   }
 
   onBackspacePress(val) {

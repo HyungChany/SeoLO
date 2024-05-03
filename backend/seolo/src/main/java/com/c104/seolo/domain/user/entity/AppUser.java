@@ -124,6 +124,10 @@ public class AppUser extends BaseEntity implements UserDetails {
         return true;
     }
 
+    public String getCompanyCode() {
+        return this.employee.getCompanycode();
+    }
+
     public boolean isMatchingCompanyCode(String companyCode) {
         return this.employee.isMatchingCompanyCode(companyCode);
     }

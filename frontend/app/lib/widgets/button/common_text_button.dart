@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../main.dart';
+import '../../main.dart';
 
 class CommonTextButton extends StatelessWidget {
   final String text; // 버튼 내용

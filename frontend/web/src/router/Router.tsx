@@ -55,6 +55,10 @@ const informationRoute = [
     path: '/employee',
     element: <PrivateRoute>{With(<Employee />)}</PrivateRoute>,
   },
+  // {
+  //   path: '/checklist',
+  //   element: With(<CheckListPage />),
+  // },
 ];
 const exampleRoute = { path: '/example', element: <Example /> };
 

@@ -1,6 +1,5 @@
 package com.c104.seolo.domain.machine.entity;
 
-import com.c104.seolo.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,5 +28,7 @@ public class MachineSubcategory {
         this.subcategory = subcategory;
     }
 
-    public MachineSubcategory(String subcategory) {}
+    public MachineSubcategory() {
+
+    }
 }

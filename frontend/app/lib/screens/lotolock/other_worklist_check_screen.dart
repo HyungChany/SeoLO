@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
-import 'package:app/widgets/common_text_button.dart';
+import 'package:app/widgets/button/common_text_button.dart';
 import 'package:app/main.dart';
 
 class OtherWorkListCheckScreen extends StatefulWidget {
