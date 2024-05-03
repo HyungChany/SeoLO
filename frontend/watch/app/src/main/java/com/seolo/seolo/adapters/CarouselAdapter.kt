@@ -1,10 +1,11 @@
 package com.seolo.seolo.adapters
 
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class CarouselStateAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+class CarouselStateAdapter(fragmentActivity: FragmentActivity) :
+    FragmentStateAdapter(fragmentActivity) {
     private val fragments: MutableList<Fragment> = mutableListOf()
 
     fun addFragment(fragment: Fragment) {
@@ -19,4 +20,3 @@ class CarouselStateAdapter(fragmentActivity: FragmentActivity) : FragmentStateAd
         return fragments.size
     }
 }
-

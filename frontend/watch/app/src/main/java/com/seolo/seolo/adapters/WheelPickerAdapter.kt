@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.seolo.seolo.R
 
-class WheelPickerAdapter(private val locations: List<String>) :
+class WheelPickerAdapter(private val selects: List<String>) :
     RecyclerView.Adapter<WheelPickerAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val textView: TextView = view.findViewById(android.R.id.text1) as TextView
@@ -27,9 +27,9 @@ class WheelPickerAdapter(private val locations: List<String>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = locations[position]
+        holder.textView.text = selects[position].toString()
         holder.textView.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.SNOW))
     }
 
-    override fun getItemCount() = locations.size
+    override fun getItemCount() = selects.size
 }

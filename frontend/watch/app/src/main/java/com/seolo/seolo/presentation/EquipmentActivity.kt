@@ -15,13 +15,13 @@ class EquipmentActivity : AppCompatActivity() {
         setContentView(R.layout.basic_wheel_picker_layout)
 
 
-        val locationPicker = findViewById<WheelPickerRecyclerView>(R.id.basic_wheel_picker_view)
-        val locationAdapter = WheelPickerAdapter(equipments)
-        locationPicker.adapter = locationAdapter
+        val equipmentPicker = findViewById<WheelPickerRecyclerView>(R.id.basic_wheel_picker_view)
+        val equipmentAdapter = WheelPickerAdapter(equipments)
+        equipmentPicker.adapter = equipmentAdapter
 
-        locationPicker.post {
+        equipmentPicker.post {
             val middlePosition = equipments.size / 2
-            locationPicker.layoutManager?.scrollToPosition(middlePosition)
+            equipmentPicker.layoutManager?.scrollToPosition(middlePosition)
         }
     }
 }
