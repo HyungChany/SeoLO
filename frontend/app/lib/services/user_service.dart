@@ -145,7 +145,6 @@ class UserService {
         MyInfoModel myInfoModel =
             MyInfoModel.fromJson(response.data['employee']);
 
-        debugPrint('${response.data['employee']['employeeName']}');
         return {'success': true, 'myInfo': myInfoModel};
       } else {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};

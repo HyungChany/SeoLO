@@ -1,3 +1,4 @@
+import 'package:app/screens/loading/loading_screen.dart';
 import 'package:app/screens/login/login_screen.dart';
 import 'package:app/screens/login/pin_login_screen.dart';
 import 'package:app/screens/main/main_screen.dart';
@@ -57,6 +58,8 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
           builder: (context) => OtherWorkListCheckScreen());
     case '/login':
       return MaterialPageRoute(builder: (context) => LoginScreen());
+    case '/loading':
+      return MaterialPageRoute(builder: (context) => LoadingScreen());
     default:
       debugPrint('Route Error');
       return MaterialPageRoute(builder: (context) => const TestScreen());
