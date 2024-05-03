@@ -9,8 +9,8 @@ public class Context {
         this.codeState = new INIT(); // 초기상태설정
     }
 
-    public void setState(CodeState codeState) {
-        this.codeState = codeState;
+    public void setState(CodeState newState) {
+        this.codeState = newState;
     }
 
     public void request() {
