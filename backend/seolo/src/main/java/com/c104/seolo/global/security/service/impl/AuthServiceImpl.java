@@ -1,36 +1,95 @@
 package com.c104.seolo.global.security.service.impl;
 
+import com.c104.seolo.domain.user.dto.request.UserLoginRequest;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.domain.user.repository.UserRepository;
 import com.c104.seolo.global.exception.AuthException;
 import com.c104.seolo.global.security.dto.request.PINLoginRequest;
 import com.c104.seolo.global.security.dto.request.PINResetRequest;
-import com.c104.seolo.global.security.dto.response.PINLoginResponse;
+import com.c104.seolo.global.security.dto.response.JwtLoginSuccessResponse;
 import com.c104.seolo.global.security.dto.response.PINLoginFailureResponse;
+import com.c104.seolo.global.security.dto.response.PINLoginResponse;
+import com.c104.seolo.global.security.entity.DaoCompanycodeToken;
 import com.c104.seolo.global.security.exception.AuthErrorCode;
+import com.c104.seolo.global.security.jwt.dto.response.IssuedToken;
+import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
+import com.c104.seolo.global.security.jwt.service.TokenService;
 import com.c104.seolo.global.security.service.AuthService;
+import com.c104.seolo.global.security.service.DBUserDetailService;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
-    private final UserRepository userRepository;
+    private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
-
+    private final UserRepository userRepository;
+    private final TokenService tokenService;
+    private final DBUserDetailService dbUserDetailService;
 
     @Autowired
-    public AuthServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
+    public AuthServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserRepository userRepository, TokenService tokenService, DBUserDetailService dbUserDetailService) {
+        this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
+        this.tokenService = tokenService;
+        this.dbUserDetailService = dbUserDetailService;
+    }
+
+    @Override
+    public JwtLoginSuccessResponse userLogin(UserLoginRequest userLoginRequest) {
+
+        Authentication authentication = authenticationManager.authenticate(new DaoCompanycodeToken(
+                userLoginRequest.getUsername(),
+                userLoginRequest.getPassword(),
+                userLoginRequest.getCompanyCode()
+        ));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        log.info("로그인 성공 객체정보 : {} ", authentication.toString());
+
+        // JWT토큰 발급
+        IssuedToken issuedToken = tokenService.issueToken(authentication);
+
+        return JwtLoginSuccessResponse.builder()
+                .username(userLoginRequest.getUsername())
+                .companyCode(userLoginRequest.getCompanyCode())
+                .issuedToken(issuedToken)
+                .build();
     }
 
 
+    @Override
+    public void userLogout(CCodePrincipal cCodePrincipal) {
+        // 인증 정보삭제
+//        AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
+
+        // 유효한 access 토큰 블랙리스트에 저장
+        ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = attr.getRequest();
+        String token = request.getHeader("Authorization");
+
+        if (token != null && token.startsWith("Bearer ")) {
+            String accessToken = token.split(" ")[1];
+            tokenService.removeAccessToken(accessToken);
+            log.info("로그아웃으로 인한 access토큰 블랙리스트 추가 : {}", accessToken);
+        }
+
+        SecurityContextHolder.clearContext();
+    }
 
     @Override
-    public PINLoginResponse pinLogin(AppUser appUser, PINLoginRequest pinLoginRequest) {
-        AppUser user = userRepository.findById(appUser.getId())
-                .orElseThrow(() -> new AuthException(AuthErrorCode.NOT_EXIST_APPUSER));
+    public PINLoginResponse pinLogin(CCodePrincipal cCodePrincipal, PINLoginRequest pinLoginRequest) {
+        AppUser user = dbUserDetailService.loadUserById(cCodePrincipal.getId());
 
         if (user.isLocked()) {
             throw new AuthException(AuthErrorCode.TOO_MANY_TRY_WRONG_LOGIN);
@@ -65,10 +124,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void resetPin(AppUser appUser, PINResetRequest pinResetRequest) {
-        AppUser user = userRepository.findById(appUser.getId())
-                .orElseThrow(() -> new AuthException(AuthErrorCode.NOT_EXIST_APPUSER));
-
+    public void resetPin(CCodePrincipal cCodePrincipal, PINResetRequest pinResetRequest) {
+        AppUser user = dbUserDetailService.loadUserById(cCodePrincipal.getId());
         user.changePin(passwordEncoder.encode(pinResetRequest.getNewPin()));
         userRepository.save(user);
     }

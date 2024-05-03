@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class DBUserDetailService implements UserDetailsService {
-
     private final UserRepository userRepository;
 
     @Autowired
@@ -22,6 +21,11 @@ public class DBUserDetailService implements UserDetailsService {
     @Override
     public AppUser loadUserByUsername(String username) throws AuthException {
         return userRepository.findAppUserByEmployeeNum(username)
+                .orElseThrow(() -> new AuthException(AuthErrorCode.NOT_EXIST_APPUSER));
+    }
+
+    public AppUser loadUserById(Long id) throws AuthException {
+        return userRepository.findById(id)
                 .orElseThrow(() -> new AuthException(AuthErrorCode.NOT_EXIST_APPUSER));
     }
 }

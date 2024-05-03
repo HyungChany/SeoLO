@@ -39,6 +39,15 @@ dependencies {
 	implementation 'org.webjars:stomp-websocket:2.3.3-1' // stomp
 	implementation 'org.springframework.boot:spring-boot-starter-websocket' // 스프링에서 제공하는 웹소켓
 	implementation 'org.webjars:sockjs-client:1.1.2'
+
+	// Spring Data Redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// JWT
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
 }
 
 tasks.named('test') {
