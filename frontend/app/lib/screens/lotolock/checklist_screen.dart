@@ -2,7 +2,7 @@ import 'package:app/widgets/checklist/check_list.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/checklist/check_banner.dart';
-import 'package:app/widgets/common_text_button.dart';
+import 'package:app/widgets/button/common_text_button.dart';
 
 // import 'package:app/widgets/checklist/check_list.dart';
 class CheckScreen extends StatefulWidget {

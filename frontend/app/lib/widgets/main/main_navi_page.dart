@@ -1,5 +1,5 @@
 import 'package:app/main.dart';
-import 'package:app/widgets/common_icon_button.dart';
+import 'package:app/widgets/button/common_icon_button.dart';
 import 'package:flutter/material.dart';
 
 class MainNaviPage extends StatefulWidget {

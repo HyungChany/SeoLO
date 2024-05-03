@@ -42,9 +42,10 @@ dependencies:
   flutter_dotenv: ^5.1.0 # .env파일
   carousel_slider: ^4.2.1 # 뉴스 캐러셀
   url_launcher: ^6.2.6 # 뉴스 링크
-  intl: ^0.18.1
-  flutter_localization: ^0.2.0
-  nfc_manager: ^3.4.0
+  intl: ^0.18.1 # 도로록 포맷팅
+  flutter_localization: ^0.2.0 # 도로록 영어 -> 한글
+  nfc_manager: ^3.4.0 # nfc 통신
+  flutter_secure_storage: ^9.0.0
   flutter_secure_storage: ^9.0.0
 
 dev_dependencies:
@@ -94,6 +95,8 @@ flutter:
     - assets/images/etc_icon.png
     - assets/images/clean_icon.png
     - assets/images/loading_icon.png
+    - assets/images/login.png
+    - assets/images/login_logo.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 
