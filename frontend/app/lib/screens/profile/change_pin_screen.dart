@@ -36,19 +36,10 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
     });
 
     if (pin.length == 4) {
-      if (!viewModel.isLoading) {
-        viewModel.pinChange().then((_) {
-          if (viewModel.errorMessage == null) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, '/login', (route) => false);
-          } else {
-            setState(() {
-              pin = '';
-              content = viewModel.errorMessage!;
-            });
-          }
-        });
-      }
+      Navigator.pushNamed(context, '/changePinCheck');
+      setState(() {
+        pin = '';
+      });
     }
   }
 

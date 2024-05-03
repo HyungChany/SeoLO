@@ -1,15 +1,17 @@
 import 'package:app/main.dart';
+import 'package:app/view_models/user/pin_change_view_model.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
+import 'package:app/widgets/dialog/dialog.dart';
 import 'package:app/widgets/lock/key_board_key.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CheckPinScreen extends StatefulWidget {
+class ChangePinCheckScreen extends StatefulWidget {
   @override
-  _CheckPinScreenState createState() => _CheckPinScreenState();
+  _ChangePinCheckScreenState createState() => _ChangePinCheckScreenState();
 }
 
-class _CheckPinScreenState extends State<CheckPinScreen> {
+class _ChangePinCheckScreenState extends State<ChangePinCheckScreen> {
   String pin = '';
   String content = '';
 
@@ -17,7 +19,7 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
   void initState() {
     super.initState();
     pin = '';
-    content = '기존 암호를 입력해 주세요.';
+    content = '새로운 암호를 한 번 더 입력해 주세요.';
   }
 
   final keys = [
@@ -28,27 +30,43 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
   ];
 
   onNumberPress(val) {
-    final viewModel = Provider.of<PinLoginViewModel>(context, listen: false);
+    final viewModel = Provider.of<PinChangeViewModel>(context, listen: false);
     setState(() {
       pin = pin + val;
-      viewModel.setPin(pin);
+      viewModel.setCheckNewPin(pin);
     });
 
     if (pin.length == 4) {
-      if (!viewModel.isLoading) {
-        viewModel.pinLogin().then((_) {
-          if (viewModel.errorMessage == null) {
-            Navigator.pushReplacementNamed(context, '/changePin');
-            setState(() {
-              pin = '';
-            });
-          } else {
-            setState(() {
-              pin = '';
-              content = viewModel.errorMessage!;
-            });
-          }
+      if (viewModel.newPin != viewModel.checkNewPin) {
+        setState(() {
+          pin = '';
+          content = 'pin 번호가 일치하지 않습니다.';
         });
+      } else {
+        if (!viewModel.isLoading) {
+          viewModel.pinChange().then((_) {
+            if (viewModel.errorMessage == null) {
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return CommonDialog(
+                      content: 'pin 번호 변경이 완료되었습니다.',
+                      buttonText: '확인',
+                      buttonClick: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/main', (route) => false);
+                      },
+                    );
+                  });
+            } else {
+              setState(() {
+                pin = '';
+                content = viewModel.errorMessage!;
+              });
+            }
+          });
+        }
       }
     }
   }
@@ -63,26 +81,26 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
     return keys
         .map(
           (x) => Container(
-            color: blue100.withOpacity(0.5),
-            child: Row(
-              children: x.map((y) {
-                return Expanded(
-                  child: KeyboardKey(
-                    label: y,
-                    onTap: y is Widget ? onBackspacePress : onNumberPress,
-                    value: y,
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        )
+        color: blue100.withOpacity(0.5),
+        child: Row(
+          children: x.map((y) {
+            return Expanded(
+              child: KeyboardKey(
+                label: y,
+                onTap: y is Widget ? onBackspacePress : onNumberPress,
+                value: y,
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    )
         .toList();
   }
 
   renderText() {
     TextStyle styleTitle =
-        TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
+    TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
 
     TextStyle styleContent = TextStyle(
         fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black);

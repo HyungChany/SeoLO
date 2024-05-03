@@ -1,15 +1,11 @@
 class PinChangeModel {
   final String newPin;
+  final String checkNewPin;
 
   PinChangeModel({
     required this.newPin,
+    required this.checkNewPin
   });
-
-  factory PinChangeModel.fromJson(Map<String, dynamic> json) {
-    return PinChangeModel(
-      newPin: json['new_pin'],
-    );
-  }
 
   Map<String, dynamic> toJson() => {
     'new_pin': newPin,
