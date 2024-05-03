@@ -69,5 +69,4 @@ dependencies {
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
-
 }
