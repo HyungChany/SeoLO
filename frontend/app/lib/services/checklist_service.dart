@@ -2,7 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
-import 'package:app/models/main/checklist_model.dart';
+import 'package:app/models/checklist/checklist_model.dart';
 class UserService {
   final _dio = Dio.Dio();
   final _storage = FlutterSecureStorage();
@@ -22,7 +22,6 @@ class UserService {
     ));
     _dio.interceptors.add(LoggingInterceptor());
   }
-
   ///////////////////////// checklist //////////////////////////////////
   Future<Map<String, dynamic>> checkList(ChecklistModel checkListModel) async {
     try {

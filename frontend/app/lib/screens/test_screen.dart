@@ -19,7 +19,7 @@ class _TestScreenState extends State<TestScreen> {
     });
 
     if (index == 0) { // 'Home' 탭이 선택될 때
-      Navigator.pushNamed(context, '/dayselect');
+      Navigator.pushNamed(context, '/checklist');
     }
     if (index == 1) {
       Navigator.pushNamed(context, '/otherworklistcheck');
