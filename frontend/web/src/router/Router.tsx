@@ -7,6 +7,8 @@ import Navigation from '@/components/navigation/Navigation.tsx';
 import LoginPage from '@/pages/LoginPage.tsx';
 import MainPage from '@/pages/MainPage.tsx';
 import CurrentLOTO from '@/pages/CurrentLOTO.tsx';
+import Equipment from '@/pages/Equipment.tsx';
+import Employee from '@/pages/Employee.tsx';
 // import CheckListPage from '@/pages/CheckListPage.tsx';
 
 const Container = styled.div`
@@ -39,6 +41,14 @@ const informationRoute = [
   {
     path: '/currentloto',
     element: With(<CurrentLOTO />),
+  },
+  {
+    path: '/equipment',
+    element: With(<Equipment />),
+  },
+  {
+    path: '/employee',
+    element: With(<Employee />),
   },
   // {
   //   path: '/checklist',

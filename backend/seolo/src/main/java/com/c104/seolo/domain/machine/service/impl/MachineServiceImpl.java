@@ -5,6 +5,7 @@ import com.c104.seolo.domain.facility.exception.FacilityErrorCode;
 import com.c104.seolo.domain.facility.repository.FacilityRepository;
 import com.c104.seolo.domain.machine.dto.MachineDto;
 import com.c104.seolo.domain.machine.dto.MachineListDto;
+import com.c104.seolo.domain.machine.dto.MachineSpaceDto;
 import com.c104.seolo.domain.machine.dto.info.MachineInfo;
 import com.c104.seolo.domain.machine.dto.info.MachineListInfo;
 import com.c104.seolo.domain.machine.dto.info.MachineManagerInfo;
@@ -18,6 +19,8 @@ import com.c104.seolo.domain.machine.exception.MachineErrorCode;
 import com.c104.seolo.domain.machine.repository.MachineManagerRepository;
 import com.c104.seolo.domain.machine.repository.MachineRepository;
 import com.c104.seolo.domain.machine.service.MachineService;
+import com.c104.seolo.domain.user.entity.AppUser;
+import com.c104.seolo.domain.user.exception.UserErrorCode;
 import com.c104.seolo.domain.user.repository.UserRepository;
 import com.c104.seolo.global.exception.CommonException;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +43,7 @@ public class MachineServiceImpl implements MachineService {
 
     @Override
     public MachineDto findMachineByMachineId(String companyCode, Long machineId) {
-        Optional<MachineInfo> machineOptional = machineRepository.findById(machineId).stream().findFirst();
+        Optional<MachineInfo> machineOptional = machineRepository.findInfoById(machineId);
         MachineInfo machine = machineOptional.orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
 
         if (!machine.getCompanyCode().equals(companyCode)) {
@@ -98,7 +101,6 @@ public class MachineServiceImpl implements MachineService {
                 .orElse(Collections.emptyList());
     }
 
-
     private void createMachineManager(Long userId, Machine machine, Role role) {
         if (userId != null) {
             userRepository.findById(userId).ifPresent(user -> {
@@ -129,14 +131,86 @@ public class MachineServiceImpl implements MachineService {
                 .number(machineRequest.getMachineCode())
                 .thum(machineRequest.getMachineThum())
                 .introductionDate(machineRequest.getIntroductionDate())
-                .longitude(-1.0f)
-                .latitude(-1.0f)
+                .longitude(0.0f)
+                .latitude(0.0f)
                 .lockerType(LockerType.NO)
                 .build();
         Machine savedMachine = machineRepository.save(machine);
 
         createMachineManager(machineRequest.getMainManagerId(), savedMachine, Role.Main);
         createMachineManager(machineRequest.getSubManagerId(), savedMachine, Role.Sub);
+    }
+
+    @Override
+    public void updateMachine(MachineRequest machineRequest, String companyCode, Long machineId) {
+        Machine machine = machineRepository.findById(machineId).orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
+        if (!machine.getFacility().getCompany().getCompanyCode().equals(companyCode)) {
+            throw new CommonException(MachineErrorCode.NOT_COMPANY_MACHINE);
+        }
+        if (machineRequest.getMainManagerId().equals(machineRequest.getSubManagerId())) {
+            throw new CommonException(MachineErrorCode.CANNOT_SEND_SAME_MANAGER);
+        }
+
+        Optional<AppUser> mainManagerOptional = userRepository.findById(machineRequest.getMainManagerId());
+        if (mainManagerOptional.isEmpty()) {
+            throw new CommonException(MachineErrorCode.NOT_EXIST_MACHINE_MANAGER);
+        }
+        mainManagerOptional.ifPresent(mainManager -> {
+            if (!mainManager.getEmployee().getCompany().getCompanyCode().equals(companyCode)) {
+                throw new CommonException(UserErrorCode.NOT_COMPANY_EMPLOYEE);
+            }
+        });
+
+        Optional<AppUser> subManagerOptional = userRepository.findById(machineRequest.getSubManagerId());
+        if (subManagerOptional.isEmpty()) {
+            throw new CommonException(MachineErrorCode.NOT_EXIST_MACHINE_MANAGER);
+        }
+        subManagerOptional.ifPresent(subManager -> {
+            if (!subManager.getEmployee().getCompany().getCompanyCode().equals(companyCode)) {
+                throw new CommonException(UserErrorCode.NOT_COMPANY_EMPLOYEE);
+            }
+        });
+
+        Optional<Facility> facilityOptional = facilityRepository.findById(machineRequest.getFacilityId());
+        Facility facility = facilityOptional.orElseThrow(() -> new CommonException(FacilityErrorCode.NOT_EXIST_FACILITY));
+        machine.setFacility(facility);
+
+        machine.setName(machineRequest.getMachineName());
+        machine.setNumber(machineRequest.getMachineCode());
+        machine.setThum(machineRequest.getMachineThum());
+        machine.setIntroductionDate(machineRequest.getIntroductionDate());
+
+        machineRepository.save(machine);
+
+        MachineManager mainManager = machineManagerRepository.findMachineManagerByMachineIdAndRole(machineId, Role.Main);
+        mainManager.setUser(mainManagerOptional.get());
+        machineManagerRepository.save(mainManager);
+
+        MachineManager subManager = machineManagerRepository.findMachineManagerByMachineIdAndRole(machineId, Role.Sub);
+        subManager.setUser(subManagerOptional.get());
+        machineManagerRepository.save(subManager);
+    }
+
+    @Override
+    public void updateMachineSpace(List<MachineSpaceDto> machineSpaceRequest, String companyCode) {
+        if (machineSpaceRequest.isEmpty()) {
+            throw new CommonException(MachineErrorCode.EMPTY_LIST);
+        }
+        machineSpaceRequest.forEach(spaceDto -> {
+            Long machineId = spaceDto.getId();
+            Float latitude = spaceDto.getLatitude();
+            Float longitude = spaceDto.getLongitude();
+
+            Machine machine = machineRepository.findById(machineId).orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
+
+            if (!machine.getFacility().getCompany().getCompanyCode().equals(companyCode)) {
+                throw new CommonException(MachineErrorCode.NOT_COMPANY_MACHINE);
+            }
+
+            machine.setLatitude(latitude);
+            machine.setLongitude(longitude);
+            machineRepository.save(machine);
+        });
     }
 
     @Override
@@ -156,4 +230,3 @@ public class MachineServiceImpl implements MachineService {
                 .build();
     }
 }
-

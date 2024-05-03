@@ -22,19 +22,20 @@ spring:
       ddl-auto: create-drop
     database-platform: org.hibernate.dialect.MySQLDialect
     defer-datasource-initialization: true # true -> ddl-auto 이후 data.sql 실행 옵션
+
+  jwt:
+    access: ${common.redis.session-store.accessKey}
+    refresh: ${common.redis.session-store.refreshKey}
+    accesstime: ${common.redis.session-store.accessLifetime}
+    refreshtime: ${common.redis.session-store.refreshLifetime}
+
+  data:
+    redis:
+      host: k10c104.p.ssafy.io
+      port: ${common.redis.session-store.port}
+
 logging:
   level:
     org.springframework.web: DEBUG
     org.hibernate.SQL: DEBUG
     org.hibernate.type: TRACE
-
-#server:
-#  servlet:
-#    session:
-#      cookie:
-#        name: JSESSIONID
-#        path: /
-#        Domain :
-#        http-only: true
-#        secure: false # 개발 환경에서는 false로 설정
-#        same-site: Lax

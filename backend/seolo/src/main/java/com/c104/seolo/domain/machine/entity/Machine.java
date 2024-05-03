@@ -38,10 +38,10 @@ public class Machine extends BaseEntity {
     @Column(name = "machine_number", length = 30, nullable = false)
     private String number;
 
-    @Column(name = "machine_longitude", nullable = false, columnDefinition = "FLOAT DEFAULT -1.0")
+    @Column(name = "machine_longitude", nullable = false, columnDefinition = "FLOAT DEFAULT 0.0")
     private Float longitude;
 
-    @Column(name = "machine_latitude", nullable = false, columnDefinition = "FLOAT DEFAULT -1.0")
+    @Column(name = "machine_latitude", nullable = false, columnDefinition = "FLOAT DEFAULT 0.0")
     private Float latitude;
 
     @Column(name = "machine_company", length = 50)

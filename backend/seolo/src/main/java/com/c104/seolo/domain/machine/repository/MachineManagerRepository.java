@@ -16,4 +16,8 @@ public interface MachineManagerRepository extends JpaRepository<MachineManager, 
             ") FROM MachineManager mm " +
             "WHERE mm.machine.id = :machineId AND mm.mm_role = :role")
     Optional<MachineManagerInfo> findMachineManagerInfoByMachineIdAndRole(Long machineId, Role role);
+
+    @Query("SELECT mm from MachineManager mm " +
+            "where mm.machine.id = :machineId AND mm.mm_role = :role ")
+    MachineManager findMachineManagerByMachineIdAndRole(Long machineId, Role role);
 }

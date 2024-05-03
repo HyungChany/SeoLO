@@ -14,3 +14,13 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: none
+  jwt:
+    access: ${common.redis.session-store.accessKey}
+    refresh: ${common.redis.session-store.refreshKey}
+    accesstime: ${common.redis.session-store.accessLifetime}
+    refreshtime: ${common.redis.session-store.refreshLifetime}
+  data:
+    redis:
+      host: k10c104.p.ssafy.io
+      port: ${common.redis.session-store.port}
+

@@ -33,4 +33,6 @@ public class LockerController {
         lockerService.updateLocker(lockerRequest, companyCode, lockId);
         return ResponseEntity.accepted().build();
     }
+
+
 }
