@@ -136,14 +136,17 @@ class UserService {
   }
 
   ///////////////////////// 나의 정보 //////////////////////////////////
-  Future<Map<String, dynamic>> myInfo(MyInfoModel myInfoModel) async {
+  Future<Map<String, dynamic>> myInfo() async {
     try {
       Dio.Response response = await _dio.get(
         '$baseUrl/users/profile',
       );
       if (response.statusCode == 200) {
+        MyInfoModel myInfoModel =
+            MyInfoModel.fromJson(response.data['employee']['employeeName']);
+
         debugPrint('${response.data['employee']['employeeName']}');
-        return {'success': true};
+        return {'success': true, 'myInfo': myInfoModel};
       } else {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
       }
