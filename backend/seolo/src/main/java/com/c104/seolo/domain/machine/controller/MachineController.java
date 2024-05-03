@@ -1,17 +1,20 @@
 package com.c104.seolo.domain.machine.controller;
 
 import com.c104.seolo.domain.machine.dto.MachineDto;
+import com.c104.seolo.domain.machine.dto.MachineSpaceDto;
 import com.c104.seolo.domain.machine.dto.request.MachineRequest;
 import com.c104.seolo.domain.machine.dto.response.MachineListResponse;
 import com.c104.seolo.domain.machine.service.MachineService;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("machines")
@@ -41,14 +44,14 @@ public class MachineController {
     }
 
     @Secured("ROLE_MANAGER")
-    @PatchMapping("/{machineId}")
-    public ResponseEntity<Void> updateMachine(
-            @RequestHeader("Company-Code") String companyCode,
-            @PathVariable Long machineId,
-            @RequestParam(value = "lat", defaultValue = "0.0") Float latitude,
-            @RequestParam(value = "long", defaultValue = "0.0") Float longitude
+    @PatchMapping("/space")
+    public ResponseEntity<Void> updateMachineSpace(
+            @RequestBody List<MachineSpaceDto> machineSpaceRequest,
+            @RequestHeader("Company-Code") String companyCode
     ) {
-        machineService.updateMachineSpace(machineId, latitude, longitude, companyCode);
+        machineService.updateMachineSpace(machineSpaceRequest, companyCode);
+        Logger logger = LoggerFactory.getLogger(MachineController.class);
+        logger.info("Received machine space update request: {}", machineSpaceRequest);
         return ResponseEntity.ok().build();
     }
 

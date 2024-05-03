@@ -1,19 +1,20 @@
-package com.c104.seolo.domain.machine.dto.response;
+package com.c104.seolo.domain.machine.dto.request;
 
-import com.c104.seolo.domain.machine.dto.MachineListDto;
+import com.c104.seolo.domain.machine.dto.MachineSpaceDto;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import java.util.List;
-import java.util.Optional;
 
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ToString
 @Getter
-public class MachineListResponse {
-    private Optional<List<MachineListDto>> machines;
+@Setter
+public class MachineSpaceRequest {
+    List<MachineSpaceDto> spaces;
 }

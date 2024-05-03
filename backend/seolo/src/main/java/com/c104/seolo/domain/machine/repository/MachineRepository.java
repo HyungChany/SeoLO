@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface MachineRepository extends JpaRepository<Machine, Integer> {
+public interface MachineRepository extends JpaRepository<Machine, Long> {
     @Query("SELECT new com.c104.seolo.domain.machine.dto.info.MachineListInfo( " +
             "m.facility.id, m.facility.facilityName, " +
             "m.id, m.name, m.number, m.introductionDate " +
@@ -26,7 +26,4 @@ public interface MachineRepository extends JpaRepository<Machine, Integer> {
             "WHERE m.id = :machineId " +
             "order by m.id desc limit 1 ")
     Optional<MachineInfo> findInfoById(@Param("machineId") Long machineId);
-
-    @Query("SELECT Machine from Machine m where m.id = :machineId")
-    Optional<Machine> findById(Long machineId);
 }
