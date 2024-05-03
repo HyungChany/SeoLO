@@ -24,7 +24,7 @@ public class TaskHistory {
     @Id
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "user_id")
     private AppUser user;
 
@@ -32,7 +32,7 @@ public class TaskHistory {
     @JoinColumn(name = "task_template_id")
     private TaskTemplate taskTemplate;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "machine_id")
     private Machine machine;
 
