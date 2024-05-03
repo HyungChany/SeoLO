@@ -6,7 +6,7 @@
     android:background="@android:color/black">
 
     <ImageView
-        android:id="@+id/imageViewLock"
+        android:id="@+id/workImageView"
         android:layout_width="100dp"
         android:layout_height="120dp"
         android:contentDescription="@string/Lock"
@@ -18,14 +18,14 @@
         app:layout_constraintVertical_bias="0.318" />
 
     <TextView
-        android:id="@+id/textViewLock"
+        android:id="@+id/workTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/Lock"
         android:textColor="@color/SNOW"
         android:textSize="30sp"
-        app:layout_constraintLeft_toLeftOf="@id/imageViewLock"
-        app:layout_constraintRight_toRightOf="@id/imageViewLock"
-        app:layout_constraintTop_toBottomOf="@id/imageViewLock" />
+        app:layout_constraintLeft_toLeftOf="@id/workImageView"
+        app:layout_constraintRight_toRightOf="@id/workImageView"
+        app:layout_constraintTop_toBottomOf="@id/workImageView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

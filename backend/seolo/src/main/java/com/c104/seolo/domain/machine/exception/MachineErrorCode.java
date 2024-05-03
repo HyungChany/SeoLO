@@ -10,6 +10,9 @@ public enum MachineErrorCode {
     NOT_EXIST_MACHINE("장비를 조회할 수 없습니다.", "ME01", HttpStatus.NOT_FOUND),
     MACHINE_ALREADY_EXISTS("같은 장비가 이미 존재합니다.", "ME03", HttpStatus.BAD_REQUEST),
     NOT_COMPANY_MACHINE("회사코드와 장비가 매칭되지 않습니다.", "ME01", HttpStatus.BAD_REQUEST),
+    CANNOT_SEND_SAME_MANAGER("같은 사람이 매니저가 될 수 없습니다.", "ME04", HttpStatus.BAD_REQUEST),
+    EMPTY_LIST("목록을 보내지 않았습니다.", "ME05", HttpStatus.BAD_REQUEST),
+    NOT_EXIST_MACHINE_MANAGER("매니저를 조회할 수 없습니다.", "ME06", HttpStatus.BAD_REQUEST),
     ;
 
     private final String message;

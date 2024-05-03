@@ -23,8 +23,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -63,10 +62,11 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.viewpager2)
     implementation(libs.material)
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    implementation("sh.tyy:wheelpicker:0.4.0")
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
-    implementation ("com.github.bumptech.glide:glide:4.12.0")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 }

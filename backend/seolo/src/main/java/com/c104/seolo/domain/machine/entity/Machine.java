@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Date;
+
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
@@ -26,8 +28,8 @@ public class Machine extends BaseEntity {
     @JoinColumn(name = "facility_id", nullable = false)
     private Facility facility;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "machine_subcategory", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "machine_subcategory")
     private MachineSubcategory machineSubcategory;
 
     @Column(name = "machine_name", length = 30, nullable = false)
@@ -36,23 +38,27 @@ public class Machine extends BaseEntity {
     @Column(name = "machine_number", length = 30, nullable = false)
     private String number;
 
-    @Column(name = "machine_longitude", nullable = false)
+    @Column(name = "machine_longitude", nullable = false, columnDefinition = "FLOAT DEFAULT 0.0")
     private Float longitude;
 
-    @Column(name = "machine_latitude", nullable = false)
+    @Column(name = "machine_latitude", nullable = false, columnDefinition = "FLOAT DEFAULT 0.0")
     private Float latitude;
 
-    @Column(name = "machine_company", length = 50, nullable = false)
+    @Column(name = "machine_company", length = 50)
     private String company;
 
     @Column(name = "machine_thum")
     private String thum;
 
     @Column(name = "machine_locker_type", length = 30, nullable = false)
+    @Enumerated(EnumType.STRING)
     private LockerType lockerType;
 
+    @Column(name="machine_introduction_date", nullable = false)
+    private Date introductionDate;
+
     @Builder
-    private Machine(Long id, Facility facility, MachineSubcategory machineSubcategory, String name, String number, Float longitude, Float latitude, LockerType lockerType) {
+    private Machine(Long id, Facility facility, MachineSubcategory machineSubcategory, String name, String number, Float longitude, Float latitude, String company, String thum, LockerType lockerType, Date introductionDate) {
         this.id = id;
         this.facility = facility;
         this.machineSubcategory = machineSubcategory;
@@ -60,7 +66,10 @@ public class Machine extends BaseEntity {
         this.number = number;
         this.longitude = longitude;
         this.latitude = latitude;
+        this.company = company;
+        this.thum = thum;
         this.lockerType = lockerType;
+        this.introductionDate = introductionDate;
     }
 
     public Machine() {}

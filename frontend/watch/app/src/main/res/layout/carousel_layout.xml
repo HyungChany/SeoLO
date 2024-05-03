@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:text="@string/sample_text"
             android:textAlignment="center"
-            android:textColor="@android:color/black"
+            android:textColor="@color/BLACK"
             android:textSize="18sp" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

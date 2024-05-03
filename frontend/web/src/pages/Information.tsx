@@ -71,7 +71,7 @@ const CompanyInformation = () => {
         </Overlay>
       )}
       <Card
-        width={20.625}
+        width={22}
         height={30}
         justifyContent={'space-between'}
         flexDirection={'column'}
@@ -82,7 +82,7 @@ const CompanyInformation = () => {
         <Typo.H0 color={Color.BLACK}>3</Typo.H0>
       </Card>
       <Card
-        width={20.625}
+        width={22}
         height={30}
         justifyContent={'space-between'}
         flexDirection={'column'}
@@ -95,7 +95,7 @@ const CompanyInformation = () => {
         <Typo.H0 color={Color.BLACK}>34</Typo.H0>
       </Card>
       <Card
-        width={20.625}
+        width={22}
         height={30}
         justifyContent={'space-between'}
         flexDirection={'column'}
