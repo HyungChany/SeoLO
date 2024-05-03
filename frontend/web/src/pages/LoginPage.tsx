@@ -102,7 +102,7 @@ const LoginPage = () => {
       };
       const response = await userLogin(data);
       console.log('로그인 성공:', response);
-      sessionStorage.setItem('accesstoken', response.issuedToken.accessToken);
+      sessionStorage.setItem('accessToken', response.issuedToken.accessToken);
       navigate('/');
     } catch (error) {
       console.error('로그인 실패:', error);
