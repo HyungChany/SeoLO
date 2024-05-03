@@ -17,6 +17,7 @@ import com.c104.seolo.global.security.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +51,7 @@ public class UserController {
         authService.userLogout(cCodePrincipal);
     }
 
-//    @Secured("ROLE_MANAGER")
+    @Secured("ROLE_MANAGER")
     @GetMapping("/users/profile")
     public UserInfoResponse getUserInfo(@AuthenticationPrincipal CCodePrincipal cCodePrincipal) {
         log.debug("현재 로그인 유저의 authentication : {}", SecurityContextHolder.getContext().getAuthentication());
