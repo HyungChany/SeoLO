@@ -21,7 +21,7 @@ public class MachineManager {
     @Id
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "machine_id", nullable = false)
     private Machine machine;
 

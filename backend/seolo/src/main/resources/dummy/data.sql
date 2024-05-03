@@ -172,6 +172,18 @@ values ('LOTO에 대해 작업자 교육이 이루어졌는가?'),
        ('LOTO를 해재하기 전 다른 작업자들이 안전하게 위치하고 있는지 확인하였는가?'),
        ('모든 작업자들에게 LOTO 제거를 공지하였는가?');
 
+INSERT INTO task_template(task_template_type, task_template_precaution)
+values ('FIX', '수리중입니다.'),
+       ('FIX', '메인 장치 수리중입니다.'),
+       ('FIX', '보조 장치 수리중입니다.'),
+       ('REPAIR', '점검중입니다.'),
+       ('REPAIR', '정기 점검중입니다.'),
+       ('REPAIR', '임시 점검중입니다.'),
+       ('CLEAN', '청소중입니다.'),
+       ('CLEAN', '정기 청소중입니다.'),
+       ('CLEAN', '임시 청소중입니다.'),
+       ('ETC', '');
+
 INSERT INTO locker(locker_battery, locker_is_locked, locker_uid, company_code)
 values (100, false, '156DA24G31', 'SFY001KOR'),
        (10, true, '156DA24G32', 'SFY001KOR'),

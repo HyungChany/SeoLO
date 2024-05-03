@@ -63,6 +63,16 @@ public class MachineController {
     }
 
     @Secured("ROLE_MANAGER")
+    @DeleteMapping("/{machineId}")
+    public ResponseEntity<Void> deleteMachine(
+            @RequestHeader("Company-Code") String companyCode,
+            @PathVariable("machineId") Long machineId
+    ) {
+        machineService.deleteMachine(machineId, companyCode);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Secured("ROLE_MANAGER")
     @GetMapping("/facility/{facilityId}")
     public ResponseEntity<MachineListResponse> getMachineList(
             @RequestHeader("Company-Code") String companyCode,
