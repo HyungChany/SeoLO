@@ -3,12 +3,12 @@ import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:app/models/checklist/checklist_model.dart';
-class UserService {
+class ChecklistService {
   final _dio = Dio.Dio();
   final _storage = FlutterSecureStorage();
   final baseUrl = dotenv.env['API_URL'] ?? '';
 
-  UserService() {
+  ChecklistService() {
     _dio.interceptors.add(Dio.InterceptorsWrapper(
       onRequest: (options, handler) async {
         String? cookie = await _storage.read(key: 'jsessionid');
@@ -23,7 +23,7 @@ class UserService {
     _dio.interceptors.add(LoggingInterceptor());
   }
   ///////////////////////// checklist //////////////////////////////////
-  Future<Map<String, dynamic>> checkList(ChecklistModel checkListModel) async {
+  Future<Map<String, dynamic>> checkList() async {
     try {
       Dio.Response response = await _dio.get(
         '$baseUrl/checklist',
