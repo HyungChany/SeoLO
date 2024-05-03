@@ -22,6 +22,7 @@ const CardContainer = styled.div<CardProps>`
   flex-direction: ${(props) => props.flexDirection};
   align-items: ${(props) => props.alignItems};
   padding: 0.5rem;
+  box-sizing: border-box;
 `;
 
 const Card = (props: CardProps) => {
