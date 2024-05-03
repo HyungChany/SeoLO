@@ -19,12 +19,5 @@ class MyInfoModel {
       employeeThum: json['employeeThum'],
     );
   }
-
-  Map<String, dynamic> toJson() => {
-    'employeeName': employeeName,
-    'employeeTitle': employeeTitle,
-    'employeeTeam': employeeTeam,
-    'employeeThum': employeeThum,
-  };
 }
 

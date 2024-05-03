@@ -1,7 +1,6 @@
 import 'package:app/models/user/my_info_model.dart';
 import 'package:app/services/user_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class MyInfoViewModel extends ChangeNotifier {
   final UserService _userService = UserService();

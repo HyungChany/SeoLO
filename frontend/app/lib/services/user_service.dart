@@ -143,7 +143,7 @@ class UserService {
       );
       if (response.statusCode == 200) {
         MyInfoModel myInfoModel =
-            MyInfoModel.fromJson(response.data['employee']['employeeName']);
+            MyInfoModel.fromJson(response.data['employee']);
 
         debugPrint('${response.data['employee']['employeeName']}');
         return {'success': true, 'myInfo': myInfoModel};
