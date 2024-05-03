@@ -91,7 +91,11 @@
             android:taskAffinity=""
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
-
+        <activity
+            android:name=".presentation.DatePickerActivity"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
     </application>
 
