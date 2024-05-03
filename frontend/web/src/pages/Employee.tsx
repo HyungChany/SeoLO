@@ -4,9 +4,9 @@ import * as Color from '@/config/color/Color.ts';
 import Card from '@/components/card/Card.tsx';
 import Dropdown from '@/components/dropdown/DropDown.tsx';
 import * as Typo from '@/components/typography/Typography.tsx';
-import Equipmentimage from '/assets/images/equipment.png';
 import InputBox from '@/components/inputbox/InputBox.tsx';
 import { Button } from '@/components/button/Button.tsx';
+import People from '/assets/images/people.png';
 const Background = styled.div`
   width: 100%;
   height: 100%;
@@ -98,20 +98,6 @@ const CommonBox = styled.div`
   justify-content: space-between;
   flex-direction: column;
 `;
-const IntroBox = styled.div`
-  width: 20rem;
-  height: 4.59rem;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-`;
-const TypoBox = styled.div`
-  width: 20rem;
-  height: 1.75rem;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-`;
 const ButtonBox = styled.div`
   width: 20rem;
   height: 3rem;
@@ -120,32 +106,25 @@ const ButtonBox = styled.div`
   gap: 1rem;
 `;
 
-const Equipment = () => {
+const Employee = () => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string>('');
   const [equipmentName, setEquipmentName] = useState<string>('');
   const [equipmentNumber, setEquipmentNumber] = useState<string>('');
-  const [year, setYear] = useState<string>('');
-  const [month, setMonth] = useState<string>('');
-  const [mainManager, setMainManager] = useState<string>('');
-  const [subManager, setSubManager] = useState<string>('');
+  const [team, setTeam] = useState<string>('');
+  const [position, setPosition] = useState<string>('');
   const handleEquipmentName = (e: ChangeEvent<HTMLInputElement>) => {
     setEquipmentName(e.target.value);
   };
   const handleEquipmentNumber = (e: ChangeEvent<HTMLInputElement>) => {
     setEquipmentNumber(e.target.value);
   };
-  const handleYear = (e: ChangeEvent<HTMLInputElement>) => {
-    setYear(e.target.value);
+  const handleTeam = (e: ChangeEvent<HTMLInputElement>) => {
+    setTeam(e.target.value);
   };
-  const handleMonth = (e: ChangeEvent<HTMLInputElement>) => {
-    setMonth(e.target.value);
+  const handlePosition = (e: ChangeEvent<HTMLInputElement>) => {
+    setPosition(e.target.value);
   };
-  const handleMainManager = (e: ChangeEvent<HTMLInputElement>) => {
-    setMainManager(e.target.value);
-  };
-  const handleSubManager = (e: ChangeEvent<HTMLInputElement>) => {
-    setSubManager(e.target.value);
-  };
+
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -174,10 +153,9 @@ const Equipment = () => {
           flexDirection={'column'}
           alignItems="center"
         >
-          <Typo.H3 color={Color.BLACK}>현재 작업장의 장비 현황</Typo.H3>
-          <Dropdown />
-          <ImgBox src={Equipmentimage} />
-          <Typo.H0 color={Color.BLACK}>34</Typo.H0>
+          <Typo.H3 color={Color.BLACK}>등록 임직원현황</Typo.H3>
+          <ImgBox src={People} />
+          <Typo.H0 color={Color.BLACK}>125</Typo.H0>
         </Card>
         <InformationBox>
           <LeftBox>
@@ -199,66 +177,46 @@ const Equipment = () => {
           </LeftBox>
           <RightBox>
             <CommonBox>
-              <Typo.H3>장비 명</Typo.H3>
+              <Typo.H3>이름</Typo.H3>
               <InputBox
                 width={20}
                 height={4}
                 value={equipmentName}
                 onChange={handleEquipmentName}
-                placeholder="장비명을 입력하세요"
+                placeholder="이름을 입력하세요"
               />
             </CommonBox>
             <CommonBox>
-              <Typo.H3>장비 번호</Typo.H3>
+              <Typo.H3>사번</Typo.H3>
               <InputBox
                 width={20}
                 height={4}
                 value={equipmentNumber}
                 onChange={handleEquipmentNumber}
-                placeholder="장비번호를 입력하세요"
+                placeholder="사번을 입력하세요"
               />
             </CommonBox>
             <CommonBox>
-              <Typo.H3>도입 일자</Typo.H3>
-              <IntroBox>
-                <InputBox
-                  width={12}
-                  height={4.59}
-                  value={year}
-                  onChange={handleYear}
-                  placeholder="2024"
-                />
-                <InputBox
-                  width={7}
-                  height={4.59}
-                  value={month}
-                  onChange={handleMonth}
-                  placeholder="12"
-                />
-              </IntroBox>
+              <Typo.H3>소속 부서</Typo.H3>
+              <InputBox
+                width={20}
+                height={4}
+                value={team}
+                onChange={handleTeam}
+                placeholder="소속부서를 입력하세요"
+              />
             </CommonBox>
             <CommonBox>
-              <TypoBox>
-                <Typo.H3>담당자(정)</Typo.H3>
-                <Typo.H3>담당자(부)</Typo.H3>
-              </TypoBox>
-              <IntroBox>
-                <InputBox
-                  width={8}
-                  height={4.59}
-                  value={mainManager}
-                  onChange={handleMainManager}
-                  placeholder="ex)김진명"
-                />
-                <InputBox
-                  width={8}
-                  height={4.59}
-                  value={subManager}
-                  onChange={handleSubManager}
-                  placeholder="ex)오정민"
-                />
-              </IntroBox>
+              <Typo.H3>직급</Typo.H3>
+              <InputBox
+                width={20}
+                height={4}
+                value={position}
+                onChange={handlePosition}
+                placeholder="직급을 입력하세요"
+              />
             </CommonBox>
+
             <ButtonBox>
               <Button
                 width={5.25}
@@ -296,4 +254,4 @@ const Equipment = () => {
   );
 };
 
-export default Equipment;
+export default Employee;
