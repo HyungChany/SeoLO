@@ -5,7 +5,7 @@
 #define SS_PIN    10                           
                                                
  
-MFRC522 mfrc(SS_PIN, RST_PIN);                 .
+MFRC522 mfrc(SS_PIN, RST_PIN);
 
 byte masterKey[4] = {0x01, 0x23, 0x45, 0x67};
 byte storedUID[4] = {0x00, 0x00, 0x00, 0x00};
@@ -24,6 +24,8 @@ void loop(){
     delay(1000);                                
     return;                                   
   } 
+
+  sendArduinoInfo();
 
   Serial.print("Card UID (Decimal): ");
   for (byte i = 0; i < 4; i++) {
@@ -69,9 +71,23 @@ void loop(){
     }
   }
 }
-
+  sendToSerial();
+  delay(1000); // 1초마다 한 번씩 전송
+}
 String SerialNumber() {
   char serialNumber[10];
   sprintf(serialNumber, "%X", ESP.getChipModel());
   return String(serialNumber);
+}
+
+void sendArduinoInfo() {
+  // 아두이노 정보를 NFC 리더기를 통해 전송하는 코드 작성
+  String arduinoInfo = "Arduino Info"; // 여기에 전송할 아두이노 정보 작성
+  Serial.println(arduinoInfo);
+}
+void sendToSerial() {
+  for (byte i = 0; i < 4; i++) {
+    Serial.write(mfrc.uid.uidByte[i]);
+  }
+  Serial.println();
 }
