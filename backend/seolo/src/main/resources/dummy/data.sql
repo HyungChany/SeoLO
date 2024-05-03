@@ -171,3 +171,14 @@ values ('LOTO에 대해 작업자 교육이 이루어졌는가?'),
        ('작업자 눈에 잘 띄는 위치에 표지판을 단단히 고정하여 경고하였는가?'),
        ('LOTO를 해재하기 전 다른 작업자들이 안전하게 위치하고 있는지 확인하였는가?'),
        ('모든 작업자들에게 LOTO 제거를 공지하였는가?');
+
+INSERT INTO locker(locker_battery, locker_is_locked, locker_uid, company_code)
+values (100, false, '156DA24G31', 'SFY001KOR'),
+       (10, true, '156DA24G32', 'SFY001KOR'),
+       (80, false, '156DA24G33', 'SFY001KOR'),
+       (98, false, '156DA24G34', 'SFY001KOR'),
+       (29, false, '156DA24G35', 'SFY001KOR'),
+       (80, false, '156DA24G36', 'SFY001KOR'),
+       (88, true, '156DA24G37', 'SFY001KOR'),
+       (91, false, '156DA24G38', 'SFY001KOR'),
+       (37, false, '156DA24G39', 'SFY001KOR');
