@@ -5,17 +5,17 @@
     android:layout_height="match_parent"
     android:background="@color/BLACK">
 
-    <sh.tyy.wheelpicker.core.WheelPickerRecyclerView
-        android:id="@+id/basic_wheel_picker_view"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/item_wheel_picker_text"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintHorizontal_bias="0.4"
+        android:gravity="center"
+        android:padding="16dp"
+        android:textColor="@color/SNOW"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:scaleX="1.8"
-        android:scaleY="1.8"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

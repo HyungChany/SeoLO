@@ -7,7 +7,7 @@ import com.seolo.seolo.adapters.WheelPickerAdapter
 import sh.tyy.wheelpicker.core.WheelPickerRecyclerView
 
 class LocationActivity : AppCompatActivity() {
-    private val locations = listOf(" ","rkskdkaskddsa", "rkskdkaskddsa", "rkskdkaskddsa", "rkskdkaskddsa", "rkskdkaskddsa", "rkskdkaskddsa", "rkskdkaskddsa", "rkskdkaskddsa"," ")
+    private val locations = listOf(" ","1", "rkskdkaskddsa", "rkskdkaskddsa", "1", "3", "rkskdkaskddsa", "rkskdkaskddsa", "rkskdkaskddsa"," ")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.hide()
@@ -15,7 +15,7 @@ class LocationActivity : AppCompatActivity() {
         setContentView(R.layout.basic_wheel_picker_layout)
 
 
-        val locationPicker = findViewById<WheelPickerRecyclerView>(R.id.location_view)
+        val locationPicker = findViewById<WheelPickerRecyclerView>(R.id.basic_wheel_picker_view)
         val locationAdapter = WheelPickerAdapter(locations)
         locationPicker.adapter = locationAdapter
 

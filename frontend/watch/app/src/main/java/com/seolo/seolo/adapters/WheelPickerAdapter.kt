@@ -1,5 +1,6 @@
 package com.seolo.seolo.adapters
 
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,12 @@ import com.seolo.seolo.R
 class WheelPickerAdapter(private val locations: List<String>) :
     RecyclerView.Adapter<WheelPickerAdapter.ViewHolder>() {
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView = view.findViewById(android.R.id.text1)
+        val textView: TextView = view.findViewById(android.R.id.text1) as TextView
+
+        init {
+            textView.gravity = Gravity.CENTER
+        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
