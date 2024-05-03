@@ -18,6 +18,7 @@ public class TaskTemplateController {
 
     @GetMapping
     public ResponseEntity<TaskTemplateResponse> getTaskTemplates() {
-        return ResponseEntity.ok(taskTemplateService.getTemplates());
+        TaskTemplateResponse response = taskTemplateService.getTemplates();
+        return ResponseEntity.ok(response);
     }
 }
