@@ -10,6 +10,7 @@ import java.util.List;
 public interface MachineService {
     MachineDto findMachineByMachineId(String companyCode, Long machineId);
     void createMachine(MachineRequest machineRequest, String companyCode);
+    void updateMachine(MachineRequest machineRequest, String companyCode, Long machineId);
     void updateMachineSpace(List<MachineSpaceDto> machineSpaceRequest, String companyCode);
     MachineListResponse findMachineByCompanyAndFacility(String companyCode, Long facilityId);
 }

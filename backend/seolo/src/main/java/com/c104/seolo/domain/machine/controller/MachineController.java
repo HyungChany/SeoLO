@@ -7,8 +7,6 @@ import com.c104.seolo.domain.machine.dto.response.MachineListResponse;
 import com.c104.seolo.domain.machine.service.MachineService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
@@ -44,15 +42,24 @@ public class MachineController {
     }
 
     @Secured("ROLE_MANAGER")
+    @PatchMapping("/{machineId}")
+    public ResponseEntity<Void> updateMachine(
+            @RequestHeader("Company-Code") String companyCode,
+            @RequestBody MachineRequest machineRequest,
+            @PathVariable Long machineId
+    ) {
+        machineService.updateMachine(machineRequest, companyCode, machineId);
+        return ResponseEntity.accepted().build();
+    }
+
+    @Secured("ROLE_MANAGER")
     @PatchMapping("/space")
     public ResponseEntity<Void> updateMachineSpace(
-            @RequestBody List<MachineSpaceDto> machineSpaceRequest,
-            @RequestHeader("Company-Code") String companyCode
+            @RequestHeader("Company-Code") String companyCode,
+            @RequestBody List<MachineSpaceDto> machineSpaceRequest
     ) {
         machineService.updateMachineSpace(machineSpaceRequest, companyCode);
-        Logger logger = LoggerFactory.getLogger(MachineController.class);
-        logger.info("Received machine space update request: {}", machineSpaceRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.accepted().build();
     }
 
     @Secured("ROLE_MANAGER")
