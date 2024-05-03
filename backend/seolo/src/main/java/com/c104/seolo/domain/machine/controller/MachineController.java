@@ -1,6 +1,7 @@
 package com.c104.seolo.domain.machine.controller;
 
 import com.c104.seolo.domain.machine.dto.MachineDto;
+import com.c104.seolo.domain.machine.dto.MachineSpaceDto;
 import com.c104.seolo.domain.machine.dto.request.MachineRequest;
 import com.c104.seolo.domain.machine.dto.response.MachineListResponse;
 import com.c104.seolo.domain.machine.service.MachineService;
@@ -11,6 +12,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("machines")
@@ -37,6 +39,27 @@ public class MachineController {
         machineService.createMachine(machineRequest, companyCode);
         URI location = URI.create("/machines");
         return ResponseEntity.created(location).build();
+    }
+
+    @Secured("ROLE_MANAGER")
+    @PatchMapping("/{machineId}")
+    public ResponseEntity<Void> updateMachine(
+            @RequestHeader("Company-Code") String companyCode,
+            @RequestBody MachineRequest machineRequest,
+            @PathVariable Long machineId
+    ) {
+        machineService.updateMachine(machineRequest, companyCode, machineId);
+        return ResponseEntity.accepted().build();
+    }
+
+    @Secured("ROLE_MANAGER")
+    @PatchMapping("/space")
+    public ResponseEntity<Void> updateMachineSpace(
+            @RequestHeader("Company-Code") String companyCode,
+            @RequestBody List<MachineSpaceDto> machineSpaceRequest
+    ) {
+        machineService.updateMachineSpace(machineSpaceRequest, companyCode);
+        return ResponseEntity.accepted().build();
     }
 
     @Secured("ROLE_MANAGER")
