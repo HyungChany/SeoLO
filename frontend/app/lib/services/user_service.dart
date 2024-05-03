@@ -1,5 +1,6 @@
 import 'package:app/models/user/login_model.dart';
 import 'package:app/models/user/my_info_model.dart';
+import 'package:app/models/user/password_change_model.dart';
 import 'package:app/models/user/pin_change_model.dart';
 import 'package:app/models/user/pin_login_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -146,6 +147,34 @@ class UserService {
             MyInfoModel.fromJson(response.data['employee']);
 
         return {'success': true, 'myInfo': myInfoModel};
+      } else {
+        return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
+      }
+    } on Dio.DioException catch (e) {
+      debugPrint(e.message);
+      return {
+        'success': false,
+        'statusCode': e.response?.statusCode,
+        'message': '오류'
+      };
+    }
+  }
+
+  ///////////////////////// 비밀번호 재설정 //////////////////////////////////
+  Future<Map<String, dynamic>> passwordChange(
+      PasswordChangeModel passwordChangeModel) async {
+    try {
+      Dio.Response response = await _dio.patch('$baseUrl/users/pwd',
+          data: passwordChangeModel.toJson());
+      if (response.statusCode == 200) {
+        debugPrint('service pwd: ${passwordChangeModel.newPwd.toString()}');
+
+        await _storage.delete(key: 'password');
+        await _storage.write(
+            key: 'password', value: passwordChangeModel.newPwd.toString());
+        return {
+          'success': true,
+        };
       } else {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
       }

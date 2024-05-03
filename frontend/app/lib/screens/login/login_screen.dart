@@ -1,5 +1,5 @@
 import 'package:app/view_models/user/login_view_model.dart';
-import 'package:app/widgets/common_text_button.dart';
+import 'package:app/widgets/button/common_text_button.dart';
 import 'package:app/widgets/inputbox/common_smallinputbox.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
