@@ -172,13 +172,14 @@ values ('LOTO에 대해 작업자 교육이 이루어졌는가?'),
        ('LOTO를 해재하기 전 다른 작업자들이 안전하게 위치하고 있는지 확인하였는가?'),
        ('모든 작업자들에게 LOTO 제거를 공지하였는가?');
 
-INSERT INTO locker(locker_battery, locker_is_locked, locker_uid, company_code)
-values (100, false, '156DA24G31', 'SFY001KOR'),
-       (10, true, '156DA24G32', 'SFY001KOR'),
-       (80, false, '156DA24G33', 'SFY001KOR'),
-       (98, false, '156DA24G34', 'SFY001KOR'),
-       (29, false, '156DA24G35', 'SFY001KOR'),
-       (80, false, '156DA24G36', 'SFY001KOR'),
-       (88, true, '156DA24G37', 'SFY001KOR'),
-       (91, false, '156DA24G38', 'SFY001KOR'),
-       (37, false, '156DA24G39', 'SFY001KOR');
+INSERT INTO locker(locker_battery, locker_is_locked, locker_uid, company_code, created_at, updated_at)
+values (100, false, '1DA24G31', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (10, true, '1DA24G32', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (80, false, '1DA24G33', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (98, false, '1DA24G34', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (29, false, '1DA24G35', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (80, false, '1DA24G36', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (88, true, '1DA24G37', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (91, false, '1DA24G38', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (37, false, '1DA24G39', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+       
