@@ -4,7 +4,7 @@ import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.security.jwt.JwtUtils;
 import com.c104.seolo.global.security.jwt.dto.response.IssuedToken;
 import com.c104.seolo.global.security.jwt.entity.InvalidToken;
-import com.c104.seolo.global.security.jwt.entity.Token;
+import com.c104.seolo.global.security.jwt.entity.JwtToken;
 import com.c104.seolo.global.security.jwt.repository.InvalidTokenRepository;
 import com.c104.seolo.global.security.jwt.repository.TokenRepository;
 import com.c104.seolo.global.security.jwt.service.TokenService;
@@ -40,7 +40,7 @@ public class JwtTokenService implements TokenService {
         String refreshToken = jwtUtils.issueRefreshToken(appUser);
 
         tokenRepository.save(
-                Token.builder()
+                JwtToken.builder()
                         .id(appUser.getId())
                         .refreshToken(refreshToken)
                         .build()

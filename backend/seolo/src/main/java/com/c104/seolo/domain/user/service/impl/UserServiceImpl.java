@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
     public UserInfoResponse getUserInfo(CCodePrincipal cCodePrincipal) {
         AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
 
-        UserInfoResponse res = UserInfoResponse.builder()
+        return UserInfoResponse.builder()
                 .id(appUser.getId())
                 .employee(appUser.getEmployee())
                 .ROLES(appUser.getROLES())
@@ -83,7 +83,6 @@ public class UserServiceImpl implements UserService {
                 .PIN(appUser.getPIN())
                 .isLocked(appUser.isLocked())
                 .build();
-        return res;
     }
 
 
