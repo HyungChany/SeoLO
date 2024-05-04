@@ -42,7 +42,9 @@ class MainActivity : ComponentActivity() {
 //            val intent = Intent(this, RealMainActivity::class.java)
 //            val intent = Intent(this, LocationActivity::class.java)
 //            val intent = Intent(this, EquipmentActivity::class.java)
-            val intent = Intent(this, WorkActivity::class.java)
+//            val intent = Intent(this, WorkActivity::class.java)
+//            val intent = Intent(this, DatePickerActivity::class.java)
+            val intent = Intent(this, TimePickerActivity::class.java)
             startActivity(intent)
     }
 }
