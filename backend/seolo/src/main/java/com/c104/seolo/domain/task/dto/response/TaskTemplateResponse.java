@@ -11,5 +11,5 @@ import java.util.Map;
 @Getter
 @ToString
 public class TaskTemplateResponse {
-    private Map<String, List<String>> templates;
+    private Map<String, List<Object[]>> templates;
 }
