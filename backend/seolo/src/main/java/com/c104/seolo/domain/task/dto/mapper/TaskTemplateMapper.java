@@ -12,10 +12,11 @@ import java.util.stream.Collectors;
 public class TaskTemplateMapper {
 
     public TaskTemplateResponse mapToResponse(List<TaskTemplateDto> taskTemplates) {
-        Map<String, List<String>> groupedTemplates = taskTemplates.stream()
+        Map<String, List<Object[]>> groupedTemplates = taskTemplates.stream()
                 .collect(Collectors.groupingBy(
                         taskTemplateDto -> taskTemplateDto.getTaskType().toString(),
-                        Collectors.mapping(TaskTemplateDto::getPrecaution, Collectors.toList())
+                        Collectors.mapping(taskTemplateDto ->
+                                new Object[]{taskTemplateDto.getId(), taskTemplateDto.getPrecaution()}, Collectors.toList())
                 ));
 
         return TaskTemplateResponse.builder()
@@ -23,4 +24,3 @@ public class TaskTemplateMapper {
                 .build();
     }
 }
-
