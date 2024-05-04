@@ -13,6 +13,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -22,33 +23,36 @@ class _MainScreenState extends State<MainScreen> {
       Navigator.pushNamed(context, '/main');
     }
     if (index == 1) {
-      Navigator.pushNamed(context, '/lock');
+      Navigator.pushNamed(context, '/nfc');
+    }
+    if (index == 2) {
+      Navigator.pushNamed(context, '/profile');
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: Header(title: '메인', back: true,),
-      body: Center(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.85,
-          child: Column(
-            children: [
-              SizedBox(height: 20,),
-              MainWelcomeBanner(),
-              SizedBox(height: 20,),
-              MainNewsBanner(),
-              SizedBox(height: 20,),
-              MainNaviPage(),
-              SizedBox(height: 20,),
-              CustomBottomNavigationBar(
-                selectedIndex: _selectedIndex,  // 현재 선택된 인덱스를 전달
-                onItemTapped: _onItemTapped,  // 탭 선택 이벤트 처리 메소드를 전달
-              ),
-            ],
+        body: Center(
+          child: SizedBox(
+            width: MediaQuery
+                .of(context)
+                .size
+                .width * 0.85,
+            child: const Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                MainWelcomeBanner(),
+                MainNewsBanner(),
+                MainNaviPage(),
+              ],
+            ),
           ),
         ),
-      ),
+        bottomNavigationBar: CustomBottomNavigationBar(
+          selectedIndex: _selectedIndex, // 현재 선택된 인덱스를 전달
+          onItemTapped: _onItemTapped, // 탭 선택 이벤트 처리 메소드를 전달
+        ) ,
     );
   }
 }

@@ -59,7 +59,7 @@ const Navigation = () => {
           <MenuLink to="/2">
             <Typo.H3>LOTO 현황</Typo.H3>
           </MenuLink>
-          <MenuLink to="/3">
+          <MenuLink to="/checklist">
             <Typo.H3>체크리스트 관리</Typo.H3>
           </MenuLink>
           <MenuLink to="/information">

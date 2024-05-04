@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:app/widgets/header/header.dart';
-import 'package:app/widgets/common_text_button.dart';
+import 'package:app/widgets/button/common_text_button.dart';
 
 class DaySelect extends StatefulWidget {
   const DaySelect({super.key});

@@ -1,12 +1,12 @@
 import { api } from './Base.ts';
 
-// interface LoginType {
-//   companyCode: string;
-//   username: string;
-//   password: string;
-// }
+interface LoginType {
+  username: string;
+  password: string;
+  company_code: string;
+}
 
-export const userLogin = async (loginData: FormData) => {
+export const userLogin = async (loginData: LoginType) => {
   try {
     const response = await api.post('/login', loginData);
     return response.data;

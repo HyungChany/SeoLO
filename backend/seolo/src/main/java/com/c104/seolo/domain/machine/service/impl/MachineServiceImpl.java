@@ -214,6 +214,23 @@ public class MachineServiceImpl implements MachineService {
     }
 
     @Override
+    public void deleteMachine(Long machineId, String companyCode) {
+        Machine machine = machineRepository.findById(machineId)
+                .orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
+
+        if (!machine.getFacility().getCompany().getCompanyCode().equals(companyCode)) {
+            throw new CommonException(MachineErrorCode.NOT_COMPANY_MACHINE);
+        }
+
+        MachineManager mainManager = machineManagerRepository.findMachineManagerByMachineIdAndRole(machineId, Role.Main);
+        MachineManager subManager = machineManagerRepository.findMachineManagerByMachineIdAndRole(machineId, Role.Sub);
+
+        machineManagerRepository.delete(mainManager);
+        machineManagerRepository.delete(subManager);
+        machineRepository.delete(machine);
+    }
+
+    @Override
     public MachineListResponse findMachineByCompanyAndFacility(String companyCode, Long facilityId) {
         Facility facility = facilityRepository.findById(facilityId).orElseThrow(() -> new CommonException(FacilityErrorCode.NOT_EXIST_FACILITY));
 

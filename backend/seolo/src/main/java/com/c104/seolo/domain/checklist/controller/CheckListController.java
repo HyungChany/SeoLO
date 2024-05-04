@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
-@RequestMapping("checklist")
+@RequestMapping("checklists")
 @RequiredArgsConstructor
 @Slf4j
 public class CheckListController {

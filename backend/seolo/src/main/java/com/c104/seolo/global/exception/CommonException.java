@@ -1,12 +1,14 @@
 package com.c104.seolo.global.exception;
 
 import com.c104.seolo.domain.machine.exception.MachineErrorCode;
+import com.c104.seolo.domain.task.exception.TaskErrorCode;
 import com.c104.seolo.global.security.exception.JwtErrorCode;
 import com.c104.seolo.headquarter.company.exception.CompanyErrorCode;
 import com.c104.seolo.domain.checklist.exception.CheckListErrorCode;
 import com.c104.seolo.domain.facility.exception.FacilityErrorCode;
 import com.c104.seolo.domain.core.exception.LockerErrorCode;
 import com.c104.seolo.domain.user.exception.UserErrorCode;
+import com.c104.seolo.headquarter.employee.exception.EmployeeErrorCode;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
@@ -53,6 +55,18 @@ public class CommonException extends RuntimeException {
     }
 
     public CommonException(JwtErrorCode e) {
+        this.message = e.getMessage();
+        this.errorCode = e.getErrorCode();
+        this.httpStatus = e.getHttpStatus();
+    }
+
+    public CommonException(EmployeeErrorCode e) {
+        this.message = e.getMessage();
+        this.errorCode = e.getErrorCode();
+        this.httpStatus = e.getHttpStatus();
+    }
+
+    public CommonException(TaskErrorCode e) {
         this.message = e.getMessage();
         this.errorCode = e.getErrorCode();
         this.httpStatus = e.getHttpStatus();

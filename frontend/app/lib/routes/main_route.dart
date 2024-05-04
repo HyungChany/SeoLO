@@ -1,7 +1,12 @@
-import 'package:app/screens/lock/lock_screen.dart';
+import 'package:app/screens/loading/loading_screen.dart';
+import 'package:app/screens/login/login_screen.dart';
+import 'package:app/screens/login/pin_login_screen.dart';
 import 'package:app/screens/main/main_screen.dart';
 import 'package:app/screens/nfc/nfc_screen.dart';
 import 'package:app/screens/profile/change_password_screen.dart';
+import 'package:app/screens/profile/change_pin_check_screen.dart';
+import 'package:app/screens/profile/change_pin_screen.dart';
+import 'package:app/screens/profile/check_pin_screen.dart';
 import 'package:app/screens/profile/profile_screen.dart';
 import 'package:app/screens/test_screen.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +21,8 @@ import 'package:app/screens/lotolock/other_worklist_check_screen.dart';
 
 Route<dynamic> generateMainRoute(RouteSettings settings) {
   switch (settings.name) {
-    case '/lock':
-      return MaterialPageRoute(builder: (context) => LockScreen());
+    case '/pinLogin':
+      return MaterialPageRoute(builder: (context) => PinLoginScreen());
     case '/test':
       return MaterialPageRoute(builder: (context) => const TestScreen());
     case '/main':
@@ -37,6 +42,12 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => ProfileScreen());
     case '/changePassword':
       return MaterialPageRoute(builder: (context) => ChangePassword());
+    case '/checkPin':
+      return MaterialPageRoute(builder: (context) => CheckPinScreen());
+    case '/changePin':
+      return MaterialPageRoute(builder: (context) => ChangePinScreen());
+    case '/changePinCheck':
+      return MaterialPageRoute(builder: (context) => ChangePinCheckScreen());
     case '/nfc':
       return MaterialPageRoute(builder: (context) => NfcScreen());
     case '/dayselect':
@@ -44,9 +55,14 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
     case '/timeselect':
       return MaterialPageRoute(builder: (context) => TimeSelect());
     case '/worklistcheck':
-      return MaterialPageRoute(builder: (context)=> WorkListCheckScreen());
+      return MaterialPageRoute(builder: (context) => WorkListCheckScreen());
     case '/otherworklistcheck':
-      return MaterialPageRoute(builder: (context)=> OtherWorkListCheckScreen());
+      return MaterialPageRoute(
+          builder: (context) => OtherWorkListCheckScreen());
+    case '/login':
+      return MaterialPageRoute(builder: (context) => LoginScreen());
+    case '/loading':
+      return MaterialPageRoute(builder: (context) => LoadingScreen());
     default:
       debugPrint('Route Error');
       return MaterialPageRoute(builder: (context) => const TestScreen());

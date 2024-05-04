@@ -2,7 +2,6 @@ INSERT INTO company (company_code, company_name, company_logo, company_registrat
 VALUES ('SFY001KOR', 'SSAFY', 'dummy', '123-45-67890', '123-45-67890-1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('SAM001KOR', 'SAMSUNG', 'dummy', '177-77-77777', '177-77-77777-7', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-
 INSERT INTO employee (employee_num, company_code, employee_name, employee_title, employee_team, employee_birthday, employee_thum, employee_join_date, employee_leave_date, created_at, updated_at)
 VALUES
     ('202100001', 'SFY001KOR', '김진명', '대리', '개발팀', '1996-02-23', 'default', '2021-07-12', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -158,8 +157,8 @@ VALUES
 ;
 
 INSERT INTO app_user (USER_IS_LOCKED, USER_PIN, CREATED_AT, UPDATED_AT, USER_ID, EMPLOYEE_NUM, USER_STAT, USER_ROLE, USER_PWD) VALUES
-    (false, '$2a$10$l1FAI5aM0A9ocigVa7L34eU6IvWO/nu0Vln5/ZawHkCdDtcVXBZvm', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, '202100001', 'INIT', 'ROLE_MANAGER', '$2a$10$pT.Qqif0f1VbpAT2OSCvCe88qQqYWX2//YXi.T722zEKj/N9gr3Ue'),
-    (false, '$2a$10$FXTUrU8805Vnxtzv3cH2aO82F4h3nyAQe/C/NWTRBdxD2beWkusLS', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, '199500001', 'INIT', 'ROLE_WORKER', '$2a$10$8lOqas3sQFbrpesrOM80oO14xs4finryPmroZMnbu/mKdh7VZhZ9q');
+                                                                                                                                   (false, '$2a$10$l1FAI5aM0A9ocigVa7L34eU6IvWO/nu0Vln5/ZawHkCdDtcVXBZvm', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, '202100001', 'INIT', 'ROLE_MANAGER', '$2a$10$pT.Qqif0f1VbpAT2OSCvCe88qQqYWX2//YXi.T722zEKj/N9gr3Ue'),
+                                                                                                                                   (false, '$2a$10$FXTUrU8805Vnxtzv3cH2aO82F4h3nyAQe/C/NWTRBdxD2beWkusLS', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, '199500001', 'INIT', 'ROLE_WORKER', '$2a$10$8lOqas3sQFbrpesrOM80oO14xs4finryPmroZMnbu/mKdh7VZhZ9q');
 
 INSERT INTO check_list_template(check_list_template_context)
 values ('LOTO에 대해 작업자 교육이 이루어졌는가?'),
@@ -171,3 +170,81 @@ values ('LOTO에 대해 작업자 교육이 이루어졌는가?'),
        ('작업자 눈에 잘 띄는 위치에 표지판을 단단히 고정하여 경고하였는가?'),
        ('LOTO를 해재하기 전 다른 작업자들이 안전하게 위치하고 있는지 확인하였는가?'),
        ('모든 작업자들에게 LOTO 제거를 공지하였는가?');
+
+INSERT INTO task_template(task_template_type, task_template_precaution)
+values ('FIX', '수리중입니다.'),
+       ('FIX', '메인 장치 수리중입니다.'),
+       ('FIX', '보조 장치 수리중입니다.'),
+       ('REPAIR', '점검중입니다.'),
+       ('REPAIR', '정기 점검중입니다.'),
+       ('REPAIR', '임시 점검중입니다.'),
+       ('CLEAN', '청소중입니다.'),
+       ('CLEAN', '정기 청소중입니다.'),
+       ('CLEAN', '임시 청소중입니다.'),
+       ('ETC', '');
+
+INSERT INTO locker(locker_battery, locker_is_locked, locker_uid, company_code, created_at, updated_at)
+values (100, false, '1DA24G31', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (10, true, '1DA24G32', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (80, false, '1DA24G33', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (98, false, '1DA24G34', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (29, false, '1DA24G35', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (80, false, '1DA24G36', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (88, true, '1DA24G37', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (91, false, '1DA24G38', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+       (37, false, '1DA24G39', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+insert into facility(created_at, updated_at, facility_company_code, facility_name, facility_address, facility_layout, facility_thum)
+values (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '1공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
+       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '2공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
+       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '3공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
+       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '4공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
+       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '5공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
+       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '6공장', '광주광역시 광산구 하남산단6번로 107', '', '');
+
+
+INSERT INTO machine_subcategory (machine_subcategory)
+VALUES
+    ('선반'),
+    ('수치제어 선반'),
+    ('보통선반'),
+    ('자동선반'),
+    ('수직선반'),
+    ('터릿선반'),
+    ('탁상선반'),
+    ('나사절삭선반'),
+    ('수제제어 수평선반'),
+    ('밀링기'),
+    ('수치제어 밀링머신'),
+    ('베드형 밀링머신'),
+    ('플래노밀러'),
+    ('머시닝센터'),
+    ('드릴링기'),
+    ('래디얼 드릴링머신'),
+    ('탁상 드릴링머신'),
+    ('보링기'),
+    ('수치제어 보링머신'),
+    ('수직형 보링머신'),
+    ('지그 보링머신'),
+    ('연삭기'),
+    ('수치제어 연삭기'),
+    ('평면연삭기'),
+    ('기어가공기'),
+    ('수치제어 기어호빙머신'),
+    ('베벨기어가공기'),
+    ('특수가공기'),
+    ('수치제어 와이어컷 방전기'),
+    ('레이저 가공기'),
+    ('기타 절삭기계'),
+    ('파워 프레스'),
+    ('크랭크 프레스'),
+    ('고속 프레스'),
+    ('딥 드로잉 프레스'),
+    ('하이드로포밍 프레스'),
+    ('수치제어 절단기'),
+    ('파이프 밴딩머신'),
+    ('단조 프레스'),
+    ('볼트/너트 포밍머신'),
+    ('와이어 드로잉머신'),
+    ('드로우 벤치'),
+    ('스프링포밍 머신');
