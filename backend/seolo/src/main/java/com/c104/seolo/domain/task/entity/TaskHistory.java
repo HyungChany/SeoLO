@@ -67,4 +67,16 @@ public class TaskHistory extends BaseEntity {
     }
 
     public TaskHistory() {}
+
+    @PrePersist
+    @PreUpdate
+    private void calculateStatus() {
+        LocalDateTime now = LocalDateTime.now();
+
+        if (taskEndDateTime == null) {
+            taskStatus = TaskStatus.ING;
+        } else if (now.isAfter(taskEndDateTime)) {
+            taskStatus = TaskStatus.END;
+        }
+    }
 }
