@@ -2,7 +2,6 @@ INSERT INTO company (company_code, company_name, company_logo, company_registrat
 VALUES ('SFY001KOR', 'SSAFY', 'dummy', '123-45-67890', '123-45-67890-1', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        ('SAM001KOR', 'SAMSUNG', 'dummy', '177-77-77777', '177-77-77777-7', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
-
 INSERT INTO employee (employee_num, company_code, employee_name, employee_title, employee_team, employee_birthday, employee_thum, employee_join_date, employee_leave_date, created_at, updated_at)
 VALUES
     ('202100001', 'SFY001KOR', '김진명', '대리', '개발팀', '1996-02-23', 'default', '2021-07-12', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -158,8 +157,8 @@ VALUES
 ;
 
 INSERT INTO app_user (USER_IS_LOCKED, USER_PIN, CREATED_AT, UPDATED_AT, USER_ID, EMPLOYEE_NUM, USER_STAT, USER_ROLE, USER_PWD) VALUES
-    (false, '$2a$10$l1FAI5aM0A9ocigVa7L34eU6IvWO/nu0Vln5/ZawHkCdDtcVXBZvm', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, '202100001', 'INIT', 'ROLE_MANAGER', '$2a$10$pT.Qqif0f1VbpAT2OSCvCe88qQqYWX2//YXi.T722zEKj/N9gr3Ue'),
-    (false, '$2a$10$FXTUrU8805Vnxtzv3cH2aO82F4h3nyAQe/C/NWTRBdxD2beWkusLS', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, '199500001', 'INIT', 'ROLE_WORKER', '$2a$10$8lOqas3sQFbrpesrOM80oO14xs4finryPmroZMnbu/mKdh7VZhZ9q');
+                                                                                                                                   (false, '$2a$10$l1FAI5aM0A9ocigVa7L34eU6IvWO/nu0Vln5/ZawHkCdDtcVXBZvm', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, '202100001', 'INIT', 'ROLE_MANAGER', '$2a$10$pT.Qqif0f1VbpAT2OSCvCe88qQqYWX2//YXi.T722zEKj/N9gr3Ue'),
+                                                                                                                                   (false, '$2a$10$FXTUrU8805Vnxtzv3cH2aO82F4h3nyAQe/C/NWTRBdxD2beWkusLS', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, '199500001', 'INIT', 'ROLE_WORKER', '$2a$10$8lOqas3sQFbrpesrOM80oO14xs4finryPmroZMnbu/mKdh7VZhZ9q');
 
 INSERT INTO check_list_template(check_list_template_context)
 values ('LOTO에 대해 작업자 교육이 이루어졌는가?'),
@@ -194,3 +193,57 @@ values (100, false, '1DA24G31', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAM
        (88, true, '1DA24G37', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        (91, false, '1DA24G38', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
        (37, false, '1DA24G39', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+
+insert into facility(created_at, updated_at, facility_company_code, facility_name, facility_address, facility_layout, facility_thum)
+values (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '1공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
+       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '2공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
+       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '3공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
+       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '4공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
+       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '5공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
+       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '6공장', '광주광역시 광산구 하남산단6번로 107', '', '');
+
+INSERT INTO machine_subcategory (machine_subcategory, machine_maincategory)
+VALUES
+    ('선반', '금속절삭기계'),
+    ('수치제어 선반', '금속절삭기계'),
+    ('보통선반', '금속절삭기계'),
+    ('자동선반', '금속절삭기계'),
+    ('수직선반', '금속절삭기계'),
+    ('터릿선반', '금속절삭기계'),
+    ('탁상선반', '금속절삭기계'),
+    ('나사절삭선반', '금속절삭기계'),
+    ('수제제어 수평선반', '금속절삭기계'),
+    ('밀링기', '금속절삭기계'),
+    ('수치제어 밀링머신', '금속절삭기계'),
+    ('베드형 밀링머신', '금속절삭기계'),
+    ('플래노밀러', '금속절삭기계'),
+    ('머시닝센터', '금속절삭기계'),
+    ('드릴링기', '금속절삭기계'),
+    ('래디얼 드릴링머신', '금속절삭기계'),
+    ('탁상 드릴링머신', '금속절삭기계'),
+    ('보링기', '금속절삭기계'),
+    ('수치제어 보링머신', '금속절삭기계'),
+    ('수직형 보링머신', '금속절삭기계'),
+    ('지그 보링머신', '금속절삭기계'),
+    ('연삭기', '금속절삭기계'),
+    ('수치제어 연삭기', '금속절삭기계'),
+    ('평면연삭기', '금속절삭기계'),
+    ('기어가공기', '금속절삭기계'),
+    ('수치제어 기어호빙머신', '금속절삭기계'),
+    ('베벨기어가공기', '금속절삭기계'),
+    ('특수가공기', '금속절삭기계'),
+    ('수치제어 와이어컷 방전기', '금속절삭기계'),
+    ('레이저 가공기', '금속절삭기계'),
+    ('기타 절삭기계', '금속절삭기계'),
+    ('파워 프레스', '금속성형기계'),
+    ('크랭크 프레스', '금속성형기계'),
+    ('고속 프레스', '금속성형기계'),
+    ('딥 드로잉 프레스', '금속성형기계'),
+    ('하이드로포밍 프레스', '금속성형기계'),
+    ('수치제어 절단기', '금속성형기계'),
+    ('파이프 밴딩머신', '금속성형기계'),
+    ('단조 프레스', '금속성형기계'),
+    ('볼트/너트 포밍머신', '금속성형기계'),
+    ('와이어 드로잉머신', '금속성형기계'),
+    ('드로우 벤치', '금속성형기계'),
+    ('스프링포밍 머신', '금속성형기계');
