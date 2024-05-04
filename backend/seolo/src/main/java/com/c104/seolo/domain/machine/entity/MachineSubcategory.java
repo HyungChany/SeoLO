@@ -22,14 +22,10 @@ public class MachineSubcategory {
     @Column(name = "machine_subcategory", length = 40, nullable = false)
     private String subcategory;
 
-    @Column(name = "macine_maincategory", length = 40, nullable = false)
-    private String maincategory;
-
     @Builder
-    private MachineSubcategory(Long id, String subcategory, String maincategory) {
+    private MachineSubcategory(Long id, String subcategory) {
         this.id = id;
         this.subcategory = subcategory;
-        this.maincategory = maincategory;
     }
 
     public MachineSubcategory() {
