@@ -2,7 +2,7 @@ import { api } from './Base.ts';
 
 export const lockCheck = async (companycode: string) => {
   try {
-    const accessToken = sessionStorage.getItem('accesstoken');
+    const accessToken = sessionStorage.getItem('accessToken');
     const response = await api.get('/locks', {
       headers: {
         Authorization: `Bearer ${accessToken}`,
