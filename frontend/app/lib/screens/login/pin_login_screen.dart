@@ -41,8 +41,33 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
     });
 
     if (pin.length == 4) {
-      if (viewModel.errorCode == 'AH07') {
-        viewModel.errorCode == 'AH07'
+      if (!viewModel.isLoading) {
+        viewModel.pinLogin().then((_) {
+          if (viewModel.errorMessage == null) {
+            Navigator.pushReplacementNamed(context, '/main');
+            setState(() {
+              pin = '';
+              failCount = 0;
+            });
+          } else {
+            setState(() {
+              pin = '';
+              failCount += 1;
+              content = failCount == 5 ? '' : '${viewModel.errorMessage!} ($failCount/5)';
+
+            });
+            failCount == 3
+                ? showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return const CommonDialog(
+                        content: 'pin 번호를 5번 틀릴 시 계정이 잠깁니다.',
+                        buttonText: '확인',
+                      );
+                    })
+                : null;
+            failCount == 5
             ? showDialog(
                 context: context,
                 barrierDismissible: false,
@@ -57,36 +82,9 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
                     },
                   );
                 })
-            : null;
-      } else {
-        if (!viewModel.isLoading) {
-          viewModel.pinLogin().then((_) {
-            if (viewModel.errorMessage == null) {
-              Navigator.pushReplacementNamed(context, '/main');
-              setState(() {
-                pin = '';
-                failCount = 0;
-              });
-            } else {
-              setState(() {
-                pin = '';
-                failCount += 1;
-                content = '${viewModel.errorMessage!} ($failCount/5)';
-              });
-              failCount == 3
-                  ? showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) {
-                        return const CommonDialog(
-                          content: 'pin 번호를 5번 틀릴 시 계정이 잠깁니다.',
-                          buttonText: '확인',
-                        );
-                      })
-                  : null;
-            }
-          });
-        }
+                : null;
+          }
+        });
       }
     }
   }
@@ -100,7 +98,10 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
   gradient1() {
     return BoxDecoration(
       gradient: LinearGradient(
-        colors: [Colors.white.withOpacity(0.5), Color.fromRGBO(215, 223, 243, 0.5)],
+        colors: [
+          Colors.white.withOpacity(0.5),
+          Color.fromRGBO(215, 223, 243, 0.5)
+        ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
@@ -110,7 +111,10 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
   gradient2() {
     return BoxDecoration(
       gradient: LinearGradient(
-        colors: [Color.fromRGBO(215, 223, 243, 0.5), Color.fromRGBO(175, 190, 240, 0.5)],
+        colors: [
+          Color.fromRGBO(215, 223, 243, 0.5),
+          Color.fromRGBO(175, 190, 240, 0.5)
+        ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
@@ -120,7 +124,10 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
   gradient3() {
     return BoxDecoration(
       gradient: LinearGradient(
-        colors: [Color.fromRGBO(175, 190, 240, 0.5), Color.fromRGBO (135, 157, 238, 0.5)],
+        colors: [
+          Color.fromRGBO(175, 190, 240, 0.5),
+          Color.fromRGBO(135, 157, 238, 0.5)
+        ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
