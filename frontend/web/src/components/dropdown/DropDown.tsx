@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 import Select, { ActionMeta, SingleValue } from 'react-select';
+import { Facilities } from '@/apis/Facilities.ts';
 
 interface OptionType {
   value: string;
   label: string;
+}
+interface FacilityType {
+  id: string;
+  name: string;
 }
 
 const DropDownBox = styled.div`
@@ -77,6 +82,7 @@ const Dropdown: React.FC<{
     }
   };
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [options, setOptions] = useState<OptionType[]>([]);
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
   const handleOptionChange = (
     newValue: SingleValue<OptionType>,
@@ -85,19 +91,19 @@ const Dropdown: React.FC<{
     console.log('Action: ', actionMeta.action);
     setSelectedOption(newValue);
   };
-  const options: OptionType[] = [
-    { value: '1공장', label: '1공장' },
-    { value: '2공장', label: '2공장' },
-    { value: '3공장', label: '3공장' },
-    { value: '4공장', label: '4공장' },
-    { value: '5공장', label: '5공장' },
-    { value: '6공장', label: '6공장' },
-    { value: '7공장', label: '7공장' },
-    { value: '8공장', label: '8공장' },
-    { value: '9공장', label: '9공장' },
-    { value: '10공장', label: '10공장' },
-    { value: '11공장', label: '11공장' },
-  ];
+  useEffect(() => {
+    const DropDownData = async () => {
+      const companyCode = 'SFY001KOR';
+      const data = await Facilities(companyCode);
+      const newOptions = data.map((facility: FacilityType) => ({
+        value: facility.id, // API 응답에 따라 조정 필요
+        label: facility.name, // API 응답에 따라 조정 필요
+      }));
+      setOptions(newOptions);
+    };
+    DropDownData();
+  }, []);
+
   return (
     <DropDownBox onClick={handleClick}>
       {/* <DropDownContent onClick={onToggle}></DropDownContent>
