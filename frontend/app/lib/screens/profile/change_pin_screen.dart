@@ -49,25 +49,77 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
     });
   }
 
+  gradient1() {
+    return BoxDecoration(
+      gradient: LinearGradient(
+        colors: [Colors.white.withOpacity(0.5), Color.fromRGBO(215, 223, 243, 0.5)],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ),
+    );
+  }
+
+  gradient2() {
+    return BoxDecoration(
+      gradient: LinearGradient(
+        colors: [Color.fromRGBO(215, 223, 243, 0.5), Color.fromRGBO(175, 190, 240, 0.5)],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ),
+    );
+  }
+
+  gradient3() {
+    return BoxDecoration(
+      gradient: LinearGradient(
+        colors: [Color.fromRGBO(175, 190, 240, 0.5), Color.fromRGBO (135, 157, 238, 0.5)],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ),
+    );
+  }
+
+  gradient4() {
+    return BoxDecoration(
+      gradient: LinearGradient(
+        colors: [Color.fromRGBO(135, 157, 238, 0.5), blue100],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+      ),
+    );
+  }
+
   renderKeyboard() {
-    return keys
-        .map(
-          (x) => Container(
-            color: blue100.withOpacity(0.5),
-            child: Row(
-              children: x.map((y) {
-                return Expanded(
-                  child: KeyboardKey(
-                    label: y,
-                    onTap: y is Widget ? onBackspacePress : onNumberPress,
-                    value: y,
-                  ),
-                );
-              }).toList(),
-            ),
+    List keyboardRows = [];
+    for (int i = 0; i < keys.length; i++) {
+      BoxDecoration decoration;
+      if (i % 4 == 0) {
+        decoration = gradient1();
+      } else if (i % 4 == 1) {
+        decoration = gradient2();
+      } else if (i % 4 == 2) {
+        decoration = gradient3();
+      } else {
+        decoration = gradient4();
+      }
+      keyboardRows.add(
+        Container(
+          decoration: decoration,
+          child: Row(
+            children: keys[i].map((y) {
+              return Expanded(
+                child: KeyboardKey(
+                  label: y,
+                  onTap: y is Widget ? onBackspacePress : onNumberPress,
+                  value: y,
+                ),
+              );
+            }).toList(),
           ),
-        )
-        .toList();
+        ),
+      );
+    }
+    return keyboardRows;
   }
 
   renderText() {
