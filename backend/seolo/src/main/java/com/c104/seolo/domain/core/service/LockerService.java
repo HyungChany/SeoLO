@@ -11,5 +11,5 @@ public interface LockerService {
     public void updateLocker(LockerRequest lockerRequest, String company_code, Long lock_id);
 
     public void enrollLocker(String company_code ,LockerEnrollRequest lockerEnrollRequest);
-    public LockerDto getLockerByUid(String lockerUid);
+    public Locker getLockerByUid(String lockerUid);
 }

@@ -82,10 +82,8 @@ public class LockerServiceImpl implements LockerService {
     }
 
     @Override
-    public LockerDto getLockerByUid(String lockerUid) {
-        Locker locker = lockerRepository.findByUid(lockerUid).orElseThrow(
+    public Locker getLockerByUid(String lockerUid) {
+        return lockerRepository.findByUid(lockerUid).orElseThrow(
                 () -> new CommonException(LockerErrorCode.NOT_EXIST_LOCKER));
-
-        return locker.toResponse();
     }
 }
