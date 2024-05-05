@@ -1,6 +1,7 @@
 package com.c104.seolo.domain.user.service.impl;
 
 import com.c104.seolo.domain.user.dto.request.UserJoinRequest;
+import com.c104.seolo.domain.user.dto.request.UserPwdCheckRequest;
 import com.c104.seolo.domain.user.dto.request.UserPwdResetRequest;
 import com.c104.seolo.domain.user.dto.response.UserInfoResponse;
 import com.c104.seolo.domain.user.dto.response.UserJoinResponse;
@@ -75,7 +76,7 @@ public class UserServiceImpl implements UserService {
     public UserInfoResponse getUserInfo(CCodePrincipal cCodePrincipal) {
         AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
 
-        UserInfoResponse res = UserInfoResponse.builder()
+        return UserInfoResponse.builder()
                 .id(appUser.getId())
                 .employee(appUser.getEmployee())
                 .ROLES(appUser.getROLES())
@@ -83,9 +84,16 @@ public class UserServiceImpl implements UserService {
                 .PIN(appUser.getPIN())
                 .isLocked(appUser.isLocked())
                 .build();
-        return res;
     }
 
+    @Override
+    public void checkSamePassword(CCodePrincipal cCodePrincipal, UserPwdCheckRequest userPwdCheckRequest) {
+        AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
+
+        if (!passwordEncoder.matches(userPwdCheckRequest.getNowPassword(),appUser.getPassword())) {
+            throw new AuthException(AuthErrorCode.INVALID_PASSWORD_FOR_CHECK);
+        }
+    }
 
     @Transactional
     @Override

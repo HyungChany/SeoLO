@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LockerRepository extends CrudRepository<Locker, Long> {
@@ -14,4 +15,5 @@ public interface LockerRepository extends CrudRepository<Locker, Long> {
             "l.id, l.uid, l.isLocked, l.battery) FROM Locker l " +
             "WHERE l.company.companyCode = :companyCode")
     List<LockerInfo> findAllByCompanyCode(String companyCode);
+    Optional<Locker> findByUid(String uid);
 }
