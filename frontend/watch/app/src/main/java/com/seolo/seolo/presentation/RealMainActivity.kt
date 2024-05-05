@@ -22,7 +22,7 @@ class RealMainActivity : AppCompatActivity() {
 
         Glide.with(this)
             .asGif()
-            .load(R.drawable.main_sample0)
+            .load(R.drawable.main_sample3)
             .into(binding.mainView)
         binding.textViewOverlay.text = "NFC"
 
