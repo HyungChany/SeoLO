@@ -17,5 +17,5 @@ public class LockerDto {
     private String uid;
     private boolean isLocked;
     private Integer battery;
-    private SecretKey encryptionKey;
+    private String encryptionKey;
 }

@@ -6,13 +6,10 @@ import com.c104.seolo.domain.core.exception.CoreTokenErrorCode;
 import com.c104.seolo.domain.core.repository.TokenRepository;
 import com.c104.seolo.domain.core.service.LockerService;
 import com.c104.seolo.domain.core.service.TokenService;
-import com.c104.seolo.global.encryption.AesEncryption;
 import com.c104.seolo.global.exception.CommonException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.crypto.SecretKey;
 
 @Service
 public class CoreTokenServiceImpl implements TokenService {
@@ -40,14 +37,13 @@ public class CoreTokenServiceImpl implements TokenService {
 
         // 해싱에 필 랜덤으로 생성해서 DB에 저장한 키로 한다.
 //        SecretKey randomSecretKey = AesEncryption.generateKey();
-        String encrypt = AesEncryption.encrypt(lockerUid, locker.getEncryptionKey());
+//        String encrypt = AesEncryption.encrypt(lockerUid, locker.getEncryptionKey());
 
 
         return Token.builder()
-                .tokenValue()
+                .tokenValue("test")
                 .build();
 
-        return null;
     }
 
     @Override

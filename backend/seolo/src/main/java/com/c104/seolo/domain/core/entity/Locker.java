@@ -36,7 +36,7 @@ public class Locker extends BaseEntity {
     private int battery;
 
     @Column(name = "locker_encryption_key", length = 32,nullable = false)
-    private SecretKey encryptionKey;
+    private String encryptionKey;
 
     protected Locker () {}
 
@@ -63,7 +63,7 @@ public class Locker extends BaseEntity {
         private String uid;
         private boolean isLocked = false;
         private int battery;
-        private SecretKey encryptionKey;
+        private String encryptionKey;
 
         public Builder company(Company company) {
             if (company == null) {
@@ -91,7 +91,7 @@ public class Locker extends BaseEntity {
             return this;
         }
 
-        public Builder encryptionKey(SecretKey newEncryptionKey) {
+        public Builder encryptionKey(String newEncryptionKey) {
             if (newEncryptionKey == null) {
                 throw new IllegalArgumentException("EncryptionKey cannot be null");
             }

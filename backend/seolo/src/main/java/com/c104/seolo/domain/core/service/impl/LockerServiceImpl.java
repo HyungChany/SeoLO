@@ -9,19 +9,30 @@ import com.c104.seolo.domain.core.entity.Locker;
 import com.c104.seolo.domain.core.exception.LockerErrorCode;
 import com.c104.seolo.domain.core.repository.LockerRepository;
 import com.c104.seolo.domain.core.service.LockerService;
+import com.c104.seolo.global.encryption.AesEncryption;
 import com.c104.seolo.global.exception.CommonException;
+import com.c104.seolo.headquarter.company.service.CompanyService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class LockerServiceImpl implements LockerService {
     private final LockerRepository lockerRepository;
+    private final CompanyService companyService;
+
+    @Autowired
+    public LockerServiceImpl(LockerRepository lockerRepository, CompanyService companyService) {
+        this.lockerRepository = lockerRepository;
+        this.companyService = companyService;
+    }
 
     private List<LockerDto> getLockers(List<LockerInfo> lockerInfos) {
         return lockerInfos.stream()
@@ -54,16 +65,22 @@ public class LockerServiceImpl implements LockerService {
     }
 
     @Override
-    public LockerDto enrollLocker(LockerEnrollRequest lockerEnrollRequest) {
-        Locker.builder()
-                .company(lockerEnrollRequest.getCompanyCode()
+    @Transactional
+    public void enrollLocker(String companyCode,LockerEnrollRequest lockerEnrollRequest) {
+        try {
+            SecretKey binarySercertKey = AesEncryption.generateKey();
 
-                )
-                .build();
+            Locker newLocker = Locker.builder()
+                    .company(companyService.findCompanyEntityByCompanyCode(companyCode))
+                    .uid(lockerEnrollRequest.getUid())
+                    .encryptionKey(AesEncryption.getBase64EncodedKey(binarySercertKey))
+                    .build();
 
-        lockerRepository.save()
-
-        return null;
+            lockerRepository.save(newLocker);
+        } catch (Exception e) {
+            log.error("Locker 대칭키 생성 중 에러 발생 : " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @Override

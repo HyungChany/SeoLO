@@ -6,7 +6,7 @@ import com.c104.seolo.global.security.jwt.dto.response.IssuedToken;
 import com.c104.seolo.global.security.jwt.entity.InvalidToken;
 import com.c104.seolo.global.security.jwt.entity.JwtToken;
 import com.c104.seolo.global.security.jwt.repository.InvalidTokenRepository;
-import com.c104.seolo.global.security.jwt.repository.TokenRepository;
+import com.c104.seolo.global.security.jwt.repository.JwtTokenRepository;
 import com.c104.seolo.global.security.jwt.service.TokenService;
 import com.c104.seolo.global.security.service.DBUserDetailService;
 import lombok.extern.slf4j.Slf4j;
@@ -18,14 +18,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtTokenService implements TokenService {
     private final JwtUtils jwtUtils;
-    private final TokenRepository tokenRepository;
+    private final JwtTokenRepository jwtTokenRepository;
     private final InvalidTokenRepository invalidTokenRepository;
     private final DBUserDetailService dbUserDetailService;
 
     @Autowired
-    public JwtTokenService(JwtUtils jwtUtils, TokenRepository tokenRepository, InvalidTokenRepository invalidTokenRepository, DBUserDetailService dbUserDetailService) {
+    public JwtTokenService(JwtUtils jwtUtils, JwtTokenRepository jwtTokenRepository, InvalidTokenRepository invalidTokenRepository, DBUserDetailService dbUserDetailService) {
         this.jwtUtils = jwtUtils;
-        this.tokenRepository = tokenRepository;
+        this.jwtTokenRepository = jwtTokenRepository;
         this.invalidTokenRepository = invalidTokenRepository;
         this.dbUserDetailService = dbUserDetailService;
     }
@@ -39,7 +39,7 @@ public class JwtTokenService implements TokenService {
         String accessToken = jwtUtils.issueAccessToken(appUser);
         String refreshToken = jwtUtils.issueRefreshToken(appUser);
 
-        tokenRepository.save(
+        jwtTokenRepository.save(
                 JwtToken.builder()
                         .id(appUser.getId())
                         .refreshToken(refreshToken)

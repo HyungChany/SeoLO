@@ -10,6 +10,6 @@ public interface LockerService {
     public LockerResponse getCompanyLockers(String company_code);
     public void updateLocker(LockerRequest lockerRequest, String company_code, Long lock_id);
 
-    public LockerDto enrollLocker(LockerEnrollRequest lockerEnrollRequest);
+    public void enrollLocker(String company_code ,LockerEnrollRequest lockerEnrollRequest);
     public LockerDto getLockerByUid(String lockerUid);
 }
