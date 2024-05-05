@@ -60,8 +60,7 @@ const CurrentLOTO = () => {
   // console.log('라커', lock);
   useEffect(() => {
     const fetchLocks = async () => {
-      const companyCode = 'SFY001KOR';
-      const data = await lockCheck(companyCode);
+      const data = await lockCheck();
       console.log('라커', data); // data를 상태로 설정
       const newOptions = data.map((locks: LockTypes) => ({
         id: locks.id,

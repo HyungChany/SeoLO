@@ -17,3 +17,19 @@ export const EquipmentRegistration = async () => {
     console.log(error);
   }
 };
+
+export const EquipmentList = async (facilityId: number) => {
+  try {
+    const accessToken = sessionStorage.getItem('accesstoken');
+    const companyCode = sessionStorage.getItem('companyCode');
+    const response = await api.get(`/machines/facility/${facilityId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Company-Code': companyCode,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
