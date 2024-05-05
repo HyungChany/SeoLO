@@ -2,21 +2,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@color/BLACK">
+    android:background="@color/BLACK"
+    android:padding="16dp">
 
     <LinearLayout
         android:id="@+id/centerLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintWidth_percent="0.61"
-        app:layout_constraintHeight_percent="0.61"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:background="@drawable/card"
-        android:orientation="vertical">
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.61"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.61"> <!-- LinearLayout 세로 중앙 정렬 -->
 
         <TextView
             android:id="@+id/TitleView"
@@ -25,12 +26,14 @@
             android:text="@string/sample_text"
             android:textAlignment="center"
             android:textColor="@color/SAMSUNG_BLUE"
-            android:textSize="18sp" />
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/ContentView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
             android:text="@string/sample_text"
             android:textAlignment="center"
             android:textColor="@color/BLACK"
