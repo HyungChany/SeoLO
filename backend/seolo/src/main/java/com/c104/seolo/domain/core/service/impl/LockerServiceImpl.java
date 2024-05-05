@@ -66,19 +66,15 @@ public class LockerServiceImpl implements LockerService {
     @Override
     @Transactional
     public void enrollLocker(String companyCode,LockerEnrollRequest lockerEnrollRequest) {
-        try {
-            SecretKey binarySercertKey = AesEncryption.generateKey();
+        SecretKey binarySercertKey = AesEncryption.generateKey();
 
-            Locker newLocker = Locker.builder()
-                    .company(companyService.findCompanyEntityByCompanyCode(companyCode))
-                    .uid(lockerEnrollRequest.getLockerUid())
-                    .encryptionKey(AesEncryption.getBase64EncodedKey(binarySercertKey))
-                    .build();
+        Locker newLocker = Locker.builder()
+                .company(companyService.findCompanyEntityByCompanyCode(companyCode))
+                .uid(lockerEnrollRequest.getLockerUid())
+                .encryptionKey(AesEncryption.getBase64EncodedKey(binarySercertKey))
+                .build();
 
-            lockerRepository.save(newLocker);
-        } catch (Exception e) {
-            log.error("Locker 대칭키 생성 중 에러 발생 : " + e.getMessage());
-        }
+        lockerRepository.save(newLocker);
     }
 
     @Override

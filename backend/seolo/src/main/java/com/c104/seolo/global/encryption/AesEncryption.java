@@ -66,5 +66,4 @@ public class AesEncryption {
             throw new CommonException(AesEncryptionErrorCode.DECRYPTION_ERROR);
         }
     }
-
 }
