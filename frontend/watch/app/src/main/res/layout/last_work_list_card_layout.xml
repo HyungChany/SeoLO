@@ -48,7 +48,7 @@
         android:layout_height="15dp"
         android:layout_marginStart="8dp"
         android:contentDescription="@string/left"
-        android:src="@drawable/left"
+        android:src="@drawable/img_left"
         app:layout_constraintBottom_toBottomOf="@id/centerLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/centerLayout" />
