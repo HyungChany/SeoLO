@@ -1,5 +1,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/BLACK"
@@ -17,7 +18,7 @@
         app:layout_constraintHeight_percent="0.61"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.61"> <!-- LinearLayout 세로 중앙 정렬 -->
+        app:layout_constraintWidth_percent="0.61">
 
         <TextView
             android:id="@+id/TitleView"
@@ -38,5 +39,30 @@
             android:textAlignment="center"
             android:textColor="@color/BLACK"
             android:textSize="18sp" />
+
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/slideRightIcon"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/right"
+        android:src="@drawable/right"
+        app:layout_constraintBottom_toBottomOf="@id/centerLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/centerLayout" />
+
+    <ImageView
+        android:id="@+id/slideLeftIcon"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/left"
+        android:src="@drawable/left"
+        app:layout_constraintBottom_toBottomOf="@id/centerLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/centerLayout" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
