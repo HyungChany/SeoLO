@@ -3,6 +3,7 @@ import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:app/widgets/lock/key_board_key.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
 class CheckPinScreen extends StatefulWidget {
@@ -13,6 +14,7 @@ class CheckPinScreen extends StatefulWidget {
 }
 
 class _CheckPinScreenState extends State<CheckPinScreen> {
+  final _storage = FlutterSecureStorage();
   String pin = '';
   String content = '';
   int failCount = 0;
@@ -50,8 +52,8 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
           } else {
             setState(() {
               pin = '';
-              failCount = viewModel.failCount!;
-              content = '${viewModel.errorMessage!} ($failCount/5)';
+              failCount += 1;
+              content = failCount == 5 ? '' : '${viewModel.errorMessage!} ($failCount/5)';
             });
             failCount == 3
                 ? showDialog(
@@ -73,6 +75,7 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
                     content: viewModel.errorMessage!,
                     buttonText: '확인',
                     buttonClick: () {
+                      _storage.deleteAll();
                       Navigator.pushNamedAndRemoveUntil(
                           context, '/login', (route) => false);
                     },
