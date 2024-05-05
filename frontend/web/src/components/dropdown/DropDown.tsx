@@ -93,8 +93,7 @@ const Dropdown: React.FC<{
   };
   useEffect(() => {
     const DropDownData = async () => {
-      const companyCode = 'SFY001KOR';
-      const data = await Facilities(companyCode);
+      const data = await Facilities();
       console.log('데이터', data);
       const newOptions = data.map((facility: FacilityType) => ({
         value: facility.id,
