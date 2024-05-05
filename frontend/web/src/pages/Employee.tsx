@@ -1,4 +1,4 @@
-import React, { useState, useRef, ChangeEvent } from 'react';
+import React, { useState, useRef, ChangeEvent, useEffect } from 'react';
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 import Card from '@/components/card/Card.tsx';
@@ -7,6 +7,15 @@ import * as Typo from '@/components/typography/Typography.tsx';
 import InputBox from '@/components/inputbox/InputBox.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import People from '/assets/images/people.png';
+import { Facilities } from '@/apis/Facilities.ts';
+interface FacilityType {
+  id: string;
+  name: string;
+}
+interface OptionType {
+  value: string;
+  label: string;
+}
 const Background = styled.div`
   width: 100%;
   height: 100%;
@@ -112,6 +121,8 @@ const Employee = () => {
   const [equipmentNumber, setEquipmentNumber] = useState<string>('');
   const [team, setTeam] = useState<string>('');
   const [position, setPosition] = useState<string>('');
+  const [options, setOptions] = useState<OptionType[]>([]);
+  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
   const handleEquipmentName = (e: ChangeEvent<HTMLInputElement>) => {
     setEquipmentName(e.target.value);
   };
@@ -124,7 +135,11 @@ const Employee = () => {
   const handlePosition = (e: ChangeEvent<HTMLInputElement>) => {
     setPosition(e.target.value);
   };
-
+  const handleOptionChange = (option: OptionType): void => {
+    setSelectedOption(option); // 선택된 옵션 상태 업데이트
+    console.log('Selected facility:', option);
+    // 추가로 필요한 동작이 있으면 여기에 작성
+  };
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -142,6 +157,17 @@ const Employee = () => {
   const handleFileUpload = async () => {
     fileInputRef.current?.click();
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await Facilities();
+      const newOptions = data.map((facility: FacilityType) => ({
+        value: facility.id,
+        label: facility.name,
+      }));
+      setOptions(newOptions);
+    };
+    fetchData();
+  }, []);
   const handleSubmit = () => {};
   return (
     <Background>
@@ -161,7 +187,12 @@ const Employee = () => {
           <LeftBox>
             <DropdownBox>
               <Typo.H3>등록 작업장</Typo.H3>
-              <Dropdown />
+              <Dropdown
+                options={options}
+                selectedOption={selectedOption}
+                onOptionChange={handleOptionChange}
+                placeholder="공장을 선택하세요"
+              />
             </DropdownBox>
             <PhotoBox onClick={handleFileUpload}>
               <Typo.H3>작업장 사진</Typo.H3>
