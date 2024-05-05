@@ -10,5 +10,5 @@ import lombok.Getter;
 public class LockerEnrollRequest {
 
     @NotNull(message = "자물쇠 기기 고유번호를 입력해주세요.")
-    private String uid;
+    private String lockerUid;
 }

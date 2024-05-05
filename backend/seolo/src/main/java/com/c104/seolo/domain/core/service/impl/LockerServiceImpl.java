@@ -13,7 +13,6 @@ import com.c104.seolo.global.encryption.AesEncryption;
 import com.c104.seolo.global.exception.CommonException;
 import com.c104.seolo.headquarter.company.service.CompanyService;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,7 +42,7 @@ public class LockerServiceImpl implements LockerService {
                         .battery(info.getBattery())
                         .build())
                 .collect(Collectors.toList());
-    };
+    }
 
     @Override
     public LockerResponse getCompanyLockers(String company_code) {
@@ -72,14 +71,13 @@ public class LockerServiceImpl implements LockerService {
 
             Locker newLocker = Locker.builder()
                     .company(companyService.findCompanyEntityByCompanyCode(companyCode))
-                    .uid(lockerEnrollRequest.getUid())
+                    .uid(lockerEnrollRequest.getLockerUid())
                     .encryptionKey(AesEncryption.getBase64EncodedKey(binarySercertKey))
                     .build();
 
             lockerRepository.save(newLocker);
         } catch (Exception e) {
             log.error("Locker 대칭키 생성 중 에러 발생 : " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
