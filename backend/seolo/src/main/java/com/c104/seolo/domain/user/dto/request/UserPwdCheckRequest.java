@@ -1,19 +1,16 @@
 package com.c104.seolo.domain.user.dto.request;
 
-import com.c104.seolo.domain.user.exception.validation.PasswordConstraint;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.ToString;
 
 @ToString
 @Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class UserPwdResetRequest {
+public class UserPwdCheckRequest {
 
-
-    @PasswordConstraint
-    private String newPassword;
-
-    private String checkNewPassword;
+    @NotNull(message = "비밀번호를 입력해주세요")
+    private String nowPassword;
 }

@@ -1,6 +1,7 @@
 package com.c104.seolo.domain.user.service;
 
 import com.c104.seolo.domain.user.dto.request.UserJoinRequest;
+import com.c104.seolo.domain.user.dto.request.UserPwdCheckRequest;
 import com.c104.seolo.domain.user.dto.request.UserPwdResetRequest;
 import com.c104.seolo.domain.user.dto.response.UserInfoResponse;
 import com.c104.seolo.domain.user.dto.response.UserJoinResponse;
@@ -14,4 +15,5 @@ public interface UserService {
     AppUser createAppUser(Employee employee, String password);
     UserInfoResponse getUserInfo(CCodePrincipal cCodePrincipal);
     void resetUserPassword(CCodePrincipal cCodePrincipal, UserPwdResetRequest userPwdResetRequest);
+    void checkSamePassword(CCodePrincipal cCodePrincipal, UserPwdCheckRequest userPwdCheckRequest);
 }
