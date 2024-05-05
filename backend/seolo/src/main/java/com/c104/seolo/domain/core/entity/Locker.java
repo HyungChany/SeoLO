@@ -32,6 +32,9 @@ public class Locker extends BaseEntity {
     @Column(name = "locker_battery", nullable = false, columnDefinition = "INTEGER DEFAULT 100")
     private int battery;
 
+    @Column(name = "locker_encryption_key", length = 32,nullable = false)
+    private String encryptionKey;
+
     protected Locker () {}
 
     public Locker(Builder builder) {
@@ -39,6 +42,7 @@ public class Locker extends BaseEntity {
         this.uid = builder.uid;
         this.isLocked = builder.isLocked;
         this.battery = builder.battery;
+        this.encryptionKey = builder.encryptionKey;
     }
 
     public static class Builder {
@@ -46,6 +50,8 @@ public class Locker extends BaseEntity {
         private String uid;
         private boolean isLocked = false;
         private int battery;
+
+        private String encryptionKey;
 
         public Builder company(Company company) {
             if (company == null) {
@@ -73,8 +79,16 @@ public class Locker extends BaseEntity {
             return this;
         }
 
+        public Builder encryptionKey(String newEncryptionKey) {
+            if (newEncryptionKey == null) {
+                throw new IllegalArgumentException("EncryptionKey cannot be null");
+            }
+            this.encryptionKey = newEncryptionKey;
+            return this;
+        }
+
         public Locker build() {
-            if (company == null) {
+            if (company == null || uid == null || encryptionKey == null ) {
                 throw new IllegalStateException("Cannot build Locker object, one or more required fields are not set");
             }
             return new Locker(this);
