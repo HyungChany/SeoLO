@@ -1,7 +1,6 @@
 package com.seolo.seolo.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -52,8 +51,5 @@ class WorkListActivity : AppCompatActivity() {
         } else {
             leftArrow.visibility = View.VISIBLE
         }
-
-        // 로그 추가
-        Log.d("ViewPagerDemo", "Current position: $position, Total count: $itemCount")
     }
 }
