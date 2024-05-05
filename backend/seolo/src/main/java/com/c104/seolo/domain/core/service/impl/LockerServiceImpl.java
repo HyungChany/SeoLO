@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +39,7 @@ public class LockerServiceImpl implements LockerService {
         return lockerInfos.stream()
                 .map(info -> LockerDto.builder()
                         .id(info.getId())
-                        .uid(info.getUid())
+                        .uid(new String( Base64.getDecoder().decode(info.getUid()), StandardCharsets.UTF_8))
                         .isLocked(info.getLocked())
                         .battery(info.getBattery())
                         .build())
@@ -69,11 +70,10 @@ public class LockerServiceImpl implements LockerService {
     public void enrollLocker(String companyCode,LockerEnrollRequest lockerEnrollRequest) {
         SecretKey binarySercertKey = AesEncryption.generateKey();
 
+        // locker DB 저장시 uid와 대칭키는 보안을 위해 base64로 인코딩한다
         Locker newLocker = Locker.builder()
                 .company(companyService.findCompanyEntityByCompanyCode(companyCode))
-                .uid(Base64.getEncoder()
-                                .encodeToString(lockerEnrollRequest.getLockerUid().getBytes())
-                )
+                .uid(Base64.getEncoder().encodeToString(lockerEnrollRequest.getLockerUid().getBytes()))
                 .encryptionKey(AesEncryption.getBase64EncodedKey(binarySercertKey))
                 .build();
 
