@@ -2,6 +2,7 @@ package com.c104.seolo.domain.core.service.impl;
 
 import com.c104.seolo.domain.core.dto.LockerDto;
 import com.c104.seolo.domain.core.dto.info.LockerInfo;
+import com.c104.seolo.domain.core.dto.request.LockerEnrollRequest;
 import com.c104.seolo.domain.core.dto.request.LockerRequest;
 import com.c104.seolo.domain.core.dto.response.LockerResponse;
 import com.c104.seolo.domain.core.entity.Locker;
@@ -27,7 +28,7 @@ public class LockerServiceImpl implements LockerService {
                 .map(info -> LockerDto.builder()
                         .id(info.getId())
                         .uid(info.getUid())
-                        .locked(info.getLocked())
+                        .isLocked(info.getLocked())
                         .battery(info.getBattery())
                         .build())
                 .collect(Collectors.toList());
@@ -50,5 +51,26 @@ public class LockerServiceImpl implements LockerService {
 
         locker.setBattery(lockerRequest.getBattery());
         lockerRepository.save(locker);
+    }
+
+    @Override
+    public LockerDto enrollLocker(LockerEnrollRequest lockerEnrollRequest) {
+        Locker.builder()
+                .company(lockerEnrollRequest.getCompanyCode()
+
+                )
+                .build();
+
+        lockerRepository.save()
+
+        return null;
+    }
+
+    @Override
+    public LockerDto getLockerByUid(String lockerUid) {
+        Locker locker = lockerRepository.findByUid(lockerUid).orElseThrow(
+                () -> new CommonException(LockerErrorCode.NOT_EXIST_LOCKER));
+
+        return locker.toResponse();
     }
 }

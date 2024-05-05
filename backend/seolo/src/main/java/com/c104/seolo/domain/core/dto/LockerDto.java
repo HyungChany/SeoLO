@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.crypto.SecretKey;
+
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Getter
@@ -13,6 +15,7 @@ import lombok.Setter;
 public class LockerDto {
     private Long id;
     private String uid;
-    private Boolean locked;
+    private boolean isLocked;
     private Integer battery;
+    private SecretKey encryptionKey;
 }

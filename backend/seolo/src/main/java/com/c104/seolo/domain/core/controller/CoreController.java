@@ -23,6 +23,6 @@ public class CoreController {
             @RequestHeader("Company-Code") String companyCode,
             @PathVariable String code
     ) {
-        coreService.coreAuth(code);
+        coreService.coreAuth(cCodePrincipal ,code);
     }
 }

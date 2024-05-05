@@ -1,11 +1,14 @@
 package com.c104.seolo.domain.core.entity;
 
+import com.c104.seolo.domain.core.dto.LockerDto;
 import com.c104.seolo.global.common.BaseEntity;
 import com.c104.seolo.headquarter.company.entity.Company;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import javax.crypto.SecretKey;
 
 @ToString
 @Getter
@@ -23,7 +26,7 @@ public class Locker extends BaseEntity {
     @JoinColumn(name = "company_code", referencedColumnName = "company_code", nullable = false)
     private Company company;
 
-    @Column(name = "locker_uid", length = 8, nullable = false)
+    @Column(name = "locker_uid", length = 8, nullable = false, unique = true)
     private String uid;
 
     @Column(name = "locker_isLocked")
@@ -33,9 +36,19 @@ public class Locker extends BaseEntity {
     private int battery;
 
     @Column(name = "locker_encryption_key", length = 32,nullable = false)
-    private String encryptionKey;
+    private SecretKey encryptionKey;
 
     protected Locker () {}
+
+    public LockerDto toResponse(){
+        return LockerDto.builder()
+                .id(this.getId())
+                .uid(this.getUid())
+                .isLocked(this.isLocked())
+                .battery(this.getBattery())
+                .encryptionKey(this.getEncryptionKey())
+                .build();
+    }
 
     public Locker(Builder builder) {
         this.company = builder.company;
@@ -50,8 +63,7 @@ public class Locker extends BaseEntity {
         private String uid;
         private boolean isLocked = false;
         private int battery;
-
-        private String encryptionKey;
+        private SecretKey encryptionKey;
 
         public Builder company(Company company) {
             if (company == null) {
@@ -79,7 +91,7 @@ public class Locker extends BaseEntity {
             return this;
         }
 
-        public Builder encryptionKey(String newEncryptionKey) {
+        public Builder encryptionKey(SecretKey newEncryptionKey) {
             if (newEncryptionKey == null) {
                 throw new IllegalArgumentException("EncryptionKey cannot be null");
             }

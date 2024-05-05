@@ -1,10 +1,12 @@
 package com.c104.seolo.domain.core.service.impl;
 
+import com.c104.seolo.domain.core.entity.Token;
 import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.core.service.CodeState;
 import com.c104.seolo.domain.core.service.Context;
 import com.c104.seolo.domain.core.service.CoreService;
 import com.c104.seolo.domain.core.service.states.INIT;
+import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +19,7 @@ import java.util.Set;
 public class CoreServiceImpl implements CoreService {
     private static final String BASE_PACKAGE = "com.c104.seolo.domain.core.service.states.";
     @Override
-    public void coreAuth(String code) {
+    public void coreAuth(CCodePrincipal cCodePrincipal, String code) {
         Context context = new Context();
         CodeState state;
 
@@ -37,4 +39,6 @@ public class CoreServiceImpl implements CoreService {
         context.setState(state);
         context.request();
     }
+
+
 }
