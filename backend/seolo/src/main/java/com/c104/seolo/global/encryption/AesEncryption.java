@@ -1,5 +1,6 @@
 package com.c104.seolo.global.encryption;
 
+import com.c104.seolo.global.encryption.exception.AesEncryptionErrorCode;
 import com.c104.seolo.global.exception.CommonException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,10 +17,15 @@ public class AesEncryption {
 
 
     // 랜덤 대칭키 생성
-    public static SecretKey generateKey() throws Exception {
-        KeyGenerator keyGenerator = KeyGenerator.getInstance(ALGORITHM);
-        keyGenerator.init(KEYSIZE);
-        return keyGenerator.generateKey();
+    public static SecretKey generateKey() {
+        try {
+            KeyGenerator keyGenerator = KeyGenerator.getInstance(ALGORITHM);
+            keyGenerator.init(KEYSIZE);
+            return keyGenerator.generateKey();
+        } catch (Exception e) {
+            log.error("대칭키 생성 중 오류가 발생" + e.getMessage());
+            throw new CommonException(AesEncryptionErrorCode.KEY_GENERATION_ERROR);
+        }
     }
     
     // 대칭키 DB 저장을 위한 Base64 인코딩
@@ -44,15 +50,11 @@ public class AesEncryption {
             return Base64.getEncoder().encodeToString(encryptedData);
         } catch (Exception e) {
             log.error("AES 암호화 중 에러발생" + e.getMessage());
-            throw new CommonException("AES 암호화 실패", e);
+            throw new CommonException(AesEncryptionErrorCode.ENCRYPTION_ERROR);
         }
     }
 
-
-
-
     public static String decrypt(String encryptedData, SecretKey secretKey) {
-
         try {
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
@@ -61,6 +63,7 @@ public class AesEncryption {
             return new String(decryptedData);
         } catch (Exception e) {
             log.error("AES 복호화 중 에러발생" + e.getMessage());
+            throw new CommonException(AesEncryptionErrorCode.DECRYPTION_ERROR);
         }
     }
 
