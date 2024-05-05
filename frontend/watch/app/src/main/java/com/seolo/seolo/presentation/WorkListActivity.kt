@@ -1,6 +1,7 @@
 package com.seolo.seolo.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -8,6 +9,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.seolo.seolo.R
 import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.adapters.CarouselStateAdapter
+import com.seolo.seolo.fragments.LastWorkListFragment
 import com.seolo.seolo.fragments.WorkListFragment
 
 class WorkListActivity : AppCompatActivity() {
@@ -28,23 +30,30 @@ class WorkListActivity : AppCompatActivity() {
         adapter.addFragment(WorkListFragment.newInstance("Title 1", "Content 1"))
         adapter.addFragment(WorkListFragment.newInstance("Title 2", "Content 2"))
         adapter.addFragment(WorkListFragment.newInstance("Title 3", "Content 3"))
-        adapter.addFragment(WorkListFragment.newInstance("Title 4", "Content 4"))
+        adapter.addFragment(LastWorkListFragment.newInstance("Title 4", "Content 4"))
 
         viewPager.adapter = adapter
+        adapter.notifyDataSetChanged()
 
         // 페이지 변경 리스너 등록
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                val leftArrow: ImageView = findViewById(R.id.slideLeftIcon)
-                val rightArrow: ImageView = findViewById(R.id.slideRightIcon)
-
-                // 첫 번째 페이지에서는 왼쪽 화살표 숨기기
-                leftArrow.visibility = if (position == 0) View.INVISIBLE else View.VISIBLE
-
-                // 마지막 페이지에서는 오른쪽 화살표 숨기기
-                rightArrow.visibility = if (position == 3) View.INVISIBLE else View.VISIBLE
+                updateArrows(position, adapter.itemCount)
             }
         })
+    }
+
+    private fun updateArrows(position: Int, itemCount: Int) {
+        val leftArrow: ImageView = findViewById(R.id.slideLeftIcon)
+
+        if (position == 0) {
+            leftArrow.visibility = View.INVISIBLE
+        } else {
+            leftArrow.visibility = View.VISIBLE
+        }
+
+        // 로그 추가
+        Log.d("ViewPagerDemo", "Current position: $position, Total count: $itemCount")
     }
 }

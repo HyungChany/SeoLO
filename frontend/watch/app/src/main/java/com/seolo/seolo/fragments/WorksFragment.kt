@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
 
-class worksFragment : Fragment() {
+class WorksFragment : Fragment() {
 
     private var imageResourceId: Int? = null
     private var work: String? = null
@@ -42,8 +42,8 @@ class worksFragment : Fragment() {
         private const val ARG_IMAGE_RESOURCE_ID = "imageResourceId"
         private const val ARG_WORK = "work"
 
-        fun newInstance(imageResourceId: Int, work: String): worksFragment {
-            val fragment = worksFragment()
+        fun newInstance(imageResourceId: Int, work: String): WorksFragment {
+            val fragment = WorksFragment()
             val args = Bundle()
             args.putInt(ARG_IMAGE_RESOURCE_ID, imageResourceId)
             args.putString(ARG_WORK, work)
