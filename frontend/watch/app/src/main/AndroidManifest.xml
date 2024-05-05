@@ -103,6 +103,12 @@
             android:taskAffinity=""
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
+        <activity
+            android:name=".presentation.WorkListActivity"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
     </application>
 
 </manifest>

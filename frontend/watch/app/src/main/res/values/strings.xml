@@ -5,7 +5,7 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">From the Square world,\nHello, %1$s!</string>
-    <string name="sample_text">Sample sssssssssssssssssssText</string>
+    <string name="sample_text">Sample</string>
     <string name="open_example_activity">Open Example Activity</string>
     <string name="left"><![CDATA[<]]></string>
     <string name="right"><![CDATA[>]]></string>

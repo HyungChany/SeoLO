@@ -19,15 +19,15 @@ class WorkListActivity : AppCompatActivity() {
         // 메인 레이아웃 설정
         setContentView(R.layout.activity_layout)
 
-        // ViewPager2와 CarouselStateAdapter 설정
+// ViewPager2와 CarouselStateAdapter 설정
         val viewPager: ViewPager2 = findViewById(R.id.viewPager)
         val adapter = CarouselStateAdapter(this@WorkListActivity)
 
-        // CardFragment 인스턴스 생성
-        adapter.addFragment(WorkListFragment())
-        adapter.addFragment(WorkListFragment())
-        adapter.addFragment(WorkListFragment())
-        adapter.addFragment(WorkListFragment())
+// CardFragment 인스턴스 생성 및 추가
+        adapter.addFragment(WorkListFragment.newInstance("Title 1", "Content 1"))
+        adapter.addFragment(WorkListFragment.newInstance("Title 2", "Content 2"))
+        adapter.addFragment(WorkListFragment.newInstance("Title 3", "Content 3"))
+        adapter.addFragment(WorkListFragment.newInstance("Title 4", "Content 4"))
 
         viewPager.adapter = adapter
     }
