@@ -95,9 +95,10 @@ const Dropdown: React.FC<{
     const DropDownData = async () => {
       const companyCode = 'SFY001KOR';
       const data = await Facilities(companyCode);
+      console.log('데이터', data);
       const newOptions = data.map((facility: FacilityType) => ({
-        value: facility.id, // API 응답에 따라 조정 필요
-        label: facility.name, // API 응답에 따라 조정 필요
+        value: facility.id,
+        label: facility.name,
       }));
       setOptions(newOptions);
     };
