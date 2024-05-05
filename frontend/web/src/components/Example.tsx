@@ -10,7 +10,6 @@ import CheckList from '@/../assets/icons/CheckList.svg?react';
 // import { Modal } from '@/components/modal/Modal.tsx';
 import Footer from '@/components/footer/Footer.tsx';
 import Navigation from '@/components/navigation/Navigation.tsx';
-import Dropdown from '@/components/dropdown/DropDown.tsx';
 import Card from '@/components/card/Card.tsx';
 import InputBox from '@/components/inputbox/InputBox.tsx';
 import { ChangeEvent, useState } from 'react';
@@ -67,7 +66,6 @@ export const Example = () => {
       <div>
         <CustomRadioButton data={radioData} width={10} />
       </div>
-      <Dropdown />
       <Typo.H1 color={Color.BLACK}>헤더1</Typo.H1>
       <Typo.H2 color={Color.RED500}>헤더2</Typo.H2>
       <Typo.H3 color={Color.YELLOW500}>헤더3</Typo.H3>

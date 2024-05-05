@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import * as Color from '@/config/color/Color.ts';
 import Select, { ActionMeta, SingleValue } from 'react-select';
+import * as Color from '@/config/color/Color.ts';
 
 interface OptionType {
   value: string;
   label: string;
+}
+
+interface DropdownProps {
+  options: OptionType[];
+  selectedOption: OptionType | null;
+  onOptionChange: (option: OptionType) => void;
+  placeholder?: string;
 }
 
 const DropDownBox = styled.div`
@@ -38,7 +45,7 @@ const StyledSelect = styled(Select<OptionType>).attrs({
     cursor: pointer;
   }
   .react-select__single-value {
-    color: ${Color.BLACK}; /* 텍스트 색상 지정 */
+    color: ${Color.BLACK};
     font-size: 1.375rem;
     font-weight: 700;
   }
@@ -49,69 +56,49 @@ const StyledSelect = styled(Select<OptionType>).attrs({
     text-align: center;
   }
   .react-select__option {
-    background-color: transparent; /* option 배경색 */
-    color: black; /* option 텍스트 색상 */
+    background-color: transparent;
+    color: black;
   }
   .react-select__option--is-selected {
-    background-color: ${Color.SNOW}; /* 클릭된 option 배경색 */
-    color: ${Color.GRAY300}; /* 클릭된 option 텍스트 색상 */
+    background-color: ${Color.SNOW};
+    color: ${Color.GRAY300};
   }
   .react-select__option--is-focused {
     border: 1px solid #afaeb7;
-    color: black; /* hover 상태의 option 텍스트 색상 */
+    color: black;
   }
   .react-select__placeholder {
     color: ${Color.BLACK};
     font-weight: 600;
   }
 `;
-const Dropdown: React.FC<{
-  onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-}> = ({ onClick }) => {
-  const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    // 클릭 이벤트 전파를 중지
-    event.stopPropagation();
-    // 추가적인 onClick 로직이 있다면 실행
-    if (onClick) {
-      onClick(event);
-    }
-  };
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+
+const Dropdown: React.FC<DropdownProps> = ({
+  options,
+  selectedOption,
+  onOptionChange,
+  placeholder,
+}) => {
   const handleOptionChange = (
     newValue: SingleValue<OptionType>,
     actionMeta: ActionMeta<OptionType>,
   ) => {
     console.log('Action: ', actionMeta.action);
-    setSelectedOption(newValue);
+    if (newValue) {
+      onOptionChange(newValue);
+    }
   };
-  const options: OptionType[] = [
-    { value: '1공장', label: '1공장' },
-    { value: '2공장', label: '2공장' },
-    { value: '3공장', label: '3공장' },
-    { value: '4공장', label: '4공장' },
-    { value: '5공장', label: '5공장' },
-    { value: '6공장', label: '6공장' },
-    { value: '7공장', label: '7공장' },
-    { value: '8공장', label: '8공장' },
-    { value: '9공장', label: '9공장' },
-    { value: '10공장', label: '10공장' },
-    { value: '11공장', label: '11공장' },
-  ];
+  const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.stopPropagation(); // 이벤트 버블링 방지
+  };
   return (
     <DropDownBox onClick={handleClick}>
-      {/* <DropDownContent onClick={onToggle}></DropDownContent>
-       */}
       <StyledSelect
         options={options}
-        onChange={handleOptionChange} // 옵션 선택 시 처리
-        menuIsOpen={isOpen} // 드롭다운 메뉴의 개폐 상태
-        placeholder="공장선택"
-        onMenuOpen={() => setIsOpen(true)}
-        onMenuClose={() => setIsOpen(false)}
+        onChange={handleOptionChange}
+        menuIsOpen={undefined} // 메뉴 개폐 상태는 내부적으로 관리되므로 undefined 처리
+        placeholder={placeholder || '선택하세요'}
         value={selectedOption}
-        // getOptionLabel={(option) => option.label}
-        // getOptionValue={(option) => option.value}
       />
     </DropDownBox>
   );

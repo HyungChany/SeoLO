@@ -8,6 +8,12 @@ import com.c104.seolo.domain.facility.entity.Facility;
 import com.c104.seolo.domain.facility.exception.FacilityErrorCode;
 import com.c104.seolo.domain.facility.repository.FacilityRepository;
 import com.c104.seolo.domain.facility.service.FacilityService;
+import com.c104.seolo.domain.machine.entity.Machine;
+import com.c104.seolo.domain.machine.entity.MachineManager;
+import com.c104.seolo.domain.machine.enums.Role;
+import com.c104.seolo.domain.machine.exception.MachineErrorCode;
+import com.c104.seolo.domain.machine.repository.MachineManagerRepository;
+import com.c104.seolo.domain.machine.repository.MachineRepository;
 import com.c104.seolo.global.exception.CommonException;
 import com.c104.seolo.headquarter.company.repository.CompanyRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +29,8 @@ import java.util.stream.Collectors;
 public class FacilityServiceImpl implements FacilityService {
     private final FacilityRepository facilityRepository;
     private final CompanyRepository companyRepository;
+    private final MachineRepository machineRepository;
+    private final MachineManagerRepository machineManagerRepository;
 
     @Override
     public FacilityResponse findFacilityByCompany(String company_code) {
@@ -86,6 +94,24 @@ public class FacilityServiceImpl implements FacilityService {
         if (!facility.getCompany().getCompanyCode().equals(company_code)) {
             throw new CommonException(FacilityErrorCode.NOT_COMPANY_FACILITY);
         }
+
+        List<Machine> machines = machineRepository.findByFacilityId(facility_id);
+        for (Machine machine : machines) {
+            Machine machineTemp = machineRepository.findById(machine.getId())
+                    .orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
+
+            if (!machineTemp.getFacility().getCompany().getCompanyCode().equals(company_code)) {
+                throw new CommonException(MachineErrorCode.NOT_COMPANY_MACHINE);
+            }
+
+            MachineManager mainManager = machineManagerRepository.findMachineManagerByMachineIdAndRole(machine.getId(), Role.Main);
+            MachineManager subManager = machineManagerRepository.findMachineManagerByMachineIdAndRole(machine.getId(), Role.Sub);
+
+            machineManagerRepository.delete(mainManager);
+            machineManagerRepository.delete(subManager);
+            machineRepository.delete(machineTemp);
+        }
+
         facilityRepository.delete(facility);
     }
 }

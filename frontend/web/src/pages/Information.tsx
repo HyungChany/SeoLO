@@ -8,8 +8,17 @@ import People from '/assets/images/people.png';
 import Dropdown from '@/components/dropdown/DropDown.tsx';
 import EquipmentModal from '@/components/modal/EquipmentModal.tsx';
 import Employee from '@/components/modal/Employee.tsx';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Facilities } from '@/apis/Facilities.ts';
 
+interface OptionType {
+  value: string;
+  label: string;
+}
+interface FacilityType {
+  id: string;
+  name: string;
+}
 const Background = styled.div`
   width: 100%;
   height: 100%;
@@ -40,6 +49,8 @@ const Overlay = styled.div`
 const CompanyInformation = () => {
   const [equipModal, setEquipModal] = useState<boolean>(false);
   const [employeeModal, setEmployeeModal] = useState<boolean>(false);
+  const [options, setOptions] = useState<OptionType[]>([]);
+  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
   const handleEquipmentClick = () => {
     setEquipModal(true);
   };
@@ -57,6 +68,22 @@ const CompanyInformation = () => {
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     e.stopPropagation();
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await Facilities();
+      const newOptions = data.map((facility: FacilityType) => ({
+        value: facility.id,
+        label: facility.name,
+      }));
+      setOptions(newOptions);
+    };
+    fetchData();
+  }, []);
+  const handleOptionChange = (option: OptionType): void => {
+    setSelectedOption(option); // 선택된 옵션 상태 업데이트
+    console.log('Selected facility:', option);
+    // 추가로 필요한 동작이 있으면 여기에 작성
   };
   return (
     <Background>
@@ -90,7 +117,12 @@ const CompanyInformation = () => {
         onClick={handleEquipmentClick}
       >
         <Typo.H3 color={Color.BLACK}>현재 작업장의 장비 현황</Typo.H3>
-        <Dropdown />
+        <Dropdown
+          options={options}
+          selectedOption={selectedOption}
+          onOptionChange={handleOptionChange}
+          placeholder="공장을 선택하세요"
+        />
         <ImgBox src={Equipment} />
         <Typo.H0 color={Color.BLACK}>34</Typo.H0>
       </Card>

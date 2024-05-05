@@ -1,9 +1,15 @@
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 import { lockCheck } from '@/apis/Lock.ts';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 interface ContentBoxProps {
   battery: number; // battery 속성에 대한 타입 정의
+}
+interface LockTypes {
+  id: number;
+  uid: string;
+  locked: boolean;
+  battery: number;
 }
 const BackGround = styled.div`
   width: 100%;
@@ -49,19 +55,20 @@ const ContentBox = styled.div<ContentBoxProps>`
   border-bottom: 2px solid ${Color.GRAY200};
 `;
 const CurrentLOTO = () => {
-  const lockers = [
-    { id: 1, uid: '3C0301F1', locked: true, battery: 97 },
-    { id: 2, uid: '3C0301F2', locked: false, battery: 68 },
-    { id: 3, uid: '3C0301F3', locked: true, battery: 74 },
-    { id: 4, uid: '3C0301F4', locked: false, battery: 33 },
-  ];
+  const [lockers, setLockers] = useState<LockTypes[]>([]);
   // const lock = lockCheck('SFY001KOR');
   // console.log('라커', lock);
   useEffect(() => {
     const fetchLocks = async () => {
-      const companyCode = 'SFY001KOR';
-      const data = await lockCheck(companyCode);
+      const data = await lockCheck();
       console.log('라커', data); // data를 상태로 설정
+      const newOptions = data.map((locks: LockTypes) => ({
+        id: locks.id,
+        uid: locks.uid,
+        locked: locks.locked,
+        battery: locks.battery,
+      }));
+      setLockers(newOptions);
     };
     fetchLocks();
   }, []);
