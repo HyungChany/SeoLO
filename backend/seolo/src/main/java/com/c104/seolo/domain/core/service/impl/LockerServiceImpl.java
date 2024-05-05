@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -70,7 +71,9 @@ public class LockerServiceImpl implements LockerService {
 
         Locker newLocker = Locker.builder()
                 .company(companyService.findCompanyEntityByCompanyCode(companyCode))
-                .uid(lockerEnrollRequest.getLockerUid())
+                .uid(Base64.getEncoder()
+                                .encodeToString(lockerEnrollRequest.getLockerUid().getBytes())
+                )
                 .encryptionKey(AesEncryption.getBase64EncodedKey(binarySercertKey))
                 .build();
 

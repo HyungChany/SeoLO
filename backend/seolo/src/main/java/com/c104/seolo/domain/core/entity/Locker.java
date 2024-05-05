@@ -26,7 +26,7 @@ public class Locker extends BaseEntity {
     @JoinColumn(name = "company_code", referencedColumnName = "company_code", nullable = false)
     private Company company;
 
-    @Column(name = "locker_uid", length = 8, nullable = false, unique = true)
+    @Column(name = "locker_uid", length = 32, nullable = false, unique = true)
     private String uid;
 
     @Column(name = "locker_isLocked")
