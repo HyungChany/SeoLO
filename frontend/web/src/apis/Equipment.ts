@@ -4,7 +4,7 @@ import { api } from './Base.ts';
 // }
 export const EquipmentRegistration = async () => {
   try {
-    const accessToken = sessionStorage.getItem('accesstoken');
+    const accessToken = sessionStorage.getItem('accessToken');
     const companyCode = sessionStorage.getItem('companyCode');
     const response = await api.post(`/machines`, {
       headers: {
@@ -18,9 +18,9 @@ export const EquipmentRegistration = async () => {
   }
 };
 
-export const EquipmentList = async (facilityId: number) => {
+export const EquipmentList = async (facilityId: string) => {
   try {
-    const accessToken = sessionStorage.getItem('accesstoken');
+    const accessToken = sessionStorage.getItem('accessToken');
     const companyCode = sessionStorage.getItem('companyCode');
     const response = await api.get(`/machines/facility/${facilityId}`, {
       headers: {
@@ -28,7 +28,8 @@ export const EquipmentList = async (facilityId: number) => {
         'Company-Code': companyCode,
       },
     });
-    return response.data;
+    console.log(response.data.machines);
+    return response.data.machines;
   } catch (error) {
     console.log(error);
   }
