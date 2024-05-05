@@ -9,7 +9,7 @@ export const lockCheck = async (companycode: string) => {
         'Company-Code': companycode,
       },
     });
-    return response.data;
+    return response.data.lockers;
   } catch (error) {
     console.log(error);
   }
