@@ -57,6 +57,7 @@ const EquipmentModal = ({ onClick }: EquipmentModalProps) => {
           $borderRadius={2.5}
           $hoverBackgroundColor={Color.SAFETY_YELLOW}
           $hoverBorderColor={Color.SAFETY_YELLOW}
+          fontSize={1.25}
         >
           등록
         </Button>
