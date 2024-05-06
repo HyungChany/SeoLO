@@ -1,5 +1,6 @@
 package com.seolo.seolo.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -29,8 +30,14 @@ class CheckListActivity : AppCompatActivity() {
 
     fun moveToNextPage() {
         val currentItem = viewPager.currentItem
-        if (currentItem < (viewPager.adapter?.itemCount ?: (0 - 1))) {
+        val totalItems = viewPager.adapter?.itemCount ?: 0
+        if (currentItem < totalItems - 1) {
             viewPager.currentItem = currentItem + 1
+        } else {
+            // 마지막 프래그먼트에서 LocationActivity로 전환
+            val intent = Intent(this, LocationActivity::class.java)
+            startActivity(intent)
+            finish() // CheckListActivity 종료
         }
     }
 }
