@@ -5,21 +5,22 @@ import com.c104.seolo.domain.core.entity.Token;
 import com.c104.seolo.domain.core.service.CodeState;
 import com.c104.seolo.domain.core.service.Context;
 import com.c104.seolo.domain.core.service.CoreTokenService;
-import com.c104.seolo.domain.core.service.LockerService;
+import com.c104.seolo.domain.task.service.TaskHistoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 public class ISSUE implements CodeState {
     private final CoreTokenService coreTokenService;
-    private final LockerService lockerService;
+    private final TaskHistoryService taskHistoryService;
 
     @Autowired
-    public ISSUE(CoreTokenService coreTokenService, LockerService lockerService) {
+    public ISSUE(CoreTokenService coreTokenService, TaskHistoryService taskHistoryService) {
         this.coreTokenService = coreTokenService;
-        this.lockerService = lockerService;
+        this.taskHistoryService = taskHistoryService;
     }
 
     @Override
@@ -32,13 +33,14 @@ public class ISSUE implements CodeState {
             - ‘LOCK’ 행동코드
             - 외부인증토큰
         */
+        // 1. 작업내역 데이터 등록필요
 
+        Token newToken = coreTokenService.issueCoreAuthToken(context.getAppUser(), context.getCoreRequest().getLockerUid()); // 2
 
-        Token newToken = coreTokenService.issueCoreAuthToken(context.getAppUser(), context.getCoreRequest().getLockerUid());
-
-        return CoreResponse.builder()
+        return CoreResponse.builder() // 3
                 .nextCode("LOCK")
                 .coreToken(newToken)
+                .httpStatus(HttpStatus.OK)
                 .build();
     }
 }

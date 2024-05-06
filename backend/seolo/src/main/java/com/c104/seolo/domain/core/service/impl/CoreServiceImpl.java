@@ -31,7 +31,8 @@ public class CoreServiceImpl implements CoreService {
         CodeState codeState = setStateByReflection(code);
         log.info("state : {}", codeState);
         Context context = initContext(codeState, cCodePrincipal, companyCode, coreRequest);
-        return context.doLogic();
+        context.doLogic();
+        return null;
     }
 
     @Override

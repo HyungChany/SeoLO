@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum LockerErrorCode {
-    NOT_EXIST_LOCKER("자물쇠를 조회할 수 없습니다.", "LK01", HttpStatus.NOT_FOUND);
+    NOT_EXIST_LOCKER("존재하지 않는 자물쇠입니다.", "LK01", HttpStatus.NOT_FOUND);
 
     private final String message;
     private final String errorCode;

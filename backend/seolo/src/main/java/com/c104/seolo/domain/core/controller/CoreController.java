@@ -1,8 +1,8 @@
 package com.c104.seolo.domain.core.controller;
 
 import com.c104.seolo.domain.core.dto.request.CoreRequest;
+import com.c104.seolo.domain.core.dto.response.CoreResponse;
 import com.c104.seolo.domain.core.service.CoreService;
-import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,10 +20,10 @@ public class CoreController {
     }
 
     @PostMapping("/{code}")
-    public void coreAuthentication(@AuthenticationPrincipal CCodePrincipal cCodePrincipal,
-                                   @RequestHeader("Company-Code") String companyCode,
-                                   @PathVariable String code, @RequestBody CoreRequest coreRequest
+    public CoreResponse coreAuthentication(@AuthenticationPrincipal CCodePrincipal cCodePrincipal,
+                                           @RequestHeader("Company-Code") String companyCode,
+                                           @PathVariable String code, @RequestBody CoreRequest coreRequest
     ) {
-        coreService.coreAuth(code, cCodePrincipal, companyCode, coreRequest);
+        return coreService.coreAuth(code, cCodePrincipal, companyCode, coreRequest);
     }
 }

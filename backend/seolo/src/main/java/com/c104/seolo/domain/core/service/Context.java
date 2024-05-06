@@ -1,16 +1,17 @@
 package com.c104.seolo.domain.core.service;
 
 import com.c104.seolo.domain.core.dto.request.CoreRequest;
+import com.c104.seolo.domain.core.dto.response.CoreResponse;
 import com.c104.seolo.domain.user.entity.AppUser;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class Context {
-    private AppUser appUser;
-    private CodeState codeState;
-    private String companyCode;
-    private CoreRequest coreRequest;
+    private final AppUser appUser;
+    private final CodeState codeState;
+    private final String companyCode;
+    private final CoreRequest coreRequest;
 
 
     @Builder
@@ -21,7 +22,7 @@ public class Context {
         this.coreRequest = coreRequest;
     }
 
-    public void doLogic() {
-        codeState.handle(this);
+    public CoreResponse doLogic() {
+        return codeState.handle(this);
     }
 }

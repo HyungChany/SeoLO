@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.http.HttpStatus;
 
 @ToString
 @Getter
@@ -15,11 +16,13 @@ public class CoreResponse {
     private final String nextCode;
     private final Token coreToken;
     private final TaskHistoryDto taskHistory;
+    private final HttpStatus httpStatus;
 
     @Builder
-    public CoreResponse(String nextCode, Token coreToken, TaskHistoryDto taskHistory) {
+    public CoreResponse(String nextCode, Token coreToken, TaskHistoryDto taskHistory, HttpStatus httpStatus) {
         this.nextCode = nextCode;
         this.coreToken = coreToken;
         this.taskHistory = taskHistory;
+        this.httpStatus = httpStatus;
     }
 }

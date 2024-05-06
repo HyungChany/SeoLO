@@ -9,11 +9,13 @@ import lombok.ToString;
 @ToString
 @Getter
 @Entity
-@Table(name = "token")
+@Table(name = "token", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"token_value"})
+})
 public class Token extends BaseEntity {
 
     @Id
-    @Column(name = "token_value", nullable = false)
+    @Column(name = "token_value",unique = true ,nullable = false)
     private String tokenValue;
 
     @ManyToOne
