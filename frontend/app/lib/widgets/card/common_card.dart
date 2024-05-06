@@ -7,13 +7,15 @@ class CommonCard extends StatefulWidget {
   final String machine;
   final String start;
   final String end;
+  final bool center;
 
   const CommonCard(
       {super.key,
       required this.facility,
       required this.machine,
       required this.start,
-      required this.end});
+      required this.end,
+      required this.center});
 
   @override
   _CommonCardState createState() => _CommonCardState();
@@ -28,27 +30,40 @@ class _CommonCardState extends State<CommonCard> {
   ];
 
   lotoCard() {
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.35,
-      height: MediaQuery.of(context).size.height * 0.23,
-      decoration: BoxDecoration(
-        color: const Color.fromRGBO(237, 244, 251, 1),
-        borderRadius: BorderRadius.circular(10.0),
-        boxShadow: const [shadow],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: data.map((item) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: RowContent(
-              title: item['title']!,
-              content: item['content']!,
-              line: 2,
-            ),
-          );
-        }).toList(),
-      ),
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width * 0.35,
+          height: MediaQuery.of(context).size.height * 0.25,
+          decoration: BoxDecoration(
+            color: const Color.fromRGBO(237, 244, 251, 1),
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: const [shadow],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: data.map((item) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: RowContent(
+                  title: item['title']!,
+                  content: item['content']!,
+                  line: 2,
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+        if (!widget.center) Container(
+          width: MediaQuery.of(context).size.width * 0.35,
+          height: MediaQuery.of(context).size.height * 0.25,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+      ],
     );
   }
 

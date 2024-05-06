@@ -4,6 +4,7 @@ import 'package:app/widgets/navigator/common_navigation_bar.dart';
 import 'package:app/widgets/profile/icon_with_text.dart';
 import 'package:app/widgets/profile/logout_button.dart';
 import 'package:app/widgets/profile/my_info.dart';
+import 'package:app/widgets/profile/my_loto.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -73,7 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: EdgeInsets.only(left: 20.0),
             child: Text('나의 LOTO', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
           ),
-          Center(child: CommonCard(facility: '검사', machine: '장비sssssssssssssssssssssssssssssssssssssss', start: '24.04.24 11:30', end: '24.04.24 11:30')),
+          MyLoto()
         ],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
