@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.core.controller;
 
+import com.c104.seolo.domain.core.dto.request.CoreRequest;
 import com.c104.seolo.domain.core.service.CoreService;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
@@ -20,9 +21,9 @@ public class CoreController {
 
     @PostMapping("/{code}")
     public void coreAuthentication(@AuthenticationPrincipal CCodePrincipal cCodePrincipal,
-            @RequestHeader("Company-Code") String companyCode,
-            @PathVariable String code
+                                   @RequestHeader("Company-Code") String companyCode,
+                                   @PathVariable String code, @RequestBody CoreRequest coreRequest
     ) {
-        coreService.coreAuth(cCodePrincipal ,code);
+        coreService.coreAuth(code, cCodePrincipal, companyCode, coreRequest);
     }
 }

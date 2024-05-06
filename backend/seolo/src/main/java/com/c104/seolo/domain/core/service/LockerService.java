@@ -9,7 +9,6 @@ import com.c104.seolo.domain.core.entity.Locker;
 public interface LockerService {
     public LockerResponse getCompanyLockers(String company_code);
     public void updateLocker(LockerRequest lockerRequest, String company_code, Long lock_id);
-
     public void enrollLocker(String company_code ,LockerEnrollRequest lockerEnrollRequest);
     public Locker getLockerByUid(String lockerUid);
 }
