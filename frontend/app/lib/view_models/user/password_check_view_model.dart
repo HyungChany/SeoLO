@@ -14,7 +14,7 @@ class PasswordCheckViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   void setNowPwd(String value) {
-    _passwordCheckData = PasswordCheckModel(nowPwd: _passwordCheckData.nowPwd);
+    _passwordCheckData = PasswordCheckModel(nowPwd: value);
     notifyListeners();
   }
 

@@ -4,6 +4,7 @@ import 'package:app/view_models/main/news_view_model.dart';
 import 'package:app/view_models/user/login_view_model.dart';
 import 'package:app/view_models/user/my_info_view_model.dart';
 import 'package:app/view_models/user/password_change_view_model.dart';
+import 'package:app/view_models/user/password_check_view_model.dart';
 import 'package:app/view_models/user/pin_change_view_model.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/view_models/user/logout_view_model.dart';
@@ -59,6 +60,7 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (_) => PinChangeViewModel()),
           ChangeNotifierProvider(create: (_) => MyInfoViewModel()),
           ChangeNotifierProvider(create: (_) => PasswordChangeViewModel()),
+          ChangeNotifierProvider(create: (_) => PasswordCheckViewModel()),
         ],
         child: MaterialApp(
           localizationsDelegates: [

@@ -24,12 +24,14 @@ class _ChangePasswordState extends State<ChangePassword> {
           SmallInputBox(
               hintText: '새 비밀번호',
               textInputAction: TextInputAction.next,
+              obscureText: true,
               onChanged: (value) {
                 viewModel.setNewPwd(value);
               }),
           SmallInputBox(
               hintText: '새 비밀번호 확인',
               textInputAction: TextInputAction.done,
+              obscureText: true,
               onChanged: (value) {
                 viewModel.setCheckNewPwd(value);
               }),

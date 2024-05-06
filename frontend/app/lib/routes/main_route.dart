@@ -6,6 +6,7 @@ import 'package:app/screens/nfc/nfc_screen.dart';
 import 'package:app/screens/profile/change_password_screen.dart';
 import 'package:app/screens/profile/change_pin_check_screen.dart';
 import 'package:app/screens/profile/change_pin_screen.dart';
+import 'package:app/screens/profile/check_password_screen.dart';
 import 'package:app/screens/profile/check_pin_screen.dart';
 import 'package:app/screens/profile/profile_screen.dart';
 import 'package:app/screens/test_screen.dart';
@@ -42,6 +43,8 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => ProfileScreen());
     case '/changePassword':
       return MaterialPageRoute(builder: (context) => ChangePassword());
+    case '/checkPassword':
+      return MaterialPageRoute(builder: (context) => CheckPassword());
     case '/checkPin':
       return MaterialPageRoute(builder: (context) => CheckPinScreen());
     case '/changePin':
