@@ -10,6 +10,7 @@ import EquipmentModal from '@/components/modal/EquipmentModal.tsx';
 import Employee from '@/components/modal/Employee.tsx';
 import React, { useEffect, useState } from 'react';
 import { Facilities } from '@/apis/Facilities.ts';
+import { EquipmentList } from '@/apis/Equipment.ts';
 
 interface OptionType {
   value: string;
@@ -51,6 +52,7 @@ const CompanyInformation = () => {
   const [employeeModal, setEmployeeModal] = useState<boolean>(false);
   const [options, setOptions] = useState<OptionType[]>([]);
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+  const [facilities, setFacilities] = useState<number>(0);
   const handleEquipmentClick = () => {
     setEquipModal(true);
   };
@@ -80,6 +82,16 @@ const CompanyInformation = () => {
     };
     fetchData();
   }, []);
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      if (selectedOption?.value) {
+        const equipmentData = await EquipmentList(selectedOption.value);
+        console.log(equipmentData);
+        setFacilities(equipmentData.length);
+      }
+    };
+    fetchEquipment();
+  }, [selectedOption]);
   const handleOptionChange = (option: OptionType): void => {
     setSelectedOption(option); // 선택된 옵션 상태 업데이트
     console.log('Selected facility:', option);
@@ -124,7 +136,7 @@ const CompanyInformation = () => {
           placeholder="공장을 선택하세요"
         />
         <ImgBox src={Equipment} />
-        <Typo.H0 color={Color.BLACK}>34</Typo.H0>
+        <Typo.H0 color={Color.BLACK}>{facilities}</Typo.H0>
       </Card>
       <Card
         width={22}
