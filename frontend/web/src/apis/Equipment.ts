@@ -1,12 +1,18 @@
 import { api } from './Base.ts';
-// interface MachinesType {
-
-// }
-export const EquipmentRegistration = async () => {
+interface MachinesType {
+  facilityId: string;
+  machineName: string;
+  machineCode: string;
+  machineThum: string;
+  introductionDate: string;
+  mainManagerId: string;
+  subManagerId: string;
+}
+export const EquipmentRegistration = async (machineData: MachinesType) => {
   try {
     const accessToken = sessionStorage.getItem('accessToken');
     const companyCode = sessionStorage.getItem('companyCode');
-    const response = await api.post(`/machines`, {
+    const response = await api.post(`/machines`, machineData, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
