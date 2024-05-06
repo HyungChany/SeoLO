@@ -37,7 +37,7 @@ class CheckListActivity : AppCompatActivity() {
             // 마지막 프래그먼트에서 LocationActivity로 전환
             val intent = Intent(this, LocationActivity::class.java)
             startActivity(intent)
-            finish() // CheckListActivity 종료
+            finish()
         }
     }
 }
