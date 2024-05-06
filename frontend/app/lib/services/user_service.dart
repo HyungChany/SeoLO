@@ -1,6 +1,7 @@
 import 'package:app/models/user/login_model.dart';
 import 'package:app/models/user/my_info_model.dart';
 import 'package:app/models/user/password_change_model.dart';
+import 'package:app/models/user/password_check_model.dart';
 import 'package:app/models/user/pin_change_model.dart';
 import 'package:app/models/user/pin_login_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -148,18 +149,13 @@ class UserService {
     }
   }
 
-  ///////////////////////// 비밀번호 재설정 //////////////////////////////////
-  Future<Map<String, dynamic>> passwordChange(
-      PasswordChangeModel passwordChangeModel) async {
+  ///////////////////////// 비밀번호 확인 //////////////////////////////////
+  Future<Map<String, dynamic>> passwordCheck(
+      PasswordCheckModel passwordCheckModel) async {
     try {
-      Dio.Response response = await _dio.patch('$baseUrl/users/pwd',
-          data: passwordChangeModel.toJson());
+      Dio.Response response = await _dio.get('$baseUrl/users/pwd',
+          data: passwordCheckModel.toJson());
       if (response.statusCode == 200) {
-        debugPrint('service pwd: ${passwordChangeModel.newPwd.toString()}');
-
-        await _storage.delete(key: 'password');
-        await _storage.write(
-            key: 'password', value: passwordChangeModel.newPwd.toString());
         return {
           'success': true,
         };
@@ -167,7 +163,28 @@ class UserService {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
       }
     } on Dio.DioException catch (e) {
-      debugPrint(e.response?.data['message']);
+      return {
+        'success': false,
+        'statusCode': e.response?.statusCode,
+        'message': e.response?.data['message'],
+      };
+    }
+  }
+
+  ///////////////////////// 비밀번호 재설정 //////////////////////////////////
+  Future<Map<String, dynamic>> passwordChange(
+      PasswordChangeModel passwordChangeModel) async {
+    try {
+      Dio.Response response = await _dio.patch('$baseUrl/users/pwd',
+          data: passwordChangeModel.toJson());
+      if (response.statusCode == 200) {
+        return {
+          'success': true,
+        };
+      } else {
+        return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
+      }
+    } on Dio.DioException catch (e) {
       return {
         'success': false,
         'statusCode': e.response?.statusCode,
