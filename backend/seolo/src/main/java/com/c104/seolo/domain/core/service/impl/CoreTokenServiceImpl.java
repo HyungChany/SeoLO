@@ -18,13 +18,13 @@ import javax.crypto.SecretKey;
 
 @Slf4j
 @Service
-public class CoreCoreTokenServiceImpl implements CoreTokenService {
+public class CoreTokenServiceImpl implements CoreTokenService {
 
     private final TokenRepository tokenRepository;
     private final LockerService lockerService;
 
     @Autowired
-    public CoreCoreTokenServiceImpl(TokenRepository tokenRepository, LockerService lockerService) {
+    public CoreTokenServiceImpl(TokenRepository tokenRepository, LockerService lockerService) {
         this.tokenRepository = tokenRepository;
         this.lockerService = lockerService;
     }
@@ -70,8 +70,8 @@ public class CoreCoreTokenServiceImpl implements CoreTokenService {
     }
 
     @Override
-    public void deleteTokenByTokenValue(String tokenValue) {
-        tokenRepository.findByTokenValue(tokenValue).ifPresent(tokenRepository::delete);
+    public void deleteTokenByUserId(Long userId) {
+        tokenRepository.findByAppUserId(userId).ifPresent(tokenRepository::delete);
     }
 
     @Override

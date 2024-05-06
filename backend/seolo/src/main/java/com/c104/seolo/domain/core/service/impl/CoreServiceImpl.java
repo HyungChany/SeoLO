@@ -11,15 +11,21 @@ import com.c104.seolo.global.exception.CommonException;
 import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
 import com.c104.seolo.global.security.service.DBUserDetailService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 public class CoreServiceImpl implements CoreService {
+
     private static final String BASE_PACKAGE = "com.c104.seolo.domain.core.service.states.";
+    private final ApplicationContext applicationContext;
     private final DBUserDetailService dbUserDetailService;
 
-    public CoreServiceImpl(DBUserDetailService dbUserDetailService) {
+    @Autowired
+    public CoreServiceImpl(ApplicationContext applicationContext, DBUserDetailService dbUserDetailService) {
+        this.applicationContext = applicationContext;
         this.dbUserDetailService = dbUserDetailService;
     }
 
@@ -31,8 +37,8 @@ public class CoreServiceImpl implements CoreService {
         CodeState codeState = setStateByReflection(code);
         log.info("state : {}", codeState);
         Context context = initContext(codeState, cCodePrincipal, companyCode, coreRequest);
-        context.doLogic();
-        return null;
+        CoreResponse coreResponse = context.doLogic();
+        return coreResponse;
     }
 
     @Override
@@ -60,14 +66,14 @@ public class CoreServiceImpl implements CoreService {
         try {
             CODE statusCode = CODE.valueOf(code); // code가 ENUM에 정의되어있는지 체크
             Class<?> clazz = Class.forName(BASE_PACKAGE + statusCode.name() );
-            state = (CodeState) clazz.getDeclaredConstructor().newInstance();
+//            state = (CodeState) clazz.getDeclaredConstructor().newInstance();
+            state = (CodeState) applicationContext.getBean(clazz);
 
             log.info("clazz : {}", clazz);
             log.info("state : {}", state);
         } catch (Exception e) {
             throw new CommonException(CoreErrorCode.STATE_REFLECTION_ERROR);
         }
-
         return state;
     }
 }
