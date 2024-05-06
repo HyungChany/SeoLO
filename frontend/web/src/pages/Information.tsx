@@ -10,6 +10,8 @@ import EquipmentModal from '@/components/modal/EquipmentModal.tsx';
 import Employee from '@/components/modal/Employee.tsx';
 import React, { useEffect, useState } from 'react';
 import { Facilities } from '@/apis/Facilities.ts';
+import { EquipmentList } from '@/apis/Equipment.ts';
+import { EmployeeList } from '@/apis/Employee.ts';
 
 interface OptionType {
   value: string;
@@ -51,8 +53,14 @@ const CompanyInformation = () => {
   const [employeeModal, setEmployeeModal] = useState<boolean>(false);
   const [options, setOptions] = useState<OptionType[]>([]);
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+  const [facilities, setFacilities] = useState<number>(0);
+  const [employees, setEmployees] = useState<number>(0);
   const handleEquipmentClick = () => {
-    setEquipModal(true);
+    if (selectedOption) {
+      setEquipModal(true);
+    } else {
+      alert('공장을 선택하세요.');
+    }
   };
   const handleEmployeeClick = () => {
     setEmployeeModal(true);
@@ -80,16 +88,34 @@ const CompanyInformation = () => {
     };
     fetchData();
   }, []);
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      if (selectedOption?.value) {
+        const equipmentData = await EquipmentList(selectedOption.value);
+        console.log(equipmentData);
+        setFacilities(equipmentData.length);
+      }
+    };
+    fetchEquipment();
+  }, [selectedOption]);
+  useEffect(() => {
+    const fetchEmployee = async () => {
+      const data = await EmployeeList();
+      setEmployees(data.length);
+    };
+    fetchEmployee();
+  }, []);
   const handleOptionChange = (option: OptionType): void => {
-    setSelectedOption(option); // 선택된 옵션 상태 업데이트
-    console.log('Selected facility:', option);
-    // 추가로 필요한 동작이 있으면 여기에 작성
+    setSelectedOption(option);
   };
   return (
     <Background>
-      {equipModal && (
+      {equipModal && selectedOption && (
         <Overlay onClick={handleCloseModal}>
-          <EquipmentModal onClick={handleModalClick} />
+          <EquipmentModal
+            onClick={handleModalClick}
+            option={selectedOption.value}
+          />
         </Overlay>
       )}
       {employeeModal && (
@@ -124,7 +150,7 @@ const CompanyInformation = () => {
           placeholder="공장을 선택하세요"
         />
         <ImgBox src={Equipment} />
-        <Typo.H0 color={Color.BLACK}>34</Typo.H0>
+        <Typo.H0 color={Color.BLACK}>{facilities}</Typo.H0>
       </Card>
       <Card
         width={22}
@@ -136,7 +162,7 @@ const CompanyInformation = () => {
       >
         <Typo.H3 color={Color.BLACK}>등록 임직원현황</Typo.H3>
         <ImgBox src={People} />
-        <Typo.H0 color={Color.BLACK}>125</Typo.H0>
+        <Typo.H0 color={Color.BLACK}>{employees}</Typo.H0>
       </Card>
     </Background>
   );
