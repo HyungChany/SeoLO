@@ -1,11 +1,6 @@
-/* While this template provides a good starting point for using Wear Compose, you can always
- * take a look at https://github.com/android/wear-os-samples/tree/main/ComposeStarter and
- * https://github.com/android/wear-os-samples/tree/main/ComposeAdvanced to find the most up to date
- * changes to the libraries and their usages.
- */
-
 package com.seolo.seolo.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -15,10 +10,10 @@ import com.seolo.seolo.R
 
 class MainActivity : ComponentActivity() {
     private lateinit var binding: MainLayoutBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
 
         // View Binding 초기화
         binding = MainLayoutBinding.inflate(layoutInflater)
@@ -29,5 +24,12 @@ class MainActivity : ComponentActivity() {
 
         // 오버레이 텍스트 설정
         binding.textViewOverlay.text = "LOTO\n잠금"
+
+        // 화면 터치 리스너 설정
+        binding.root.setOnClickListener {
+            // CheckListActivity로 이동하는 Intent 생성
+            val intent = Intent(this, CheckListActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

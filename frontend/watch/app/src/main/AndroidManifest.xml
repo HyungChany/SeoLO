@@ -67,13 +67,6 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
         <activity
-            android:name=".presentation.RealMainActivity"
-            android:exported="false"
-            android:taskAffinity=""
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
-            android:windowSoftInputMode="stateAlwaysVisible" />
-
-        <activity
             android:name=".presentation.LocationActivity"
             android:exported="false"
             android:taskAffinity=""
