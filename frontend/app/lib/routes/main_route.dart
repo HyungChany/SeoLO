@@ -1,6 +1,7 @@
 import 'package:app/screens/loading/loading_screen.dart';
 import 'package:app/screens/login/login_screen.dart';
 import 'package:app/screens/login/pin_login_screen.dart';
+import 'package:app/screens/loto_process/loto_process_screen.dart';
 import 'package:app/screens/main/main_screen.dart';
 import 'package:app/screens/nfc/nfc_screen.dart';
 import 'package:app/screens/profile/change_password_screen.dart';
@@ -66,6 +67,8 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => LoginScreen());
     case '/loading':
       return MaterialPageRoute(builder: (context) => LoadingScreen());
+    case '/lotoProcess':
+      return MaterialPageRoute(builder: (context) => LotoProcessScreen());
     default:
       debugPrint('Route Error');
       return MaterialPageRoute(builder: (context) => const TestScreen());
