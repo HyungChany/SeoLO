@@ -13,7 +13,7 @@ import com.c104.seolo.global.security.entity.DaoCompanycodeToken;
 import com.c104.seolo.global.security.exception.AuthErrorCode;
 import com.c104.seolo.global.security.jwt.dto.response.IssuedToken;
 import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
-import com.c104.seolo.global.security.jwt.service.TokenService;
+import com.c104.seolo.global.security.jwt.service.JwtTokenService;
 import com.c104.seolo.global.security.service.AuthService;
 import com.c104.seolo.global.security.service.DBUserDetailService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,15 +33,15 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private final TokenService tokenService;
+    private final JwtTokenService jwtTokenService;
     private final DBUserDetailService dbUserDetailService;
 
     @Autowired
-    public AuthServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserRepository userRepository, TokenService tokenService, DBUserDetailService dbUserDetailService) {
+    public AuthServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserRepository userRepository, JwtTokenService jwtTokenService, DBUserDetailService dbUserDetailService) {
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
-        this.tokenService = tokenService;
+        this.jwtTokenService = jwtTokenService;
         this.dbUserDetailService = dbUserDetailService;
     }
 
@@ -58,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
         log.info("로그인 성공 객체정보 : {} ", authentication.toString());
 
         // JWT토큰 발급
-        IssuedToken issuedToken = tokenService.issueToken(authentication);
+        IssuedToken issuedToken = jwtTokenService.issueToken(authentication);
 
         return JwtLoginSuccessResponse.builder()
                 .username(userLoginRequest.getUsername())
@@ -80,7 +80,7 @@ public class AuthServiceImpl implements AuthService {
 
         if (token != null && token.startsWith("Bearer ")) {
             String accessToken = token.split(" ")[1];
-            tokenService.removeAccessToken(accessToken);
+            jwtTokenService.removeAccessToken(accessToken);
             log.info("로그아웃으로 인한 access토큰 블랙리스트 추가 : {}", accessToken);
         }
 

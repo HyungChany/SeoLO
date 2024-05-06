@@ -1,5 +1,7 @@
 package com.c104.seolo.domain.core.service;
 
+import com.c104.seolo.domain.core.dto.response.CoreResponse;
+
 public interface CodeState {
-    void handle(Context context);
+    CoreResponse handle(Context context);
 }

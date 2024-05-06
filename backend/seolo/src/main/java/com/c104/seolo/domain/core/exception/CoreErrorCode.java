@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
-public enum LockerErrorCode {
-    NOT_EXIST_LOCKER("존재하지 않는 자물쇠입니다.", "LK01", HttpStatus.NOT_FOUND);
+public enum CoreErrorCode {
+    STATE_REFLECTION_ERROR("상태 설정 중 에러가 발생했습니다." ,"CE01", HttpStatus.BAD_REQUEST);
 
     private final String message;
     private final String errorCode;

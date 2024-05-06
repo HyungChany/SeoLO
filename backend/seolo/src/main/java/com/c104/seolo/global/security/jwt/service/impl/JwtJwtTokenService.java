@@ -7,7 +7,6 @@ import com.c104.seolo.global.security.jwt.entity.InvalidToken;
 import com.c104.seolo.global.security.jwt.entity.JwtToken;
 import com.c104.seolo.global.security.jwt.repository.InvalidTokenRepository;
 import com.c104.seolo.global.security.jwt.repository.JwtTokenRepository;
-import com.c104.seolo.global.security.jwt.service.TokenService;
 import com.c104.seolo.global.security.service.DBUserDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +15,14 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class JwtTokenService implements TokenService {
+public class JwtJwtTokenService implements com.c104.seolo.global.security.jwt.service.JwtTokenService {
     private final JwtUtils jwtUtils;
     private final JwtTokenRepository jwtTokenRepository;
     private final InvalidTokenRepository invalidTokenRepository;
     private final DBUserDetailService dbUserDetailService;
 
     @Autowired
-    public JwtTokenService(JwtUtils jwtUtils, JwtTokenRepository jwtTokenRepository, InvalidTokenRepository invalidTokenRepository, DBUserDetailService dbUserDetailService) {
+    public JwtJwtTokenService(JwtUtils jwtUtils, JwtTokenRepository jwtTokenRepository, InvalidTokenRepository invalidTokenRepository, DBUserDetailService dbUserDetailService) {
         this.jwtUtils = jwtUtils;
         this.jwtTokenRepository = jwtTokenRepository;
         this.invalidTokenRepository = invalidTokenRepository;
