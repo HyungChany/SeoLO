@@ -24,6 +24,7 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
     super.initState();
     pin = '';
     content = '암호를 입력해 주세요.';
+    failCount = 0;
   }
 
   final keys = [
@@ -54,7 +55,6 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
               pin = '';
               failCount += 1;
               content = failCount == 5 ? '' : '${viewModel.errorMessage!} ($failCount/5)';
-
             });
             failCount == 3
                 ? showDialog(

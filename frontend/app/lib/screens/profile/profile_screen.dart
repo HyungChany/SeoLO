@@ -4,6 +4,7 @@ import 'package:app/widgets/navigator/common_navigation_bar.dart';
 import 'package:app/widgets/profile/icon_with_text.dart';
 import 'package:app/widgets/profile/logout_button.dart';
 import 'package:app/widgets/profile/my_info.dart';
+import 'package:app/widgets/profile/my_loto.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -15,6 +16,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   int _selectedIndex = 2;
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -63,23 +65,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
                 SizedBox(height: 10,),
-                IconWithText(icon: Icon(Icons.edit_document, size: 35,), text: '비밀번호 재설정', naviPage: '/changePassword',),
-                IconWithText(icon: Icon(Icons.password, size: 35,), text: 'PIN 번호 재설정', naviPage: '/checkPin',)
+                IconWithText(icon: Icon(Icons.edit_document, size: 35,),
+                  text: '비밀번호 재설정',
+                  naviPage: '/checkPassword',),
+                IconWithText(icon: Icon(Icons.password, size: 35,),
+                  text: 'PIN 번호 재설정',
+                  naviPage: '/checkPin',)
               ],
             ),
           ),
           const Divider(color: Colors.grey, thickness: 1.0,),
           const Padding(
             padding: EdgeInsets.only(left: 20.0),
-            child: Text('나의 LOTO', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
+            child: Text('나의 LOTO',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
           ),
-          const CommonCard(facility: '검사', machine: '장비sssssssssssssssssssssssssssssssssssssss', start: '24.04.24 11:30', end: '24.04.24 11:30'),
+          MyLoto()
         ],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
         selectedIndex: _selectedIndex, // 현재 선택된 인덱스를 전달
         onItemTapped: _onItemTapped, // 탭 선택 이벤트 처리 메소드를 전달
-      ) ,
+      ),
     );
   }
 }

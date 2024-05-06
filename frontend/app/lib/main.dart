@@ -4,6 +4,7 @@ import 'package:app/view_models/main/news_view_model.dart';
 import 'package:app/view_models/user/login_view_model.dart';
 import 'package:app/view_models/user/my_info_view_model.dart';
 import 'package:app/view_models/user/password_change_view_model.dart';
+import 'package:app/view_models/user/password_check_view_model.dart';
 import 'package:app/view_models/user/pin_change_view_model.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/view_models/user/logout_view_model.dart';
@@ -26,6 +27,8 @@ const Color safetyBlue = Color.fromRGBO(0, 0, 255, 1);
 const Color snow = Color.fromRGBO(255, 250, 250, 1);
 const Color green400 = Color.fromRGBO(93, 210, 122, 1);
 const Color red300 = Color.fromRGBO(241, 38, 13, 1);
+const Color yellow200 = Color.fromRGBO(250, 237, 11, 1);
+const Color safetyRed = Color.fromRGBO(255, 0, 0, 1);
 // 그림자
 const BoxShadow shadow = BoxShadow(
   color: Color.fromRGBO(0, 0, 0, 0.25), // 그림자 확산 범위
@@ -59,6 +62,7 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (_) => PinChangeViewModel()),
           ChangeNotifierProvider(create: (_) => MyInfoViewModel()),
           ChangeNotifierProvider(create: (_) => PasswordChangeViewModel()),
+          ChangeNotifierProvider(create: (_) => PasswordCheckViewModel()),
         ],
         child: MaterialApp(
           localizationsDelegates: [
