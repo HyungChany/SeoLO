@@ -73,7 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: EdgeInsets.only(left: 20.0),
             child: Text('나의 LOTO', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
           ),
-          const CommonCard(facility: '검사', machine: '장비sssssssssssssssssssssssssssssssssssssss', start: '24.04.24 11:30', end: '24.04.24 11:30'),
+          Center(child: CommonCard(facility: '검사', machine: '장비sssssssssssssssssssssssssssssssssssssss', start: '24.04.24 11:30', end: '24.04.24 11:30')),
         ],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
