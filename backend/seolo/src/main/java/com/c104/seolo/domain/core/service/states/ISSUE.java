@@ -1,15 +1,26 @@
 package com.c104.seolo.domain.core.service.states;
 
 import com.c104.seolo.domain.core.dto.response.CoreResponse;
-import com.c104.seolo.domain.core.service.*;
-import lombok.RequiredArgsConstructor;
+import com.c104.seolo.domain.core.entity.Token;
+import com.c104.seolo.domain.core.service.CodeState;
+import com.c104.seolo.domain.core.service.Context;
+import com.c104.seolo.domain.core.service.CoreTokenService;
+import com.c104.seolo.domain.core.service.LockerService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Slf4j
-@RequiredArgsConstructor
+@Service
 public class ISSUE implements CodeState {
-    private CoreTokenService coreTokenService;
-    private LockerService lockerService;
+    private final CoreTokenService coreTokenService;
+    private final LockerService lockerService;
+
+    @Autowired
+    public ISSUE(CoreTokenService coreTokenService, LockerService lockerService) {
+        this.coreTokenService = coreTokenService;
+        this.lockerService = lockerService;
+    }
 
     @Override
     public CoreResponse handle(Context context) {
@@ -23,12 +34,11 @@ public class ISSUE implements CodeState {
         */
 
 
-
-        coreTokenService.issueCoreAuthToken(context.getAppUser(),)
+        Token newToken = coreTokenService.issueCoreAuthToken(context.getAppUser(), context.getCoreRequest().getLockerUid());
 
         return CoreResponse.builder()
-                .nextCode()
-                .coreToken()
+                .nextCode("LOCK")
+                .coreToken(newToken)
                 .build();
     }
 }
