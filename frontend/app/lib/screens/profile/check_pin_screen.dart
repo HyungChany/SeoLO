@@ -24,6 +24,7 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
     super.initState();
     pin = '';
     content = '기존 암호를 입력해 주세요.';
+    failCount = 0;
   }
 
   final keys = [
