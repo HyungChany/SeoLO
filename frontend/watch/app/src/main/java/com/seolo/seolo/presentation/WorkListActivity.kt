@@ -32,18 +32,17 @@ class WorkListActivity : AppCompatActivity() {
         adapter.addFragment(LastWorkListFragment.newInstance("Title 4", "Content 4"))
 
         viewPager.adapter = adapter
-        adapter.notifyDataSetChanged()
 
         // 페이지 변경 리스너 등록
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                updateArrows(position, adapter.itemCount)
+                updateArrows(position)
             }
         })
     }
 
-    private fun updateArrows(position: Int, itemCount: Int) {
+    private fun updateArrows(position: Int) {
         val leftArrow: ImageView = findViewById(R.id.slideLeftIcon)
 
         if (position == 0) {
