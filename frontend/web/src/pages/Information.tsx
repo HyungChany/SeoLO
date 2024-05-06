@@ -56,7 +56,11 @@ const CompanyInformation = () => {
   const [facilities, setFacilities] = useState<number>(0);
   const [employees, setEmployees] = useState<number>(0);
   const handleEquipmentClick = () => {
-    setEquipModal(true);
+    if (selectedOption) {
+      setEquipModal(true);
+    } else {
+      alert('공장을 선택하세요.');
+    }
   };
   const handleEmployeeClick = () => {
     setEmployeeModal(true);
@@ -102,15 +106,16 @@ const CompanyInformation = () => {
     fetchEmployee();
   }, []);
   const handleOptionChange = (option: OptionType): void => {
-    setSelectedOption(option); // 선택된 옵션 상태 업데이트
-    console.log('Selected facility:', option);
-    // 추가로 필요한 동작이 있으면 여기에 작성
+    setSelectedOption(option);
   };
   return (
     <Background>
-      {equipModal && (
+      {equipModal && selectedOption && (
         <Overlay onClick={handleCloseModal}>
-          <EquipmentModal onClick={handleModalClick} />
+          <EquipmentModal
+            onClick={handleModalClick}
+            option={selectedOption.value}
+          />
         </Overlay>
       )}
       {employeeModal && (
