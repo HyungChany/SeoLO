@@ -1,25 +1,43 @@
 package com.seolo.seolo.presentation
 
+import android.content.Intent
 import android.os.Bundle
-import android.widget.CheckBox
-import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.R
+import com.seolo.seolo.adapters.CarouselStateAdapter
+import com.seolo.seolo.fragments.CheckListFragment
 
 class CheckListActivity : AppCompatActivity() {
+    private lateinit var viewPager: ViewPager2
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme(android.R.style.Theme_DeviceDefault)
         supportActionBar?.hide()
         setContentView(R.layout.checklist_layout)
 
-        val checkBox = findViewById<CheckBox>(R.id.checkBox)
-        val textBox = findViewById<LinearLayout>(R.id.textbox)
+        viewPager = findViewById(R.id.viewPagerChecklist)
+        val adapter = CarouselStateAdapter(this)
 
-        // textBox 클릭 시 checkBox의 체크 상태를 토글합니다.
-        textBox.setOnClickListener {
-            checkBox.isChecked = !checkBox.isChecked
+        // 여러 체크리스트 프래그먼트를 추가
+        adapter.addFragment(CheckListFragment.newInstance("Item 1"))
+        adapter.addFragment(CheckListFragment.newInstance("Item 2"))
+        adapter.addFragment(CheckListFragment.newInstance("Item 3"))
+
+        viewPager.adapter = adapter
+    }
+
+    fun moveToNextPage() {
+        val currentItem = viewPager.currentItem
+        val totalItems = viewPager.adapter?.itemCount ?: 0
+        if (currentItem < totalItems - 1) {
+            viewPager.currentItem = currentItem + 1
+        } else {
+            // 마지막 프래그먼트에서 LocationActivity로 전환
+            val intent = Intent(this, LocationActivity::class.java)
+            startActivity(intent)
+            finish()
         }
     }
 }

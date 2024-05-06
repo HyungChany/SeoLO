@@ -1,81 +1,35 @@
-/* While this template provides a good starting point for using Wear Compose, you can always
- * take a look at https://github.com/android/wear-os-samples/tree/main/ComposeStarter and
- * https://github.com/android/wear-os-samples/tree/main/ComposeAdvanced to find the most up to date
- * changes to the libraries and their usages.
- */
-
 package com.seolo.seolo.presentation
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
 import androidx.activity.ComponentActivity
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
+import com.seolo.seolo.databinding.MainLayoutBinding
+import com.bumptech.glide.Glide
 import com.seolo.seolo.R
-import com.seolo.seolo.presentation.theme.SeoLoTheme
 
 class MainActivity : ComponentActivity() {
+    private lateinit var binding: MainLayoutBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         installSplashScreen()
 
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        // View Binding 초기화
+        binding = MainLayoutBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        // 버튼을 통해 ExampleActivity로 전환
-        val button: Button = findViewById(R.id.button_example)
-        button.setOnClickListener {
-//            val intent = Intent(this, CarouselActivity::class.java)
-//            val intent = Intent(this, LockActivity::class.java)
-//            val intent = Intent(this, RealMainActivity::class.java)
-//            val intent = Intent(this, LocationActivity::class.java)
-//            val intent = Intent(this, EquipmentActivity::class.java)
-//            val intent = Intent(this, WorkActivity::class.java)
-//            val intent = Intent(this, DatePickerActivity::class.java)
-            val intent = Intent(this, TimePickerActivity::class.java)
+        // Glide를 사용하여 GIF 이미지 로딩
+        Glide.with(this).asGif().load(R.drawable.main_sample3).into(binding.mainView)
+
+        // 오버레이 텍스트 설정
+        binding.textViewOverlay.text = "LOTO\n잠금"
+
+        // 화면 터치 리스너 설정
+        binding.root.setOnClickListener {
+            // CheckListActivity로 이동하는 Intent 생성
+            val intent = Intent(this, CheckListActivity::class.java)
             startActivity(intent)
-    }
-}
-}
-
-@Composable
-fun WearApp(greetingName: String) {
-    SeoLoTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background),
-            contentAlignment = Alignment.Center
-        ) {
-            Greeting(greetingName = greetingName)
         }
     }
-}
-
-@Composable
-fun Greeting(greetingName: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.hello_world, greetingName)
-    )
-}
-
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    WearApp("Preview Android")
 }

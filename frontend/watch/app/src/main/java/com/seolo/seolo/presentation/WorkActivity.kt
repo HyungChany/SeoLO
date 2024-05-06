@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.CarouselStateAdapter
-import com.seolo.seolo.fragments.worksFragment
+import com.seolo.seolo.fragments.WorksFragment
 
 class WorkActivity : AppCompatActivity() {
 
@@ -21,11 +21,11 @@ class WorkActivity : AppCompatActivity() {
         val adapter = CarouselStateAdapter(this@WorkActivity)
 
         // CardFragment 인스턴스 생성 및 이미지 리소스 지정
-        adapter.addFragment(worksFragment.newInstance(R.drawable.img_maintenance, "정비"))
-        adapter.addFragment(worksFragment.newInstance(R.drawable.img_clean, "청소"))
-        adapter.addFragment(worksFragment.newInstance(R.drawable.img_repair, "수리"))
-        adapter.addFragment(worksFragment.newInstance(R.drawable.img_etc, "기타"))
-        adapter.addFragment(worksFragment.newInstance(R.drawable.img_mic, "음성"))
+        adapter.addFragment(WorksFragment.newInstance(R.drawable.img_maintenance, "정비"))
+        adapter.addFragment(WorksFragment.newInstance(R.drawable.img_clean, "청소"))
+        adapter.addFragment(WorksFragment.newInstance(R.drawable.img_repair, "수리"))
+        adapter.addFragment(WorksFragment.newInstance(R.drawable.img_etc, "기타"))
+        adapter.addFragment(WorksFragment.newInstance(R.drawable.img_mic, "음성"))
 
         viewPager.adapter = adapter
     }
