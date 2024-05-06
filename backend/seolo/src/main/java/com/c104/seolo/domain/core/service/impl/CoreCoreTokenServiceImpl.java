@@ -4,12 +4,11 @@ import com.c104.seolo.domain.core.entity.Locker;
 import com.c104.seolo.domain.core.entity.Token;
 import com.c104.seolo.domain.core.exception.CoreTokenErrorCode;
 import com.c104.seolo.domain.core.repository.TokenRepository;
-import com.c104.seolo.domain.core.service.LockerService;
 import com.c104.seolo.domain.core.service.CoreTokenService;
+import com.c104.seolo.domain.core.service.LockerService;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.encryption.AesEncryption;
 import com.c104.seolo.global.exception.CommonException;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,12 +53,6 @@ public class CoreCoreTokenServiceImpl implements CoreTokenService {
         SecretKey encryptionKey = AesEncryption.decodeBase64ToSecretKey(base64encryptionKey);
         String encryptedUid = AesEncryption.encrypt(lockerUid, encryptionKey);
 
-        log.info("appUser: {}", appUser);
-        log.info("locker : {}", locker.toString());
-        log.info("base64encryptionKey : {}", base64encryptionKey);
-        log.info("encryptionKey : {}", encryptionKey.toString());
-        log.info("encryptedUid : {}", encryptedUid);
-
         // 중복 검사
         if (tokenRepository.findByTokenValue(encryptedUid).isPresent()) {
             throw new CommonException(CoreTokenErrorCode.DUPLICATE_TOKEN_VALUE);
@@ -70,10 +63,15 @@ public class CoreCoreTokenServiceImpl implements CoreTokenService {
                 .locker(locker)
                 .appUser(appUser)
                 .build();
-
+        log.info("newToken: {}", newToken.toString());
         tokenRepository.save(newToken);
 
         return newToken;
+    }
+
+    @Override
+    public void deleteTokenByTokenValue(String tokenValue) {
+        tokenRepository.findByTokenValue(tokenValue).ifPresent(tokenRepository::delete);
     }
 
     @Override

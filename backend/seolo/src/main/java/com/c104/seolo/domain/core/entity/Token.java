@@ -29,9 +29,9 @@ public class Token extends BaseEntity {
     protected Token() {}
 
     public Token(Builder builder) {
-        this.tokenValue = tokenValue;
-        this.locker = locker;
-        this.appUser = appUser;
+        this.tokenValue = builder.tokenValue;
+        this.locker = builder.locker;
+        this.appUser = builder.appUser;
     }
 
     public static class Builder {
