@@ -2,6 +2,7 @@ package com.c104.seolo.domain.user.controller;
 
 import com.c104.seolo.domain.user.dto.request.UserJoinRequest;
 import com.c104.seolo.domain.user.dto.request.UserLoginRequest;
+import com.c104.seolo.domain.user.dto.request.UserPwdCheckRequest;
 import com.c104.seolo.domain.user.dto.request.UserPwdResetRequest;
 import com.c104.seolo.domain.user.dto.response.UserInfoResponse;
 import com.c104.seolo.domain.user.dto.response.UserJoinResponse;
@@ -17,6 +18,7 @@ import com.c104.seolo.global.security.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -56,6 +58,12 @@ public class UserController {
     public UserInfoResponse getUserInfo(@AuthenticationPrincipal CCodePrincipal cCodePrincipal) {
         log.debug("현재 로그인 유저의 authentication : {}", SecurityContextHolder.getContext().getAuthentication());
         return userService.getUserInfo(cCodePrincipal);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/users/pwd")
+    public void checkSameUserPwd(@AuthenticationPrincipal CCodePrincipal cCodePrincipal, @Valid @RequestBody UserPwdCheckRequest userPwdCheckRequest) {
+        userService.checkSamePassword(cCodePrincipal, userPwdCheckRequest);
     }
 
     @PatchMapping("/users/pwd")
