@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Modal } from './Modal.tsx';
 import { Button } from '../button/Button.tsx';
 import * as Color from '@/config/color/Color.ts';
+import { useNavigate } from 'react-router-dom';
 interface EquipmentModalProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
@@ -44,7 +45,10 @@ const ButtonBox = styled.div`
   justify-content: flex-end;
 `;
 const EquipmentModal = ({ onClick }: EquipmentModalProps) => {
-  const handleButtonClick = () => {};
+  const navigate = useNavigate();
+  const handleButtonClick = () => {
+    navigate('/equipment');
+  };
   return (
     <Modal onClick={onClick}>
       <ButtonBox>
@@ -57,6 +61,7 @@ const EquipmentModal = ({ onClick }: EquipmentModalProps) => {
           $borderRadius={2.5}
           $hoverBackgroundColor={Color.SAFETY_YELLOW}
           $hoverBorderColor={Color.SAFETY_YELLOW}
+          fontSize={1.25}
         >
           등록
         </Button>
