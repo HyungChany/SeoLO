@@ -12,7 +12,7 @@ import com.seolo.seolo.R
 import com.seolo.seolo.presentation.DatePickerActivity
 
 // WorksFragment 클래스 정의
-class WorksFragment : Fragment() {
+class LastWorksFragment : Fragment() {
     // 이미지 리소스 ID와 작업 정보를 저장하는 변수 선언
     private var imageResourceId: Int? = null
     private var work: String? = null
@@ -32,7 +32,7 @@ class WorksFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // work_layout 레이아웃을 inflate하여 View 객체 생성
-        val view = inflater.inflate(R.layout.work_layout, container, false)
+        val view = inflater.inflate(R.layout.last_work_layout, container, false)
 
         // ImageView와 TextView를 찾아서 값을 설정
         val imageView: ImageView = view.findViewById(R.id.workImageView)
@@ -54,8 +54,8 @@ class WorksFragment : Fragment() {
         private const val ARG_IMAGE_RESOURCE_ID = "imageResourceId"
         private const val ARG_WORK = "work"
 
-        fun newInstance(imageResourceId: Int, work: String): WorksFragment {
-            val fragment = WorksFragment()
+        fun newInstance(imageResourceId: Int, work: String): LastWorksFragment {
+            val fragment = LastWorksFragment()
             val args = Bundle()
             args.putInt(ARG_IMAGE_RESOURCE_ID, imageResourceId)
             args.putString(ARG_WORK, work)

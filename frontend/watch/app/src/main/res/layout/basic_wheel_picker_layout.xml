@@ -9,8 +9,8 @@
         android:id="@+id/basic_wheel_picker_view"
         android:layout_width="wrap_content"
         android:layout_height="125dp"
-        android:scaleX="1.8"
-        android:scaleY="1.8"
+        android:scaleX="2"
+        android:scaleY="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -19,8 +19,8 @@
 
     <Button
         android:id="@+id/confirm_button"
-        android:layout_width="55dp"
-        android:layout_height="24dp"
+        android:layout_width="60dp"
+        android:layout_height="30dp"
         android:background="@drawable/button_background"
         android:clickable="true"
         android:text="@string/confirm"
