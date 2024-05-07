@@ -59,13 +59,13 @@ export const deleteCheckList = async (checklistId: number) => {
   try {
     const accessToken = sessionStorage.getItem('accessToken');
     const companyCode = sessionStorage.getItem('companyCode');
-    const response = await api.delete(`/checklist/${checklistId}`, {
+    const response = await api.delete(`/checklists/${checklistId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
       },
     });
-    return response.data;
+    return response;
   } catch (error) {
     console.error('체크리스트 삭제 실패: ', error);
     throw error;

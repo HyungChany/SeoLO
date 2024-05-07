@@ -135,8 +135,9 @@ const CheckListPage = () => {
   const handlePlusCheckListClick = () => {
     setCreateCheckListModal(true);
   };
-  const handleDeleteCheckListClick = () => {
+  const handleDeleteCheckListClick = (list: CheckListType) => {
     setDeleteCheckListModal(true);
+    setCurrentChecklist(list);
   };
   const handleCloseModal = (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -152,17 +153,7 @@ const CheckListPage = () => {
   ) => {
     e.stopPropagation();
   };
-  //   const lists = [
-  //     { id: 1, content: '체크리스트 1' },
-  //     { id: 2, content: '체크리스트 2' },
-  //     {
-  //       id: 3,
-  //       content:
-  //         '체크리스트 3ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ',
-  //     },
-  //     { id: 4, content: '체크리스트 4' },
-  //     { id: 5, content: '체크리스트 5' },
-  //   ];
+
   useEffect(() => {
     const fetchLists = async () => {
       const data = await getCheckList();
@@ -183,9 +174,12 @@ const CheckListPage = () => {
             />
           </Overlay>
         )}
-        {deleteCheckListModal && (
+        {deleteCheckListModal && currentChecklist && (
           <Overlay onClick={handleCloseModal}>
-            <DeleteCheckListModal onClick={handleModalClick} />
+            <DeleteCheckListModal
+              onClick={handleModalClick}
+              checklistId={currentChecklist.id}
+            />
           </Overlay>
         )}
         {createCheckListModal && (
@@ -237,7 +231,7 @@ const CheckListPage = () => {
                       children={'상세보기'}
                     ></Button>
                     <Button
-                      onClick={handleDeleteCheckListClick}
+                      onClick={() => handleDeleteCheckListClick(list)}
                       width={3.5}
                       height={1.5625}
                       $backgroundColor={Color.GRAY100}
