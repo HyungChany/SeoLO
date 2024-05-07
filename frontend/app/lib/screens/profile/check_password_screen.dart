@@ -20,34 +20,41 @@ class _CheckPasswordState extends State<CheckPassword> {
     final viewModel = Provider.of<PasswordCheckViewModel>(context);
     return Scaffold(
       appBar: const Header(title: '비밀번호 재설정', back: true),
-      body: Column(
-        children: [
-          SmallInputBox(
-              hintText: '현재 비밀번호',
-              textInputAction: TextInputAction.done,
-              obscureText: true,
-              onChanged: (value) {
-                viewModel.setNowPwd(value);
-              }),
-          CommonTextButton(
-              text: '확인',
-              onTap: () {
-                viewModel.passwordCheck().then((_) {
-                  if (viewModel.errorMessage == null) {
-                    Navigator.pushReplacementNamed(context, '/changePassword');
-                  } else {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return CommonDialog(
-                            content: viewModel.errorMessage!,
-                            buttonText: '확인',
-                          );
-                        });
-                  }
-                });
-              })
-        ],
+      body: Center(
+        child: Column(
+          children: [
+            SizedBox(height: 80,),
+            Text('비밀번호 재설정을 위해 현재 비밀번호를 입력해 주세요.'),
+            SizedBox(height: 20,),
+            SmallInputBox(
+                hintText: '현재 비밀번호',
+                textInputAction: TextInputAction.done,
+                obscureText: true,
+                onChanged: (value) {
+                  viewModel.setNowPwd(value);
+                }),
+            SizedBox(height: 50,),
+            CommonTextButton(
+                text: '확인',
+                onTap: () {
+                  viewModel.passwordCheck().then((_) {
+                    if (viewModel.errorMessage == null) {
+                      Navigator.pushReplacementNamed(context, '/changePassword');
+                    } else {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return CommonDialog(
+                              content: viewModel.errorMessage!,
+                              buttonText: '확인',
+                            );
+                          });
+                    }
+                  });
+                }),
+            SizedBox(height: MediaQuery.of(context).viewInsets.bottom),
+          ],
+        ),
       ),
     );
   }

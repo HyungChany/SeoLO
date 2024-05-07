@@ -1,8 +1,5 @@
-import 'package:app/main.dart';
-import 'package:app/view_models/user/my_info_view_model.dart';
 import 'package:app/widgets/profile/icon_with_text.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class MyActivity extends StatefulWidget {
   const MyActivity({super.key});
@@ -14,7 +11,7 @@ class MyActivity extends StatefulWidget {
 class _MyActivityState extends State<MyActivity> {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       children: [
         IconWithText(
           icon: Icon(
