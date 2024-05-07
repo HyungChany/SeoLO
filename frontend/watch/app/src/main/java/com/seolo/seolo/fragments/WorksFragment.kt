@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
+import com.seolo.seolo.presentation.DatePickerActivity
 import com.seolo.seolo.presentation.LOTOInfoActivity
 import com.seolo.seolo.presentation.NFCActivity
 
@@ -44,7 +45,7 @@ class WorksFragment : Fragment() {
         // View를 클릭하면 LOTOInfoActivity로 이동하는 이벤트 처리
         view.setOnClickListener {
             val context = view.context
-            val intent = Intent(context, LOTOInfoActivity::class.java)
+            val intent = Intent(context, DatePickerActivity::class.java)
             context.startActivity(intent)
         }
         return view

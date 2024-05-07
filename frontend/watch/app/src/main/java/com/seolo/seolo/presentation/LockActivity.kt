@@ -24,8 +24,7 @@ class LockActivity : AppCompatActivity() {
 
         // 잠금 해제 화면 표시 코드
         // TODO: 잠금 해제 조건에 따라서 보여주는 화면을 구성
-
-        // ImageView 인스턴스 찾아서 이미지 설정
+        // ImageView 인스턴스 찾아서 Unlock이미지 설정
         val imageViewUnLock: ImageView = findViewById(R.id.imageViewLock)
         imageViewUnLock.setImageResource(R.drawable.img_unlock)
 
