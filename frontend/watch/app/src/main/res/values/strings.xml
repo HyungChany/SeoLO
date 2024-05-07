@@ -18,4 +18,5 @@
     <string name="splash">Splash</string>
     <string name="main_gif">main_gif</string>
     <string name="confirm">확인</string>
+    <string name="login">핸드폰에서 로그인을 진행해주세요.</string>
 </resources>
