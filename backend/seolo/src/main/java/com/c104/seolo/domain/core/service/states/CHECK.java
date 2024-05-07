@@ -3,6 +3,9 @@ package com.c104.seolo.domain.core.service.states;
 import com.c104.seolo.domain.core.dto.response.CoreResponse;
 import com.c104.seolo.domain.core.service.CodeState;
 import com.c104.seolo.domain.core.service.Context;
+import com.c104.seolo.domain.core.service.LockerAccessLogService;
+import com.c104.seolo.domain.machine.dto.MachineDto;
+import com.c104.seolo.domain.machine.service.MachineService;
 import com.c104.seolo.domain.task.entity.TaskHistory;
 import com.c104.seolo.domain.task.service.TaskHistoryService;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +16,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class CHECK implements CodeState {
     private final TaskHistoryService taskHistoryService;
+    private final LockerAccessLogService lockerAccessLogService;
+    private final MachineService machineService;
 
     @Autowired
-    public CHECK(TaskHistoryService taskHistoryService) {
+    public CHECK(TaskHistoryService taskHistoryService, LockerAccessLogService lockerAccessLogService, MachineService machineService) {
         this.taskHistoryService = taskHistoryService;
+        this.lockerAccessLogService = lockerAccessLogService;
+        this.machineService = machineService;
     }
 
     @Override
@@ -31,6 +38,11 @@ public class CHECK implements CodeState {
         */
         TaskHistory latestTaskHistory = taskHistoryService.getLatestTaskHistoryEntityByMachineId(context.getCoreRequest().getMachineId()); // 1
 
+        // machinedto말고 machine객체로
+        MachineDto machine = machineService.findMachineByMachineId(context.getCompanyCode(), context.getCoreRequest().getMachineId());
+
+
+//        lockerAccessLogService.recordAccessLog(context.getAppUser(), Machine machine);
 
         return null;
     }
