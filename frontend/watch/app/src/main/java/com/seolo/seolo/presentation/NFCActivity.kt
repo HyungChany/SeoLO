@@ -28,7 +28,7 @@ class NFCActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Glide를 사용하여 GIF 이미지 로딩
-        Glide.with(this).asGif().load(R.drawable.main_sample3).into(binding.nfcView)
+        Glide.with(this).asGif().load(R.drawable.main_sample6).into(binding.nfcView)
 
         // ImageView에 일반 이미지 로딩
         val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.img_nfc)

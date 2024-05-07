@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         setContentView(binding.root)
 
         // Glide를 사용하여 GIF 이미지 로딩
-        Glide.with(this).asGif().load(R.drawable.main_sample3).into(binding.gifImageView)
+        Glide.with(this).asGif().load(R.drawable.main_sample6).into(binding.gifImageView)
 
         // 오버레이 텍스트 설정
         binding.textViewOverlay.text = "LOTO\n잠금"
