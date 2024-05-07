@@ -6,7 +6,7 @@
     android:background="@color/BLACK"
     android:padding="16dp">
 
-    <pl.droidsonroids.gif.GifImageView
+    <ImageView
         android:id="@+id/nfcView"
         android:layout_width="match_parent"
         android:layout_height="300dp"

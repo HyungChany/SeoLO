@@ -6,9 +6,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.bumptech.glide.Glide
 import com.seolo.seolo.R
 import com.seolo.seolo.databinding.NfcLayoutBinding
-import pl.droidsonroids.gif.GifDrawable
 
 // NFCActivity 클래스 정의
 class NFCActivity : AppCompatActivity() {
@@ -27,10 +27,8 @@ class NFCActivity : AppCompatActivity() {
         binding = NfcLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // GIF 이미지 설정 및 속도 조절
-        val gifFromResource = GifDrawable(resources, R.drawable.main_sample3)
-        gifFromResource.setSpeed(2.0f)
-        binding.nfcView.setImageDrawable(gifFromResource)
+        // Glide를 사용하여 GIF 이미지 로딩
+        Glide.with(this).asGif().load(R.drawable.main_sample3).into(binding.nfcView)
 
         // ImageView에 일반 이미지 로딩
         val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.img_nfc)
