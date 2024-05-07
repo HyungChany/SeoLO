@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent } from 'react';
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 import Card from '@/components/card/Card.tsx';
@@ -7,7 +7,6 @@ import InputBox from '@/components/inputbox/InputBox.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import People from '/assets/images/people.png';
 import { EmployeeDetail, EmployeeRegistration } from '@/apis/Employee.ts';
-
 interface EmployeeType {
   employee_join_date: string;
   employee_leave_date: string;
