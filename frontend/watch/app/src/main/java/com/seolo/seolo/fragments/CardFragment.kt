@@ -7,24 +7,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
 
+// CardFragment 클래스 정의
 class CardFragment : Fragment() {
-    // 다른 데이터나 로직이 필요하지 않다면 newInstance 메서드는 필요 없습니다.
-
+    // Fragment의 View를 생성하고 반환하는 메서드
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // 레이아웃 인플레이트
+        // carousel_layout 레이아웃을 inflate하여 반환
         return inflater.inflate(R.layout.carousel_layout, container, false)
     }
 
-    // 필요한 경우 newInstance 메서드를 추가
+    // 정적 메서드를 사용하여 CardFragment 인스턴스를 생성하는 companion object
     companion object {
         fun newInstance(): CardFragment {
             return CardFragment()
-            // 필요한 경우 여기에 데이터를 추가
         }
     }
 }
-
-
