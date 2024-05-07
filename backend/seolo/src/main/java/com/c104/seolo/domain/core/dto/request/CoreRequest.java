@@ -13,10 +13,12 @@ import lombok.ToString;
 public class CoreRequest {
     private final String lockerUid;
     private final TaskHistoryDto taskHistoryDto;
+    private final Long machineId;
 
     @Builder
-    public CoreRequest(TaskHistoryDto taskHistoryDto, String lockerUid) {
-        this.taskHistoryDto = taskHistoryDto;
+    public CoreRequest(String lockerUid, TaskHistoryDto taskHistoryDto, Long machineId) {
         this.lockerUid = lockerUid;
+        this.taskHistoryDto = taskHistoryDto;
+        this.machineId = machineId;
     }
 }

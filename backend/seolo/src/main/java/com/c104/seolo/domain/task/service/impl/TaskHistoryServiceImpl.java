@@ -2,6 +2,7 @@ package com.c104.seolo.domain.task.service.impl;
 
 import com.c104.seolo.domain.task.dto.TaskHistoryDto;
 import com.c104.seolo.domain.task.dto.info.TaskHistoryInfo;
+import com.c104.seolo.domain.task.entity.TaskHistory;
 import com.c104.seolo.domain.task.exception.TaskErrorCode;
 import com.c104.seolo.domain.task.repository.TaskHistoryRepository;
 import com.c104.seolo.domain.task.service.TaskHistoryService;
@@ -39,5 +40,11 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
                 .taskEndEstimatedTime(taskHistoryInfo.getTaskEndEstimatedTime())
                 .taskPrecaution(taskHistoryInfo.getTaskPrecaution())
                 .build();
+    }
+
+    @Override
+    public TaskHistory getLatestTaskHistoryEntityByMachineId(Long machineId) {
+        return taskHistoryRepository.getTaskHistoryByMachineId(machineId)
+                .orElseThrow(() -> new CommonException(TaskErrorCode.NOT_EXIST_TASK));
     }
 }

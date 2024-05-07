@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface TaskHistoryRepository extends JpaRepository<TaskHistory, Long> {
     @Query("SELECT new com.c104.seolo.domain.task.dto.info.TaskHistoryInfo( " +
@@ -16,4 +18,7 @@ public interface TaskHistoryRepository extends JpaRepository<TaskHistory, Long> 
             ") FROM TaskHistory t JOIN t.taskTemplate tt JOIN t.machine m JOIN t.user u " +
             "WHERE t.id = :taskId")
     TaskHistoryInfo getTaskHistoryInfoById(Long taskId);
+
+    @Query("SELECT t FROM TaskHistory t WHERE t.machine.id = :machineId ORDER BY t.taskStartDateTime DESC")
+    Optional<TaskHistory> getTaskHistoryByMachineId(Long machineId);
 }
