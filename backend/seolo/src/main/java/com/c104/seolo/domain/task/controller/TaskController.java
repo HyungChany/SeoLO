@@ -1,6 +1,7 @@
 package com.c104.seolo.domain.task.controller;
 
 import com.c104.seolo.domain.task.dto.TaskHistoryDto;
+import com.c104.seolo.domain.task.dto.response.TaskListResponse;
 import com.c104.seolo.domain.task.service.TaskHistoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,5 +21,12 @@ public class TaskController {
             @PathVariable("taskId") Long taskId
     ) {
         return ResponseEntity.ok(taskService.getTaskHistory(taskId, companyCode));
+    }
+
+    @GetMapping("/assignment/{employeeNum}")
+    public ResponseEntity<TaskListResponse> getTasks(
+            @PathVariable("employeeNum") String employeeNum
+    ) {
+        return ResponseEntity.ok(taskService.getTaskHistoryEntityByEmployeeNum(employeeNum));
     }
 }
