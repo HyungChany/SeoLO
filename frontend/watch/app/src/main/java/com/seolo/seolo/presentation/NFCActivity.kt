@@ -16,8 +16,6 @@ class NFCActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 스플래시 스크린 설치
-        installSplashScreen()
         // 테마 설정
         setTheme(android.R.style.Theme_DeviceDefault)
         // 액션바 숨기기

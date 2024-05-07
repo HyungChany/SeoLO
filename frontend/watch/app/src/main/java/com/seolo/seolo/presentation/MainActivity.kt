@@ -13,7 +13,6 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        installSplashScreen()
 
         // View Binding 초기화
         binding = MainLayoutBinding.inflate(layoutInflater)

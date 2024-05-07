@@ -12,8 +12,6 @@ class LockActivity : AppCompatActivity() {
     // Activity가 생성될 때 호출되는 메서드
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 스플래시 화면 설정
-        installSplashScreen()
         // 테마 설정
         setTheme(android.R.style.Theme_DeviceDefault)
         // 액션바 숨기기
