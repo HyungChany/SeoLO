@@ -1,10 +1,12 @@
 package com.c104.seolo.domain.user.service.impl;
 
+import com.c104.seolo.domain.user.dto.info.UserListInfo;
 import com.c104.seolo.domain.user.dto.request.UserJoinRequest;
 import com.c104.seolo.domain.user.dto.request.UserPwdCheckRequest;
 import com.c104.seolo.domain.user.dto.request.UserPwdResetRequest;
 import com.c104.seolo.domain.user.dto.response.UserInfoResponse;
 import com.c104.seolo.domain.user.dto.response.UserJoinResponse;
+import com.c104.seolo.domain.user.dto.response.UserListResponse;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.domain.user.enums.ROLES;
 import com.c104.seolo.domain.user.exception.UserErrorCode;
@@ -22,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -111,5 +114,14 @@ public class UserServiceImpl implements UserService {
         // 3. 일치하면 기존 비밀번호 데이터를 새로 설정하는 비밀번호로 바꾸고 로그아웃시킨다.
         user.changePassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+    }
+
+    @Override
+    public UserListResponse getUserList(String companyCode) {
+        List<UserListInfo> userListInfos = userRepository.findAppUserListByCompanyCode(companyCode);
+
+        return UserListResponse.builder()
+                .workers(userListInfos)
+                .build();
     }
 }
