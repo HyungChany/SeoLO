@@ -37,6 +37,7 @@ const InformationBox = styled.div`
   border-radius: 3.125rem;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
   gap: 12rem;
+  overflow: hidden;
 `;
 const LeftBox = styled.div`
   width: 25.0625rem;
