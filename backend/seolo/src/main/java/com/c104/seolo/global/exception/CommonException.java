@@ -4,6 +4,7 @@ import com.c104.seolo.domain.core.exception.CoreErrorCode;
 import com.c104.seolo.domain.core.exception.CoreTokenErrorCode;
 import com.c104.seolo.domain.machine.exception.MachineErrorCode;
 import com.c104.seolo.domain.task.exception.TaskErrorCode;
+import com.c104.seolo.domain.task.exception.TaskTemplateErrorCode;
 import com.c104.seolo.global.encryption.exception.AesEncryptionErrorCode;
 import com.c104.seolo.global.security.exception.JwtErrorCode;
 import com.c104.seolo.headquarter.company.exception.CompanyErrorCode;
@@ -88,6 +89,12 @@ public class CommonException extends RuntimeException {
     }
 
     public CommonException(CoreErrorCode e) {
+        this.message = e.getMessage();
+        this.errorCode = e.getErrorCode();
+        this.httpStatus = e.getHttpStatus();
+    }
+
+    public CommonException(TaskTemplateErrorCode e) {
         this.message = e.getMessage();
         this.errorCode = e.getErrorCode();
         this.httpStatus = e.getHttpStatus();

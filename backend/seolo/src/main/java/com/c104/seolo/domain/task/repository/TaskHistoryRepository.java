@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.task.repository;
 
+import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.task.dto.info.TaskHistoryInfo;
 import com.c104.seolo.domain.task.entity.TaskHistory;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,4 +22,7 @@ public interface TaskHistoryRepository extends JpaRepository<TaskHistory, Long> 
 
     @Query("SELECT t FROM TaskHistory t WHERE t.machine.id = :machineId ORDER BY t.taskStartDateTime DESC")
     Optional<TaskHistory> getTaskHistoryByMachineId(Long machineId);
+
+    @Query("SELECT t FROM TaskHistory t WHERE t.machine.id = :machineId AND t.user.id = :userId OR t.taskCode = 'ISSUED' OR t.taskCode = 'LOCKED'")
+    Optional<TaskHistory> findByMachineIdAndUserIdOrTaskCode(Long machineId, Long userId);
 }
