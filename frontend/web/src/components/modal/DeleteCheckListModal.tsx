@@ -2,10 +2,10 @@ import { deleteCheckList } from '@/apis/CheckList.ts';
 import { Modal } from './Modal.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import * as Color from '@/config/color/Color.ts';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 interface DeleteCheckListModalProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  checklistId: number;
 }
 
 const Text = styled.div`
@@ -25,13 +25,13 @@ const ButtonContainer = styled.div`
   justify-content: space-evenly;
 `;
 
-const DeleteCheckListModal = ({ onClick }: DeleteCheckListModalProps) => {
-  const navigate = useNavigate();
+const DeleteCheckListModal = ({
+  onClick,
+  checklistId,
+}: DeleteCheckListModalProps) => {
   const handleDelete = async () => {
     try {
-      await deleteCheckList(10);
-      console.log('삭제 성공');
-      navigate('/checklist');
+      await deleteCheckList(checklistId);
     } catch (error) {
       console.error('삭제 실패:', error);
       alert('삭제 실패');
