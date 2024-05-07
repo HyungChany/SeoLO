@@ -11,7 +11,7 @@ import sh.tyy.wheelpicker.core.WheelPickerRecyclerView
 // EquipmentActivity 클래스 정의
 class EquipmentActivity : AppCompatActivity() {
     // 장비 목록 초기화
-    private val equipments = listOf(" ", "장비1", "장비2", "장비3", "장비4", "장비5")
+    private val equipments = listOf(" ", "장비1", "장비2", "장비3", "장비4", "장비5", " ")
 
     // Activity가 생성될 때 호출되는 메서드
     override fun onCreate(savedInstanceState: Bundle?) {
