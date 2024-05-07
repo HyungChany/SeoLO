@@ -7,8 +7,8 @@
     android:background="@android:color/black"
     android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/mainView"
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gifImageView"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:contentDescription="@string/main_gif"
