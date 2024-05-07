@@ -1,21 +1,12 @@
-import React, { useState, useRef, ChangeEvent, useEffect } from 'react';
+import React, { useState, ChangeEvent } from 'react';
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 import Card from '@/components/card/Card.tsx';
-import Dropdown from '@/components/dropdown/DropDown.tsx';
 import * as Typo from '@/components/typography/Typography.tsx';
 import InputBox from '@/components/inputbox/InputBox.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import People from '/assets/images/people.png';
-import { Facilities } from '@/apis/Facilities.ts';
-interface FacilityType {
-  id: string;
-  name: string;
-}
-interface OptionType {
-  value: string;
-  label: string;
-}
+
 const Background = styled.div`
   width: 100%;
   height: 100%;
@@ -28,7 +19,6 @@ const Box = styled.div`
   width: 92%;
   height: 90%;
   display: flex;
-  justify-content: space-between;
   gap: 2rem;
 `;
 const ImgBox = styled.img`
@@ -36,7 +26,7 @@ const ImgBox = styled.img`
   height: 13rem;
 `;
 const InformationBox = styled.div`
-  width: 60rem;
+  width: 80rem;
   height: 100%;
   display: flex;
   padding-top: 1rem;
@@ -46,34 +36,28 @@ const InformationBox = styled.div`
   background-color: ${Color.WHITE};
   border-radius: 3.125rem;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
-  justify-content: space-between;
+  gap: 12rem;
 `;
 const LeftBox = styled.div`
   width: 25.0625rem;
-  height: 35rem;
+  height: 100%;
   display: flex;
-  justify-content: space-between;
+
   flex-direction: column;
   gap: 1.5rem;
 `;
-const DropdownBox = styled.div`
-  width: 19.375rem;
-  height: 10rem;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-`;
+
 const PhotoBox = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1.5rem;
 `;
 const Photo = styled.div`
-  width: 25.0625rem;
-  height: 23.125rem;
+  width: 100%;
+  height: 30rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -81,20 +65,14 @@ const Photo = styled.div`
   border: 1px solid ${Color.GRAY300};
   border-radius: 1.25rem;
 `;
-const Preview = styled.img`
-  width: 100%;
-  height: 100%;
-  border-radius: 1.25rem;
-  object-fit: cover;
-`;
-const PhotoInputBox = styled.input.attrs({
-  type: 'file',
-  accept: 'image/*', // 이미지 파일만 받도록 설정
-})`
-  display: none;
-`;
+// const Preview = styled.img`
+//   width: 100%;
+//   height: 100%;
+//   border-radius: 1.25rem;
+//   object-fit: cover;
+// `;
 const RightBox = styled.div`
-  width: 20rem;
+  width: 100%;
   height: 35rem;
   display: flex;
   flex-direction: column;
@@ -108,66 +86,38 @@ const CommonBox = styled.div`
   flex-direction: column;
 `;
 const ButtonBox = styled.div`
-  width: 20rem;
+  width: 100%;
   height: 3rem;
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
 `;
-
+const ContentBox = styled.div`
+  width: 20rem;
+  height: 4rem;
+  display: flex;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  background-color: ${Color.GRAY100};
+  border: 1px solid ${Color.GRAY300};
+  border-radius: 8px;
+  font-size: 1.25rem;
+  align-items: center;
+`;
+const Content = styled.div`
+  width: auto;
+  height: auto;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: ${Color.BLACK};
+`;
 const Employee = () => {
-  const [imagePreviewUrl, setImagePreviewUrl] = useState<string>('');
-  const [equipmentName, setEquipmentName] = useState<string>('');
+  // const [imagePreviewUrl, setImagePreviewUrl] = useState<string>('');
   const [equipmentNumber, setEquipmentNumber] = useState<string>('');
-  const [team, setTeam] = useState<string>('');
-  const [position, setPosition] = useState<string>('');
-  const [options, setOptions] = useState<OptionType[]>([]);
-  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
-  const handleEquipmentName = (e: ChangeEvent<HTMLInputElement>) => {
-    setEquipmentName(e.target.value);
-  };
   const handleEquipmentNumber = (e: ChangeEvent<HTMLInputElement>) => {
     setEquipmentNumber(e.target.value);
   };
-  const handleTeam = (e: ChangeEvent<HTMLInputElement>) => {
-    setTeam(e.target.value);
-  };
-  const handlePosition = (e: ChangeEvent<HTMLInputElement>) => {
-    setPosition(e.target.value);
-  };
-  const handleOptionChange = (option: OptionType): void => {
-    setSelectedOption(option); // 선택된 옵션 상태 업데이트
-    console.log('Selected facility:', option);
-    // 추가로 필요한 동작이 있으면 여기에 작성
-  };
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
 
-      // Create an image preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreviewUrl(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleFileUpload = async () => {
-    fileInputRef.current?.click();
-  };
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await Facilities();
-      const newOptions = data.map((facility: FacilityType) => ({
-        value: facility.id,
-        label: facility.name,
-      }));
-      setOptions(newOptions);
-    };
-    fetchData();
-  }, []);
   const handleSubmit = () => {};
   return (
     <Background>
@@ -185,38 +135,6 @@ const Employee = () => {
         </Card>
         <InformationBox>
           <LeftBox>
-            <DropdownBox>
-              <Typo.H3>등록 작업장</Typo.H3>
-              <Dropdown
-                options={options}
-                selectedOption={selectedOption}
-                onOptionChange={handleOptionChange}
-                placeholder="공장을 선택하세요"
-              />
-            </DropdownBox>
-            <PhotoBox onClick={handleFileUpload}>
-              <Typo.H3>작업장 사진</Typo.H3>
-              <Photo>
-                {imagePreviewUrl ? (
-                  <Preview src={imagePreviewUrl} alt="Uploaded Image Preview" />
-                ) : (
-                  '사진을 업로드해주세요'
-                )}
-                <PhotoInputBox ref={fileInputRef} onChange={handleFileChange} />
-              </Photo>
-            </PhotoBox>
-          </LeftBox>
-          <RightBox>
-            <CommonBox>
-              <Typo.H3>이름</Typo.H3>
-              <InputBox
-                width={20}
-                height={4}
-                value={equipmentName}
-                onChange={handleEquipmentName}
-                placeholder="이름을 입력하세요"
-              />
-            </CommonBox>
             <CommonBox>
               <Typo.H3>사번</Typo.H3>
               <InputBox
@@ -228,26 +146,35 @@ const Employee = () => {
               />
             </CommonBox>
             <CommonBox>
+              <Typo.H3>이름</Typo.H3>
+              <ContentBox>
+                <Content>오정민</Content>
+              </ContentBox>
+            </CommonBox>
+            <CommonBox>
               <Typo.H3>소속 부서</Typo.H3>
-              <InputBox
-                width={20}
-                height={4}
-                value={team}
-                onChange={handleTeam}
-                placeholder="소속부서를 입력하세요"
-              />
+              <ContentBox>
+                <Content>자원 관리팀</Content>
+              </ContentBox>
             </CommonBox>
             <CommonBox>
               <Typo.H3>직급</Typo.H3>
-              <InputBox
-                width={20}
-                height={4}
-                value={position}
-                onChange={handlePosition}
-                placeholder="직급을 입력하세요"
-              />
+              <ContentBox>
+                <Content>대리</Content>
+              </ContentBox>
             </CommonBox>
-
+          </LeftBox>
+          <RightBox>
+            <PhotoBox>
+              <Typo.H3>작업장 사진</Typo.H3>
+              <Photo>
+                {/* {imagePreviewUrl ? (
+                  <Preview src={imagePreviewUrl} alt="Uploaded Image Preview" />
+                ) : (
+                  '사진'
+                )} */}
+              </Photo>
+            </PhotoBox>
             <ButtonBox>
               <Button
                 width={5.25}
