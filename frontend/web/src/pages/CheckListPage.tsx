@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import CheckListModal from '@/components/modal/CheckListModal.tsx';
 import DeleteCheckListModal from '@/components/modal/DeleteCheckListModal.tsx';
 import { getCheckList } from '@/apis/CheckList.ts';
+import CreateCheckListModal from '@/components/modal/CreateCheckListModal.tsx';
 interface CheckListType {
   id: number;
   context: string;
@@ -123,13 +124,17 @@ const CheckListPage = () => {
     useState<boolean>(false);
   const [lists, setLists] = useState<CheckListType[] | null>(null);
   const [plusLists, setPlusLists] = useState<CheckListType[] | null>(null);
+  const [createCheckListModal, setCreateCheckListModal] =
+    useState<boolean>(false);
   const [currentChecklist, setCurrentChecklist] =
     useState<CheckListType | null>(null);
   const handleCheckListClick = (list: CheckListType) => {
     setCheckListModal(true);
     setCurrentChecklist(list);
   };
-  const handlePlusCheckListClick = () => {};
+  const handlePlusCheckListClick = () => {
+    setCreateCheckListModal(true);
+  };
   const handleDeleteCheckListClick = () => {
     setDeleteCheckListModal(true);
   };
@@ -138,6 +143,7 @@ const CheckListPage = () => {
   ) => {
     setCheckListModal(false);
     setDeleteCheckListModal(false);
+    setCreateCheckListModal(false);
     e.stopPropagation();
     setCurrentChecklist(null);
   };
@@ -180,6 +186,11 @@ const CheckListPage = () => {
         {deleteCheckListModal && (
           <Overlay onClick={handleCloseModal}>
             <DeleteCheckListModal onClick={handleModalClick} />
+          </Overlay>
+        )}
+        {createCheckListModal && (
+          <Overlay onClick={handleCloseModal}>
+            <CreateCheckListModal onClick={handleModalClick} />
           </Overlay>
         )}
         <Box>

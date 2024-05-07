@@ -25,7 +25,14 @@ export const getCheckList = async () => {
 // 체크리스트 추가
 export const postCheckList = async (listData: ListType) => {
   try {
-    const response = await api.post('/checklist', listData);
+    const accessToken = sessionStorage.getItem('accessToken');
+    const companyCode = sessionStorage.getItem('companyCode');
+    const response = await api.post('/checklists', listData, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Company-Code': companyCode,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error('체크리스트 추가 실패: ', error);
