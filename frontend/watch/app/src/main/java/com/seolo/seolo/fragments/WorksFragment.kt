@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
 import com.seolo.seolo.presentation.LOTOInfoActivity
+import com.seolo.seolo.presentation.NFCActivity
 
 class WorksFragment : Fragment() {
 
@@ -39,7 +40,7 @@ class WorksFragment : Fragment() {
 
         view.setOnClickListener {
             val context = view.context
-            val intent = Intent(context, LOTOInfoActivity::class.java)
+            val intent = Intent(context, NFCActivity::class.java)
             context.startActivity(intent)
         }
         return view
