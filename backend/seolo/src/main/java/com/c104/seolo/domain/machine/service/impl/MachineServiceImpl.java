@@ -246,4 +246,9 @@ public class MachineServiceImpl implements MachineService {
                 .machines(Optional.of(machineDtoList))
                 .build();
     }
+
+    @Override
+    public Machine getMachineByMachineId(Long machineId) {
+        return machineRepository.findById(machineId).orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
+    }
 }
