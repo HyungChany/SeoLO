@@ -1,11 +1,65 @@
 import 'package:app/main.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/widgets/dialog/dialog.dart';
-import 'package:app/widgets/lock/key_board_key.dart';
+import 'package:app/widgets/login/key_board_key.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:local_auth_android/local_auth_android.dart';
 import 'package:provider/provider.dart';
+
+class FingerprintAuth {
+  static final _auth = LocalAuthentication();
+
+  static Future<bool> hasBiometrics() async {
+    try {
+      return await _auth.canCheckBiometrics ?? false;
+    } catch (e) {
+      debugPrint('에러 : $e');
+    }
+    return false;
+  }
+
+  static Future<List<BiometricType>> getBiometrics() async {
+    try {
+      return await _auth.getAvailableBiometrics();
+    } catch (e) {
+      debugPrint('에러 : $e');
+    }
+    return <BiometricType>[];
+  }
+
+  static Future<bool> authenticate() async {
+    final isAvailable = await hasBiometrics();
+    if (!isAvailable) return false;
+    try {
+      return await _auth.authenticate(
+          localizedReason: '생체정보를 인식해주세요.',
+          options: const AuthenticationOptions(
+            biometricOnly: true,
+            useErrorDialogs: true, //기본 대화 상자를 사용하기
+            stickyAuth: true,
+          ),
+          authMessages: [
+            const AndroidAuthMessages(
+              biometricHint: '생체 정보를 스캔하세요.',
+              biometricNotRecognized: '생체정보가 일치하지 않습니다.',
+              biometricRequiredTitle: '지문인식',
+              biometricSuccess: '로그인',
+              cancelButton: '취소',
+              deviceCredentialsRequiredTitle: '생체인식이 필요합니다.',
+              deviceCredentialsSetupDescription: '기기 설정으로 이동하여 생체 인식을 등록하세요.',
+              goToSettingsButton: '설정',
+              goToSettingsDescription: '기기 설정으로 이동하여 생체 인식을 등록하세요.',
+              signInTitle: '계속하려면 생체 인식을 스캔',
+            )
+          ]);
+    } catch (e) {
+      debugPrint('에러 : $e');
+    }
+    return false;
+  }
+}
 
 class PinLoginScreen extends StatefulWidget {
   const PinLoginScreen({super.key});
@@ -16,7 +70,6 @@ class PinLoginScreen extends StatefulWidget {
 
 class _PinLoginScreenState extends State<PinLoginScreen> {
   final _storage = const FlutterSecureStorage();
-  final _auth = LocalAuthentication();
 
   String pin = '';
   String content = '';
@@ -25,9 +78,36 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
   @override
   void initState() {
     super.initState();
+    checkBiometricAvailability();
     pin = '';
     content = '암호를 입력해 주세요.';
     failCount = 0;
+  }
+
+  void checkBiometricAvailability() async {
+    bool isBiometricAvailable = await FingerprintAuth.hasBiometrics();
+    if (isBiometricAvailable) {
+      List<BiometricType> availableBiometrics =
+          await FingerprintAuth.getBiometrics();
+      if (availableBiometrics.isNotEmpty) {
+        authenticateWithBiometrics();
+      } else {}
+    } else {}
+  }
+
+  void authenticateWithBiometrics() async {
+    bool isAuthenticated = await FingerprintAuth.authenticate();
+    if (isAuthenticated) {
+      Navigator.pushReplacementNamed(context, '/main');
+      setState(() {
+        pin = '';
+        failCount = 0;
+      });
+    } else {
+      setState(() {
+        content = '생체 인증에 실패했습니다.';
+      });
+    }
   }
 
   final keys = [
@@ -57,7 +137,9 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
             setState(() {
               pin = '';
               failCount += 1;
-              content = failCount == 5 ? '' : '${viewModel.errorMessage!} ($failCount/5)';
+              content = failCount == 5
+                  ? ''
+                  : '${viewModel.errorMessage!} ($failCount/5)';
             });
             failCount == 3
                 ? showDialog(
@@ -71,20 +153,20 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
                     })
                 : null;
             failCount == 5
-            ? showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return CommonDialog(
-                    content: viewModel.errorMessage!,
-                    buttonText: '확인',
-                    buttonClick: () {
-                      _storage.deleteAll();
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/login', (route) => false);
-                    },
-                  );
-                })
+                ? showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return CommonDialog(
+                        content: viewModel.errorMessage!,
+                        buttonText: '확인',
+                        buttonClick: () {
+                          _storage.deleteAll();
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/login', (route) => false);
+                        },
+                      );
+                    })
                 : null;
           }
         });
@@ -96,10 +178,6 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
     setState(() {
       pin = pin.substring(0, pin.length - 1);
     });
-  }
-
-  onFingerprintPress() {
-
   }
 
   gradient1() {
@@ -172,7 +250,19 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
               return Expanded(
                 child: KeyboardKey(
                   label: y,
-                  onTap: y is Widget ? onBackspacePress : onNumberPress,
+                  onTap: () {
+                    if (y is Widget) {
+                      if (y is Icon) {
+                        if (y.icon == Icons.fingerprint) {
+                          authenticateWithBiometrics();
+                        } else if (y.icon == Icons.backspace_outlined) {
+                          onBackspacePress(y);
+                        }
+                      }
+                    } else {
+                      onNumberPress(y);
+                    }
+                  },
                   value: y,
                 ),
               );
@@ -185,8 +275,8 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
   }
 
   renderText() {
-    TextStyle styleTitle = const
-        TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
+    TextStyle styleTitle = const TextStyle(
+        fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
 
     TextStyle styleContent = const TextStyle(
         fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black);

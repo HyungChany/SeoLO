@@ -73,7 +73,7 @@ class _CommonIconButtonState extends State<CommonIconButton>{
             textAlign: TextAlign.center,
             style: TextStyle(
               color: widget.isSelected ? samsungBlue : Colors.black,
-              fontSize: 20,
+              fontSize: 10,
               fontWeight: FontWeight.bold,
             ),
           )

@@ -1,7 +1,7 @@
 import 'package:app/main.dart';
 import 'package:app/view_models/user/pin_change_view_model.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
-import 'package:app/widgets/lock/key_board_key.dart';
+import 'package:app/widgets/login/key_board_key.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -110,7 +110,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
               return Expanded(
                 child: KeyboardKey(
                   label: y,
-                  onTap: y is Widget ? onBackspacePress : onNumberPress,
+                  onTap: y is Widget ? onBackspacePress(y) : onNumberPress(y),
                   value: y,
                 ),
               );
