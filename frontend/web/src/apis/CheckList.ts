@@ -57,7 +57,14 @@ export const patchtCheckList = async (
 // 체크리스트 삭제
 export const deleteCheckList = async (checklistId: number) => {
   try {
-    const response = await api.delete(`/checklist/${checklistId}`);
+    const accessToken = sessionStorage.getItem('accessToken');
+    const companyCode = sessionStorage.getItem('companyCode');
+    const response = await api.delete(`/checklist/${checklistId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Company-Code': companyCode,
+      },
+    });
     return response.data;
   } catch (error) {
     console.error('체크리스트 삭제 실패: ', error);

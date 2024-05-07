@@ -29,7 +29,7 @@ const DeleteCheckListModal = ({ onClick }: DeleteCheckListModalProps) => {
   const navigate = useNavigate();
   const handleDelete = async () => {
     try {
-      await deleteCheckList(12);
+      await deleteCheckList(10);
       console.log('삭제 성공');
       navigate('/checklist');
     } catch (error) {
@@ -37,6 +37,7 @@ const DeleteCheckListModal = ({ onClick }: DeleteCheckListModalProps) => {
       alert('삭제 실패');
     }
   };
+
   return (
     <Modal onClick={onClick}>
       <Text>정말로 삭제하시겠습니까?</Text>
