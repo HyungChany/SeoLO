@@ -45,7 +45,7 @@ dependencies:
   intl: ^0.18.1 # 도로록 포맷팅
   flutter_localization: ^0.2.0 # 도로록 영어 -> 한글
   nfc_manager: ^3.4.0 # nfc 통신
-  flutter_secure_storage: ^9.0.0
+  flutter_secure_storage: ^9.0.0 # token 담을 스토리지
 
 dev_dependencies:
   flutter_test:
