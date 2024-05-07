@@ -3,6 +3,7 @@ import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/navigator/common_navigation_bar.dart';
 import 'package:app/widgets/profile/icon_with_text.dart';
 import 'package:app/widgets/profile/logout_button.dart';
+import 'package:app/widgets/profile/my_activity.dart';
 import 'package:app/widgets/profile/my_info.dart';
 import 'package:app/widgets/profile/my_loto.dart';
 import 'package:flutter/material.dart';
@@ -23,14 +24,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
 
     if (index == 0) {
-      Navigator.pushNamed(context, '/main');
+      Navigator.pushReplacementNamed(context, '/main');
     }
     if (index == 1) {
-      Navigator.pushNamed(context, '/nfc');
+      Navigator.pushReplacementNamed(context, '/nfc');
     }
     if (index == 2) {
-      Navigator.pushNamed(context, '/profile');
+      Navigator.pushReplacementNamed(context, '/profile');
     }
+  }
+
+  titleStyle() {
+    return const TextStyle(fontWeight: FontWeight.bold, fontSize: 25);
   }
 
   @override
@@ -51,41 +56,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 LogoutButton()],
             ),
           ),
-          const Divider(
-            color: Colors.grey,
-            thickness: 1.0,
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 20.0),
+          const Divider(color: Colors.grey, thickness: 1.0,),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '내 활동',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                ),
-                SizedBox(height: 10,),
-                IconWithText(icon: Icon(Icons.edit_document, size: 35,),
-                  text: '비밀번호 재설정',
-                  naviPage: '/checkPassword',),
-                IconWithText(icon: Icon(Icons.password, size: 35,),
-                  text: 'PIN 번호 재설정',
-                  naviPage: '/checkPin',)
+                Text('내 활동', style: titleStyle()),
+                const SizedBox(height: 10,),
+                const MyActivity(),
               ],
             ),
           ),
           const Divider(color: Colors.grey, thickness: 1.0,),
-          const Padding(
-            padding: EdgeInsets.only(left: 20.0),
-            child: Text('나의 LOTO',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Text('나의 LOTO', style: titleStyle()),
           ),
+          const SizedBox(height: 10,),
           MyLoto()
         ],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
-        selectedIndex: _selectedIndex, // 현재 선택된 인덱스를 전달
-        onItemTapped: _onItemTapped, // 탭 선택 이벤트 처리 메소드를 전달
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
       ),
     );
   }

@@ -21,6 +21,7 @@ class SmallInputBox extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.82,
       height: MediaQuery.of(context).size.height * 0.06,
       child: TextFormField(
+        scrollPadding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
         textAlignVertical: TextAlignVertical.center,
         textInputAction: textInputAction,

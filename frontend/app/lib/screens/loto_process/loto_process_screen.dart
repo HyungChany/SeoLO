@@ -1,4 +1,3 @@
-import 'package:app/main.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/loto_process/loto_definition.dart';
 import 'package:flutter/material.dart';
