@@ -1,4 +1,5 @@
 import { api } from './Base.ts';
+import axios from 'axios';
 interface EmployeeType {
   username: string;
   password: string;
@@ -39,15 +40,23 @@ export const EmployeeDetail = async (employeeNumber: string) => {
 export const EmployeeRegistration = async (employeeData: EmployeeType) => {
   try {
     const accessToken = sessionStorage.getItem('accessToken');
-    const companyCode = sessionStorage.getItem('companyCode');
+    // const companyCode = sessionStorage.getItem('companyCode');
     const response = await api.post(`/join`, employeeData, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
-        'Company-Code': companyCode,
+        // 'Company-Code': companyCode,
       },
     });
     return response.data;
   } catch (error) {
-    console.log(error);
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        alert(error.response.data.message); // 오류 메시지를 보여줍니다.
+      } else {
+        console.log('Error without response data');
+      }
+    } else {
+      console.log('Unexpected error', error);
+    }
   }
 };

@@ -6,7 +6,7 @@ import * as Typo from '@/components/typography/Typography.tsx';
 import InputBox from '@/components/inputbox/InputBox.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import People from '/assets/images/people.png';
-import { EmployeeDetail } from '@/apis/Employee.ts';
+import { EmployeeDetail, EmployeeRegistration } from '@/apis/Employee.ts';
 
 interface EmployeeType {
   employee_join_date: string;
@@ -133,12 +133,32 @@ const SearchBox = styled.div`
 const Employee = () => {
   // const [imagePreviewUrl, setImagePreviewUrl] = useState<string>('');
   const [equipmentNumber, setEquipmentNumber] = useState<string>('');
+  const companyCode = sessionStorage.getItem('companyCode');
   const [employeeInformation, setEmployeeInformation] =
     useState<EmployeeType | null>(null);
   const handleEquipmentNumber = (e: ChangeEvent<HTMLInputElement>) => {
     setEquipmentNumber(e.target.value);
   };
-  const handleSubmit = () => {};
+  const handleSubmit = async () => {
+    try {
+      if (employeeInformation && companyCode) {
+        const formattedBirthday = employeeInformation.employee_birthday.replace(
+          /-/g,
+          '',
+        );
+        const employeeData = {
+          username: equipmentNumber,
+          password: 'A' + 'a' + formattedBirthday + '@', // 초기 비밀번호는 Aa생년월일@
+          company_code: companyCode,
+        };
+        const response = await EmployeeRegistration(employeeData);
+        console.log(response);
+        alert('임직원 등록에 성공하였습니다.');
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   const handleSearch = () => {
     const fetchData = async () => {
       const data = await EmployeeDetail(equipmentNumber);
