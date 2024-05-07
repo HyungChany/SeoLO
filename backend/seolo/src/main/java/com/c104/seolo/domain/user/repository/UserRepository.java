@@ -21,7 +21,4 @@ public interface UserRepository extends JpaRepository<AppUser, Long> {
             "u.id, e.employeeName, e.employeeTitle, e.employeeTeam, e.employeeThum " +
             ") from AppUser u JOIN u.employee e where e.company.companyCode = :companyCode")
     List<UserListInfo> findAppUserListByCompanyCode(@Param("companyCode") String companyCode);
-
-    @Query("SELECT t from TaskHistory t where t.user.employee.employeeNum = :employeeNum order by t.createdAt desc ")
-    List<TaskHistory> findTaskHistoryByEmployeeNum(@Param("employeeNum") String employeeNum);
 }
