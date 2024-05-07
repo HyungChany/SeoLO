@@ -1,4 +1,4 @@
-package com.c104.seolo.headquarter.controller;
+package com.c104.seolo.headquarter.employee.controller;
 
 import com.c104.seolo.headquarter.employee.dto.EmployeeDto;
 import com.c104.seolo.headquarter.employee.dto.response.EmployeeResponse;
