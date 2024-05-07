@@ -40,7 +40,7 @@ class WorksFragment : Fragment() {
 
         view.setOnClickListener {
             val context = view.context
-            val intent = Intent(context, NFCActivity::class.java)
+            val intent = Intent(context, LOTOInfoActivity::class.java)
             context.startActivity(intent)
         }
         return view
