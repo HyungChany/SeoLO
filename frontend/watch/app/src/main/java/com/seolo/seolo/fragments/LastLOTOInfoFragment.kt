@@ -51,8 +51,7 @@ class LastLOTOInfoFragment : Fragment() {
     private fun showConfirmationDialog() {
         val dialog = AlertDialog.Builder(
             requireActivity(), com.google.android.material.R.style.AlertDialog_AppCompat_Light
-        ).setTitle(" ").setMessage("NFC 기능을 시작하시겠습니까?")
-            .setPositiveButton("확인", null)
+        ).setTitle(" ").setMessage("NFC 기능을 시작하시겠습니까?").setPositiveButton("확인", null)
             .setNegativeButton("취소", DialogInterface.OnClickListener { dialogInterface, _ ->
                 dialogInterface.cancel()
             }).create()

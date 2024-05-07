@@ -10,8 +10,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
 import com.seolo.seolo.presentation.DatePickerActivity
-import com.seolo.seolo.presentation.LOTOInfoActivity
-import com.seolo.seolo.presentation.NFCActivity
 
 // WorksFragment 클래스 정의
 class LastWorksFragment : Fragment() {

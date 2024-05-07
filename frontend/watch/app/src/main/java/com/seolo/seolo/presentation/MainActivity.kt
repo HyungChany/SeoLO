@@ -4,9 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.seolo.seolo.databinding.MainLayoutBinding
 import com.bumptech.glide.Glide
 import com.seolo.seolo.R
+import com.seolo.seolo.databinding.MainLayoutBinding
 
 class MainActivity : ComponentActivity() {
     private lateinit var binding: MainLayoutBinding
