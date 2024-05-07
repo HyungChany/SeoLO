@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.task.entity;
 
+import com.c104.seolo.domain.task.dto.TaskTemplateDto;
 import com.c104.seolo.domain.task.enums.TaskType;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -35,4 +36,12 @@ public class TaskTemplate {
     }
 
     public TaskTemplate() {}
+
+    public TaskTemplate toEntity(TaskTemplateDto dto) {
+        return TaskTemplate.builder()
+                .id(dto.getId())
+                .taskType(dto.getTaskType())
+                .precaution(dto.getPrecaution())
+                .build();
+    }
 }
