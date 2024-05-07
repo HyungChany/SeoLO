@@ -3,10 +3,21 @@ package com.c104.seolo.domain.core.service.states;
 import com.c104.seolo.domain.core.dto.response.CoreResponse;
 import com.c104.seolo.domain.core.service.CodeState;
 import com.c104.seolo.domain.core.service.Context;
+import com.c104.seolo.domain.task.entity.TaskHistory;
+import com.c104.seolo.domain.task.service.TaskHistoryService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Slf4j
+@Service
 public class CHECK implements CodeState {
+    private final TaskHistoryService taskHistoryService;
+
+    @Autowired
+    public CHECK(TaskHistoryService taskHistoryService) {
+        this.taskHistoryService = taskHistoryService;
+    }
 
     @Override
     public CoreResponse handle(Context context) {
@@ -18,6 +29,7 @@ public class CHECK implements CodeState {
         2. 전달받은 유저 SESSION 정보를 통해 자물쇠에 접근한 유저 정보를 DB에 기록한다.
         3. 1번에서 조회한 작업내역 데이터를 응답한다.
         */
+        TaskHistory latestTaskHistory = taskHistoryService.getLatestTaskHistoryEntityByMachineId(context.getCoreRequest().getMachineId()); // 1
 
 
 
