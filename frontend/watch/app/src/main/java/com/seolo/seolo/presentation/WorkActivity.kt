@@ -1,5 +1,6 @@
 package com.seolo.seolo.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -28,5 +29,10 @@ class WorkActivity : AppCompatActivity() {
         adapter.addFragment(WorksFragment.newInstance(R.drawable.img_mic, "음성"))
 
         viewPager.adapter = adapter
+
+        viewPager.setOnClickListener {
+            val intent = Intent(this, WorkListActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

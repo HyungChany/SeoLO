@@ -17,6 +17,7 @@ class LoginActivity : AppCompatActivity() {
             // 로그인 성공 시 MainActivity로 이동
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-        } else {}
+        } else {
+        }
     }
 }
