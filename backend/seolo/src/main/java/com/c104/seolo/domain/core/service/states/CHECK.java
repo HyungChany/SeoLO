@@ -32,8 +32,6 @@ public class CHECK implements CodeState {
         TaskHistory latestTaskHistory = taskHistoryService.getLatestTaskHistoryEntityByMachineId(context.getCoreRequest().getMachineId()); // 1
 
 
-
-
         return null;
     }
 }
