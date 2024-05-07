@@ -1,8 +1,8 @@
 package com.seolo.seolo.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.R
 
 class LoginActivity : AppCompatActivity() {
@@ -11,5 +11,12 @@ class LoginActivity : AppCompatActivity() {
         setTheme(android.R.style.Theme_DeviceDefault)
         supportActionBar?.hide()
         setContentView(R.layout.login_layout)
+        val loginToken = "qwer1234"
+
+        if (loginToken != " ") {
+            // 로그인 성공 시 MainActivity로 이동
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        } else {}
     }
 }

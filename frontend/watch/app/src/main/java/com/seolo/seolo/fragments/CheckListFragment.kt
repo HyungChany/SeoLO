@@ -8,7 +8,6 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.R
 import com.seolo.seolo.presentation.CheckListActivity
 
