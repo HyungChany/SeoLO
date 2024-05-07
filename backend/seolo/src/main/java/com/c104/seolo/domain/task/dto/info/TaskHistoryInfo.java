@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.task.dto.info;
 
+import com.c104.seolo.domain.task.enums.TaskStatus;
 import com.c104.seolo.domain.task.enums.TaskType;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,6 +16,7 @@ public class TaskHistoryInfo {
     private LocalDateTime taskEndTime;
     private LocalDateTime taskEndEstimatedTime;
     private String taskPrecaution;
+    private TaskStatus status;
 
     private String companyCode;
 
