@@ -101,9 +101,9 @@ public class MachineServiceImpl implements MachineService {
                 .orElse(Collections.emptyList());
     }
 
-    private void createMachineManager(Long userId, Machine machine, Role role) {
-        if (userId != null) {
-            userRepository.findById(userId).ifPresent(user -> {
+    private void createMachineManager(String employeeNum, Machine machine, Role role) {
+        if (employeeNum != null) {
+            userRepository.findAppUserByEmployeeNum(employeeNum).ifPresent(user -> {
                 MachineManager mm = MachineManager.builder()
                         .machine(machine)
                         .user(user)
@@ -121,7 +121,7 @@ public class MachineServiceImpl implements MachineService {
         if (!facility.getCompany().getCompanyCode().equals(companyCode)) {
             throw new CommonException(FacilityErrorCode.NOT_COMPANY_FACILITY);
         }
-        if (machineRequest.getMainManagerId().equals(machineRequest.getSubManagerId())) {
+        if (machineRequest.getMainManagerNum().equals(machineRequest.getSubManagerNum())) {
             throw new CommonException(MachineErrorCode.CANNOT_SEND_SAME_MANAGER);
         }
 
@@ -137,8 +137,8 @@ public class MachineServiceImpl implements MachineService {
                 .build();
         Machine savedMachine = machineRepository.save(machine);
 
-        createMachineManager(machineRequest.getMainManagerId(), savedMachine, Role.Main);
-        createMachineManager(machineRequest.getSubManagerId(), savedMachine, Role.Sub);
+        createMachineManager(machineRequest.getMainManagerNum(), savedMachine, Role.Main);
+        createMachineManager(machineRequest.getSubManagerNum(), savedMachine, Role.Sub);
     }
 
     @Override
@@ -147,11 +147,11 @@ public class MachineServiceImpl implements MachineService {
         if (!machine.getFacility().getCompany().getCompanyCode().equals(companyCode)) {
             throw new CommonException(MachineErrorCode.NOT_COMPANY_MACHINE);
         }
-        if (machineRequest.getMainManagerId().equals(machineRequest.getSubManagerId())) {
+        if (machineRequest.getMainManagerNum().equals(machineRequest.getSubManagerNum())) {
             throw new CommonException(MachineErrorCode.CANNOT_SEND_SAME_MANAGER);
         }
 
-        Optional<AppUser> mainManagerOptional = userRepository.findById(machineRequest.getMainManagerId());
+        Optional<AppUser> mainManagerOptional = userRepository.findAppUserByEmployeeNum(machineRequest.getMainManagerNum());
         if (mainManagerOptional.isEmpty()) {
             throw new CommonException(MachineErrorCode.NOT_EXIST_MACHINE_MANAGER);
         }
@@ -161,7 +161,7 @@ public class MachineServiceImpl implements MachineService {
             }
         });
 
-        Optional<AppUser> subManagerOptional = userRepository.findById(machineRequest.getSubManagerId());
+        Optional<AppUser> subManagerOptional = userRepository.findAppUserByEmployeeNum(machineRequest.getSubManagerNum());
         if (subManagerOptional.isEmpty()) {
             throw new CommonException(MachineErrorCode.NOT_EXIST_MACHINE_MANAGER);
         }
