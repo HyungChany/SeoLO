@@ -6,7 +6,18 @@ import * as Typo from '@/components/typography/Typography.tsx';
 import InputBox from '@/components/inputbox/InputBox.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import People from '/assets/images/people.png';
+import { EmployeeDetail } from '@/apis/Employee.ts';
 
+interface EmployeeType {
+  employee_join_date: string;
+  employee_leave_date: string;
+  employee_num: string;
+  employee_name: string;
+  employee_title: string;
+  employee_team: string;
+  employee_birthday: string;
+  employee_thum: string;
+}
 const Background = styled.div`
   width: 100%;
   height: 100%;
@@ -66,12 +77,12 @@ const Photo = styled.div`
   border: 1px solid ${Color.GRAY300};
   border-radius: 1.25rem;
 `;
-// const Preview = styled.img`
-//   width: 100%;
-//   height: 100%;
-//   border-radius: 1.25rem;
-//   object-fit: cover;
-// `;
+const Preview = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 1.25rem;
+  object-fit: cover;
+`;
 const RightBox = styled.div`
   width: 100%;
   height: 35rem;
@@ -112,14 +123,31 @@ const Content = styled.div`
   font-weight: 400;
   color: ${Color.BLACK};
 `;
+const SearchBox = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+`;
 const Employee = () => {
   // const [imagePreviewUrl, setImagePreviewUrl] = useState<string>('');
   const [equipmentNumber, setEquipmentNumber] = useState<string>('');
+  const [employeeInformation, setEmployeeInformation] =
+    useState<EmployeeType | null>(null);
   const handleEquipmentNumber = (e: ChangeEvent<HTMLInputElement>) => {
     setEquipmentNumber(e.target.value);
   };
-
   const handleSubmit = () => {};
+  const handleSearch = () => {
+    const fetchData = async () => {
+      const data = await EmployeeDetail(equipmentNumber);
+      setEmployeeInformation(data);
+
+      console.log(data);
+    };
+    fetchData();
+  };
   return (
     <Background>
       <Box>
@@ -138,30 +166,59 @@ const Employee = () => {
           <LeftBox>
             <CommonBox>
               <Typo.H3>사번</Typo.H3>
-              <InputBox
-                width={20}
-                height={4}
-                value={equipmentNumber}
-                onChange={handleEquipmentNumber}
-                placeholder="사번을 입력하세요"
-              />
+
+              <SearchBox>
+                <InputBox
+                  width={16}
+                  height={4}
+                  value={equipmentNumber}
+                  onChange={handleEquipmentNumber}
+                  placeholder="사번을 입력하세요"
+                />
+                <Button
+                  width={4}
+                  height={3}
+                  $backgroundColor={Color.GRAY200}
+                  $borderColor={Color.GRAY200}
+                  $borderRadius={1.25}
+                  $hoverBackgroundColor={Color.GRAY200}
+                  $hoverBorderColor={Color.GRAY200}
+                  onClick={handleSearch}
+                  fontSize={'1.25rem'}
+                  fontWeight={'bold'}
+                >
+                  검색
+                </Button>
+              </SearchBox>
             </CommonBox>
             <CommonBox>
               <Typo.H3>이름</Typo.H3>
               <ContentBox>
-                <Content>오정민</Content>
+                {employeeInformation ? (
+                  <Content>{employeeInformation.employee_name}</Content>
+                ) : (
+                  <Content></Content>
+                )}
               </ContentBox>
             </CommonBox>
             <CommonBox>
               <Typo.H3>소속 부서</Typo.H3>
               <ContentBox>
-                <Content>자원 관리팀</Content>
+                {employeeInformation ? (
+                  <Content>{employeeInformation.employee_team}</Content>
+                ) : (
+                  <Content></Content>
+                )}
               </ContentBox>
             </CommonBox>
             <CommonBox>
               <Typo.H3>직급</Typo.H3>
               <ContentBox>
-                <Content>대리</Content>
+                {employeeInformation ? (
+                  <Content>{employeeInformation.employee_title}</Content>
+                ) : (
+                  <Content></Content>
+                )}
               </ContentBox>
             </CommonBox>
           </LeftBox>
@@ -169,11 +226,14 @@ const Employee = () => {
             <PhotoBox>
               <Typo.H3>작업장 사진</Typo.H3>
               <Photo>
-                {/* {imagePreviewUrl ? (
-                  <Preview src={imagePreviewUrl} alt="Uploaded Image Preview" />
+                {employeeInformation ? (
+                  <Preview
+                    src={employeeInformation.employee_thum}
+                    alt="Uploaded Image Preview"
+                  />
                 ) : (
                   '사진'
-                )} */}
+                )}
               </Photo>
             </PhotoBox>
             <ButtonBox>

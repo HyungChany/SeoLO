@@ -15,3 +15,19 @@ export const EmployeeList = async () => {
     console.log(error);
   }
 };
+
+export const EmployeeDetail = async (employeeNumber: string) => {
+  try {
+    const accessToken = sessionStorage.getItem('accessToken');
+    const companyCode = sessionStorage.getItem('companyCode');
+    const response = await api.get(`/employees/${employeeNumber}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Company-Code': companyCode,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
