@@ -31,7 +31,7 @@ class WorkActivity : AppCompatActivity() {
         viewPager.adapter = adapter
 
         viewPager.setOnClickListener {
-            val intent = Intent(this, WorkListActivity::class.java)
+            val intent = Intent(this, LOTOInfoActivity::class.java)
             startActivity(intent)
         }
     }

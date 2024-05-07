@@ -96,7 +96,7 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
         <activity
-            android:name=".presentation.WorkListActivity"
+            android:name=".presentation.LOTOInfoActivity"
             android:exported="false"
             android:taskAffinity=""
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />

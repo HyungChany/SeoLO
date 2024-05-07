@@ -9,7 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
-import com.seolo.seolo.presentation.WorkListActivity
+import com.seolo.seolo.presentation.LOTOInfoActivity
 
 class WorksFragment : Fragment() {
 
@@ -39,7 +39,7 @@ class WorksFragment : Fragment() {
 
         view.setOnClickListener {
             val context = view.context
-            val intent = Intent(context, WorkListActivity::class.java)
+            val intent = Intent(context, LOTOInfoActivity::class.java)
             context.startActivity(intent)
         }
         return view

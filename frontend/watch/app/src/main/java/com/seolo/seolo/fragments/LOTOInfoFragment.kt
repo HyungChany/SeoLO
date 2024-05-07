@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
 
-class WorkListFragment : Fragment() {
+class LOTOInfoFragment : Fragment() {
     private var titleText: String? = null
     private var contentText: String? = null
 
@@ -34,8 +34,8 @@ class WorkListFragment : Fragment() {
         private const val ARG_TITLE = "arg_title"
         private const val ARG_CONTENT = "arg_content"
 
-        fun newInstance(title: String, content: String): WorkListFragment {
-            return WorkListFragment().apply {
+        fun newInstance(title: String, content: String): LOTOInfoFragment {
+            return LOTOInfoFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_TITLE, title)
                     putString(ARG_CONTENT, content)
