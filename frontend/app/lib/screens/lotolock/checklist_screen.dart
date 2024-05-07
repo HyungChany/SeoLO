@@ -63,7 +63,17 @@ class _CheckScreenState extends State<CheckScreen> {
                     ? () {
                         Navigator.pushNamed(context, '/worklist');
                       }
-                    : null,
+                    : () {
+                          showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (BuildContext context) {
+                            return CommonDialog(
+                              content: '체크리스트의 모든 항목에 체크해 주세요.'
+                              buttonText: '확인',
+                            );
+                          });
+                    }
               ),
               SizedBox(
                 height: 20,
