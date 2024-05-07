@@ -9,6 +9,7 @@ import InputBox from '@/components/inputbox/InputBox.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import { Facilities } from '@/apis/Facilities.ts';
 import { EquipmentList } from '@/apis/Equipment.ts';
+import SmallDropdown from '@/components/dropdown/SmallDropDown.tsx';
 interface OptionType {
   value: string;
   label: string;
@@ -156,12 +157,12 @@ const Equipment = () => {
   const handleMonth = (e: ChangeEvent<HTMLInputElement>) => {
     setMonth(e.target.value);
   };
-  const handleMainManager = (e: ChangeEvent<HTMLInputElement>) => {
-    setMainManager(e.target.value);
-  };
-  const handleSubManager = (e: ChangeEvent<HTMLInputElement>) => {
-    setSubManager(e.target.value);
-  };
+  // const handleMainManager = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setMainManager(e.target.value);
+  // };
+  // const handleSubManager = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setSubManager(e.target.value);
+  // };
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -299,19 +300,17 @@ const Equipment = () => {
                 <Typo.H3>담당자(부)</Typo.H3>
               </TypoBox>
               <IntroBox>
-                <InputBox
-                  width={8}
-                  height={4.59}
-                  value={mainManager}
-                  onChange={handleMainManager}
-                  placeholder="ex)김진명"
+                <SmallDropdown
+                  options={options}
+                  selectedOption={selectedOption}
+                  onOptionChange={handleOptionChange}
+                  placeholder="선택하세요"
                 />
-                <InputBox
-                  width={8}
-                  height={4.59}
-                  value={subManager}
-                  onChange={handleSubManager}
-                  placeholder="ex)오정민"
+                <SmallDropdown
+                  options={options}
+                  selectedOption={selectedOption}
+                  onOptionChange={handleOptionChange}
+                  placeholder="선택하세요"
                 />
               </IntroBox>
             </CommonBox>
