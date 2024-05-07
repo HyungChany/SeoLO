@@ -8,7 +8,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.seolo.seolo.R
 import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.adapters.CarouselStateAdapter
-import com.seolo.seolo.fragments.LastWorkListFragment
+import com.seolo.seolo.fragments.LastLOTOInfoFragment
 import com.seolo.seolo.fragments.LOTOInfoFragment
 
 // LOTOInfoActivity 클래스 정의
@@ -32,7 +32,7 @@ class LOTOInfoActivity : AppCompatActivity() {
         adapter.addFragment(LOTOInfoFragment.newInstance("Title 1", "Content 1"))
         adapter.addFragment(LOTOInfoFragment.newInstance("Title 2", "Content 2"))
         adapter.addFragment(LOTOInfoFragment.newInstance("Title 3", "Content 3"))
-        adapter.addFragment(LastWorkListFragment.newInstance("Title 4", "Content 4"))
+        adapter.addFragment(LastLOTOInfoFragment.newInstance("Title 4", "Content 4"))
 
         // ViewPager2에 어댑터 설정
         viewPager.adapter = adapter

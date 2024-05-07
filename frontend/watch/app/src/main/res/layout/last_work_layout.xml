@@ -29,17 +29,6 @@
         app:layout_constraintTop_toBottomOf="@id/workImageView" />
 
     <ImageView
-        android:id="@+id/slideRightIcon"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="@string/right"
-        android:src="@drawable/img_right"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
         android:id="@+id/slideLeftIcon"
         android:layout_width="15dp"
         android:layout_height="15dp"

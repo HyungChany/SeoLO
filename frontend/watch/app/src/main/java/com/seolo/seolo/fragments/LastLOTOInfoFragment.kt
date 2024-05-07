@@ -14,7 +14,7 @@ import com.seolo.seolo.R
 import com.seolo.seolo.presentation.NFCActivity
 
 // LastWorkListFragment 클래스 정의
-class LastWorkListFragment : Fragment() {
+class LastLOTOInfoFragment : Fragment() {
     // 제목과 내용을 저장하는 변수 선언
     private var titleText: String? = null
     private var contentText: String? = null
@@ -74,8 +74,8 @@ class LastWorkListFragment : Fragment() {
         private const val ARG_TITLE = "arg_title"
         private const val ARG_CONTENT = "arg_content"
 
-        fun newInstance(title: String, content: String): LastWorkListFragment {
-            return LastWorkListFragment().apply {
+        fun newInstance(title: String, content: String): LastLOTOInfoFragment {
+            return LastLOTOInfoFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_TITLE, title)
                     putString(ARG_CONTENT, content)
