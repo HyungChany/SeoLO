@@ -137,8 +137,8 @@ const Equipment = () => {
   const [equipmentNumber, setEquipmentNumber] = useState<string>('');
   const [year, setYear] = useState<string>('');
   const [month, setMonth] = useState<string>('');
-  const [mainManager, setMainManager] = useState<string>('');
-  const [subManager, setSubManager] = useState<string>('');
+  // const [mainManager, setMainManager] = useState<string>('');
+  // const [subManager, setSubManager] = useState<string>('');
   const [options, setOptions] = useState<OptionType[]>([]);
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
   const [facilities, setFacilities] = useState<number>(0);
