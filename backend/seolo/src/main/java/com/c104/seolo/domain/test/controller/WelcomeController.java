@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.test.controller;
 
+import com.c104.seolo.domain.core.dto.TokenDto;
 import com.c104.seolo.domain.core.dto.request.LockerEnrollRequest;
 import com.c104.seolo.domain.core.entity.Token;
 import com.c104.seolo.domain.core.service.CoreTokenService;
@@ -29,7 +30,7 @@ public class WelcomeController {
 
     @PostMapping("/core-token")
     @ResponseBody
-    public Token issuTokenTest(@AuthenticationPrincipal CCodePrincipal cCodePrincipal, @RequestBody LockerEnrollRequest lockerEnrollRequest) {
+    public TokenDto issuTokenTest(@AuthenticationPrincipal CCodePrincipal cCodePrincipal, @RequestBody LockerEnrollRequest lockerEnrollRequest) {
         AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
         return coreTokenService.issueCoreAuthToken(appUser, lockerEnrollRequest.getLockerUid());
     }

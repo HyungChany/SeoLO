@@ -7,6 +7,7 @@ import com.c104.seolo.domain.core.service.CodeState;
 import com.c104.seolo.domain.core.service.Context;
 import com.c104.seolo.domain.core.service.LockerAccessLogService;
 import com.c104.seolo.domain.core.service.LockerService;
+import com.c104.seolo.domain.task.dto.TaskHistoryDto;
 import com.c104.seolo.domain.task.entity.TaskHistory;
 import com.c104.seolo.domain.task.service.TaskHistoryService;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +43,7 @@ public class CHECK implements CodeState {
         */
 
         // 1
-        TaskHistory latestTask = taskHistoryService.getLatestTaskHistoryEntityByMachineId(context.getCoreRequest().getMachineId());
+        TaskHistoryDto latestTask = taskHistoryService.getLatestTaskHistoryEntityByMachineId(context.getCoreRequest().getMachineId());
 
         // 2
         Locker locker = lockerService.getLockerByUid(context.getCoreRequest().getLockerUid());

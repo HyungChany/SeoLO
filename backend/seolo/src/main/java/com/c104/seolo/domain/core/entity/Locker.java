@@ -40,16 +40,6 @@ public class Locker extends BaseEntity {
 
     protected Locker () {}
 
-    public LockerDto toResponse(){
-        return LockerDto.builder()
-                .id(this.getId())
-                .uid(this.getUid())
-                .isLocked(this.isLocked())
-                .battery(this.getBattery())
-                .encryptionKey(this.getEncryptionKey())
-                .build();
-    }
-
     public Locker(Builder builder) {
         this.company = builder.company;
         this.uid = builder.uid;

@@ -1,12 +1,13 @@
 package com.c104.seolo.domain.task.service.impl;
 
 import com.c104.seolo.domain.core.enums.CODE;
-import com.c104.seolo.domain.machine.entity.Machine;
+import com.c104.seolo.domain.machine.dto.MachineDto;
 import com.c104.seolo.domain.machine.service.MachineService;
 import com.c104.seolo.domain.task.dto.TaskHistoryDto;
+import com.c104.seolo.domain.task.dto.TaskTemplateDto;
 import com.c104.seolo.domain.task.dto.info.TaskHistoryInfo;
+import com.c104.seolo.domain.task.dto.response.TaskHistoryResponse;
 import com.c104.seolo.domain.task.entity.TaskHistory;
-import com.c104.seolo.domain.task.entity.TaskTemplate;
 import com.c104.seolo.domain.task.exception.TaskErrorCode;
 import com.c104.seolo.domain.task.repository.TaskHistoryRepository;
 import com.c104.seolo.domain.task.service.TaskHistoryService;
@@ -31,7 +32,7 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
     private final MachineService machineService;
 
     @Override
-    public TaskHistoryDto getTaskHistory(Long taskId, String companyCode) {
+    public TaskHistoryResponse getTaskHistory(Long taskId, String companyCode) {
         TaskHistoryInfo taskHistoryInfo = taskHistoryRepository.getTaskHistoryInfoById(taskId);
         if (taskHistoryInfo == null) {
             throw new CommonException(TaskErrorCode.NOT_EXIST_TASK);
@@ -39,7 +40,7 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
         if (!taskHistoryInfo.getCompanyCode().equals(companyCode)) {
             throw new CommonException(TaskErrorCode.NOT_COMPANY_TASK);
         }
-        return TaskHistoryDto.builder()
+        return TaskHistoryResponse.builder()
                 .id(taskHistoryInfo.getId())
                 .facilityName(taskHistoryInfo.getFacilityName())
                 .machineName(taskHistoryInfo.getMachineName())
@@ -56,9 +57,9 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
     }
 
     @Override
-    public TaskHistory getLatestTaskHistoryEntityByMachineId(Long machineId) {
-        return taskHistoryRepository.getTaskHistoryByMachineId(machineId)
-                .orElseThrow(() -> new CommonException(TaskErrorCode.NOT_EXIST_TASK));
+    public TaskHistoryDto getLatestTaskHistoryEntityByMachineId(Long machineId) {
+        return TaskHistoryDto.of(taskHistoryRepository.getLatestTaskHistoryByMachineId(machineId)
+                .orElseThrow(() -> new CommonException(TaskErrorCode.NOT_EXIST_TASK)));
     }
 
     @Override
@@ -81,14 +82,13 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
 //        -> 유저 정보를 조회해서 객체로 받아왔어
 //        -> 그러면 유저가아닌 다른 도메인에서 UserRepository를 의존받아서 조회해야하는거잖아?
 //        -> 그렇다면 왜 굳이 조회하는 서비스 메서드를 만든거임? 애초에 걍 처음부터 그 메서드에서 조회를하지
-
-        TaskTemplate template = taskTemplateService.getTemplate(taskTemplateId);
-        Machine machine = machineService.getMachineByMachineId(machineId);
+        TaskTemplateDto template = taskTemplateService.getTemplate(taskTemplateId);
+        MachineDto machine = machineService.getMachineByMachineId(machineId);
 
         TaskHistory newTaskHistory = TaskHistory.builder()
                 .user(appUser)
-                .taskTemplate(template)
-                .machine(machine)
+                .taskTemplate(template.toEntity())
+                .machine(machine.toEntity())
                 .taskEndEstimatedDateTime(LocalDateTime.parse(endTime))
                 .taskCode(CODE.ISSUED)
                 .taskPrecaution(taskPrecaution)

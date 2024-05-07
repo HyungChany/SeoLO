@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.core.service.impl;
 
+import com.c104.seolo.domain.core.dto.TokenDto;
 import com.c104.seolo.domain.core.entity.Locker;
 import com.c104.seolo.domain.core.entity.Token;
 import com.c104.seolo.domain.core.exception.CoreTokenErrorCode;
@@ -32,7 +33,7 @@ public class CoreTokenServiceImpl implements CoreTokenService {
 
     @Override
     @Transactional
-    public Token issueCoreAuthToken(AppUser appUser , String lockerUid) {
+    public TokenDto issueCoreAuthToken(AppUser appUser , String lockerUid) {
         if (isTokenExistedForUserId(appUser.getId())) {
             throw new CommonException(CoreTokenErrorCode.EXISTED_TOKEN);
         }
@@ -66,7 +67,7 @@ public class CoreTokenServiceImpl implements CoreTokenService {
         log.info("newToken: {}", newToken.toString());
         tokenRepository.save(newToken);
 
-        return newToken;
+        return TokenDto.of(newToken);
     }
 
     @Override

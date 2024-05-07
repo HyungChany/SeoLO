@@ -36,12 +36,4 @@ public class TaskTemplate {
     }
 
     public TaskTemplate() {}
-
-    public TaskTemplate toEntity(TaskTemplateDto dto) {
-        return TaskTemplate.builder()
-                .id(dto.getId())
-                .taskType(dto.getTaskType())
-                .precaution(dto.getPrecaution())
-                .build();
-    }
 }

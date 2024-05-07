@@ -1,6 +1,6 @@
 package com.c104.seolo.domain.machine.controller;
 
-import com.c104.seolo.domain.machine.dto.MachineDto;
+import com.c104.seolo.domain.machine.dto.MachineInfo;
 import com.c104.seolo.domain.machine.dto.MachineSpaceDto;
 import com.c104.seolo.domain.machine.dto.request.MachineRequest;
 import com.c104.seolo.domain.machine.dto.response.MachineListResponse;
@@ -23,7 +23,7 @@ public class MachineController {
 
     @Secured("ROLE_MANAGER")
     @GetMapping("/{machineId}")
-    public ResponseEntity<MachineDto> getMachine(
+    public ResponseEntity<MachineInfo> getMachine(
             @RequestHeader("Company-Code") String companyCode,
             @PathVariable Long machineId
     ) {

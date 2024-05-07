@@ -4,9 +4,9 @@ import com.c104.seolo.domain.facility.entity.Facility;
 import com.c104.seolo.domain.facility.exception.FacilityErrorCode;
 import com.c104.seolo.domain.facility.repository.FacilityRepository;
 import com.c104.seolo.domain.machine.dto.MachineDto;
+import com.c104.seolo.domain.machine.dto.MachineInfo;
 import com.c104.seolo.domain.machine.dto.MachineListDto;
 import com.c104.seolo.domain.machine.dto.MachineSpaceDto;
-import com.c104.seolo.domain.machine.dto.info.MachineInfo;
 import com.c104.seolo.domain.machine.dto.info.MachineListInfo;
 import com.c104.seolo.domain.machine.dto.info.MachineManagerInfo;
 import com.c104.seolo.domain.machine.dto.request.MachineRequest;
@@ -42,9 +42,9 @@ public class MachineServiceImpl implements MachineService {
     private final UserRepository userRepository;
 
     @Override
-    public MachineDto findMachineByMachineId(String companyCode, Long machineId) {
-        Optional<MachineInfo> machineOptional = machineRepository.findInfoById(machineId);
-        MachineInfo machine = machineOptional.orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
+    public MachineInfo findMachineByMachineId(String companyCode, Long machineId) {
+        Optional<com.c104.seolo.domain.machine.dto.info.MachineInfo> machineOptional = machineRepository.findInfoById(machineId);
+        com.c104.seolo.domain.machine.dto.info.MachineInfo machine = machineOptional.orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
 
         if (!machine.getCompanyCode().equals(companyCode)) {
             throw new CommonException(MachineErrorCode.NOT_COMPANY_MACHINE);
@@ -58,7 +58,7 @@ public class MachineServiceImpl implements MachineService {
         Long subManagerId = subnManagerOptional.map(MachineManagerInfo::getMachineManagerId).orElse(null);
         String subManagerName = subnManagerOptional.map(MachineManagerInfo::getName).orElse(null);
 
-        return MachineDto.builder()
+        return MachineInfo.builder()
                 .id(machine.getId())
                 .facilityId(machine.getFacilityId())
                 .facilityName(machine.getFacilityName())
@@ -248,7 +248,7 @@ public class MachineServiceImpl implements MachineService {
     }
 
     @Override
-    public Machine getMachineByMachineId(Long machineId) {
-        return machineRepository.findById(machineId).orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
+    public MachineDto getMachineByMachineId(Long machineId) {
+        return MachineDto.of(machineRepository.findById(machineId).orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE)));
     }
 }

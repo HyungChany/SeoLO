@@ -31,8 +31,8 @@ public class TaskTemplateServiceImpl implements TaskTemplateService {
     }
 
     @Override
-    public TaskTemplate getTemplate(Long taskTemplateId) {
-        return taskTemplateRepository.findById(taskTemplateId).orElseThrow(
-                () -> new CommonException(TaskTemplateErrorCode.NOT_EXIST_TASK_TEMPLATE));
+    public TaskTemplateDto getTemplate(Long taskTemplateId) {
+        return TaskTemplateDto.of(taskTemplateRepository.findById(taskTemplateId).orElseThrow(
+                () -> new CommonException(TaskTemplateErrorCode.NOT_EXIST_TASK_TEMPLATE)));
     }
 }
