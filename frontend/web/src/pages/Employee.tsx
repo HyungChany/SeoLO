@@ -153,7 +153,6 @@ const Employee = () => {
         };
         const response = await EmployeeRegistration(employeeData);
         console.log(response);
-        alert('임직원 등록에 성공하였습니다.');
       }
     } catch (e) {
       console.log(e);

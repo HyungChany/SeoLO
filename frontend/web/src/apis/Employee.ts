@@ -47,6 +47,7 @@ export const EmployeeRegistration = async (employeeData: EmployeeType) => {
         // 'Company-Code': companyCode,
       },
     });
+    alert('임직원 등록에 성공하였습니다.');
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
