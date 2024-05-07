@@ -1,24 +1,24 @@
 package com.c104.seolo.domain.core.service.impl;
 
-import com.c104.seolo.domain.core.dto.LockerDto;
 import com.c104.seolo.domain.core.entity.Locker;
 import com.c104.seolo.domain.core.entity.Token;
 import com.c104.seolo.domain.core.exception.CoreTokenErrorCode;
 import com.c104.seolo.domain.core.repository.TokenRepository;
+import com.c104.seolo.domain.core.service.CoreTokenService;
 import com.c104.seolo.domain.core.service.LockerService;
-import com.c104.seolo.domain.core.service.TokenService;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.encryption.AesEncryption;
 import com.c104.seolo.global.exception.CommonException;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.util.Base64;
 
+@Slf4j
 @Service
-public class CoreTokenServiceImpl implements TokenService {
+public class CoreTokenServiceImpl implements CoreTokenService {
 
     private final TokenRepository tokenRepository;
     private final LockerService lockerService;
@@ -38,6 +38,7 @@ public class CoreTokenServiceImpl implements TokenService {
         }
 
         /*
+        [토큰 발급 모듈]
         토큰의 value는 자물쇠의 고유 넘버(UID 혹은 serial No.) 으로 지정한다.
         해싱에 쓰이는 대칭키는 랜덤으로 생성해서 Locker DB에 저장한 값으로 한다.
 
@@ -50,14 +51,27 @@ public class CoreTokenServiceImpl implements TokenService {
         Locker locker = lockerService.getLockerByUid(lockerUid);
         String base64encryptionKey = locker.getEncryptionKey();
         SecretKey encryptionKey = AesEncryption.decodeBase64ToSecretKey(base64encryptionKey);
-
         String encryptedUid = AesEncryption.encrypt(lockerUid, encryptionKey);
 
-        return Token.builder()
+        // 중복 검사
+        if (tokenRepository.findByTokenValue(encryptedUid).isPresent()) {
+            throw new CommonException(CoreTokenErrorCode.DUPLICATE_TOKEN_VALUE);
+        }
+
+        Token newToken = Token.builder()
                 .tokenValue(encryptedUid)
                 .locker(locker)
                 .appUser(appUser)
                 .build();
+        log.info("newToken: {}", newToken.toString());
+        tokenRepository.save(newToken);
+
+        return newToken;
+    }
+
+    @Override
+    public void deleteTokenByUserId(Long userId) {
+        tokenRepository.findByAppUserId(userId).ifPresent(tokenRepository::delete);
     }
 
     @Override

@@ -23,7 +23,7 @@ const ButtonContainer = styled.button<ButtonProps>`
     typeof props.height === 'number' ? `${props.height}rem` : props.height};
   border-radius: ${(props) => props.$borderRadius}rem;
   border: 1px solid ${(props) => props.$borderColor};
-  font-size: ${(props) => props.$borderRadius}rem;
+  font-size: ${(props) => props.fontSize}rem;
   font-weight: ${(props) => props.fontWeight || 'normal'};
   padding: 0.7rem;
   align-items: center;

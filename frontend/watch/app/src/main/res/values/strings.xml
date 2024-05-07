@@ -5,7 +5,7 @@
     values-round/strings.xml for round devices.
     -->
     <string name="hello_world">From the Square world,\nHello, %1$s!</string>
-    <string name="sample_text">Sample sssssssssssssssssssText</string>
+    <string name="sample_text">Sample</string>
     <string name="open_example_activity">Open Example Activity</string>
     <string name="left"><![CDATA[<]]></string>
     <string name="right"><![CDATA[>]]></string>
@@ -18,4 +18,6 @@
     <string name="splash">Splash</string>
     <string name="main_gif">main_gif</string>
     <string name="confirm">확인</string>
+    <string name="login">핸드폰에서 로그인을 진행해주세요.</string>
+    <string name="nfc_time">mm:ss</string>
 </resources>

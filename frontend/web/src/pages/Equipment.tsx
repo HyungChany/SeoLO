@@ -9,6 +9,7 @@ import InputBox from '@/components/inputbox/InputBox.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import { Facilities } from '@/apis/Facilities.ts';
 import { EquipmentList } from '@/apis/Equipment.ts';
+import SmallDropdown from '@/components/dropdown/SmallDropDown.tsx';
 interface OptionType {
   value: string;
   label: string;
@@ -29,7 +30,6 @@ const Box = styled.div`
   width: 92%;
   height: 90%;
   display: flex;
-  justify-content: space-between;
   gap: 2rem;
 `;
 const ImgBox = styled.img`
@@ -37,7 +37,7 @@ const ImgBox = styled.img`
   height: 13rem;
 `;
 const InformationBox = styled.div`
-  width: 60rem;
+  width: 80rem;
   height: 100%;
   display: flex;
   padding-top: 1rem;
@@ -47,7 +47,8 @@ const InformationBox = styled.div`
   background-color: ${Color.WHITE};
   border-radius: 3.125rem;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
-  justify-content: space-between;
+  gap: 20rem;
+  overflow: hidden;
 `;
 const LeftBox = styled.div`
   width: 25.0625rem;
@@ -73,7 +74,7 @@ const PhotoBox = styled.div`
   gap: 0.5rem;
 `;
 const Photo = styled.div`
-  width: 25.0625rem;
+  width: 30rem;
   height: 23.125rem;
   display: flex;
   justify-content: center;
@@ -95,7 +96,7 @@ const PhotoInputBox = styled.input.attrs({
   display: none;
 `;
 const RightBox = styled.div`
-  width: 20rem;
+  width: 100%;
   height: 35rem;
   display: flex;
   flex-direction: column;
@@ -136,8 +137,8 @@ const Equipment = () => {
   const [equipmentNumber, setEquipmentNumber] = useState<string>('');
   const [year, setYear] = useState<string>('');
   const [month, setMonth] = useState<string>('');
-  const [mainManager, setMainManager] = useState<string>('');
-  const [subManager, setSubManager] = useState<string>('');
+  // const [mainManager, setMainManager] = useState<string>('');
+  // const [subManager, setSubManager] = useState<string>('');
   const [options, setOptions] = useState<OptionType[]>([]);
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
   const [facilities, setFacilities] = useState<number>(0);
@@ -156,12 +157,12 @@ const Equipment = () => {
   const handleMonth = (e: ChangeEvent<HTMLInputElement>) => {
     setMonth(e.target.value);
   };
-  const handleMainManager = (e: ChangeEvent<HTMLInputElement>) => {
-    setMainManager(e.target.value);
-  };
-  const handleSubManager = (e: ChangeEvent<HTMLInputElement>) => {
-    setSubManager(e.target.value);
-  };
+  // const handleMainManager = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setMainManager(e.target.value);
+  // };
+  // const handleSubManager = (e: ChangeEvent<HTMLInputElement>) => {
+  //   setSubManager(e.target.value);
+  // };
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -299,19 +300,17 @@ const Equipment = () => {
                 <Typo.H3>담당자(부)</Typo.H3>
               </TypoBox>
               <IntroBox>
-                <InputBox
-                  width={8}
-                  height={4.59}
-                  value={mainManager}
-                  onChange={handleMainManager}
-                  placeholder="ex)김진명"
+                <SmallDropdown
+                  options={options}
+                  selectedOption={selectedOption}
+                  onOptionChange={handleOptionChange}
+                  placeholder="선택하세요"
                 />
-                <InputBox
-                  width={8}
-                  height={4.59}
-                  value={subManager}
-                  onChange={handleSubManager}
-                  placeholder="ex)오정민"
+                <SmallDropdown
+                  options={options}
+                  selectedOption={selectedOption}
+                  onOptionChange={handleOptionChange}
+                  placeholder="선택하세요"
                 />
               </IntroBox>
             </CommonBox>

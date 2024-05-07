@@ -2,6 +2,8 @@ package com.c104.seolo.domain.task.service.impl;
 
 import com.c104.seolo.domain.task.dto.TaskHistoryDto;
 import com.c104.seolo.domain.task.dto.info.TaskHistoryInfo;
+import com.c104.seolo.domain.task.dto.response.TaskListResponse;
+import com.c104.seolo.domain.task.entity.TaskHistory;
 import com.c104.seolo.domain.task.exception.TaskErrorCode;
 import com.c104.seolo.domain.task.repository.TaskHistoryRepository;
 import com.c104.seolo.domain.task.service.TaskHistoryService;
@@ -9,6 +11,8 @@ import com.c104.seolo.global.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +42,20 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
                 .taskEndTime(taskHistoryInfo.getTaskEndTime())
                 .taskEndEstimatedTime(taskHistoryInfo.getTaskEndEstimatedTime())
                 .taskPrecaution(taskHistoryInfo.getTaskPrecaution())
+                .build();
+    }
+
+    @Override
+    public TaskHistory getLatestTaskHistoryEntityByMachineId(Long machineId) {
+        return taskHistoryRepository.getTaskHistoryByMachineId(machineId)
+                .orElseThrow(() -> new CommonException(TaskErrorCode.NOT_EXIST_TASK));
+    }
+
+    @Override
+    public TaskListResponse getTaskHistoryEntityByEmployeeNum(String employeeNum) {
+        List<TaskHistoryInfo> taskHistoryInfos = taskHistoryRepository.getTaskHistoryByEmployeeNum(employeeNum);
+        return TaskListResponse.builder()
+                .tasks(taskHistoryInfos)
                 .build();
     }
 }
