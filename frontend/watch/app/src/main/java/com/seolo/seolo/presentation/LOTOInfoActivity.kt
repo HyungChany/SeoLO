@@ -9,9 +9,9 @@ import com.seolo.seolo.R
 import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.adapters.CarouselStateAdapter
 import com.seolo.seolo.fragments.LastWorkListFragment
-import com.seolo.seolo.fragments.WorkListFragment
+import com.seolo.seolo.fragments.LOTOInfoFragment
 
-class WorkListActivity : AppCompatActivity() {
+class LOTOInfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
@@ -23,12 +23,12 @@ class WorkListActivity : AppCompatActivity() {
 
         // ViewPager2와 CarouselStateAdapter 설정
         val viewPager: ViewPager2 = findViewById(R.id.viewPager)
-        val adapter = CarouselStateAdapter(this@WorkListActivity)
+        val adapter = CarouselStateAdapter(this@LOTOInfoActivity)
 
         // CardFragment 인스턴스 생성 및 추가
-        adapter.addFragment(WorkListFragment.newInstance("Title 1", "Content 1"))
-        adapter.addFragment(WorkListFragment.newInstance("Title 2", "Content 2"))
-        adapter.addFragment(WorkListFragment.newInstance("Title 3", "Content 3"))
+        adapter.addFragment(LOTOInfoFragment.newInstance("Title 1", "Content 1"))
+        adapter.addFragment(LOTOInfoFragment.newInstance("Title 2", "Content 2"))
+        adapter.addFragment(LOTOInfoFragment.newInstance("Title 3", "Content 3"))
         adapter.addFragment(LastWorkListFragment.newInstance("Title 4", "Content 4"))
 
         viewPager.adapter = adapter

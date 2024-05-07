@@ -47,7 +47,6 @@
         </activity>
 
 
-
         <activity
             android:name=".presentation.CarouselActivity"
             android:exported="false"
@@ -97,7 +96,19 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
         <activity
-            android:name=".presentation.WorkListActivity"
+            android:name=".presentation.LOTOInfoActivity"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name=".presentation.LoginActivity"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name=".presentation.NFCActivity"
             android:exported="false"
             android:taskAffinity=""
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />

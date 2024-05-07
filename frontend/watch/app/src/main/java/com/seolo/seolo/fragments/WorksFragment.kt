@@ -1,5 +1,6 @@
 package com.seolo.seolo.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
+import com.seolo.seolo.presentation.LOTOInfoActivity
+import com.seolo.seolo.presentation.NFCActivity
 
 class WorksFragment : Fragment() {
 
@@ -35,6 +38,11 @@ class WorksFragment : Fragment() {
         val textView: TextView = view.findViewById(R.id.workTextView)
         textView.text = work
 
+        view.setOnClickListener {
+            val context = view.context
+            val intent = Intent(context, LOTOInfoActivity::class.java)
+            context.startActivity(intent)
+        }
         return view
     }
 
