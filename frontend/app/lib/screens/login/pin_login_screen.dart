@@ -1,65 +1,13 @@
 import 'package:app/main.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/widgets/dialog/dialog.dart';
+import 'package:app/widgets/login/fingerprint_auth.dart';
 import 'package:app/widgets/login/key_board_key.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:local_auth_android/local_auth_android.dart';
 import 'package:provider/provider.dart';
-
-class FingerprintAuth {
-  static final _auth = LocalAuthentication();
-
-  static Future<bool> hasBiometrics() async {
-    try {
-      return await _auth.canCheckBiometrics ?? false;
-    } catch (e) {
-      debugPrint('에러 : $e');
-    }
-    return false;
-  }
-
-  static Future<List<BiometricType>> getBiometrics() async {
-    try {
-      return await _auth.getAvailableBiometrics();
-    } catch (e) {
-      debugPrint('에러 : $e');
-    }
-    return <BiometricType>[];
-  }
-
-  static Future<bool> authenticate() async {
-    final isAvailable = await hasBiometrics();
-    if (!isAvailable) return false;
-    try {
-      return await _auth.authenticate(
-          localizedReason: '생체정보를 인식해주세요.',
-          options: const AuthenticationOptions(
-            biometricOnly: true,
-            useErrorDialogs: true, //기본 대화 상자를 사용하기
-            stickyAuth: true,
-          ),
-          authMessages: [
-            const AndroidAuthMessages(
-              biometricHint: '생체 정보를 스캔하세요.',
-              biometricNotRecognized: '생체정보가 일치하지 않습니다.',
-              biometricRequiredTitle: '지문인식',
-              biometricSuccess: '로그인',
-              cancelButton: '취소',
-              deviceCredentialsRequiredTitle: '생체인식이 필요합니다.',
-              deviceCredentialsSetupDescription: '기기 설정으로 이동하여 생체 인식을 등록하세요.',
-              goToSettingsButton: '설정',
-              goToSettingsDescription: '기기 설정으로 이동하여 생체 인식을 등록하세요.',
-              signInTitle: '계속하려면 생체 인식을 스캔',
-            )
-          ]);
-    } catch (e) {
-      debugPrint('에러 : $e');
-    }
-    return false;
-  }
-}
 
 class PinLoginScreen extends StatefulWidget {
   const PinLoginScreen({super.key});
@@ -85,11 +33,14 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
   }
 
   void checkBiometricAvailability() async {
+    // 지문인식을 지원하는 기기인지 확인
     bool isBiometricAvailable = await FingerprintAuth.hasBiometrics();
     if (isBiometricAvailable) {
       List<BiometricType> availableBiometrics =
           await FingerprintAuth.getBiometrics();
+      // 지문이 등록되어 있다면
       if (availableBiometrics.isNotEmpty) {
+        // 지문인식 진행
         authenticateWithBiometrics();
       } else {}
     } else {}
@@ -97,17 +48,14 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
 
   void authenticateWithBiometrics() async {
     bool isAuthenticated = await FingerprintAuth.authenticate();
+    // 지문인식 성공
     if (isAuthenticated) {
       Navigator.pushReplacementNamed(context, '/main');
       setState(() {
         pin = '';
         failCount = 0;
       });
-    } else {
-      setState(() {
-        content = '생체 인증에 실패했습니다.';
-      });
-    }
+    } else {}
   }
 
   final keys = [
