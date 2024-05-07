@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../main.dart';
 
 class CheckBoxList extends StatefulWidget {
-
   final String title;
+  final Function(bool)? onChecked;
 
-  const CheckBoxList({super.key,required this.title});
+  const CheckBoxList({Key? key, required this.title, this.onChecked}) : super(key: key);
+
   @override
-  State<CheckBoxList> createState() =>
-      _CheckBoxListState();
+  _CheckBoxListState createState() => _CheckBoxListState();
 }
 
 class _CheckBoxListState extends State<CheckBoxList> {
@@ -17,19 +18,18 @@ class _CheckBoxListState extends State<CheckBoxList> {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: CheckboxListTile(
-          title: Text(widget.title),
-          value: _isChecked,
-          onChanged: (bool? newValue) {
-            setState(() {
-              _isChecked = newValue ?? false; // 체크박스 상태 업데이트
-            });
-          },
-          checkColor: snow,
-          activeColor: samsungBlue,
-        ),
-
-      );
-
+      child: CheckboxListTile(
+        title: Text(widget.title),
+        value: _isChecked,
+        onChanged: (bool? newValue) {
+          setState(() {
+            _isChecked = newValue ?? false;
+          });
+          widget.onChecked?.call(_isChecked); 
+        },
+        checkColor: snow,
+        activeColor: samsungBlue,
+      ),
+    );
   }
 }

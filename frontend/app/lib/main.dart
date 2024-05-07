@@ -63,6 +63,7 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (_) => MyInfoViewModel()),
           ChangeNotifierProvider(create: (_) => PasswordChangeViewModel()),
           ChangeNotifierProvider(create: (_) => PasswordCheckViewModel()),
+          ChangeNotifierProvider(create: (_) => ChecklistViewModel()),
         ],
         child: MaterialApp(
           localizationsDelegates: [

@@ -4,23 +4,27 @@ import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/checklist/check_banner.dart';
 import 'package:app/widgets/button/common_text_button.dart';
 
-// import 'package:app/widgets/checklist/check_list.dart';
 class CheckScreen extends StatefulWidget {
   @override
   _CheckScreenState createState() => _CheckScreenState();
 }
 
 class _CheckScreenState extends State<CheckScreen> {
+  late List<bool> _isCheckedList;
+
+  @override
+  void initState() {
+    super.initState();
+    _isCheckedList = List.filled(checkList.length, false);
+  }
+
+  bool _allChecked() {
+    return _isCheckedList.every((isChecked) => isChecked);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<String> checkList = [
-      '작업장 안전 규칙 1',
-      '작업장 안전 규칙 2',
-      '작업장 안전 규칙 3',
-      '작업장 안전 규칙 4',
-      '작업장 안전 규칙 5',
-      '작업장 안전 규칙 6'
-    ];
+    final viewModel = Provider.of<ChecklistViewModel>(context);
     return Scaffold(
       appBar: const Header(
         title: '체크리스트',
@@ -39,21 +43,28 @@ class _CheckScreenState extends State<CheckScreen> {
                 height: 20,
               ),
               Expanded(
-                // Column 내에 ListView를 사용할 경우 Expanded 필요
                 child: ListView.builder(
                   itemCount: checkList.length,
                   itemBuilder: (context, index) {
                     return CheckBoxList(
-                      title: checkList[index], // 각 항목의 제목을 CheckBoxList에 전달
+                      title: checkList[index],
+                      onChecked: (isChecked) {
+                        setState(() {
+                          _isCheckedList[index] = isChecked;
+                        });
+                      },
                     );
                   },
                 ),
               ),
               CommonTextButton(
-                  text: '다음 단계',
-                  onTap: () {
-                    Navigator.pushNamed(context, '/main');
-                  }),
+                text: '다음 단계',
+                onTap: _allChecked()
+                    ? () {
+                        Navigator.pushNamed(context, '/worklist');
+                      }
+                    : null,
+              ),
               SizedBox(
                 height: 20,
               )
