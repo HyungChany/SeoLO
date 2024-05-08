@@ -41,6 +41,7 @@ const Content = styled.div`
   align-items: center;
   font-size: 1.25rem;
   font-weight: 500;
+  text-overflow: ellipsis;
 `;
 const ContentBox = styled.div<ContentBoxProps>`
   width: 100%;
