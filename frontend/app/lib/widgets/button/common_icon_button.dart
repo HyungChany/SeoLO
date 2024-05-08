@@ -42,14 +42,12 @@ class _CommonIconButtonState extends State<CommonIconButton>{
     return InkWell(
       onTap: widget.onTap,
       child: Column(
-        // 가운데 정렬
-        // mainAxisAlignment: MainAxisAlignment.center,
         // 세로로 세울 애들이 누구인지
         children: [
           // 아이콘이 있는 부분
           Container(
-            height: widget.shape == BoxShape.rectangle ? 120 : 100,
-            width: widget.shape == BoxShape.rectangle ? 120 : 100,
+            height: widget.shape == BoxShape.rectangle ? MediaQuery.of(context).size.height * 0.13 : MediaQuery.of(context).size.height * 0.13,
+            width: widget.shape == BoxShape.rectangle ? MediaQuery.of(context).size.width * 0.3 : MediaQuery.of(context).size.width * 0.3,
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 color: widget.shape == BoxShape.rectangle ? mint200 : gray100,

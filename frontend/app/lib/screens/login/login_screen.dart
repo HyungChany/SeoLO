@@ -27,59 +27,63 @@ class _LoginScreenState extends State<LoginScreen> {
 
   loginBox() {
     final viewModel = Provider.of<LoginViewModel>(context);
-    return Container(
-      width: MediaQuery.of(context).size.width * 0.9,
-      height: MediaQuery.of(context).size.height * 0.6,
-      decoration: (BoxDecoration(
-          color: const Color.fromRGBO(49, 49, 49, 0.05),
-          borderRadius: BorderRadius.circular(20.0),
-          boxShadow: [shadow1, shadow2])),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          const SizedBox(height: 50),
-          Image.asset('assets/images/login_logo.png'),
-          SmallInputBox(
-            hintText: '회사 번호',
-            textInputAction: TextInputAction.next,
-            onChanged: (value) => viewModel.setCompanyCode(value),
-          ),
-          SmallInputBox(
-            hintText: '사번',
-            textInputAction: TextInputAction.next,
-            onChanged: (value) => viewModel.setUsername(value),
-          ),
-          SmallInputBox(
-            hintText: '비밀번호',
-            textInputAction: TextInputAction.done,
-            onChanged: (value) => viewModel.setPassword(value),
-            obscureText: true,
-          ),
-          CommonTextButton(
-            text: '로그인',
-            onTap: () {
-              if (!viewModel.isLoading) {
-                viewModel.login().then((_) {
-                  if (viewModel.errorMessage == null) {
-                    Navigator.pushReplacementNamed(context, '/main');
-                  } else {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (BuildContext context) {
-                          return CommonDialog(
-                            content: viewModel.errorMessage!,
-                            buttonText: '확인',
-                          );
-                        });
-                  }
-                });
-              }
-            },
-            width: MediaQuery.of(context).size.width * 0.82,
-            height: MediaQuery.of(context).size.height * 0.06,
-          )
-        ],
+    return SingleChildScrollView(
+      padding:
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: Container(
+        width: MediaQuery.of(context).size.width * 0.9,
+        height: MediaQuery.of(context).size.height * 0.6,
+        decoration: (BoxDecoration(
+            color: const Color.fromRGBO(49, 49, 49, 0.05),
+            borderRadius: BorderRadius.circular(20.0),
+            boxShadow: [shadow1, shadow2])),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const SizedBox(height: 30),
+            Image.asset('assets/images/login_logo.png'),
+            SmallInputBox(
+              hintText: '회사 번호',
+              textInputAction: TextInputAction.next,
+              onChanged: (value) => viewModel.setCompanyCode(value),
+            ),
+            SmallInputBox(
+              hintText: '사번',
+              textInputAction: TextInputAction.next,
+              onChanged: (value) => viewModel.setUsername(value),
+            ),
+            SmallInputBox(
+              hintText: '비밀번호',
+              textInputAction: TextInputAction.done,
+              onChanged: (value) => viewModel.setPassword(value),
+              obscureText: true,
+            ),
+            CommonTextButton(
+              text: '로그인',
+              onTap: () {
+                if (!viewModel.isLoading) {
+                  viewModel.login().then((_) {
+                    if (viewModel.errorMessage == null) {
+                      Navigator.pushReplacementNamed(context, '/main');
+                    } else {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (BuildContext context) {
+                            return CommonDialog(
+                              content: viewModel.errorMessage!,
+                              buttonText: '확인',
+                            );
+                          });
+                    }
+                  });
+                }
+              },
+              width: MediaQuery.of(context).size.width * 0.82,
+              height: MediaQuery.of(context).size.height * 0.06,
+            ),
+          ],
+        ),
       ),
     );
   }

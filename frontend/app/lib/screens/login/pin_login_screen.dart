@@ -1,9 +1,12 @@
 import 'package:app/main.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/widgets/dialog/dialog.dart';
-import 'package:app/widgets/lock/key_board_key.dart';
+import 'package:app/widgets/login/fingerprint_auth.dart';
+import 'package:app/widgets/login/key_board_key.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:local_auth/local_auth.dart';
+import 'package:local_auth_android/local_auth_android.dart';
 import 'package:provider/provider.dart';
 
 class PinLoginScreen extends StatefulWidget {
@@ -14,7 +17,8 @@ class PinLoginScreen extends StatefulWidget {
 }
 
 class _PinLoginScreenState extends State<PinLoginScreen> {
-  final _storage = FlutterSecureStorage();
+  final _storage = const FlutterSecureStorage();
+
   String pin = '';
   String content = '';
   int failCount = 0;
@@ -22,9 +26,36 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
   @override
   void initState() {
     super.initState();
+    checkBiometricAvailability();
     pin = '';
     content = '암호를 입력해 주세요.';
     failCount = 0;
+  }
+
+  void checkBiometricAvailability() async {
+    // 지문인식을 지원하는 기기인지 확인
+    bool isBiometricAvailable = await FingerprintAuth.hasBiometrics();
+    if (isBiometricAvailable) {
+      List<BiometricType> availableBiometrics =
+          await FingerprintAuth.getBiometrics();
+      // 지문이 등록되어 있다면
+      if (availableBiometrics.isNotEmpty) {
+        // 지문인식 진행
+        authenticateWithBiometrics();
+      } else {}
+    } else {}
+  }
+
+  void authenticateWithBiometrics() async {
+    bool isAuthenticated = await FingerprintAuth.authenticate();
+    // 지문인식 성공
+    if (isAuthenticated) {
+      Navigator.pushReplacementNamed(context, '/main');
+      setState(() {
+        pin = '';
+        failCount = 0;
+      });
+    } else {}
   }
 
   final keys = [
@@ -54,7 +85,9 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
             setState(() {
               pin = '';
               failCount += 1;
-              content = failCount == 5 ? '' : '${viewModel.errorMessage!} ($failCount/5)';
+              content = failCount == 5
+                  ? ''
+                  : '${viewModel.errorMessage!} ($failCount/5)';
             });
             failCount == 3
                 ? showDialog(
@@ -68,20 +101,20 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
                     })
                 : null;
             failCount == 5
-            ? showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return CommonDialog(
-                    content: viewModel.errorMessage!,
-                    buttonText: '확인',
-                    buttonClick: () {
-                      _storage.deleteAll();
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/login', (route) => false);
-                    },
-                  );
-                })
+                ? showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return CommonDialog(
+                        content: viewModel.errorMessage!,
+                        buttonText: '확인',
+                        buttonClick: () {
+                          _storage.deleteAll();
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/login', (route) => false);
+                        },
+                      );
+                    })
                 : null;
           }
         });
@@ -100,7 +133,7 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
       gradient: LinearGradient(
         colors: [
           Colors.white.withOpacity(0.5),
-          Color.fromRGBO(215, 223, 243, 0.5)
+          const Color.fromRGBO(215, 223, 243, 0.5)
         ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
@@ -109,7 +142,7 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
   }
 
   gradient2() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
         colors: [
           Color.fromRGBO(215, 223, 243, 0.5),
@@ -122,7 +155,7 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
   }
 
   gradient3() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
         colors: [
           Color.fromRGBO(175, 190, 240, 0.5),
@@ -135,7 +168,7 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
   }
 
   gradient4() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
         colors: [Color.fromRGBO(135, 157, 238, 0.5), blue100],
         begin: Alignment.topCenter,
@@ -165,7 +198,19 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
               return Expanded(
                 child: KeyboardKey(
                   label: y,
-                  onTap: y is Widget ? onBackspacePress : onNumberPress,
+                  onTap: () {
+                    if (y is Widget) {
+                      if (y is Icon) {
+                        if (y.icon == Icons.fingerprint) {
+                          authenticateWithBiometrics();
+                        } else if (y.icon == Icons.backspace_outlined) {
+                          onBackspacePress(y);
+                        }
+                      }
+                    } else {
+                      onNumberPress(y);
+                    }
+                  },
                   value: y,
                 ),
               );
@@ -178,10 +223,10 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
   }
 
   renderText() {
-    TextStyle styleTitle =
-        TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
+    TextStyle styleTitle = const TextStyle(
+        fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
 
-    TextStyle styleContent = TextStyle(
+    TextStyle styleContent = const TextStyle(
         fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black);
 
     return Expanded(
@@ -193,14 +238,14 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
               '암호 입력',
               style: styleTitle,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
               content,
               style: styleContent,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Row(
@@ -212,7 +257,7 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
                     style: TextStyle(
                       color: pin.length >= i
                           ? blue100
-                          : Color.fromRGBO(227, 227, 227, 1),
+                          : const Color.fromRGBO(227, 227, 227, 1),
                       fontWeight: FontWeight.bold,
                       fontSize: 50.0,
                     ),

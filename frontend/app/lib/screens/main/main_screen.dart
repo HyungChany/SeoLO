@@ -20,13 +20,13 @@ class _MainScreenState extends State<MainScreen> {
     });
 
     if (index == 0) {
-      Navigator.pushNamed(context, '/main');
+      Navigator.pushReplacementNamed(context, '/main');
     }
     if (index == 1) {
       Navigator.pushNamed(context, '/nfc');
     }
     if (index == 2) {
-      Navigator.pushNamed(context, '/profile');
+      Navigator.pushReplacementNamed(context, '/profile');
     }
   }
 

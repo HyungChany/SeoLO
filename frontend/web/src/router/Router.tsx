@@ -10,6 +10,7 @@ import CurrentLOTO from '@/pages/CurrentLOTO.tsx';
 import Equipment from '@/pages/Equipment.tsx';
 import Employee from '@/pages/Employee.tsx';
 import PrivateRoute from '@/components/routesetting/PrivateRoute.tsx';
+import CheckListPage from '@/pages/CheckListPage.tsx';
 
 const Container = styled.div`
   display: flex;
@@ -55,10 +56,10 @@ const informationRoute = [
     path: '/employee',
     element: <PrivateRoute>{With(<Employee />)}</PrivateRoute>,
   },
-  // {
-  //   path: '/checklist',
-  //   element: With(<CheckListPage />),
-  // },
+  {
+    path: '/checklist',
+    element: With(<CheckListPage />),
+  },
 ];
 const exampleRoute = { path: '/example', element: <Example /> };
 

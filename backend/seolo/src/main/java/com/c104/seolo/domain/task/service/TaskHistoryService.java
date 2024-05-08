@@ -1,11 +1,10 @@
 package com.c104.seolo.domain.task.service;
 
-import com.c104.seolo.domain.task.dto.TaskHistoryDto;
-import com.c104.seolo.domain.task.dto.response.TaskHistoryResponse;
-import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
+import com.c104.seolo.domain.task.dto.response.TaskListResponse;
+import com.c104.seolo.domain.task.entity.TaskHistory;
 
 public interface TaskHistoryService {
-    TaskHistoryResponse getTaskHistory(Long taskId, String companyCode);
-    TaskHistoryDto getLatestTaskHistoryEntityByMachineId(Long machineId);
-    void enrollTaskHistory(CCodePrincipal cCodePrincipal, Long taskTemplateId, Long machineId, String endTime,String taskPrecaution);
+    TaskHistoryDto getTaskHistory(Long taskId, String companyCode);
+    TaskHistory getLatestTaskHistoryEntityByMachineId(Long machineId);
+    TaskListResponse getTaskHistoryEntityByEmployeeNum(String employeeNum);
 }

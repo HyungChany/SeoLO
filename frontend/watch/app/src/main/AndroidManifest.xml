@@ -46,13 +46,6 @@
             </intent-filter>
         </activity>
 
-
-        <activity
-            android:name=".presentation.CarouselActivity"
-            android:exported="false"
-            android:taskAffinity=""
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
-
         <activity
             android:name=".presentation.LockActivity"
             android:exported="false"

@@ -30,7 +30,6 @@ const Box = styled.div`
   width: 92%;
   height: 90%;
   display: flex;
-  justify-content: space-between;
   gap: 2rem;
 `;
 const ImgBox = styled.img`
@@ -38,7 +37,7 @@ const ImgBox = styled.img`
   height: 13rem;
 `;
 const InformationBox = styled.div`
-  width: 60rem;
+  width: 80rem;
   height: 100%;
   display: flex;
   padding-top: 1rem;
@@ -48,7 +47,8 @@ const InformationBox = styled.div`
   background-color: ${Color.WHITE};
   border-radius: 3.125rem;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
-  justify-content: space-between;
+  gap: 20rem;
+  overflow: hidden;
 `;
 const LeftBox = styled.div`
   width: 25.0625rem;
@@ -74,7 +74,7 @@ const PhotoBox = styled.div`
   gap: 0.5rem;
 `;
 const Photo = styled.div`
-  width: 25.0625rem;
+  width: 30rem;
   height: 23.125rem;
   display: flex;
   justify-content: center;
@@ -96,7 +96,7 @@ const PhotoInputBox = styled.input.attrs({
   display: none;
 `;
 const RightBox = styled.div`
-  width: 20rem;
+  width: 100%;
   height: 35rem;
   display: flex;
   flex-direction: column;

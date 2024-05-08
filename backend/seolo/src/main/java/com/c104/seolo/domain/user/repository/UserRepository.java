@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.user.repository;
 
+import com.c104.seolo.domain.task.entity.TaskHistory;
 import com.c104.seolo.domain.user.dto.info.UserListInfo;
 import com.c104.seolo.domain.user.entity.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;

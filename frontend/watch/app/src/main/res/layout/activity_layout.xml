@@ -5,7 +5,7 @@
     android:gravity="center"
     android:background="@color/BLACK">
 
-    <androidx.viewpager2.widget.ViewPager2
+<androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
