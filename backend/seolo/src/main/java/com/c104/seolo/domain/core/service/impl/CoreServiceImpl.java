@@ -9,7 +9,6 @@ import com.c104.seolo.domain.core.service.Context;
 import com.c104.seolo.domain.core.service.CoreService;
 import com.c104.seolo.global.exception.CommonException;
 import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
-import com.c104.seolo.global.security.service.DBUserDetailService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -21,21 +20,18 @@ public class CoreServiceImpl implements CoreService {
 
     private static final String BASE_PACKAGE = "com.c104.seolo.domain.core.service.states.";
     private final ApplicationContext applicationContext;
-    private final DBUserDetailService dbUserDetailService;
 
     @Autowired
-    public CoreServiceImpl(ApplicationContext applicationContext, DBUserDetailService dbUserDetailService) {
+    public CoreServiceImpl(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
-        this.dbUserDetailService = dbUserDetailService;
     }
 
     @Override
-    public CoreResponse coreAuth(String code,CCodePrincipal cCodePrincipal, String companyCode, CoreRequest coreRequest) {
+    public CoreResponse coreAuth(String code, CCodePrincipal cCodePrincipal, String companyCode, CoreRequest coreRequest) {
         /*
         사용자로부터 받은 code 값에 따라 다른 로직을 수행
         */
         CodeState codeState = setStateByReflection(code);
-        log.info("state : {}", codeState);
         Context context = initContext(codeState, cCodePrincipal, companyCode, coreRequest);
         CoreResponse coreResponse = context.doLogic();
         return coreResponse;
@@ -48,7 +44,7 @@ public class CoreServiceImpl implements CoreService {
         */
 
         return Context.builder()
-                .appUser(dbUserDetailService.loadUserById(cCodePrincipal.getId()))
+                .cCodePrincipal(cCodePrincipal)
                 .codeState(codeState)
                 .companyCode(companyCode)
                 .coreRequest(coreRequest)

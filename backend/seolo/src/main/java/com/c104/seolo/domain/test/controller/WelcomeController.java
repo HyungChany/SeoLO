@@ -32,7 +32,7 @@ public class WelcomeController {
     @ResponseBody
     public TokenDto issuTokenTest(@AuthenticationPrincipal CCodePrincipal cCodePrincipal, @RequestBody LockerEnrollRequest lockerEnrollRequest) {
         AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
-        return coreTokenService.issueCoreAuthToken(appUser, lockerEnrollRequest.getLockerUid());
+        return coreTokenService.issueCoreAuthToken(cCodePrincipal, lockerEnrollRequest.getLockerUid());
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)

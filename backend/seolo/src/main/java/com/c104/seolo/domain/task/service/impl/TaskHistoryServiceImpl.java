@@ -17,14 +17,18 @@ import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.exception.CommonException;
 import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
 import com.c104.seolo.global.security.service.DBUserDetailService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class TaskHistoryServiceImpl implements TaskHistoryService {
     private final TaskHistoryRepository taskHistoryRepository;
@@ -64,6 +68,12 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
     }
 
     @Override
+    public TaskHistoryDto getCurrentTaskHistoryByMachineIdAndUserId(Long machineId, Long userId) {
+        return TaskHistoryDto.of(taskHistoryRepository.getCurrentTaskHistoryByMachineIdAndUserId(machineId, userId)
+                .orElseThrow(() -> new CommonException(TaskErrorCode.NOT_EXIST_TASK)));
+    }
+
+    @Override
     public void enrollTaskHistory(CCodePrincipal cCodePrincipal,
                                   Long taskTemplateId,
                                   Long machineId,
@@ -99,7 +109,7 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
         장비ID와 유저ID로 기존에 있던 모든 작업내역 DB를 조회하되 TASK_CODE 상태가 ISSUED, LOCKED 인 튜플이 있다면
         에러를 띄운다. → 이미 잠금로직 진행중이라는 뜻이니까
         */
-        taskHistoryRepository.findByMachineIdAndUserIdOrTaskCode(machineId, appUser.getId())
+        taskHistoryRepository.findByMachineIdOrUserIdAndTaskCode(machineId, appUser.getId())
                 .ifPresent(taskHistory -> {
                     throw new CommonException(TaskErrorCode.ALREADY_LOCKING);
                 });
@@ -113,5 +123,32 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
         return TaskListResponse.builder()
                 .tasks(taskHistoryInfos)
                 .build();
+    }
+
+    @Override
+    public void updateTaskCode(Long taskId, CODE taskCode) {
+        updateTask(taskId, taskHistory -> taskHistory.setTaskCode(taskCode));
+    }
+
+    @Override
+    public void updateTaskCodeNull(Long taskId) {
+        updateTask(taskId, taskHistory -> taskHistory.setTaskCode(null));
+    }
+
+    @Override
+    public void updateTaskEndTimeNow(Long taskId) {
+        updateTask(taskId, taskHistory -> taskHistory.setTaskEndDateTime(LocalDateTime.now()));
+    }
+
+    @Override
+    public void updateTaskStartTimeNow(Long taskId) {
+        updateTask(taskId, taskHistory -> taskHistory.setTaskStartDateTime(LocalDateTime.now()));
+    }
+
+    private void updateTask(Long taskId, Consumer<TaskHistory> taskUpdater) {
+        TaskHistory taskHistory = taskHistoryRepository.findById(taskId)
+                .orElseThrow(() -> new CommonException(TaskErrorCode.NOT_EXIST_TASK));
+        taskUpdater.accept(taskHistory);
+        taskHistoryRepository.save(taskHistory);
     }
 }

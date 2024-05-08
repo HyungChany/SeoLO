@@ -6,24 +6,25 @@ import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.core.repository.LockerAccessLogRepository;
 import com.c104.seolo.domain.core.service.LockerAccessLogService;
 import com.c104.seolo.domain.user.entity.AppUser;
+import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
+import com.c104.seolo.global.security.service.DBUserDetailService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class LockerAccessLogServiceImpl implements LockerAccessLogService {
     private final LockerAccessLogRepository lockerAccessLogRepository;
+    private final DBUserDetailService dbUserDetailService;
 
-    @Autowired
-    public LockerAccessLogServiceImpl(LockerAccessLogRepository lockerAccessLogRepository) {
-        this.lockerAccessLogRepository = lockerAccessLogRepository;
-    }
 
     @Override
-    public void recordAccessLog(AppUser appUser, Locker locker, CODE statusCode) {
+    public void recordAccessLog(CCodePrincipal cCodePrincipal, Locker locker, CODE statusCode) {
         LockerAccessLog lockerAccessLog = LockerAccessLog.builder()
-                .appUser(appUser)
+                .appUser(dbUserDetailService.loadUserById(cCodePrincipal.getId()))
                 .locker(locker)
                 .statusCode(statusCode)
                 .build();
