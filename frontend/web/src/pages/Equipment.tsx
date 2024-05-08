@@ -47,7 +47,7 @@ const InformationBox = styled.div`
   background-color: ${Color.WHITE};
   border-radius: 3.125rem;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
-  gap: 20rem;
+  gap: 14rem;
   overflow: hidden;
 `;
 const LeftBox = styled.div`
