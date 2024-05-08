@@ -1,43 +1,50 @@
 package com.c104.seolo.domain.task.dto;
 
-import com.c104.seolo.domain.task.enums.TaskType;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
+import com.c104.seolo.domain.core.enums.CODE;
+import com.c104.seolo.domain.task.entity.TaskHistory;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@Builder
 @Getter
 @Setter
 public class TaskHistoryDto {
-    @NotNull
     private Long id;
-    @NotNull
-    private String facilityName;
-    @NotNull
-    private String machineName;
-    @NotNull
-    private String machineCode;
-    @NotNull
-    private String workerTeam;
-    @NotNull
-    private String workerName;
-    @NotNull
-    private String workerTitle;
-    @NotNull
-    private TaskType taskType;
-    @PastOrPresent
-    private LocalDateTime taskStartTime;
-    @FutureOrPresent
-    private LocalDateTime taskEndTime;
-    @FutureOrPresent
-    private LocalDateTime taskEndEstimatedTime;
+    private Long userId;
+    private TaskTemplateDto taskTemplate;
+    private Long machineId;
+    private LocalDateTime taskStartDateTime;
+    private LocalDateTime taskEndDateTime;
+    private LocalDateTime taskEndEstimatedDateTime;
+    private CODE taskCode;
     private String taskPrecaution;
+
+    @Builder
+    public TaskHistoryDto(Long id, Long userId, TaskTemplateDto taskTemplate, Long machineId, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime, LocalDateTime taskEndEstimatedDateTime, CODE taskCode, String taskPrecaution) {
+        this.id = id;
+        this.userId = userId;
+        this.taskTemplate = taskTemplate;
+        this.machineId = machineId;
+        this.taskStartDateTime = taskStartDateTime;
+        this.taskEndDateTime = taskEndDateTime;
+        this.taskEndEstimatedDateTime = taskEndEstimatedDateTime;
+        this.taskCode = taskCode;
+        this.taskPrecaution = taskPrecaution;
+    }
+
+    public static TaskHistoryDto of(TaskHistory taskHistory) {
+        return TaskHistoryDto.builder()
+                .id(taskHistory.getId())
+                .userId(taskHistory.getUser().getId())
+                .taskTemplate(TaskTemplateDto.of(taskHistory.getTaskTemplate()))
+                .machineId(taskHistory.getMachine().getId())
+                .taskStartDateTime(taskHistory.getTaskStartDateTime())
+                .taskEndDateTime(taskHistory.getTaskEndDateTime())
+                .taskEndEstimatedDateTime(taskHistory.getTaskEndEstimatedDateTime())
+                .taskCode(taskHistory.getTaskCode())
+                .taskPrecaution(taskHistory.getTaskPrecaution())
+                .build();
+    }
 }

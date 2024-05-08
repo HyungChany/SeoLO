@@ -1,7 +1,8 @@
 package com.c104.seolo.domain.core.service.states;
 
+import com.c104.seolo.domain.core.dto.TokenDto;
 import com.c104.seolo.domain.core.dto.response.CoreResponse;
-import com.c104.seolo.domain.core.entity.Token;
+import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.core.service.CodeState;
 import com.c104.seolo.domain.core.service.Context;
 import com.c104.seolo.domain.core.service.CoreTokenService;
@@ -35,10 +36,10 @@ public class ISSUE implements CodeState {
         */
         // 1. 작업내역 데이터 등록필요
 
-        Token newToken = coreTokenService.issueCoreAuthToken(context.getAppUser(), context.getCoreRequest().getLockerUid()); // 2
+        TokenDto newToken = coreTokenService.issueCoreAuthToken(context.getAppUser(), context.getCoreRequest().getLockerUid());// 2
 
         return CoreResponse.builder() // 3
-                .nextCode("LOCK")
+                .nextCode(CODE.LOCK)
                 .coreToken(newToken)
                 .httpStatus(HttpStatus.OK)
                 .build();

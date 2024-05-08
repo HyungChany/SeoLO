@@ -3,8 +3,11 @@ package com.c104.seolo.domain.task.service.impl;
 import com.c104.seolo.domain.task.dto.TaskTemplateDto;
 import com.c104.seolo.domain.task.dto.mapper.TaskTemplateMapper;
 import com.c104.seolo.domain.task.dto.response.TaskTemplateResponse;
+import com.c104.seolo.domain.task.entity.TaskTemplate;
+import com.c104.seolo.domain.task.exception.TaskTemplateErrorCode;
 import com.c104.seolo.domain.task.repository.TaskTemplateRepository;
 import com.c104.seolo.domain.task.service.TaskTemplateService;
+import com.c104.seolo.global.exception.CommonException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +28,11 @@ public class TaskTemplateServiceImpl implements TaskTemplateService {
     public TaskTemplateResponse getTemplates() {
         List<TaskTemplateDto> taskTemplates = taskTemplateRepository.findAllDto();
         return taskTemplateMapper.mapToResponse(taskTemplates);
+    }
+
+    @Override
+    public TaskTemplateDto getTemplate(Long taskTemplateId) {
+        return TaskTemplateDto.of(taskTemplateRepository.findById(taskTemplateId).orElseThrow(
+                () -> new CommonException(TaskTemplateErrorCode.NOT_EXIST_TASK_TEMPLATE)));
     }
 }
