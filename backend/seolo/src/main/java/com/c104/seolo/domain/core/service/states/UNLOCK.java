@@ -30,7 +30,7 @@ public class UNLOCK implements CodeState {
         2. 필요한 처리를 한다.
         3. 204 No Content를 응답한다.
         */
-        coreTokenService.deleteTokenByUserId(context.getAppUser().getId()); // 1
+        coreTokenService.deleteTokenByUserId(context.getCCodePrincipal().getId()); // 1
         return CoreResponse.builder() // 3
                 .httpStatus(HttpStatus.NO_CONTENT)
                 .message("등록된 인증토큰이 삭제되었습니다.")

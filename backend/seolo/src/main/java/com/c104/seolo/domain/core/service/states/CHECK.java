@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.core.service.states;
 
+import com.c104.seolo.domain.core.dto.request.CoreRequest;
 import com.c104.seolo.domain.core.dto.response.CoreResponse;
 import com.c104.seolo.domain.core.entity.Locker;
 import com.c104.seolo.domain.core.enums.CODE;
@@ -41,13 +42,14 @@ public class CHECK implements CodeState {
         2. 전달받은 유저정보를 통해 자물쇠에 접근한 유저 정보를 접근기록DB에 기록한다.
         3. 1번에서 조회한 작업내역 데이터를 응답한다.
         */
+        CoreRequest coreRequest = context.getCoreRequest();
 
         // 1
-        TaskHistoryDto latestTask = taskHistoryService.getLatestTaskHistoryEntityByMachineId(context.getCoreRequest().getMachineId());
+        TaskHistoryDto latestTask = taskHistoryService.getLatestTaskHistoryEntityByMachineId(coreRequest.getMachineId());
 
         // 2
-        Locker locker = lockerService.getLockerByUid(context.getCoreRequest().getLockerUid());
-        lockerAccessLogService.recordAccessLog(context.getAppUser(), locker, CODE.CHECK);
+        Locker locker = lockerService.getLockerByUid(coreRequest.getLockerUid());
+        lockerAccessLogService.recordAccessLog(context.getCCodePrincipal(), locker, CODE.CHECK);
 
         // 3
         return CoreResponse.builder()

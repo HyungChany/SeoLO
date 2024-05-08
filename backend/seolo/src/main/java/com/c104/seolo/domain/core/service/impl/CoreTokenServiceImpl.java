@@ -10,7 +10,10 @@ import com.c104.seolo.domain.core.service.LockerService;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.encryption.AesEncryption;
 import com.c104.seolo.global.exception.CommonException;
+import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
+import com.c104.seolo.global.security.service.DBUserDetailService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,21 +22,19 @@ import javax.crypto.SecretKey;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CoreTokenServiceImpl implements CoreTokenService {
 
     private final TokenRepository tokenRepository;
     private final LockerService lockerService;
+    private final DBUserDetailService dbUserDetailService;
 
-    @Autowired
-    public CoreTokenServiceImpl(TokenRepository tokenRepository, LockerService lockerService) {
-        this.tokenRepository = tokenRepository;
-        this.lockerService = lockerService;
-    }
 
 
     @Override
     @Transactional
-    public TokenDto issueCoreAuthToken(AppUser appUser , String lockerUid) {
+    public TokenDto issueCoreAuthToken(CCodePrincipal cCodePrincipal , String lockerUid) {
+        AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
         if (isTokenExistedForUserId(appUser.getId())) {
             throw new CommonException(CoreTokenErrorCode.EXISTED_TOKEN);
         }

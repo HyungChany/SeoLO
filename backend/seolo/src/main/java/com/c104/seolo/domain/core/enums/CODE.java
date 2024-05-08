@@ -6,6 +6,7 @@ public enum CODE {
     LOCKED,
     ISSUED,
     // 행동코드
+    ISSUE,
     CHECK,
     LOCK,
     UNLOCK,

@@ -1,6 +1,5 @@
 package com.c104.seolo.domain.core.dto.request;
 
-import com.c104.seolo.domain.task.dto.response.TaskHistoryResponse;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Builder;
@@ -11,14 +10,18 @@ import lombok.ToString;
 @ToString
 @Getter
 public class CoreRequest {
-    private final String lockerUid;
-    private final TaskHistoryResponse taskHistoryDto;
-    private final Long machineId;
+    private String lockerUid;
+    private Long machineId;
+    private Long taskTemplateId;
+    private String taskPrecaution;
+    private String endTime;
 
     @Builder
-    public CoreRequest(String lockerUid, TaskHistoryResponse taskHistoryDto, Long machineId) {
+    public CoreRequest(String lockerUid, Long machineId, Long taskTemplateId, String taskPrecaution, String endTime) {
         this.lockerUid = lockerUid;
-        this.taskHistoryDto = taskHistoryDto;
         this.machineId = machineId;
+        this.taskTemplateId = taskTemplateId;
+        this.taskPrecaution = taskPrecaution;
+        this.endTime = endTime;
     }
 }

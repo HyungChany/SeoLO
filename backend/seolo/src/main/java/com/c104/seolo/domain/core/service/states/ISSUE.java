@@ -1,6 +1,7 @@
 package com.c104.seolo.domain.core.service.states;
 
 import com.c104.seolo.domain.core.dto.TokenDto;
+import com.c104.seolo.domain.core.dto.request.CoreRequest;
 import com.c104.seolo.domain.core.dto.response.CoreResponse;
 import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.core.service.CodeState;
@@ -35,10 +36,19 @@ public class ISSUE implements CodeState {
             - 외부인증토큰
         */
         // 1. 작업내역 데이터 등록필요
+        // 여기서 직접 생성하지않는다 ?!
+        CoreRequest coreRequest = context.getCoreRequest();
+        taskHistoryService.enrollTaskHistory(context.getCCodePrincipal(),
+                coreRequest.getTaskTemplateId(),
+                coreRequest.getMachineId(),
+                coreRequest.getEndTime(),
+                coreRequest.getTaskPrecaution());
 
-        TokenDto newToken = coreTokenService.issueCoreAuthToken(context.getAppUser(), context.getCoreRequest().getLockerUid());// 2
+        // 2
+        TokenDto newToken = coreTokenService.issueCoreAuthToken(context.getCCodePrincipal(), coreRequest.getLockerUid());
 
-        return CoreResponse.builder() // 3
+        // 3
+        return CoreResponse.builder()
                 .nextCode(CODE.LOCK)
                 .coreToken(newToken)
                 .httpStatus(HttpStatus.OK)
