@@ -2,8 +2,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.seolo.seolo.R
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
 import com.seolo.seolo.presentation.MainActivity
 
 // LoginActivity 클래스 정의
@@ -17,22 +15,12 @@ class LoginActivity : AppCompatActivity() {
         // 레이아웃 설정
         setContentView(R.layout.login_layout)
 
-        // MasterKeyAlias 생성
-        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-        // 암호화된 공유 프리퍼런스 생성
-        val sharedPreferences = EncryptedSharedPreferences.create(
-            "secure_prefs",
-            masterKeyAlias,
-            applicationContext,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
 
-        // 로그인 토큰 가져오기
-        val loginToken = sharedPreferences.getString("auth_token", null)
+        // DataLayerClient 인스턴스 가져오기
+        val dataLayerClient = DataLayerClient.getInstance(applicationContext)
 
-        // 로그인 토큰이 존재하는 경우 MainActivity로 이동
-        if (loginToken != null && loginToken.isNotEmpty()) {
+        // 로그인 토큰이 Null이 아니고, 비어있지 않을 때 MainActivity로 이동
+        if (dataLayerClient.connectionToken != null && dataLayerClient.connectionToken!!.isNotEmpty()) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()

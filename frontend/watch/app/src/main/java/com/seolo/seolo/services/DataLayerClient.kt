@@ -1,13 +1,15 @@
+import android.content.Context
 import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
-import android.content.Context
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
 
-class DataLayerClient private constructor(private val context: Context): MessageClient.OnMessageReceivedListener {
+class DataLayerClient private constructor(private val context: Context) :
+    MessageClient.OnMessageReceivedListener {
     // MessageClient 인스턴스 초기화
     private val messageClient: MessageClient = Wearable.getMessageClient(context)
+
+    // 토큰 저장 변수
+    var connectionToken: String? = null
 
     // 생성자에서 MessageClient 리스너 등록
     init {
@@ -16,7 +18,8 @@ class DataLayerClient private constructor(private val context: Context): Message
 
     // 싱글톤 패턴으로 인스턴스 생성
     companion object {
-        @Volatile private var instance: DataLayerClient? = null
+        @Volatile
+        private var instance: DataLayerClient? = null
 
         fun getInstance(context: Context) = instance ?: synchronized(this) {
             instance ?: DataLayerClient(context).also { instance = it }
@@ -40,20 +43,9 @@ class DataLayerClient private constructor(private val context: Context): Message
 
     // 메시지 수신 처리
     override fun onMessageReceived(messageEvent: MessageEvent) {
-        // 토큰 처리
+        // App, Watch 연결 검증 토큰 처리
         if (messageEvent.path == "/login_token") {
-            val token = String(messageEvent.data)
-            val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-            val sharedPreferences = EncryptedSharedPreferences.create(
-                "secure_prefs",
-                masterKeyAlias,
-                context,
-                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-            )
-
-            // 토큰 저장
-            sharedPreferences.edit().putString("auth_token", token).apply()
+            connectionToken = String(messageEvent.data)
         }
     }
 
@@ -62,3 +54,4 @@ class DataLayerClient private constructor(private val context: Context): Message
         messageClient.removeListener(this)
     }
 }
+
