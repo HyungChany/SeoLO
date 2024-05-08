@@ -3,10 +3,9 @@ import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
 
-class DataLayerClient private constructor(private val context: Context) :
+class DataLayerClient private constructor(private val messageClient: MessageClient) :
     MessageClient.OnMessageReceivedListener {
     // MessageClient 인스턴스 초기화
-    private val messageClient: MessageClient = Wearable.getMessageClient(context)
 
     // 토큰 저장 변수
     var connectionToken: String? = null
@@ -32,17 +31,19 @@ class DataLayerClient private constructor(private val context: Context) :
         @Volatile
         private var instance: DataLayerClient? = null
 
-        fun getInstance(context: Context) = instance ?: synchronized(this) {
-            instance ?: DataLayerClient(context).also { instance = it }
+        fun getInstance(context: Context): DataLayerClient = instance ?: synchronized(this) {
+            instance
+                ?: DataLayerClient(Wearable.getMessageClient(context.applicationContext)).also {
+                    instance = it
+                }
         }
     }
 
     // 메시지 전송 메서드
-    fun sendMessage(path: String, message: ByteArray) {
-        // 메시지 전송 코드
-        val nodeListTask = Wearable.getNodeClient(context).connectedNodes
-        nodeListTask.addOnSuccessListener { nodes ->
-            nodes.forEach { node ->
+    fun sendMessage(path: String, message: ByteArray = ByteArray(0)) {
+        val nodeClient = Wearable.getNodeClient(messageClient.applicationContext)
+        nodeClient.connectedNodes.addOnSuccessListener { nodes ->
+            for (node in nodes) {
                 messageClient.sendMessage(node.id, path, message).addOnSuccessListener {
                     // 메시지 전송 성공 처리
                 }.addOnFailureListener {
@@ -52,17 +53,28 @@ class DataLayerClient private constructor(private val context: Context) :
         }
     }
 
+    // 토큰 요청 전송
+    fun requestConnectionToken() {
+        // /request_login" 경로로 "/request_login" 문자열을 UTF-8 바이트 배열로 변환하여 메시지 전송
+        sendMessage("/seolo/request_login", "request_login".toByteArray(Charsets.UTF_8))
+        cleanup()
+    }
+    fun cleanup() {
+        messageClient.removeListener(this)
+    }
+
+
     // 메시지 수신 처리
     override fun onMessageReceived(messageEvent: MessageEvent) {
         // App, Watch 연결 검증 토큰 처리
-        if (messageEvent.path == "/login_token") {
-            connectionToken = String(messageEvent.data)
+        if (messageEvent.path == "/seolo/login") {
+            connectionToken = String(messageEvent.data, Charsets.UTF_8)
         }
-    }
 
-    // 리스너 제거 메서드
-    fun cleanup() {
-        messageClient.removeListener(this)
+        // 리스너 제거 메서드
+        fun cleanup() {
+            messageClient.removeListener(this)
+        }
     }
 }
 
