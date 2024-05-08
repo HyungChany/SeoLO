@@ -15,13 +15,14 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <EditText
-        android:id="@+id/EditText"
+        android:id="@+id/inputPwText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:autofillHints="PINNumber"
+        android:autofillHints="password"
         android:gravity="center"
-        android:hint="@string/company_login"
+        android:hint="@string/password_login"
         android:inputType="text"
         android:textColor="@color/SNOW"
         android:textColorHint="@color/GRAY400"
@@ -33,18 +34,16 @@
         app:layout_constraintVertical_bias="0.5" />
 
     <Button
-        android:id="@+id/next_button"
+        android:id="@+id/confirm_button"
         android:layout_width="70dp"
         android:layout_height="30dp"
         android:background="@drawable/button_background"
         android:clickable="true"
-        android:text="@string/next"
+        android:text="@string/login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/EditText" />
-
-
+        app:layout_constraintTop_toBottomOf="@+id/inputPwText" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

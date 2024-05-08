@@ -4,7 +4,7 @@
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.
     -->
-    <string name="hello_world">From the Square world,\nHello, %1$s!</string>
+    <string name="hello_world">hello_world</string>
     <string name="sample_text">Sample</string>
     <string name="open_example_activity">Open Example Activity</string>
     <string name="left"><![CDATA[<]]></string>
@@ -17,8 +17,12 @@
     <string name="_2">2</string>
     <string name="splash">Splash</string>
     <string name="main_gif">main_gif</string>
+    <string name="login">로그인</string>
+    <string name="next">다음</string>
     <string name="confirm">확인</string>
-    <string name="login">핸드폰에서 로그인을 진행해주세요.</string>
+    <string name="company_login">회사 코드를 입력하세요.</string>
+    <string name="id_login">사번을 입력하세요.</string>
+    <string name="password_login">비밀번호를 입력하세요.</string>
     <string name="nfc_time">mm:ss</string>
-    <string name="password_placeholder">비밀번호를 입력하세요</string>
+    <string name="password_placeholder">PIN번호를 입력하세요</string>
 </resources>
