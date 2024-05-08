@@ -7,7 +7,7 @@ import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.seolo.seolo.R
-import com.seolo.seolo.services.TokenManager
+import com.seolo.seolo.helper.TokenManager
 
 // SplashActivity 클래스 정의
 class SplashActivity : ComponentActivity() {
@@ -15,7 +15,7 @@ class SplashActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         // 스플래시 스크린 설치
-        installSplashScreen()
+        val splashScreen = installSplashScreen()
 
         // 스플래시 레이아웃 설정
         setContentView(R.layout.splash_layout)

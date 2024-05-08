@@ -1,4 +1,4 @@
-package com.seolo.seolo.services
+package com.seolo.seolo.helper
 
 import android.content.Context
 import android.content.SharedPreferences

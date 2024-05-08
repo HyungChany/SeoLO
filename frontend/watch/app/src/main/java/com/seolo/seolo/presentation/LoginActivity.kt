@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.seolo.seolo.R
 import com.seolo.seolo.model.TokenResponse
 import com.seolo.seolo.services.RetrofitClient
-import com.seolo.seolo.services.TokenManager
+import com.seolo.seolo.helper.TokenManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
