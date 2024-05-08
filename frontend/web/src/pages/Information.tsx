@@ -7,7 +7,7 @@ import Equipment from '/assets/images/equipment.png';
 import People from '/assets/images/people.png';
 import Dropdown from '@/components/dropdown/DropDown.tsx';
 import EquipmentModal from '@/components/modal/EquipmentModal.tsx';
-import Employee from '@/components/modal/Employee.tsx';
+import Employee from '@/components/modal/EmployeeModal.tsx';
 import React, { useEffect, useState } from 'react';
 import { Facilities } from '@/apis/Facilities.ts';
 import { EquipmentList } from '@/apis/Equipment.ts';
