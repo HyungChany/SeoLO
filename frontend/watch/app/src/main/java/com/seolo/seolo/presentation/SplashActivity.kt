@@ -1,6 +1,5 @@
 package com.seolo.seolo.presentation
 
-import DataLayerClient
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -8,12 +7,10 @@ import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.seolo.seolo.R
+import com.seolo.seolo.services.TokenManager
 
 // SplashActivity 클래스 정의
 class SplashActivity : ComponentActivity() {
-    private lateinit var dataLayerClient: DataLayerClient
-    private var tokenReceived = false  // 토큰 수신 상태 플래그
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -23,29 +20,18 @@ class SplashActivity : ComponentActivity() {
         // 스플래시 레이아웃 설정
         setContentView(R.layout.splash_layout)
 
-        // DataLayerClient 인스턴스화
-        dataLayerClient = DataLayerClient.getInstance(applicationContext)
-
-        // 토큰 요청 보내기
-        dataLayerClient.requestConnectionToken()
-
-        // 3초 후 토큰 수신 실패 시 로그인 액티비티로 이동
+        // 스플래시 화면을 잠시 유지한 후 토큰 체크
         Handler(Looper.getMainLooper()).postDelayed({
-            if (!tokenReceived) {  // 토큰이 수신되지 않았을 경우
-                navigateToLoginActivity()
-            }
-        }, 3000)  // 3초 지연
+            checkTokenAndNavigate()
+        }, 2000)
+    }
 
-        // 리스너 설정 및 토큰 수신
-        dataLayerClient.setListener(object : DataLayerClient.TokenReceiveListener {
-            override fun onTokenReceived(token: String?) {
-                // 토큰 수신 후 로직 처리
-                if (token != null && token.isNotEmpty()) {
-                    tokenReceived = true
-                    navigateToMainActivity()
-                }
-            }
-        })
+    private fun checkTokenAndNavigate() {
+        if (TokenManager.getAccessToken(this).isNullOrEmpty()) {
+            navigateToLoginActivity()
+        } else {
+            navigateToMainActivity()
+        }
     }
 
     private fun navigateToMainActivity() {
@@ -59,6 +45,4 @@ class SplashActivity : ComponentActivity() {
         startActivity(intent)
         finish()
     }
-
-
 }
