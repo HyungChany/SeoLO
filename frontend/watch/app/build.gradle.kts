@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.material)
     implementation("sh.tyy:wheelpicker:0.4.0")
     implementation("com.github.bumptech.glide:glide:4.12.0")
+    implementation("androidx.security:security-crypto:1.0.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     implementation("com.google.android.gms:play-services-wearable:18.1.0")
     androidTestImplementation(platform(libs.compose.bom))

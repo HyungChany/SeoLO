@@ -11,6 +11,7 @@ constraintlayout = "2.1.4"
 appcompat = "1.6.1"
 viewpager2 = "1.0.0"
 material = "1.11.0"
+securityCryptoKtx = "1.0.0"
 
 [libraries]
 play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "playServicesWearable" }
@@ -28,6 +29,7 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref = "viewpager2" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+security-crypto-ktx = { group = "androidx.security", name = "security-crypto-ktx", version.ref = "securityCryptoKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
