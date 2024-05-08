@@ -8,4 +8,5 @@ public interface CoreTokenService {
     TokenDto issueCoreAuthToken(CCodePrincipal cCodePrincipal, String LockerUid);
     boolean isTokenExistedForUserId(Long userId);
     void deleteTokenByUserId(Long userId);
+    void deleteTokenByTokenValue(String tokenValue);
 }

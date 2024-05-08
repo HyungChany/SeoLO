@@ -25,7 +25,6 @@ public class CHECK implements CodeState {
 
 
     @Autowired
-
     public CHECK(TaskHistoryService taskHistoryService, LockerAccessLogService lockerAccessLogService, LockerService lockerService) {
         this.taskHistoryService = taskHistoryService;
         this.lockerAccessLogService = lockerAccessLogService;

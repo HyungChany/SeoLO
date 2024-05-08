@@ -51,9 +51,16 @@ public class CoreTokenServiceImpl implements CoreTokenService {
         아두이노는 서버로부터 받은 정보들을 복호화해야만 정보를 볼 수 있다.
         */
         Locker locker = lockerService.getLockerByUid(lockerUid);
+
+        // Locker DB에 Base64로 저장되어 있는 대칭키를 가져온다.
         String base64encryptionKey = locker.getEncryptionKey();
+        // 해당 대칭키 Base64를 복호화한다.
         SecretKey encryptionKey = AesEncryption.decodeBase64ToSecretKey(base64encryptionKey);
+        // 복호화한 해당 대칭키를 이용해 자물쇠고유번호를 AES128 암호화한다.
+        // 발급된 AES128 암호화된 UID도 Base64로 인코딩되어있다.
         String encryptedUid = AesEncryption.encrypt(lockerUid, encryptionKey);
+        log.info("encrytionKey : {}", encryptionKey);
+        log.info("encryptionUid :{}",encryptedUid);
 
         // 중복 검사
         if (tokenRepository.findByTokenValue(encryptedUid).isPresent()) {
@@ -79,5 +86,10 @@ public class CoreTokenServiceImpl implements CoreTokenService {
     @Override
     public boolean isTokenExistedForUserId(Long userId) {
         return tokenRepository.findByAppUserId(userId).isPresent();
+    }
+
+    @Override
+    public void deleteTokenByTokenValue(String tokenValue) {
+        tokenRepository.findById(tokenValue).ifPresent(tokenRepository::delete);
     }
 }

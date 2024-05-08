@@ -9,6 +9,7 @@ import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
 public interface TaskHistoryService {
     TaskHistoryResponse getTaskHistory(Long taskId, String companyCode);
     TaskHistoryDto getLatestTaskHistoryEntityByMachineId(Long machineId);
+    TaskHistoryDto getCurrentTaskHistoryByMachineIdAndUserId(Long machineId, Long userId);
     TaskListResponse getTaskHistoryEntityByEmployeeNum(String employeeNum);
     void enrollTaskHistory(CCodePrincipal cCodePrincipal,
                            Long taskTemplateId,

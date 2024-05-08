@@ -35,8 +35,7 @@ public class ISSUE implements CodeState {
             - ‘LOCK’ 행동코드
             - 외부인증토큰
         */
-        // 1. 작업내역 데이터 등록필요
-        // 여기서 직접 생성하지않는다 ?!
+        // 1. 작업내역 데이터 등록
         CoreRequest coreRequest = context.getCoreRequest();
         taskHistoryService.enrollTaskHistory(context.getCCodePrincipal(),
                 coreRequest.getTaskTemplateId(),
