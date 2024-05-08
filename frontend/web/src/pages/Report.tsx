@@ -40,6 +40,7 @@ const TitleBox = styled.div`
   height: auto;
   display: flex;
   flex-direction: row;
+  border-bottom: 1px solid ${Color.GRAY200};
 `;
 const SelectBox = styled.div`
   width: 100%;
@@ -151,10 +152,8 @@ const Report = () => {
     },
     // 추가 데이터는 여기에...
   ]);
-  const handleCloseModal = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => {
-    e.stopPropagation();
+  const handleCloseModal = () => {
+    // e.stopPropagation();
     setReportModal(!reportModal);
   };
   const handleSelectToggle = (
@@ -175,8 +174,13 @@ const Report = () => {
   return (
     <MainBox>
       {reportModal && (
-        <Overlay onClick={handleCloseModal}>
-          <ReportCheckModal></ReportCheckModal>
+        <Overlay
+          onClick={(e) => {
+            e.stopPropagation();
+            handleCloseModal();
+          }}
+        >
+          <ReportCheckModal onClose={handleCloseModal}></ReportCheckModal>
         </Overlay>
       )}
       <SelectBox>
