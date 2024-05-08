@@ -17,11 +17,13 @@ import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.exception.CommonException;
 import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
 import com.c104.seolo.global.security.service.DBUserDetailService;
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.function.Consumer;
 
 @Service
 @RequiredArgsConstructor
@@ -113,5 +115,31 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
         return TaskListResponse.builder()
                 .tasks(taskHistoryInfos)
                 .build();
+    }
+
+    @Override
+    public void updateTaskCode(Long taskId, CODE taskCode) {
+        updateTask(taskId, taskHistory -> taskHistory.setTaskCode(taskCode));
+    }
+
+    @Override
+    public void updateTaskCodeNull(Long taskId) {
+        updateTask(taskId, taskHistory -> taskHistory.setTaskCode(null));
+    }
+
+    @Override
+    public void updateTaskEndTimeNow(Long taskId) {
+        updateTask(taskId, taskHistory -> taskHistory.setTaskEndDateTime(LocalDateTime.now()));
+    }
+
+    @Override
+    public void updateTaskStartTimeNow(Long taskId) {
+        updateTask(taskId, taskHistory -> taskHistory.setTaskStartDateTime(LocalDateTime.now()));
+    }
+
+    private void updateTask(Long taskId, Consumer<TaskHistory> taskUpdater) {
+        taskHistoryRepository.findById(taskId).ifPresentOrElse(taskUpdater, () -> {
+            throw new CommonException(TaskErrorCode.NOT_EXIST_TASK);
+        });
     }
 }

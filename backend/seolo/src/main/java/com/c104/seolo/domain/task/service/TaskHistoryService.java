@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.task.service;
 
+import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.task.dto.TaskHistoryDto;
 import com.c104.seolo.domain.task.dto.response.TaskHistoryResponse;
 import com.c104.seolo.domain.task.dto.response.TaskListResponse;
@@ -14,4 +15,9 @@ public interface TaskHistoryService {
                            Long machineId,
                            String endTime,
                            String taskPrecaution);
+
+    void updateTaskCode(Long taskId, CODE taskCode);
+    void updateTaskCodeNull(Long taskId);
+    void updateTaskEndTimeNow(Long taskId);
+    void updateTaskStartTimeNow(Long taskId);
 }
