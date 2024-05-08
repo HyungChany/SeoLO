@@ -25,7 +25,18 @@ class SplashActivity : ComponentActivity() {
 
         // DataLayerClient 인스턴스화
         dataLayerClient = DataLayerClient.getInstance(applicationContext)
-        // 리스너 설정 및 토큰 수신 대기
+
+        // 토큰 요청 보내기
+        dataLayerClient.requestConnectionToken()
+
+        // 3초 후 토큰 수신 실패 시 로그인 액티비티로 이동
+        Handler(Looper.getMainLooper()).postDelayed({
+            if (!tokenReceived) {  // 토큰이 수신되지 않았을 경우
+                navigateToLoginActivity()
+            }
+        }, 3000)  // 3초 지연
+
+        // 리스너 설정 및 토큰 수신
         dataLayerClient.setListener(object : DataLayerClient.TokenReceiveListener {
             override fun onTokenReceived(token: String?) {
                 // 토큰 수신 후 로직 처리
@@ -35,13 +46,6 @@ class SplashActivity : ComponentActivity() {
                 }
             }
         })
-
-        // 5초 후 토큰 수신 실패 시 로그인 액티비티로 이동
-        Handler(Looper.getMainLooper()).postDelayed({
-            if (!tokenReceived) {  // 토큰이 수신되지 않았을 경우
-                navigateToLoginActivity()
-            }
-        }, 3000)  // 3초 지연
     }
 
     private fun navigateToMainActivity() {
@@ -56,8 +60,5 @@ class SplashActivity : ComponentActivity() {
         finish()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        dataLayerClient.cleanup()  // 리스너 제거
-    }
+
 }
