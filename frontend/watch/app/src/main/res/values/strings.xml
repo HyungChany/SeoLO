@@ -20,4 +20,5 @@
     <string name="confirm">확인</string>
     <string name="login">핸드폰에서 로그인을 진행해주세요.</string>
     <string name="nfc_time">mm:ss</string>
+    <string name="password_placeholder">비밀번호를 입력하세요</string>
 </resources>

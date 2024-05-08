@@ -1,7 +1,9 @@
 package com.c104.seolo.domain.core.service.states;
 
+import com.c104.seolo.domain.core.dto.TokenDto;
+import com.c104.seolo.domain.core.dto.request.CoreRequest;
 import com.c104.seolo.domain.core.dto.response.CoreResponse;
-import com.c104.seolo.domain.core.entity.Token;
+import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.core.service.CodeState;
 import com.c104.seolo.domain.core.service.Context;
 import com.c104.seolo.domain.core.service.CoreTokenService;
@@ -33,12 +35,20 @@ public class ISSUE implements CodeState {
             - ‘LOCK’ 행동코드
             - 외부인증토큰
         */
-        // 1. 작업내역 데이터 등록필요
+        // 1. 작업내역 데이터 등록
+        CoreRequest coreRequest = context.getCoreRequest();
+        taskHistoryService.enrollTaskHistory(context.getCCodePrincipal(),
+                coreRequest.getTaskTemplateId(),
+                coreRequest.getMachineId(),
+                coreRequest.getEndTime(),
+                coreRequest.getTaskPrecaution());
 
-        Token newToken = coreTokenService.issueCoreAuthToken(context.getAppUser(), context.getCoreRequest().getLockerUid()); // 2
+        // 2
+        TokenDto newToken = coreTokenService.issueCoreAuthToken(context.getCCodePrincipal(), coreRequest.getLockerUid());
 
-        return CoreResponse.builder() // 3
-                .nextCode("LOCK")
+        // 3
+        return CoreResponse.builder()
+                .nextCode(CODE.LOCK)
                 .coreToken(newToken)
                 .httpStatus(HttpStatus.OK)
                 .build();

@@ -1,11 +1,10 @@
 import { deleteCheckList } from '@/apis/CheckList.ts';
-import { Modal } from './Modal.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import * as Color from '@/config/color/Color.ts';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 interface DeleteCheckListModalProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  checklistId: number;
 }
 
 const Text = styled.div`
@@ -24,14 +23,30 @@ const ButtonContainer = styled.div`
   flex-direction: row;
   justify-content: space-evenly;
 `;
-
-const DeleteCheckListModal = ({ onClick }: DeleteCheckListModalProps) => {
-  const navigate = useNavigate();
+const Box = styled.div`
+  width: auto;
+  min-width: 50%;
+  max-width: 85%;
+  height: 10rem;
+  border-radius: 1.25rem;
+  border: 1px solid ${Color.GRAY100};
+  background-color: ${Color.WHITE};
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  padding: 1.5rem;
+  font-size: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+`;
+const DeleteCheckListModal = ({
+  onClick,
+  checklistId,
+}: DeleteCheckListModalProps) => {
   const handleDelete = async () => {
     try {
-      await deleteCheckList(10);
-      console.log('삭제 성공');
-      navigate('/checklist');
+      await deleteCheckList(checklistId);
     } catch (error) {
       console.error('삭제 실패:', error);
       alert('삭제 실패');
@@ -39,33 +54,22 @@ const DeleteCheckListModal = ({ onClick }: DeleteCheckListModalProps) => {
   };
 
   return (
-    <Modal onClick={onClick}>
+    <Box onClick={onClick}>
       <Text>정말로 삭제하시겠습니까?</Text>
       <ButtonContainer>
         <Button
-          onClick={() => {}}
-          width={5}
-          height={2}
-          $backgroundColor={Color.GRAY100}
-          $borderColor={'white'}
-          $borderRadius={0.3125}
-          $hoverBackgroundColor={'white'}
-          $hoverBorderColor={'white'}
-          children={'돌아가기'}
-        ></Button>
-        <Button
           onClick={handleDelete}
-          width={5}
-          height={2}
-          $backgroundColor={'red'}
-          $borderColor={'white'}
-          $borderRadius={0.3125}
-          $hoverBackgroundColor={'red'}
-          $hoverBorderColor={'red'}
+          width={8}
+          height={5}
+          $backgroundColor={Color.GRAY100}
+          $borderColor={Color.GRAY100}
+          $borderRadius={1.25}
+          $hoverBackgroundColor={Color.RED100}
+          $hoverBorderColor={Color.RED100}
           children={'삭제'}
         ></Button>
       </ButtonContainer>
-    </Modal>
+    </Box>
   );
 };
 

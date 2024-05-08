@@ -57,7 +57,7 @@ public class UserController {
         authService.userLogout(cCodePrincipal);
     }
 
-    @Secured("ROLE_MANAGER")
+//    @Secured("ROLE_MANAGER")
     @GetMapping("/users/profile")
     public UserInfoResponse getUserInfo(@AuthenticationPrincipal CCodePrincipal cCodePrincipal) {
         log.debug("현재 로그인 유저의 authentication : {}", SecurityContextHolder.getContext().getAuthentication());

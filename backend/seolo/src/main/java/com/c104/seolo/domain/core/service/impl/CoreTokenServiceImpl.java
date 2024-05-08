@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.core.service.impl;
 
+import com.c104.seolo.domain.core.dto.TokenDto;
 import com.c104.seolo.domain.core.entity.Locker;
 import com.c104.seolo.domain.core.entity.Token;
 import com.c104.seolo.domain.core.exception.CoreTokenErrorCode;
@@ -9,7 +10,10 @@ import com.c104.seolo.domain.core.service.LockerService;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.encryption.AesEncryption;
 import com.c104.seolo.global.exception.CommonException;
+import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
+import com.c104.seolo.global.security.service.DBUserDetailService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,21 +22,19 @@ import javax.crypto.SecretKey;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CoreTokenServiceImpl implements CoreTokenService {
 
     private final TokenRepository tokenRepository;
     private final LockerService lockerService;
+    private final DBUserDetailService dbUserDetailService;
 
-    @Autowired
-    public CoreTokenServiceImpl(TokenRepository tokenRepository, LockerService lockerService) {
-        this.tokenRepository = tokenRepository;
-        this.lockerService = lockerService;
-    }
 
 
     @Override
     @Transactional
-    public Token issueCoreAuthToken(AppUser appUser , String lockerUid) {
+    public TokenDto issueCoreAuthToken(CCodePrincipal cCodePrincipal , String lockerUid) {
+        AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
         if (isTokenExistedForUserId(appUser.getId())) {
             throw new CommonException(CoreTokenErrorCode.EXISTED_TOKEN);
         }
@@ -49,9 +51,16 @@ public class CoreTokenServiceImpl implements CoreTokenService {
         아두이노는 서버로부터 받은 정보들을 복호화해야만 정보를 볼 수 있다.
         */
         Locker locker = lockerService.getLockerByUid(lockerUid);
+
+        // Locker DB에 Base64로 저장되어 있는 대칭키를 가져온다.
         String base64encryptionKey = locker.getEncryptionKey();
+        // 해당 대칭키 Base64를 복호화한다.
         SecretKey encryptionKey = AesEncryption.decodeBase64ToSecretKey(base64encryptionKey);
+        // 복호화한 해당 대칭키를 이용해 자물쇠고유번호를 AES128 암호화한다.
+        // 발급된 AES128 암호화된 UID도 Base64로 인코딩되어있다.
         String encryptedUid = AesEncryption.encrypt(lockerUid, encryptionKey);
+        log.info("encrytionKey : {}", encryptionKey);
+        log.info("encryptionUid :{}",encryptedUid);
 
         // 중복 검사
         if (tokenRepository.findByTokenValue(encryptedUid).isPresent()) {
@@ -66,7 +75,7 @@ public class CoreTokenServiceImpl implements CoreTokenService {
         log.info("newToken: {}", newToken.toString());
         tokenRepository.save(newToken);
 
-        return newToken;
+        return TokenDto.of(newToken);
     }
 
     @Override
@@ -77,5 +86,10 @@ public class CoreTokenServiceImpl implements CoreTokenService {
     @Override
     public boolean isTokenExistedForUserId(Long userId) {
         return tokenRepository.findByAppUserId(userId).isPresent();
+    }
+
+    @Override
+    public void deleteTokenByTokenValue(String tokenValue) {
+        tokenRepository.findById(tokenValue).ifPresent(tokenRepository::delete);
     }
 }

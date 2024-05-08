@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.task.entity;
 
+import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.machine.entity.Machine;
 import com.c104.seolo.domain.task.enums.TaskStatus;
 import com.c104.seolo.domain.user.entity.AppUser;
@@ -37,24 +38,27 @@ public class TaskHistory extends BaseEntity {
     @JoinColumn(name = "machine_id")
     private Machine machine;
 
-    @Column(name = "task_start_datetime", nullable = false, updatable = false)
+    @Column(name = "task_start_datetime", updatable = false)
     private LocalDateTime taskStartDateTime;
 
     @Column(name = "task_end_datetime")
     private LocalDateTime taskEndDateTime;
 
-    @Column(name = "task_end_estimated_datetime", nullable = false)
+    @Column(name = "task_end_estimated_datetime")
     private LocalDateTime taskEndEstimatedDateTime;
 
-    @Column(name = "task_status", nullable = false, length = 15)
+    @Column(name = "task_code", length = 15)
     @Enumerated(EnumType.STRING)
-    private TaskStatus taskStatus;
+    // 토큰을 발급한 상태(잠금준비) -> ISSUED
+    // 실제로 자물쇠를 잠군 상태 -> LOCKED
+    // 열려있는 기본 상태 -> NULL
+    private CODE taskCode;
 
     @Column(name = "task_precaution", length = 255)
     private String taskPrecaution;
 
     @Builder
-    private TaskHistory(Long id, AppUser user, TaskTemplate taskTemplate, Machine machine, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime, LocalDateTime taskEndEstimatedDateTime, TaskStatus taskStatus, String taskPrecaution){
+    public TaskHistory(Long id, AppUser user, TaskTemplate taskTemplate, Machine machine, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime, LocalDateTime taskEndEstimatedDateTime, CODE taskCode, String taskPrecaution) {
         this.id = id;
         this.user = user;
         this.taskTemplate = taskTemplate;
@@ -62,21 +66,10 @@ public class TaskHistory extends BaseEntity {
         this.taskStartDateTime = taskStartDateTime;
         this.taskEndDateTime = taskEndDateTime;
         this.taskEndEstimatedDateTime = taskEndEstimatedDateTime;
-        this.taskStatus = taskStatus;
+        this.taskCode = taskCode;
         this.taskPrecaution = taskPrecaution;
     }
 
     public TaskHistory() {}
 
-    @PrePersist
-    @PreUpdate
-    private void calculateStatus() {
-        LocalDateTime now = LocalDateTime.now();
-
-        if (taskEndDateTime == null) {
-            taskStatus = TaskStatus.ING;
-        } else if (now.isAfter(taskEndDateTime)) {
-            taskStatus = TaskStatus.END;
-        }
-    }
 }

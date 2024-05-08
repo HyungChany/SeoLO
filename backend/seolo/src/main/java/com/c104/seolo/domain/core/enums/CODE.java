@@ -4,7 +4,9 @@ public enum CODE {
     // 상태코드
     INIT,
     LOCKED,
+    ISSUED,
     // 행동코드
+    ISSUE,
     CHECK,
     LOCK,
     UNLOCK,
