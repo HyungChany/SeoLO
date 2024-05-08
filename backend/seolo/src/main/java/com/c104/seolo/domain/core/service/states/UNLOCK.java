@@ -35,7 +35,8 @@ public class UNLOCK implements CodeState {
         2. 해당 작업내역을 찾아
             TASK_CODE는 NULL로
             TASK_ENDTIME을 UNLOCK 요청이 들어온 시간으로 업데이트한다.
-        3. 204 No Content를 응답한다.
+        3. 해당 작업내역을 보고서 DB에 저장한다.
+        4. 204 No Content를 응답한다.
         */
 
         CoreRequest coreRequest = context.getCoreRequest();
@@ -48,9 +49,12 @@ public class UNLOCK implements CodeState {
         taskHistoryService.updateTaskEndTimeNow(latestTaskHistory.getId());
 
         // 3
+
+
+        // 4
         return CoreResponse.builder() // 3
                 .httpStatus(HttpStatus.NO_CONTENT)
-                .message("등록된 인증토큰이 삭제되었습니다.")
+                .message("자물쇠가 열림처리 되었습니다. 토큰이 삭제되었습니다. 진행했던 작업내역이 보고서로 저장됩니다. ")
                 .build();
     }
 }

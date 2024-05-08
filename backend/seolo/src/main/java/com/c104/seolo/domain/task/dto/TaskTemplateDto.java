@@ -1,7 +1,7 @@
 package com.c104.seolo.domain.task.dto;
 
 import com.c104.seolo.domain.task.entity.TaskTemplate;
-import com.c104.seolo.domain.task.enums.TaskType;
+import com.c104.seolo.domain.task.enums.TASKTYPE;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.NotNull;
@@ -16,11 +16,11 @@ public class TaskTemplateDto {
     @NotNull
     private Long id;
     @NotNull
-    private TaskType taskType;
+    private TASKTYPE taskType;
     private String precaution;
 
     @Builder
-    public TaskTemplateDto(Long id, TaskType taskType, String precaution) {
+    public TaskTemplateDto(Long id, TASKTYPE taskType, String precaution) {
         this.id = id;
         this.taskType = taskType;
         this.precaution = precaution;

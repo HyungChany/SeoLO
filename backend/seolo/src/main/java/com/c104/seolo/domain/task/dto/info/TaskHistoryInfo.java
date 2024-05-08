@@ -1,7 +1,6 @@
 package com.c104.seolo.domain.task.dto.info;
 
-import com.c104.seolo.domain.task.enums.TaskStatus;
-import com.c104.seolo.domain.task.enums.TaskType;
+import com.c104.seolo.domain.task.enums.TASKTYPE;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -11,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 public class TaskHistoryInfo {
     private Long id;
-    private TaskType taskType;
+    private TASKTYPE taskType;
     private LocalDateTime taskStartTime;
     private LocalDateTime taskEndTime;
     private LocalDateTime taskEndEstimatedTime;

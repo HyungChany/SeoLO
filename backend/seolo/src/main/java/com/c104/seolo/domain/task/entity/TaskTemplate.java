@@ -1,7 +1,6 @@
 package com.c104.seolo.domain.task.entity;
 
-import com.c104.seolo.domain.task.dto.TaskTemplateDto;
-import com.c104.seolo.domain.task.enums.TaskType;
+import com.c104.seolo.domain.task.enums.TASKTYPE;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,13 +22,13 @@ public class TaskTemplate {
 
     @Column(name = "task_template_type", nullable = false, length = 15)
     @Enumerated(EnumType.STRING)
-    private TaskType taskType;
+    private TASKTYPE taskType;
 
     @Column(name = "task_template_precaution")
     private String precaution;
 
     @Builder
-    private TaskTemplate(Long id, TaskType taskType, String precaution) {
+    private TaskTemplate(Long id, TASKTYPE taskType, String precaution) {
         this.id = id;
         this.taskType = taskType;
         this.precaution = precaution;
