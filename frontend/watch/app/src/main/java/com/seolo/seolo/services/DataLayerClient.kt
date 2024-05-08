@@ -2,6 +2,8 @@ import com.google.android.gms.wearable.MessageClient
 import com.google.android.gms.wearable.MessageEvent
 import com.google.android.gms.wearable.Wearable
 import android.content.Context
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKeys
 
 class DataLayerClient private constructor(private val context: Context): MessageClient.OnMessageReceivedListener {
     // MessageClient 인스턴스 초기화
@@ -38,10 +40,20 @@ class DataLayerClient private constructor(private val context: Context): Message
 
     // 메시지 수신 처리
     override fun onMessageReceived(messageEvent: MessageEvent) {
-        // 수신된 메시지 처리
-        if (messageEvent.path == "/example_path") {
-            val message = String(messageEvent.data)
-            // 메시지 처리
+        // 토큰 처리
+        if (messageEvent.path == "/login_token") {
+            val token = String(messageEvent.data)
+            val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
+            val sharedPreferences = EncryptedSharedPreferences.create(
+                "secure_prefs",
+                masterKeyAlias,
+                context,
+                EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+                EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+            )
+
+            // 토큰 저장
+            sharedPreferences.edit().putString("auth_token", token).apply()
         }
     }
 
