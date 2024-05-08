@@ -40,6 +40,7 @@ const TitleBox = styled.div`
   height: auto;
   display: flex;
   flex-direction: row;
+  border-bottom: 1px solid ${Color.GRAY200};
 `;
 const SelectBox = styled.div`
   width: 100%;
