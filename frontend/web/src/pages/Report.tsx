@@ -4,6 +4,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import Check from '/assets/icons/Check.svg';
 import NonCheck from '/assets/icons/NonCheck.svg';
+import ReportCheckModal from '@/components/modal/ReportCheckModal.tsx';
 interface ButtonProps {
   backgroundColor: string;
   color: string;
@@ -88,8 +89,21 @@ const ContentBox = styled.div`
   overflow-y: auto;
   gap: 1.2rem;
 `;
+const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); // 반투명 검은색 배경
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+`;
 const Report = () => {
   const [selectedButtonIndex, setSelectedButtonIndex] = useState<number>(0);
+  const [reportModal, setReportModal] = useState<boolean>(false);
   const handleButtonClick = (index: number) => {
     setSelectedButtonIndex(index); // 클릭된 버튼의 인덱스로 상태 업데이트
     console.log(index);
@@ -137,43 +151,34 @@ const Report = () => {
     },
     // 추가 데이터는 여기에...
   ]);
-
-  const handleSelectToggle = (index: number) => {
+  const handleCloseModal = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    e.stopPropagation();
+    setReportModal(!reportModal);
+  };
+  const handleSelectToggle = (
+    index: number,
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
     const updatedEquipment = equipment.map((item, idx) => {
       if (idx === index) return { ...item, selected: !item.selected };
       return item;
     });
     setEquipment(updatedEquipment);
+    e.stopPropagation();
   };
-  //   const dummyData: EquipmentData[] = [
-  //     {
-  //       selected: true,
-  //       equipmentNumber: 'A/W - 1',
-  //       equipmentName: 'Wire bonder',
-  //       manager: '오민상',
-  //       lotoPurpose: '정비 수지 작업',
-  //       accidentOccurred: 'N',
-  //       accidentType: '-',
-  //       casualties: 0,
-  //       startTime: '24.04.06 - 11:00',
-  //       endTime: '24.04.06 - 14:00',
-  //     },
-  //     {
-  //       selected: false,
-  //       equipmentNumber: 'A/W - 1',
-  //       equipmentName: 'Wire bonder',
-  //       manager: '오민상',
-  //       lotoPurpose: '정비 수지 작업',
-  //       accidentOccurred: 'N',
-  //       accidentType: '-',
-  //       casualties: 0,
-  //       startTime: '24.04.06 - 11:00',
-  //       endTime: '24.04.06 - 14:00',
-  //     },
-  //     // 더 많은 데이터를 추가할 수 있습니다.
-  //   ];
+  const handleReport = () => {
+    setReportModal(true);
+  };
+
   return (
     <MainBox>
+      {reportModal && (
+        <Overlay onClick={handleCloseModal}>
+          <ReportCheckModal></ReportCheckModal>
+        </Overlay>
+      )}
       <SelectBox>
         <ButtonBox>
           {selectTitle.map((title, index) => (
@@ -211,19 +216,19 @@ const Report = () => {
           <Title
             key={index}
             width={index === 0 ? '5%' : undefined}
-            justifyContent={index === 0 ? 'center' : undefined}
+            justifyContent={index === 0 || index === 5 ? 'center' : undefined}
           >
             {data}
           </Title>
         ))}
       </TitleBox>
-      <ContentBox>
+      <ContentBox onClick={handleReport}>
         {equipment.map((data, index) => (
           <TitleBox>
             <Title
               width="5%"
               justifyContent="center"
-              onClick={() => handleSelectToggle(index)}
+              onClick={(event) => handleSelectToggle(index, event)}
             >
               {data.selected ? (
                 <img src={Check} alt="" />
@@ -235,7 +240,7 @@ const Report = () => {
             <Title>{data.equipmentName}</Title>
             <Title>{data.manager}</Title>
             <Title>{data.lotoPurpose}</Title>
-            <Title>{data.accidentOccurred}</Title>
+            <Title justifyContent="center">{data.accidentOccurred}</Title>
             <Title>{data.accidentType}</Title>
             <Title>{data.casualties}</Title>
             <Title>{data.startTime}</Title>
