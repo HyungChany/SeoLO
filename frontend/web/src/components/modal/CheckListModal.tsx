@@ -7,6 +7,7 @@ interface CheckListModalProps {
 }
 const Modal = styled.div`
   width: auto;
+  min-width: 50%;
   max-width: 85%;
   height: 5rem;
   border-radius: 1.25rem;

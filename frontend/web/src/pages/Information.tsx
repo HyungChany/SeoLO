@@ -34,7 +34,6 @@ const Background = styled.div`
 `;
 const ImgBox = styled.img`
   width: 13rem;
-  height: 13rem;
 `;
 const Overlay = styled.div`
   position: fixed;

@@ -279,22 +279,27 @@ const MainPage = () => {
               <Card width={'10rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
-                    <div style={{ marginTop:'0.5rem' }}>등록 장비</div>
-                  </Typo.H4>
-                </InnerContainer>
-              </Card>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
-                <InnerContainer>
-                <Typo.H4>
-                    <div style={{ marginTop:'0.5rem' }}>등록 LOTO</div>
+                    <div style={{ marginTop: '0.5rem' }}>등록 장비</div>
                   </Typo.H4>
                 </InnerContainer>
               </Card>
               <Card width={'10rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
-                    <div style={{ display: 'flex', justifyContent: 'space-between'}}>
-                      <div style={{ margin:'0.5rem 0.5rem 0 0' }}>오늘의</div>
+                    <div style={{ marginTop: '0.5rem' }}>등록 LOTO</div>
+                  </Typo.H4>
+                </InnerContainer>
+              </Card>
+              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+                <InnerContainer>
+                  <Typo.H4>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <div style={{ margin: '0.5rem 0.5rem 0 0' }}>오늘의</div>
                       <Typo.H2 color={Color.RED100}>LOTO</Typo.H2>
                     </div>
                     사용현황
@@ -304,8 +309,13 @@ const MainPage = () => {
               <Card width={'10rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
-                    <div style={{ display: 'flex', justifyContent: 'space-between'}}>
-                      <div style={{ margin:'0.5rem 0.3rem 0 0' }}>이번 주</div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <div style={{ margin: '0.5rem 0.3rem 0 0' }}>이번 주</div>
                       <Typo.H2 color={Color.RED100}>LOTO</Typo.H2>
                     </div>
                     사용현황
@@ -315,8 +325,13 @@ const MainPage = () => {
               <Card width={'10rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
-                    <div style={{ display: 'flex', justifyContent: 'space-between'}}>
-                      <div style={{ margin:'0.5rem 0.8rem 0 0' }}>이번 달</div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <div style={{ margin: '0.5rem 0.8rem 0 0' }}>이번 달</div>
                       <Typo.H2 color={Color.RED100}>재해</Typo.H2>
                     </div>
                     발생현황

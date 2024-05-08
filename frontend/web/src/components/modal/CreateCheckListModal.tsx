@@ -51,8 +51,7 @@ const CreateCheckListModal = ({ onClick }: CheckListModalProps) => {
     if (checklist) {
       const fetchData = async () => {
         const checklistData = { context: checklist };
-        const data = await postCheckList(checklistData);
-        console.log(data);
+        await postCheckList(checklistData);
       };
       fetchData();
       navigate('/checklist');
