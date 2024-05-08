@@ -47,6 +47,7 @@ dependencies:
   nfc_manager: ^3.4.0 # nfc 통신
   flutter_secure_storage: ^9.0.0 # token 담을 스토리지
   local_auth_android: ^1.0.38
+  flutter_launcher_icons: ^0.13.1 #앱 아이콘 설정
 
 dev_dependencies:
   flutter_test:
@@ -58,7 +59,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
-  flutter_launcher_icons: ^0.13.1 #앱 아이콘 설정
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
