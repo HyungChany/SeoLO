@@ -4,8 +4,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
-import com.seolo.seolo.R
 import com.seolo.seolo.databinding.ActivityMainBinding
 import com.seolo.seolo.fragments.MainFragment
 
