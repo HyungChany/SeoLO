@@ -20,14 +20,14 @@ import retrofit2.Response
 
 class LoginPartTwoFragment : Fragment() {
 
-    private lateinit var passwordEditText: EditText
+    private lateinit var inputPwText: EditText
     private lateinit var loginButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.last_login_layout, container, false)
-        passwordEditText = view.findViewById(R.id.numberEditText)
+        inputPwText = view.findViewById(R.id.inputPwText)
         loginButton = view.findViewById(R.id.confirm_button)
 
         loginButton.setOnClickListener {
@@ -38,8 +38,8 @@ class LoginPartTwoFragment : Fragment() {
 
     private fun login() {
         val activity = activity as LoginActivity
-        val username = activity.employeeNumber
-        val password = passwordEditText.text.toString()
+        val username = activity.username
+        val password = inputPwText.text.toString()
         val companyCode = activity.companyCode
 
         val loginData = mapOf(

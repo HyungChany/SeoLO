@@ -12,7 +12,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
 
     var companyCode: String = ""
-    var employeeNumber: String = ""
+    var username: String = ""
     var password: String = ""
 
 
