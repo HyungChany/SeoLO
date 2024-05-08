@@ -1,8 +1,11 @@
+import 'package:app/view_models/checklist/checklist_view_model.dart';
 import 'package:app/widgets/checklist/check_list.dart';
+import 'package:app/widgets/dialog/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/checklist/check_banner.dart';
 import 'package:app/widgets/button/common_text_button.dart';
+import 'package:provider/provider.dart';
 
 class CheckScreen extends StatefulWidget {
   @override
@@ -14,8 +17,9 @@ class _CheckScreenState extends State<CheckScreen> {
 
   @override
   void initState() {
+    final viewModel = Provider.of<ChecklistViewModel>(context, listen: false);
     super.initState();
-    _isCheckedList = List.filled(checkList.length, false);
+    _isCheckedList = List.filled(viewModel.checklist.length, false);
   }
 
   bool _allChecked() {
@@ -35,19 +39,19 @@ class _CheckScreenState extends State<CheckScreen> {
           width: MediaQuery.of(context).size.width * 0.95,
           child: Column(
             children: [
-              CheckBanner(
+              const CheckBanner(
                 word: '체크리스트',
                 content: '의 모든 항목을 확인해주세요',
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: checkList.length,
+                  itemCount: viewModel.checklist.length,
                   itemBuilder: (context, index) {
                     return CheckBoxList(
-                      title: checkList[index],
+                      title: viewModel.checklist[index].context,
                       onChecked: (isChecked) {
                         setState(() {
                           _isCheckedList[index] = isChecked;
@@ -68,14 +72,14 @@ class _CheckScreenState extends State<CheckScreen> {
                           context: context,
                           barrierDismissible: true,
                           builder: (BuildContext context) {
-                            return CommonDialog(
-                              content: '체크리스트의 모든 항목에 체크해 주세요.'
+                            return const CommonDialog(
+                              content: '체크리스트의 모든 항목에 체크해 주세요.',
                               buttonText: '확인',
                             );
                           });
                     }
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               )
             ],

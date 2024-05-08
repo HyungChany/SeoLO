@@ -3,18 +3,18 @@ import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:app/models/checklist/checklist_model.dart';
-class ChecklistService {
+class LotoService {
   final _dio = Dio.Dio();
   final _storage = FlutterSecureStorage();
   final baseUrl = dotenv.env['API_URL'] ?? '';
 
-  ChecklistService() {
+  LotoService() {
     _dio.interceptors.add(Dio.InterceptorsWrapper(
       onRequest: (options, handler) async {
-        String? cookie = await _storage.read(key: 'jsessionid');
+        String? token = await _storage.read(key: 'token');
         String? companyCode = await _storage.read(key: 'companyCode');
-        if (cookie != null) {
-          options.headers['Cookie'] = 'JSESSIONID=$cookie';
+        if (token != null) {
+          options.headers['Authorization'] = 'Bearer $token';
           options.headers['Company-Code'] = companyCode;
         }
         return handler.next(options);
@@ -22,11 +22,12 @@ class ChecklistService {
     ));
     _dio.interceptors.add(LoggingInterceptor());
   }
+
   ///////////////////////// checklist //////////////////////////////////
   Future<Map<String, dynamic>> checkList() async {
     try {
       Dio.Response response = await _dio.get(
-        '$baseUrl/checklist',
+        '$baseUrl/checklists',
       );
       if (response.statusCode == 200) {
         List<ChecklistModel> userCheckList = [];
