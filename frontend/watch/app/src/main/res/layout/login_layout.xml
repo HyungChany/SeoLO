@@ -16,13 +16,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/numberEditText"
+        android:id="@+id/EditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:autofillHints="PINNumber"
         android:gravity="center"
         android:hint="@string/company_login"
-        android:inputType="number"
+        android:inputType="text"
         android:textColor="@color/SNOW"
         android:textColorHint="@color/GRAY400"
         android:textSize="15sp"
@@ -42,7 +42,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/numberEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/EditText" />
 
 
 
