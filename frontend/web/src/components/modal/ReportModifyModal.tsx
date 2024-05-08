@@ -2,10 +2,6 @@ import { Modal } from './Modal.tsx';
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 import { Button } from '../button/Button.tsx';
-import React from 'react';
-interface ReportCheckModalProps {
-  onClose: () => void; // 모달을 닫는 함수
-}
 const Box = styled.div`
   width: 100%;
   height: 100%;
@@ -64,8 +60,7 @@ const ButtonBox = styled.div`
   justify-content: flex-end;
   gap: 1rem;
 `;
-
-const ReportCheckModal: React.FC<ReportCheckModalProps> = ({ onClose }) => {
+const ReportCheckModal = () => {
   const leftTitle = [
     '작업자',
     '사번',
@@ -100,6 +95,9 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({ onClose }) => {
     '없음',
     '0',
   ];
+  const handleSubmit = () => {
+    console.log('handleSubmit');
+  };
   const handleInnerClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
@@ -143,7 +141,7 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({ onClose }) => {
             $borderRadius={2.5}
             $hoverBackgroundColor={Color.GRAY300}
             $hoverBorderColor={Color.GRAY100}
-            onClick={onClose}
+            onClick={handleSubmit}
           >
             수정
           </Button>
@@ -155,9 +153,9 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({ onClose }) => {
             $borderRadius={2.5}
             $hoverBackgroundColor={Color.GRAY300}
             $hoverBorderColor={Color.GRAY100}
-            onClick={onClose}
+            onClick={handleSubmit}
           >
-            확인
+            닫기
           </Button>
         </ButtonBox>
       </Box>
