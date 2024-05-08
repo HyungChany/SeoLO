@@ -8,6 +8,7 @@ import androidx.security.crypto.MasterKeys
 object TokenManager {
     private const val PREFS_FILE_NAME = "encrypted_prefs"
     private const val PREF_ACCESS_TOKEN = "access_token"
+    private const val PREF_REFRESH_TOKEN = "refresh_token"
 
     private fun getPreferences(context: Context): SharedPreferences {
         val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
@@ -28,6 +29,11 @@ object TokenManager {
     fun getAccessToken(context: Context): String? {
         return getPreferences(context).getString(PREF_ACCESS_TOKEN, null)
     }
+
+    fun setRefreshToken(context: Context, token: String) {
+        getPreferences(context).edit().putString(PREF_REFRESH_TOKEN, token).apply()
+    }
+
 
     fun clearTokens(context: Context) {
         getPreferences(context).edit().clear().apply()
