@@ -6,10 +6,13 @@ class ChecklistViewModel extends ChangeNotifier{
   final LotoService _lotoService = LotoService();
 
   List <ChecklistModel> _checklist = [];
+  List <bool> _isCheckedList = [];
+  
   bool _isLoading = false;
   String? _errorMessage;
 
   List<ChecklistModel> get checklist => _checklist;
+  List<bool> get isCheckedList => _isCheckedList;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
@@ -19,6 +22,7 @@ class ChecklistViewModel extends ChangeNotifier{
 
   void loadInitialData() async{
     _checklist = [];
+    _isCheckedList = [];
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
@@ -29,6 +33,9 @@ class ChecklistViewModel extends ChangeNotifier{
     }else{
       _errorMessage = null;
       _checklist = result['userCheckList'];
+      for (int i = 0; i < result['userCheckList'].length; i++) {
+        _isCheckedList.add(false);
+      }
     }
     notifyListeners();
   }
