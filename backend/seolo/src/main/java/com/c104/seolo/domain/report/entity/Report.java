@@ -119,6 +119,16 @@ public class Report extends BaseEntity {
             return this;
         }
 
+        public Builder taskStartDateTime(LocalDateTime taskStartDateTime) {
+            this.taskStartDateTime = taskStartDateTime;
+            return this;
+        }
+
+        public Builder taskEndDateTime(LocalDateTime taskEndDateTime) {
+            this.taskEndDateTime = taskEndDateTime;
+            return this;
+        }
+
         public Builder victimsNum(Integer newVictimsNum) {
             this.victimsNum = newVictimsNum;
             return this;
