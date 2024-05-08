@@ -12,9 +12,20 @@ class DataLayerClient private constructor(private val context: Context) :
     var connectionToken: String? = null
 
     // 생성자에서 MessageClient 리스너 등록
+    private var listener: TokenReceiveListener? = null
+
+    interface TokenReceiveListener {
+        fun onTokenReceived(token: String?)
+    }
+
+    fun setListener(listener: TokenReceiveListener) {
+        this.listener = listener
+    }
+
     init {
         messageClient.addListener(this)
     }
+
 
     // 싱글톤 패턴으로 인스턴스 생성
     companion object {

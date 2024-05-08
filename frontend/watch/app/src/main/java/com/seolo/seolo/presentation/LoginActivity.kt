@@ -1,8 +1,9 @@
+package com.seolo.seolo.presentation
+
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.seolo.seolo.R
-import com.seolo.seolo.presentation.MainActivity
 
 // LoginActivity 클래스 정의
 class LoginActivity : AppCompatActivity() {
