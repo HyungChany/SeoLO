@@ -276,21 +276,21 @@ const MainPage = () => {
               </CardDrawing>
             )}
             <Cards>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
                     <div style={{ marginTop: '0.5rem' }}>등록 장비</div>
                   </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
                     <div style={{ marginTop: '0.5rem' }}>등록 LOTO</div>
                   </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
                     <div
@@ -306,7 +306,7 @@ const MainPage = () => {
                   </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
                     <div
@@ -322,7 +322,7 @@ const MainPage = () => {
                   </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
                     <div
