@@ -20,7 +20,7 @@ import sh.tyy.wheelpicker.core.WheelPickerRecyclerView
 
 // LocationActivity 클래스 정의
 class LocationActivity : AppCompatActivity() {
-    private lateinit var facilities: List<FacilityItem>
+    private lateinit var facilities: ArrayList<FacilityItem>
     private var selectedFacilityId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +70,10 @@ class LocationActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         val machines = response.body()?.machines ?: listOf()
                         Log.d("MachineResponse", "Machines: $machines")
+                        val intent = Intent(this@LocationActivity, EquipmentActivity::class.java)
+                        intent.putExtra("machines", ArrayList(machines))
+                        startActivity(intent)
+                        finish()
                     } else {
                         Log.e("MachineError", "Error fetching machines: ${response.errorBody()?.string()}")
                     }
