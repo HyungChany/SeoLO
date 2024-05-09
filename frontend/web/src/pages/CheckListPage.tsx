@@ -156,14 +156,19 @@ const CheckListPage = () => {
   const handleCloseCreateModal = () => {
     setCreateCheckListModal(false);
   };
+  const handleCloseDeleteModal = () => {
+    setDeleteCheckListModal(false);
+  };
   useEffect(() => {
     const fetchLists = async () => {
       const data = await getCheckList();
       setLists(data.basic_checklists);
       setPlusLists(data.checklists);
+      console.log(data);
     };
     fetchLists();
   }, []);
+
   return (
     <>
       <BackGround>
@@ -180,6 +185,7 @@ const CheckListPage = () => {
             <DeleteCheckListModal
               onClick={handleModalClick}
               checklistId={currentChecklist.id}
+              onClose={handleCloseDeleteModal}
             />
           </Overlay>
         )}

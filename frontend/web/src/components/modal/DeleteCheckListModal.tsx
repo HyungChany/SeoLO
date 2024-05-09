@@ -5,6 +5,7 @@ import styled from 'styled-components';
 interface DeleteCheckListModalProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   checklistId: number;
+  onClose: () => void;
 }
 
 const Text = styled.div`
@@ -27,7 +28,7 @@ const Box = styled.div`
   width: auto;
   min-width: 50%;
   max-width: 85%;
-  height: 10rem;
+  height: auto;
   border-radius: 1.25rem;
   border: 1px solid ${Color.GRAY100};
   background-color: ${Color.WHITE};
@@ -38,15 +39,19 @@ const Box = styled.div`
   font-size: 1.6rem;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
   gap: 2rem;
 `;
 const DeleteCheckListModal = ({
   onClick,
   checklistId,
+  onClose,
 }: DeleteCheckListModalProps) => {
   const handleDelete = async () => {
     try {
       await deleteCheckList(checklistId);
+      onClose();
+      window.location.reload();
     } catch (error) {
       console.error('삭제 실패:', error);
       alert('삭제 실패');
@@ -60,7 +65,7 @@ const DeleteCheckListModal = ({
         <Button
           onClick={handleDelete}
           width={8}
-          height={5}
+          height={3}
           $backgroundColor={Color.GRAY100}
           $borderColor={Color.GRAY100}
           $borderRadius={1.25}
