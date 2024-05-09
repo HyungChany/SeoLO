@@ -7,6 +7,7 @@ import { postCheckList } from '@/apis/CheckList.ts';
 import { useNavigate } from 'react-router-dom';
 interface CheckListModalProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onClose: () => void;
 }
 const Box = styled.div`
   width: 60%;
@@ -41,7 +42,7 @@ const Input = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const CreateCheckListModal = ({ onClick }: CheckListModalProps) => {
+const CreateCheckListModal = ({ onClose, onClick }: CheckListModalProps) => {
   const [checklist, setChecklist] = useState<string>('');
   const handleChecklist = (e: ChangeEvent<HTMLInputElement>) => {
     setChecklist(e.target.value);
@@ -52,6 +53,7 @@ const CreateCheckListModal = ({ onClick }: CheckListModalProps) => {
       const fetchData = async () => {
         const checklistData = { context: checklist };
         await postCheckList(checklistData);
+        onClose();
       };
       fetchData();
       navigate('/checklist');

@@ -153,13 +153,14 @@ const CheckListPage = () => {
   ) => {
     e.stopPropagation();
   };
-
+  const handleCloseCreateModal = () => {
+    setCreateCheckListModal(false);
+  };
   useEffect(() => {
     const fetchLists = async () => {
       const data = await getCheckList();
       setLists(data.basic_checklists);
       setPlusLists(data.checklists);
-      console.log(data);
     };
     fetchLists();
   }, []);
@@ -184,7 +185,10 @@ const CheckListPage = () => {
         )}
         {createCheckListModal && (
           <Overlay onClick={handleCloseModal}>
-            <CreateCheckListModal onClick={handleModalClick} />
+            <CreateCheckListModal
+              onClick={handleModalClick}
+              onClose={handleCloseCreateModal}
+            />
           </Overlay>
         )}
         <Box>
