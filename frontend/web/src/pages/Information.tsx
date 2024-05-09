@@ -131,7 +131,7 @@ const CompanyInformation = () => {
       >
         <Typo.H3 color={Color.BLACK}>등록 작업장 수</Typo.H3>
         <ImgBox src={WorkPlace} />
-        <Typo.H0 color={Color.BLACK}>3</Typo.H0>
+        <Typo.H0 color={Color.BLACK}>{options.length}</Typo.H0>
       </Card>
       <Card
         width={22}
