@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class NewReport {
     private String machineNumber;
     private String machineName;
+    private String workerNumber;
     private String workerName;
     private TASKTYPE taskType;
     private boolean isAccident;
@@ -23,9 +24,10 @@ public class NewReport {
     private boolean needRecheck;
 
     @Builder
-    public NewReport(String machineNumber, String machineName, String workerName, TASKTYPE taskType, boolean isAccident, String accidentType, Integer victimsNum, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime, boolean needRecheck) {
+    public NewReport(String machineNumber, String machineName, String workerNumber, String workerName, TASKTYPE taskType, boolean isAccident, String accidentType, Integer victimsNum, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime, boolean needRecheck) {
         this.machineNumber = machineNumber;
         this.machineName = machineName;
+        this.workerNumber = workerNumber;
         this.workerName = workerName;
         this.taskType = taskType;
         this.isAccident = isAccident;
@@ -36,11 +38,11 @@ public class NewReport {
         this.needRecheck = needRecheck;
     }
 
-
     public Report toEntity() {
         return Report.builder()
                 .machineNumber(machineNumber)
                 .machineName(machineName)
+                .workerNumber(workerNumber)
                 .workerName(workerName)
                 .taskType(taskType)
                 .isAccident(isAccident)
@@ -51,10 +53,11 @@ public class NewReport {
                 .build();
     }
 
-    public static NewReport of(String machineNumber, String machineName, String workerName, TASKTYPE taskType, boolean isAccident, String accidentType, Integer victimsNum, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime) {
+    public static NewReport of(String machineNumber, String machineName, String workerNumber ,String workerName, TASKTYPE taskType, boolean isAccident, String accidentType, Integer victimsNum, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime) {
         return NewReport.builder()
                 .machineNumber(machineNumber)
                 .machineName(machineName)
+                .workerNumber(workerNumber)
                 .workerName(workerName)
                 .taskType(taskType)
                 .isAccident(isAccident)
