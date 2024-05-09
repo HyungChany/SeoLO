@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
+import com.seolo.seolo.helper.TokenManager
 import com.seolo.seolo.model.TokenResponse
 import com.seolo.seolo.presentation.LoginActivity
 import com.seolo.seolo.presentation.MainActivity
@@ -48,24 +49,30 @@ class LoginPartTwoFragment : Fragment() {
 
         Log.d("LoginData", "Login request data: $loginData")
 
-        RetrofitClient.apiService.login(loginData)
-            .enqueue(object : Callback<TokenResponse> {
-                override fun onResponse(
-                    call: Call<TokenResponse>, response: Response<TokenResponse>
-                ) {
-                    response.body()?.let { tokenResponse ->
-                        if (tokenResponse.issuedToken.accessToken.isNotEmpty()) {
-                            // 로그인 성공 시 처리 로직
-                            val intent = Intent(activity, MainActivity::class.java)
-                            startActivity(intent)
-                            activity.finish()
-                        }
+        RetrofitClient.loginService.login(loginData).enqueue(object : Callback<TokenResponse> {
+            override fun onResponse(
+                call: Call<TokenResponse>, response: Response<TokenResponse>
+            ) {
+                response.body()?.let { tokenResponse ->
+                    if (tokenResponse.issuedToken.accessToken.isNotEmpty()) {
+
+                        // 토큰 저장
+                        TokenManager.setAccessToken(
+                            requireContext(), tokenResponse.issuedToken.accessToken
+                        )
+                        TokenManager.setCompanyCode(requireContext(), companyCode)
+
+                        // 로그인 성공 시 처리 로직
+                        val intent = Intent(activity, MainActivity::class.java)
+                        startActivity(intent)
+                        activity.finish()
                     }
                 }
+            }
 
-                override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                    // 로그인 실패 시 처리 로직
-                }
-            })
+            override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
+                // 로그인 실패 시 처리 로직
+            }
+        })
     }
 }

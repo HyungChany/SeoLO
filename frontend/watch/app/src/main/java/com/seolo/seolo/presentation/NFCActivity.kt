@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.bumptech.glide.Glide
 import com.seolo.seolo.R
 import com.seolo.seolo.databinding.NfcLayoutBinding
@@ -35,7 +34,7 @@ class NFCActivity : AppCompatActivity() {
         // 화면 터치 리스너 설정
         binding.root.setOnClickListener {
             // CheckListActivity로 이동하는 Intent 생성
-            val intent = Intent(this, CheckListActivity::class.java)
+            val intent = Intent(this, ChecklistActivity::class.java)
             startActivity(intent)
         }
     }

@@ -1,6 +1,7 @@
 package com.seolo.seolo.fragments
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +10,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
-import com.seolo.seolo.presentation.CheckListActivity
+import com.seolo.seolo.presentation.ChecklistActivity
 
 // CheckListFragment 클래스 정의
-class CheckListFragment : Fragment() {
+class ChecklistFragment : Fragment() {
     // 체크리스트 텍스트를 저장하는 변수
     private var checklistText: String? = null
 
@@ -38,6 +39,7 @@ class CheckListFragment : Fragment() {
 
         // TextView에 체크리스트 텍스트 설정
         textView.text = checklistText
+        textView.movementMethod = ScrollingMovementMethod()
 
         // 체크박스를 클릭하면 다음 페이지로 이동하는 이벤트 처리
         textBox.setOnClickListener {
@@ -45,7 +47,7 @@ class CheckListFragment : Fragment() {
             checkBox.isChecked = !checkBox.isChecked
             if (!wasChecked) {
                 view.postDelayed({
-                    (activity as? CheckListActivity)?.moveToNextPage()
+                    (activity as? ChecklistActivity)?.moveToNextPage()
                 }, 800)
             }
         }
@@ -56,7 +58,7 @@ class CheckListFragment : Fragment() {
             checkBox.isChecked = !checkBox.isChecked
             if (!wasChecked) {
                 view.postDelayed({
-                    (activity as? CheckListActivity)?.moveToNextPage()
+                    (activity as? ChecklistActivity)?.moveToNextPage()
                 }, 800)
             }
         }
@@ -68,8 +70,8 @@ class CheckListFragment : Fragment() {
     companion object {
         private const val ARG_TEXT = "arg_text"
 
-        fun newInstance(text: String): CheckListFragment {
-            return CheckListFragment().apply {
+        fun newInstance(text: String): ChecklistFragment {
+            return ChecklistFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_TEXT, text)
                 }
