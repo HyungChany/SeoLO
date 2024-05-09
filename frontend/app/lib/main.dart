@@ -7,6 +7,7 @@ import 'package:app/view_models/loto/task_templates_view_model.dart';
 import 'package:app/view_models/main/news_view_model.dart';
 import 'package:app/view_models/user/login_view_model.dart';
 import 'package:app/view_models/user/my_info_view_model.dart';
+import 'package:app/view_models/user/my_tasks_view_model.dart';
 import 'package:app/view_models/user/password_change_view_model.dart';
 import 'package:app/view_models/user/password_check_view_model.dart';
 import 'package:app/view_models/user/pin_change_view_model.dart';
@@ -67,6 +68,7 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (_) => MyInfoViewModel()),
           ChangeNotifierProvider(create: (_) => PasswordChangeViewModel()),
           ChangeNotifierProvider(create: (_) => PasswordCheckViewModel()),
+          ChangeNotifierProvider(create: (_) => MyTasksViewModel()),
           ChangeNotifierProvider(create: (_) => CoreIssueViewModel()),
           ChangeNotifierProvider(create: (_) => ChecklistViewModel()),
           ChangeNotifierProvider(create: (_) => MachineViewModel()),

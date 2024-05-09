@@ -1,7 +1,5 @@
-import 'package:app/widgets/card/common_card.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/navigator/common_navigation_bar.dart';
-import 'package:app/widgets/profile/icon_with_text.dart';
 import 'package:app/widgets/profile/logout_button.dart';
 import 'package:app/widgets/profile/my_activity.dart';
 import 'package:app/widgets/profile/my_info.dart';
@@ -12,7 +10,7 @@ class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  _ProfileScreenState createState() => _ProfileScreenState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {

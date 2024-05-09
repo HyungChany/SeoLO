@@ -1,9 +1,13 @@
+import 'package:app/view_models/user/my_tasks_view_model.dart';
 import 'package:app/widgets/card/common_card.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MyLoto extends StatefulWidget {
+  const MyLoto({super.key});
+
   @override
-  _MyLotoState createState() => _MyLotoState();
+  State<MyLoto> createState() => _MyLotoState();
 }
 
 class _MyLotoState extends State<MyLoto> {
@@ -31,12 +35,13 @@ class _MyLotoState extends State<MyLoto> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<MyTasksViewModel>(context);
     return Column(
       children: [
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.4,
           child: PageView.builder(
-            itemCount: facilities.length,
+            itemCount: viewModel.myTasksModel!.length,
             controller: _pageController,
             onPageChanged: (int index) {
               setState(() {
@@ -53,6 +58,7 @@ class _MyLotoState extends State<MyLoto> {
   }
 
   Widget _buildListItem(int index) {
+    final viewModel = Provider.of<MyTasksViewModel>(context);
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -73,10 +79,10 @@ class _MyLotoState extends State<MyLoto> {
             child: Transform.scale(
               scale: index == currentIndex ? 1.0 : 0.75,
               child: CommonCard(
-                facility: facilities[index],
-                machine: machines[index],
-                start: starts[index],
-                end: ends[index],
+                facility: viewModel.myTasksModel![index].facilityName,
+                machine: viewModel.myTasksModel![index].machineName,
+                start: viewModel.myTasksModel![index].startTime ?? '',
+                end: viewModel.myTasksModel![index].endTime ?? '',
                 center: index == currentIndex ? true : false,
               ),
             ),
