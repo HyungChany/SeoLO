@@ -2,9 +2,16 @@ import { Modal } from './Modal.tsx';
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 import { Button } from '../button/Button.tsx';
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
+import InputBox from '../inputbox/InputBox.tsx';
+
 interface ReportCheckModalProps {
   onClose: () => void; // 모달을 닫는 함수
+}
+
+interface AccidentCheckType {
+  backgroundColor: string;
+  color: string;
 }
 const Box = styled.div`
   width: 100%;
@@ -65,7 +72,22 @@ const ButtonBox = styled.div`
   gap: 1rem;
 `;
 
+const AccidentButton = styled.div<AccidentCheckType>`
+  width: 5rem;
+  height: 2rem;
+  background-color: ${(props) => props.backgroundColor};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: ${(props) => props.color};
+  border-radius: 8px;
+  cursor: pointer;
+`;
 const ReportCheckModal: React.FC<ReportCheckModalProps> = ({ onClose }) => {
+  const [modifyModal, setModifyModal] = useState<boolean>(false);
+  const [accidentBtn, setAccidentBtn] = useState<boolean>(false);
+  const [accidentText, setAccidentText] = useState<string>('');
+  const [accidentPeople, setAccidentPeople] = useState<string>('');
   const leftTitle = [
     '작업자',
     '사번',
@@ -88,8 +110,8 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({ onClose }) => {
     'LOTO 목적',
     '시작 시간',
     '종료 시간',
-    '사고 유형',
     '사고 여부',
+    '사고 유형',
     '인명 피해',
   ];
   const rightContent = [
@@ -104,6 +126,21 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({ onClose }) => {
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
     event.stopPropagation();
+  };
+  const handleModifyClick = () => {
+    setModifyModal(!modifyModal);
+  };
+  const handleCloseModal = () => {
+    onClose();
+  };
+  const handleAccidentClick = () => {
+    setAccidentBtn(!accidentBtn);
+  };
+  const handleAccidentText = (e: ChangeEvent<HTMLInputElement>) => {
+    setAccidentText(e.target.value);
+  };
+  const handleAccidentPeopleText = (e: ChangeEvent<HTMLInputElement>) => {
+    setAccidentPeople(e.target.value);
   };
   return (
     <Modal onClick={handleInnerClick}>
@@ -128,37 +165,100 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({ onClose }) => {
               ))}
             </TitleContentBox>
             <TitleContentBox>
-              {rightContent.map((title) => (
-                <RightContent>{title}</RightContent>
-              ))}
+              {rightContent.map((content, index) => {
+                if (modifyModal && index === 3) {
+                  return (
+                    <>
+                      {accidentBtn ? (
+                        <AccidentButton
+                          backgroundColor={Color.SAMSUNG_BLUE}
+                          color={Color.WHITE}
+                          onClick={handleAccidentClick}
+                        >
+                          발생
+                        </AccidentButton>
+                      ) : (
+                        <AccidentButton
+                          backgroundColor={Color.GRAY200}
+                          color={Color.BLACK}
+                          onClick={handleAccidentClick}
+                        >
+                          없음
+                        </AccidentButton>
+                      )}
+                    </>
+                  );
+                } else if (modifyModal && index === 4) {
+                  return (
+                    <RightContent>
+                      <InputBox
+                        width={10}
+                        height={2.3}
+                        value={accidentText}
+                        onChange={handleAccidentText}
+                      />
+                    </RightContent>
+                  );
+                } else if (modifyModal && index === 5) {
+                  return (
+                    <RightContent>
+                      <InputBox
+                        width={4}
+                        height={2.3}
+                        value={accidentPeople}
+                        onChange={handleAccidentPeopleText}
+                      />
+                    </RightContent>
+                  );
+                } else {
+                  return <RightContent key={content}>{content}</RightContent>;
+                }
+              })}
             </TitleContentBox>
           </Container>
         </ContentBox>
         <ButtonBox>
-          <Button
-            width={5}
-            height={2.5}
-            $backgroundColor={Color.WHITE}
-            $borderColor={Color.GRAY100}
-            $borderRadius={2.5}
-            $hoverBackgroundColor={Color.GRAY300}
-            $hoverBorderColor={Color.GRAY100}
-            onClick={onClose}
-          >
-            수정
-          </Button>
-          <Button
-            width={5}
-            height={2.5}
-            $backgroundColor={Color.WHITE}
-            $borderColor={Color.GRAY100}
-            $borderRadius={2.5}
-            $hoverBackgroundColor={Color.GRAY300}
-            $hoverBorderColor={Color.GRAY100}
-            onClick={onClose}
-          >
-            확인
-          </Button>
+          {modifyModal ? (
+            <Button
+              width={5}
+              height={2.5}
+              $backgroundColor={Color.WHITE}
+              $borderColor={Color.GRAY100}
+              $borderRadius={2.5}
+              $hoverBackgroundColor={Color.GRAY300}
+              $hoverBorderColor={Color.GRAY100}
+              onClick={handleCloseModal}
+            >
+              확인
+            </Button>
+          ) : (
+            <>
+              <Button
+                width={5}
+                height={2}
+                $backgroundColor={Color.WHITE}
+                $borderColor={Color.GRAY100}
+                $borderRadius={2.5}
+                $hoverBackgroundColor={Color.GRAY300}
+                $hoverBorderColor={Color.GRAY100}
+                onClick={handleModifyClick}
+              >
+                수정
+              </Button>
+              <Button
+                width={5}
+                height={2}
+                $backgroundColor={Color.WHITE}
+                $borderColor={Color.GRAY100}
+                $borderRadius={2.5}
+                $hoverBackgroundColor={Color.GRAY300}
+                $hoverBorderColor={Color.GRAY100}
+                onClick={handleCloseModal}
+              >
+                확인
+              </Button>
+            </>
+          )}
         </ButtonBox>
       </Box>
     </Modal>
