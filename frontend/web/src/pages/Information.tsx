@@ -6,15 +6,15 @@ import * as Typo from '@/components/typography/Typography.tsx';
 import Equipment from '/assets/images/equipment.png';
 import People from '/assets/images/people.png';
 import Dropdown from '@/components/dropdown/DropDown.tsx';
-import EquipmentModal from '@/components/modal/EquipmentModal.tsx';
+import EquipmentModal from '@/components/modal/MachineModal.tsx';
 import Employee from '@/components/modal/EmployeeModal.tsx';
 import React, { useEffect, useState } from 'react';
 import { Facilities } from '@/apis/Facilities.ts';
-import { EquipmentList } from '@/apis/Equipment.ts';
+import { MachineList } from '@/apis/Machine.ts';
 import { EmployeeList } from '@/apis/Employee.ts';
 
 interface OptionType {
-  value: string;
+  value: number;
   label: string;
 }
 interface FacilityType {
@@ -90,7 +90,7 @@ const CompanyInformation = () => {
   useEffect(() => {
     const fetchEquipment = async () => {
       if (selectedOption?.value) {
-        const equipmentData = await EquipmentList(selectedOption.value);
+        const equipmentData = await MachineList(selectedOption.value);
         console.log(equipmentData);
         setFacilities(equipmentData.length);
       }
