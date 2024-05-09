@@ -1,4 +1,5 @@
 import 'package:app/view_models/core/core_issue_view_model.dart';
+import 'package:app/widgets/dialog/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/button/common_text_button.dart';
@@ -100,7 +101,23 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
               child: CommonTextButton(
                 text: '확인',
                 onTap: () {
-                  Navigator.pushNamed(context, '/main');
+                  if (!viewModel.isLoading) {
+                    viewModel.coreIssue().then((_) {
+                      if (viewModel.errorMessage == null) {
+                        Navigator.pushReplacementNamed(context, '/main');
+                      } else {
+                        showDialog(
+                            context: context,
+                            barrierDismissible: true,
+                            builder: (BuildContext context) {
+                              return CommonDialog(
+                                content: viewModel.errorMessage!,
+                                buttonText: '확인',
+                              );
+                            });
+                      }
+                    });
+                  }
                 },
               ),
             ),
