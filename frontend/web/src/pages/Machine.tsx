@@ -213,6 +213,7 @@ const Equipment = () => {
   const handleSubmit = () => {
     if (dateError) {
       alert(dateError);
+      return;
     }
     if (selectedSubmitOption && image) {
       const fetchMachine = async () => {

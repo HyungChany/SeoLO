@@ -13,8 +13,8 @@ interface MenuProps {
 
 // 스타일 정의
 const Container = styled.div<Pick<MenuProps, 'width'>>`
-  width: ${(props) => (typeof props.width === 'number' ? `${props.width}rem` : props.width)}
-  }rem;
+  width: ${(props) =>
+    typeof props.width === 'number' ? `${props.width}rem` : props.width};
 `;
 
 const MenuContainer = styled.div`
