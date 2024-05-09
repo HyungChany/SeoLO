@@ -8,7 +8,11 @@ import Equipmentimage from '/assets/images/equipment.png';
 import InputBox from '@/components/inputbox/InputBox.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import { Facilities } from '@/apis/Facilities.ts';
-import { MachineList, MachineRegistration } from '@/apis/Machine.ts';
+import {
+  MachineList,
+  MachinePhoto,
+  MachineRegistration,
+} from '@/apis/Machine.ts';
 
 interface OptionType {
   value: number;
@@ -134,6 +138,8 @@ const ButtonBox = styled.div`
 
 const Equipment = () => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string>('');
+  const [image, setImage] = useState<File | null>(null);
+  const [imageURL, setImageURL] = useState<string>('');
   const [equipmentName, setEquipmentName] = useState<string>('');
   const [equipmentNumber, setEquipmentNumber] = useState<string>('');
   const [date, setDate] = useState<string>('');
@@ -191,7 +197,7 @@ const Equipment = () => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const file = event.target.files[0];
-
+      setImage(file);
       // Create an image preview
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -208,13 +214,13 @@ const Equipment = () => {
     if (dateError) {
       alert(dateError);
     }
-    if (selectedSubmitOption) {
+    if (selectedSubmitOption && image) {
       const fetchMachine = async () => {
         const machineData = {
           facilityId: selectedSubmitOption.value,
           machineName: equipmentName,
           machineCode: equipmentNumber,
-          machineThum: imagePreviewUrl,
+          machineThum: imageURL,
           introductionDate: date,
           mainManagerNum: mainManager,
           subManagerNum: subManager,
@@ -251,6 +257,17 @@ const Equipment = () => {
     };
     fetchEquipment();
   }, [selectedOption]);
+  useEffect(() => {
+    if (imagePreviewUrl && image) {
+      const fetchData = async () => {
+        const machine = new FormData();
+        machine.append('multipartFiles', image);
+        const data = await MachinePhoto(machine);
+        setImageURL(data.urls.url1);
+      };
+      fetchData();
+    }
+  }, [image, imagePreviewUrl]);
 
   const handleSubmitOptionChange = (option: OptionType): void => {
     setSelectedSubmitOption(option);
