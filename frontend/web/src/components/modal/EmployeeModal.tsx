@@ -79,7 +79,7 @@ const EquipmentModal = ({ onClick }: EquipmentModalProps) => {
           <Content>대리</Content>
         </ContentBox>
         <ContentBox>
-          <Chapter>LOTO 시행 횟수</Chapter>
+          <Chapter>권한</Chapter>
           <Content>4</Content>
         </ContentBox>
       </MainBox>

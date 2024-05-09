@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 import Card from '@/components/card/Card.tsx';
@@ -6,7 +6,11 @@ import * as Typo from '@/components/typography/Typography.tsx';
 import InputBox from '@/components/inputbox/InputBox.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import People from '/assets/images/people.png';
-import { EmployeeDetail, EmployeeRegistration } from '@/apis/Employee.ts';
+import {
+  EmployeeDetail,
+  EmployeeRegistration,
+  RegistratedEmployee,
+} from '@/apis/Employee.ts';
 interface EmployeeType {
   employee_join_date: string;
   employee_leave_date: string;
@@ -133,6 +137,7 @@ const Employee = () => {
   // const [imagePreviewUrl, setImagePreviewUrl] = useState<string>('');
   const [equipmentNumber, setEquipmentNumber] = useState<string>('');
   const companyCode = sessionStorage.getItem('companyCode');
+  const [EmployeeNumber, setEmployeeNumber] = useState<number>(0);
   const [employeeInformation, setEmployeeInformation] =
     useState<EmployeeType | null>(null);
   const handleEquipmentNumber = (e: ChangeEvent<HTMLInputElement>) => {
@@ -152,10 +157,16 @@ const Employee = () => {
         };
         const response = await EmployeeRegistration(employeeData);
         console.log(response);
+        window.location.reload();
+      } else {
+        alert('사번을 입력해주세요.');
       }
     } catch (e) {
       console.log(e);
     }
+  };
+  const handleCancel = () => {
+    setEquipmentNumber('');
   };
   const handleSearch = () => {
     const fetchData = async () => {
@@ -166,6 +177,13 @@ const Employee = () => {
     };
     fetchData();
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await RegistratedEmployee();
+      setEmployeeNumber(data.length);
+    };
+    fetchData();
+  }, []);
   return (
     <Background>
       <Box>
@@ -178,7 +196,7 @@ const Employee = () => {
         >
           <Typo.H3 color={Color.BLACK}>등록 임직원현황</Typo.H3>
           <ImgBox src={People} />
-          <Typo.H0 color={Color.BLACK}>125</Typo.H0>
+          <Typo.H0 color={Color.BLACK}>{EmployeeNumber}</Typo.H0>
         </Card>
         <InformationBox>
           <LeftBox>
@@ -263,7 +281,7 @@ const Employee = () => {
                 $borderRadius={1.25}
                 $hoverBackgroundColor={Color.GRAY200}
                 $hoverBorderColor={Color.GRAY200}
-                onClick={handleSubmit}
+                onClick={handleCancel}
                 fontSize={'1.25rem'}
                 fontWeight={'bold'}
               >
