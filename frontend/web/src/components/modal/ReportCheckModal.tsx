@@ -2,7 +2,8 @@ import { Modal } from './Modal.tsx';
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 import { Button } from '../button/Button.tsx';
-import React, { useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
+import InputBox from '../inputbox/InputBox.tsx';
 
 interface ReportCheckModalProps {
   onClose: () => void; // 모달을 닫는 함수
@@ -85,6 +86,8 @@ const AccidentButton = styled.div<AccidentCheckType>`
 const ReportCheckModal: React.FC<ReportCheckModalProps> = ({ onClose }) => {
   const [modifyModal, setModifyModal] = useState<boolean>(false);
   const [accidentBtn, setAccidentBtn] = useState<boolean>(false);
+  const [accidentText, setAccidentText] = useState<string>('');
+  const [accidentPeople, setAccidentPeople] = useState<string>('');
   const leftTitle = [
     '작업자',
     '사번',
@@ -133,6 +136,12 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({ onClose }) => {
   const handleAccidentClick = () => {
     setAccidentBtn(!accidentBtn);
   };
+  const handleAccidentText = (e: ChangeEvent<HTMLInputElement>) => {
+    setAccidentText(e.target.value);
+  };
+  const handleAccidentPeopleText = (e: ChangeEvent<HTMLInputElement>) => {
+    setAccidentPeople(e.target.value);
+  };
   return (
     <Modal onClick={handleInnerClick}>
       <Box>
@@ -179,6 +188,28 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({ onClose }) => {
                       )}
                     </>
                   );
+                } else if (modifyModal && index === 4) {
+                  return (
+                    <RightContent>
+                      <InputBox
+                        width={10}
+                        height={2.3}
+                        value={accidentText}
+                        onChange={handleAccidentText}
+                      />
+                    </RightContent>
+                  );
+                } else if (modifyModal && index === 5) {
+                  return (
+                    <RightContent>
+                      <InputBox
+                        width={4}
+                        height={2.3}
+                        value={accidentPeople}
+                        onChange={handleAccidentPeopleText}
+                      />
+                    </RightContent>
+                  );
                 } else {
                   return <RightContent key={content}>{content}</RightContent>;
                 }
@@ -204,7 +235,7 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({ onClose }) => {
             <>
               <Button
                 width={5}
-                height={2.5}
+                height={2}
                 $backgroundColor={Color.WHITE}
                 $borderColor={Color.GRAY100}
                 $borderRadius={2.5}
@@ -216,7 +247,7 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({ onClose }) => {
               </Button>
               <Button
                 width={5}
-                height={2.5}
+                height={2}
                 $backgroundColor={Color.WHITE}
                 $borderColor={Color.GRAY100}
                 $borderRadius={2.5}

@@ -6,7 +6,7 @@ interface InputBoxProps {
   width: number;
   height: number;
   value: string | number;
-  placeholder: string;
+  placeholder?: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   isPassword?: boolean;
 }
