@@ -172,10 +172,10 @@ values ('LOTO에 대해 작업자 교육이 이루어졌는가?'),
        ('모든 작업자들에게 LOTO 제거를 공지하였는가?');
 
 INSERT INTO task_template(task_template_type, task_template_precaution)
-values ('FIX', '수리중입니다.'),
-       ('REPAIR', '점검중입니다.'),
-       ('CLEAN', '청소중입니다.'),
-       ('ETC', '');
+values ('정비', '정비 중입니다.'),
+       ('청소', '청소 중입니다.'),
+       ('수리', '수리 중입니다.'),
+       ('기타', '');
 
 INSERT INTO locker(locker_battery, locker_is_locked, locker_uid, company_code, created_at, updated_at, locker_encryption_key)
 values (100, false, 'MURBMjRHMzE=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Y3R5pIjVCzW1uz0XJFs123=='),
@@ -256,5 +256,5 @@ VALUES
 INSERT INTO loto_report
     (IS_ACCIDENT, VICTIMS_NUM, CREATED_AT, END_DATETIME, LOTO_REPORT_ID, START_DATETIME, UPDATED_AT, TASK_TYPE, MACHINE_NAME, MACHINE_NUMBER, WORKER_NAME, ACCIDENT_TYPE)
 VALUES
-    (false, null, '2024-05-09 16:14:49.180938', '2024-05-09 16:14:49.177935', 1, '2024-05-09 16:14:46.202558', '2024-05-09 16:14:49.180938', 'FIX', '수평형 컨베이어 삼면포장기', 'KL-7217', '202100001', null),
-    (false, null, '2024-05-09 16:17:50.974998', '2024-05-09 16:17:50.972219', 2, '2024-05-09 16:17:46.388145', '2024-05-09 16:17:50.974998', 'REPAIR', '수평형 컨베이어 삼면포장기', 'KL-7217', '199500001', null);
+    (false, null, '2024-05-09 16:14:49.180938', '2024-05-09 16:14:49.177935', 1, '2024-05-09 16:14:46.202558', '2024-05-09 16:14:49.180938', '수리', '수평형 컨베이어 삼면포장기', 'KL-7217', '202100001', null),
+    (false, null, '2024-05-09 16:17:50.974998', '2024-05-09 16:17:50.972219', 2, '2024-05-09 16:17:46.388145', '2024-05-09 16:17:50.974998', '정비', '수평형 컨베이어 삼면포장기', 'KL-7217', '199500001', null);
