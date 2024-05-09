@@ -13,8 +13,8 @@ import 'package:app/screens/profile/profile_screen.dart';
 import 'package:app/screens/test_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:app/screens/lotolock/checklist_screen.dart';
-import 'package:app/screens/lotolock/workplace_select_screen.dart';
 import 'package:app/screens/lotolock/facility_select_screen.dart';
+import 'package:app/screens/lotolock/machine_select_screen.dart';
 import 'package:app/screens/lotolock/worklist_select_screen.dart';
 import 'package:app/screens/lotolock/day_select_screen.dart';
 import 'package:app/screens/lotolock/time_select_screen.dart';
@@ -34,9 +34,9 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
     case '/workplace':
       return MaterialPageRoute(
           builder: (context) => const WorkPlaceSelectScreen());
-    case '/facility':
+    case '/machine':
       return MaterialPageRoute(
-          builder: (context) => const FacilitySelectScreen());
+          builder: (context) => const MachineSelectScreen());
     case '/worklist':
       return MaterialPageRoute(
           builder: (context) => const WorkListSelectScreen());

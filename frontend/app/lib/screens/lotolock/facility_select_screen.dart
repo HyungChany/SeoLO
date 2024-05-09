@@ -3,26 +3,27 @@ import 'package:app/widgets/checklist/check_banner.dart';
 import 'package:app/widgets/checklist/select_list.dart';
 import 'package:app/widgets/header/header.dart';
 
-class FacilitySelectScreen extends StatefulWidget {
-  const FacilitySelectScreen({super.key});
+class WorkPlaceSelectScreen extends StatefulWidget {
+  const WorkPlaceSelectScreen({super.key});
 
   @override
-  State<FacilitySelectScreen> createState() => _FacilitySelectScreenState();
+  State<WorkPlaceSelectScreen> createState() => _WorkPlaceSelectScreenState();
 }
 
-class _FacilitySelectScreenState extends State<FacilitySelectScreen> {
+class _WorkPlaceSelectScreenState extends State<WorkPlaceSelectScreen> {
   @override
   Widget build(BuildContext context) {
     final List<String> workPlaceList = [
-      'F/B - 1',
-      'F/B - 2',
-      'L/A - 1',
-      'L/W - 1',
-      'L/W -2',
+      '제 1공장',
+      '제 2공장',
+      '제 3공장',
+      '제 4공장',
+      '제 5공장',
+      '제 6공장'
     ];
     return Scaffold(
       appBar: Header(
-        title: '설비 선택',
+        title: '작업장 선택',
         back: true,
       ),
       body: Center(
@@ -30,17 +31,17 @@ class _FacilitySelectScreenState extends State<FacilitySelectScreen> {
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: [
-              CheckBanner(word: '설비', content: '를 선택 해주세요'),
+              CheckBanner(word: '작업장', content: ' 위치를 선택 해주세요'),
               SizedBox(
                 height: 20,
               ),
               Expanded(
                   child: ListView.builder(
-                    itemCount: workPlaceList.length,
-                    itemBuilder: (context, index) {
-                      return SelectList(title: workPlaceList[index]);
-                    },
-                  ))
+                itemCount: workPlaceList.length,
+                itemBuilder: (context, index) {
+                  return SelectList(title: workPlaceList[index]);
+                },
+              ))
             ],
           ),
         ),
