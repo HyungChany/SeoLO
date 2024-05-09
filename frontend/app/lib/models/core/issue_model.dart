@@ -9,6 +9,7 @@ class CoreIssueModel {
   final String machineCode;
   final String manager;
   final String taskTemplateName;
+  final String endDay;
 
 
   CoreIssueModel({
@@ -22,6 +23,7 @@ class CoreIssueModel {
     required this.machineCode,
     required this.manager,
     required this.taskTemplateName,
+    required this.endDay,
   });
 
   Map<String, dynamic> toJson() => {

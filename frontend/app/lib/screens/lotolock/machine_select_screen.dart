@@ -14,7 +14,6 @@ class MachineSelectScreen extends StatefulWidget {
 }
 
 class _MachineSelectScreenState extends State<MachineSelectScreen> {
-
   @override
   void initState() {
     super.initState();
@@ -30,36 +29,41 @@ class _MachineSelectScreenState extends State<MachineSelectScreen> {
         title: '설비 선택',
         back: true,
       ),
-      body: Center(
-        child: SizedBox(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
-          child: Column(
-            children: [
-              CheckBanner(word: '설비', content: '를 선택 해주세요'),
-              SizedBox(
-                height: 20,
+      body: viewModel.isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Center(
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  children: [
+                    CheckBanner(word: '설비', content: '를 선택 해주세요'),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Expanded(
+                        child: ListView.builder(
+                      itemCount: viewModel.machines.length,
+                      itemBuilder: (context, index) {
+                        return SelectList(
+                          title: viewModel.machines[index].machineName,
+                          onTap: () {
+                            coreViewModel.setMachineId(
+                                viewModel.machines[index].machineId);
+                            coreViewModel.setMachineName(
+                                viewModel.machines[index].machineName);
+                            coreViewModel.setMachineCode(
+                                viewModel.machines[index].machineCode);
+                            Navigator.pushNamed(context, '/taskTemplate');
+                          },
+                        );
+                      },
+                    ))
+                  ],
+                ),
               ),
-              Expanded(
-                  child: ListView.builder(
-                    itemCount: viewModel.machines.length,
-                    itemBuilder: (context, index) {
-                      return SelectList(
-                        title: viewModel.machines[index].machineName,
-                        onTap: () {
-                          coreViewModel.setMachineId(viewModel.machines[index].machineId);
-                          coreViewModel.setMachineName(viewModel.machines[index].machineName);
-                          coreViewModel.setMachineCode(viewModel.machines[index].machineCode);
-                          Navigator.pushNamed(context, '/taskTemplate');
-                        },);
-                    },
-                  ))
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

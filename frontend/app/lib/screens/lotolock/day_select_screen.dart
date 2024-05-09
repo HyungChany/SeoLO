@@ -10,7 +10,7 @@ class DaySelect extends StatefulWidget {
   const DaySelect({super.key});
 
   @override
-  _DaySelectState createState() => _DaySelectState();
+  State<DaySelect> createState() => _DaySelectState();
 }
 
 class _DaySelectState extends State<DaySelect> {
@@ -47,7 +47,7 @@ class _DaySelectState extends State<DaySelect> {
             child: CommonTextButton(
               text: '다음 단계',
               onTap: () {
-                coreViewModel.setEndTime(endDay);
+                coreViewModel.setEndDay(endDay);
                 Navigator.pushNamed(context, '/selectTime');
               },
             ),
