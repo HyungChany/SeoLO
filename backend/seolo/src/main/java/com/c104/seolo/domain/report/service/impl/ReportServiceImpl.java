@@ -9,9 +9,11 @@ import com.c104.seolo.domain.report.repository.ReportRepository;
 import com.c104.seolo.domain.report.service.ReportService;
 import com.c104.seolo.global.exception.CommonException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -32,7 +34,10 @@ public class ReportServiceImpl implements ReportService {
 
     @Override
     public ReportsReponse getAllReports() {
-        Iterable<Report> allReports = reportRepository.findAll();
+        List<Report> allReports = reportRepository.findAll();
+
+
+        Collections.reverse(allReports);
 
         List<ReportDto> reportDtos = new ArrayList<>();
         allReports.forEach(report -> reportDtos.add(ReportDto.of(report)));

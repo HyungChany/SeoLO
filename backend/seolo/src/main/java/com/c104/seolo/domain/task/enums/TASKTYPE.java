@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum TASKTYPE {
-    FIX("수리"),
-    REPAIR("정비"),
-    CLEAN("청소"),
-    ETC("기타");
+    수리("수리"),
+    정비("정비"),
+    청소("청소"),
+    기타("기타");
 
     private final String selectTaskType;
     TASKTYPE(String selectTaskType) {
