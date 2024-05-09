@@ -1,20 +1,25 @@
 package com.seolo.seolo.model
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
+
 
 data class FacilityResponse(
     val facilities: List<FacilityItem>
 )
 
+@Parcelize
 data class FacilityItem(
     val id: Int,
     val name: String,
-)
+) : Parcelable
 
 data class MachineResponse(
     val machines: List<MachineItem>
 )
 
+@Parcelize
 data class MachineItem(
     @SerializedName("machine_id") val machineId: Int,
     @SerializedName("facility_id") val facilityId: Int,
@@ -26,4 +31,4 @@ data class MachineItem(
     @SerializedName("main_manager_name") val mainManagerName: String?,
     @SerializedName("sub_manager_id") val subManagerId: Int?,
     @SerializedName("sub_manager_name") val subManagerName: String?
-)
+) : Parcelable
