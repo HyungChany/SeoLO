@@ -4,8 +4,10 @@ import com.c104.seolo.domain.report.dto.NewReport;
 import com.c104.seolo.domain.report.dto.ReportDto;
 import com.c104.seolo.domain.report.dto.response.ReportsReponse;
 import com.c104.seolo.domain.report.entity.Report;
+import com.c104.seolo.domain.report.exception.ReportErrorCode;
 import com.c104.seolo.domain.report.repository.ReportRepository;
 import com.c104.seolo.domain.report.service.ReportService;
+import com.c104.seolo.global.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +40,14 @@ public class ReportServiceImpl implements ReportService {
         return ReportsReponse.builder()
                 .reports(reportDtos)
                 .build();
+    }
+
+    @Override
+    public ReportDto getReport(Long reportId) {
+        Report report = reportRepository.findById(reportId).orElseThrow(
+                () -> new CommonException(ReportErrorCode.NOT_EXIST_REPORT)
+        );
+
+        return ReportDto.of(report);
     }
 }
