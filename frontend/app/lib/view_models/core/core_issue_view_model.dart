@@ -1,5 +1,6 @@
 import 'package:app/models/core/issue_model.dart';
 import 'package:app/services/core_service.dart';
+import 'package:app/view_models/user/my_info_view_model.dart';
 import 'package:flutter/material.dart';
 
 class CoreIssueViewModel extends ChangeNotifier {

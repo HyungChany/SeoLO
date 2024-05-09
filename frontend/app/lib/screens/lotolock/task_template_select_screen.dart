@@ -4,33 +4,33 @@ import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/inputbox/common_largeinputbox.dart';
 import 'package:app/widgets/button/common_text_button.dart';
 
-class WorkListSelectScreen extends StatefulWidget {
-  const WorkListSelectScreen({super.key});
+class TaskTemplateSelectScreen extends StatefulWidget {
+  const TaskTemplateSelectScreen({super.key});
 
   @override
-  _WorkListSelectScreenState createState() => _WorkListSelectScreenState();
+  State<TaskTemplateSelectScreen> createState() => _TaskTemplateSelectScreenState();
 }
 
-class _WorkListSelectScreenState extends State<WorkListSelectScreen> {
-  String? workListOption;
+class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> {
+  String? taskOption;
 
-  void updateSustainCare(String option) {
+  void updateTaskTemplate(String option) {
     setState(() {
-      if (workListOption == option) {
-        workListOption = null; // 이미 선택된 항목을 다시 선택하면 선택 해제
+      if (taskOption == option) {
+        taskOption = null; // 이미 선택된 항목을 다시 선택하면 선택 해제
       } else {
-        workListOption = option;
+        taskOption = option;
       }
     });
   }
 
-  final List<String> workListIcon = [
+  final List<String> taskIcon = [
     'assets/images/maintenance_icon.png',
     'assets/images/clean_icon.png',
     'assets/images/repair_icon.png',
     'assets/images/etc_icon.png'
   ];
-  final List<String> workText = ['정비', '청소', '수리', '기타'];
+  final List<String> taskName = ['정비', '청소', '수리', '기타'];
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +46,13 @@ class _WorkListSelectScreenState extends State<WorkListSelectScreen> {
                 child: GridView.count(
                   crossAxisCount: 2,
                   children: List.generate(
-                      workListIcon.length,
+                      taskIcon.length,
                       (index) => CommonIconButton(
-                            text: workText[index],
-                            iconImage: workListIcon[index],
+                            text: taskName[index],
+                            iconImage: taskIcon[index],
                             shape: BoxShape.circle,
-                            isSelected: workListOption == workText[index],
-                            onTap: () => updateSustainCare(workText[index]),
+                            isSelected: taskOption == taskName[index],
+                            onTap: () => updateTaskTemplate(taskName[index]),
                           )),
                 ),
               ),

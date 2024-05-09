@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:app/screens/lotolock/checklist_screen.dart';
 import 'package:app/screens/lotolock/facility_select_screen.dart';
 import 'package:app/screens/lotolock/machine_select_screen.dart';
-import 'package:app/screens/lotolock/worklist_select_screen.dart';
+import 'package:app/screens/lotolock/task_template_select_screen.dart';
 import 'package:app/screens/lotolock/day_select_screen.dart';
 import 'package:app/screens/lotolock/time_select_screen.dart';
 import 'package:app/screens/lotolock/worklist_check_screen.dart';
@@ -37,9 +37,9 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
     case '/machine':
       return MaterialPageRoute(
           builder: (context) => const MachineSelectScreen());
-    case '/worklist':
+    case '/taskTemplate':
       return MaterialPageRoute(
-          builder: (context) => const WorkListSelectScreen());
+          builder: (context) => const TaskTemplateSelectScreen());
     case '/profile':
       return MaterialPageRoute(builder: (context) => ProfileScreen());
     case '/changePassword':
