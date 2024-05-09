@@ -1,25 +1,26 @@
 import { Button } from '@/components/button/Button.tsx';
 import * as Color from '@/config/color/Color.ts';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Check from '/assets/icons/Check.svg';
-import NonCheck from '/assets/icons/NonCheck.svg';
+// import Check from '/assets/icons/Check.svg';
+// import NonCheck from '/assets/icons/NonCheck.svg';
 import ReportCheckModal from '@/components/modal/ReportCheckModal.tsx';
+import { totalReport } from '@/apis/Report.ts';
 interface ButtonProps {
   backgroundColor: string;
   color: string;
 }
 interface EquipmentData {
-  selected: boolean;
-  equipmentNumber: string;
-  equipmentName: string;
-  manager: string;
-  lotoPurpose: string;
-  accidentOccurred: string;
+  reportId: number;
+  machineNumber: string;
+  machineName: string;
+  workerName: string;
+  tasktype: string;
   accidentType: string;
-  casualties: number;
-  startTime: string;
-  endTime: string;
+  victimsNum: number;
+  taskStartDateTime: string;
+  taskEndDateTime: string;
+  accident: boolean;
 }
 interface TitleType {
   width?: string;
@@ -105,6 +106,7 @@ const Overlay = styled.div`
 const Report = () => {
   const [selectedButtonIndex, setSelectedButtonIndex] = useState<number>(0);
   const [reportModal, setReportModal] = useState<boolean>(false);
+  const [reportData, setReportData] = useState<EquipmentData[]>([]);
   const handleButtonClick = (index: number) => {
     setSelectedButtonIndex(index); // 클릭된 버튼의 인덱스로 상태 업데이트
     console.log(index);
@@ -125,52 +127,36 @@ const Report = () => {
     '시작 일시',
     '종료 일시',
   ];
-  const [equipment, setEquipment] = useState<EquipmentData[]>([
-    {
-      selected: true,
-      equipmentNumber: 'A/W - 1',
-      equipmentName: 'Wire bonder',
-      manager: '오민상',
-      lotoPurpose: '정비 수지 작업',
-      accidentOccurred: 'N',
-      accidentType: '-',
-      casualties: 0,
-      startTime: '24.04.06 - 11:00',
-      endTime: '24.04.06 - 14:00',
-    },
-    {
-      selected: false,
-      equipmentNumber: 'A/W - 1',
-      equipmentName: 'Wire bonder',
-      manager: '오민상',
-      lotoPurpose: '정비 수지 작업',
-      accidentOccurred: 'N',
-      accidentType: '-',
-      casualties: 0,
-      startTime: '24.04.06 - 11:00',
-      endTime: '24.04.06 - 14:00',
-    },
-    // 추가 데이터는 여기에...
-  ]);
+  // const [equipment, setEquipment] = useState<EquipmentData[]>();
   const handleCloseModal = () => {
     // e.stopPropagation();
     setReportModal(!reportModal);
   };
-  const handleSelectToggle = (
-    index: number,
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => {
-    const updatedEquipment = equipment.map((item, idx) => {
-      if (idx === index) return { ...item, selected: !item.selected };
-      return item;
-    });
-    setEquipment(updatedEquipment);
-    e.stopPropagation();
-  };
+  // const handleSelectToggle = (
+  //   // index: number,
+  //   e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  // ) => {
+  //   // const updatedEquipment = reportData.map((item, idx) => {
+  //   //   if (idx === index) return { ...item, selected: !item.selected };
+  //   //   return item;
+  //   // });
+  //   // setEquipment(updatedEquipment);
+  //   e.stopPropagation();
+  // };
   const handleReport = () => {
     setReportModal(true);
   };
-
+  useEffect(() => {
+    const report = async () => {
+      try {
+        const data = await totalReport();
+        setReportData(data);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    report();
+  });
   return (
     <MainBox>
       {reportModal && (
@@ -227,28 +213,28 @@ const Report = () => {
         ))}
       </TitleBox>
       <ContentBox onClick={handleReport}>
-        {equipment.map((data, index) => (
+        {reportData.map((data) => (
           <TitleBox>
             <Title
               width="5%"
               justifyContent="center"
-              onClick={(event) => handleSelectToggle(index, event)}
+              // onClick={(event) => handleSelectToggle(index,event)}
             >
-              {data.selected ? (
+              {/* {data.selected ? (
                 <img src={Check} alt="" />
               ) : (
                 <img src={NonCheck} alt="" />
-              )}
+              )} */}
             </Title>
-            <Title>{data.equipmentNumber}</Title>
-            <Title>{data.equipmentName}</Title>
-            <Title>{data.manager}</Title>
-            <Title>{data.lotoPurpose}</Title>
-            <Title justifyContent="center">{data.accidentOccurred}</Title>
+            <Title>{data.machineNumber}</Title>
+            <Title>{data.machineName}</Title>
+            <Title>{data.workerName}</Title>
+            <Title>{data.tasktype}</Title>
+            <Title justifyContent="center">{data.accident}</Title>
             <Title>{data.accidentType}</Title>
-            <Title>{data.casualties}</Title>
-            <Title>{data.startTime}</Title>
-            <Title>{data.endTime}</Title>
+            <Title>{data.victimsNum}</Title>
+            <Title>{data.taskStartDateTime}</Title>
+            <Title>{data.taskEndDateTime}</Title>
           </TitleBox>
         ))}
       </ContentBox>
