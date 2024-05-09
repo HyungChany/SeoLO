@@ -47,9 +47,6 @@ public class Report extends BaseEntity {
     @Column(name = "end_datetime")
     private LocalDateTime taskEndDateTime;
 
-    @Column(name = "need_recheck")
-    private boolean needRecheck;
-
     protected Report() {}
 
     private Report(Builder builder) {
@@ -62,7 +59,6 @@ public class Report extends BaseEntity {
         this.victimsNum = builder.victimsNum;
         this.taskStartDateTime = builder.taskStartDateTime;
         this.taskEndDateTime = builder.taskEndDateTime;
-        this.needRecheck = builder.needRecheck;
     }
 
     public static class Builder {
@@ -75,7 +71,6 @@ public class Report extends BaseEntity {
         private Integer victimsNum = 0;
         private LocalDateTime taskStartDateTime;
         private LocalDateTime taskEndDateTime;
-        private boolean needRecheck = false;
 
         public Builder machineNumber(String newMachineNumber) {
             if (newMachineNumber == null) {
@@ -131,11 +126,6 @@ public class Report extends BaseEntity {
 
         public Builder victimsNum(Integer newVictimsNum) {
             this.victimsNum = newVictimsNum;
-            return this;
-        }
-
-        public Builder needRecheck(boolean needRecheck) {
-            this.needRecheck = needRecheck;
             return this;
         }
 

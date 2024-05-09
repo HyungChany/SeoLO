@@ -48,11 +48,10 @@ public class NewReport {
                 .victimsNum(victimsNum)
                 .taskStartDateTime(taskStartDateTime)
                 .taskEndDateTime(taskEndDateTime)
-                .needRecheck(needRecheck)
                 .build();
     }
 
-    public static NewReport of(String machineNumber, String machineName, String workerName, TASKTYPE taskType, boolean isAccident, String accidentType, Integer victimsNum, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime, boolean needRecheck) {
+    public static NewReport of(String machineNumber, String machineName, String workerName, TASKTYPE taskType, boolean isAccident, String accidentType, Integer victimsNum, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime) {
         return NewReport.builder()
                 .machineNumber(machineNumber)
                 .machineName(machineName)
@@ -63,7 +62,6 @@ public class NewReport {
                 .victimsNum(victimsNum)
                 .taskStartDateTime(taskStartDateTime)
                 .taskEndDateTime(taskEndDateTime)
-                .needRecheck(needRecheck)
                 .build();
     }
 }

@@ -1,11 +1,16 @@
 package com.c104.seolo.domain.report.service.impl;
 
 import com.c104.seolo.domain.report.dto.NewReport;
+import com.c104.seolo.domain.report.dto.ReportDto;
+import com.c104.seolo.domain.report.dto.response.ReportsReponse;
 import com.c104.seolo.domain.report.entity.Report;
 import com.c104.seolo.domain.report.repository.ReportRepository;
 import com.c104.seolo.domain.report.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -21,5 +26,17 @@ public class ReportServiceImpl implements ReportService {
 
         Report report = newReport.toEntity();
         reportRepository.save(report);
+    }
+
+    @Override
+    public ReportsReponse getAllReports() {
+        Iterable<Report> allReports = reportRepository.findAll();
+
+        List<ReportDto> reportDtos = new ArrayList<>();
+        allReports.forEach(report -> reportDtos.add(ReportDto.of(report)));
+
+        return ReportsReponse.builder()
+                .reports(reportDtos)
+                .build();
     }
 }

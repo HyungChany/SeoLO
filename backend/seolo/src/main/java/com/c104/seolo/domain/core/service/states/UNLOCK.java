@@ -13,6 +13,7 @@ import com.c104.seolo.domain.task.dto.TaskHistoryDto;
 import com.c104.seolo.domain.task.service.TaskHistoryService;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.security.service.DBUserDetailService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UNLOCK implements CodeState {
     private final CoreTokenService coreTokenService;
     private final TaskHistoryService taskHistoryService;
