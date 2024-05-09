@@ -68,7 +68,7 @@ class MainChkFragment : Fragment() {
                         if (response.isSuccessful) {
                             response.body()?.let { checklistResponse ->
                                 ChecklistManager.setChecklist(
-                                    requireContext(), checklistResponse.basic_checklists
+                                    requireContext(), checklistResponse.basicChecklists
                                 )
                             }
                             navigateToChecklistActivity()

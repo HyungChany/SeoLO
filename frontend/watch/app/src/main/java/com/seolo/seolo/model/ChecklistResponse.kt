@@ -1,7 +1,10 @@
 package com.seolo.seolo.model
 
+import com.google.gson.annotations.SerializedName
+
 data class ChecklistResponse(
-    val basic_checklists: List<ChecklistItem>
+    @SerializedName("basic_checklists") val basicChecklists: List<ChecklistItem>
+
 )
 
 data class ChecklistItem(
