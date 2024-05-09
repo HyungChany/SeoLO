@@ -251,3 +251,10 @@ VALUES
     ('2024-05-07 14:37:42.935150', 1, 2, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', 'CNC조각기', 'KL-5709', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL5709.jpg'),
     ('2024-05-07 14:37:42.935150', 1, 3, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '자동라벨기/스티커부착기', 'KL-0515', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL0515.jpg'),
     ('2024-05-07 14:37:42.935150', 1, 4, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '레이저각인기', 'KL-8818', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL8818.jpeg');
+
+
+INSERT INTO loto_report
+    (IS_ACCIDENT, VICTIMS_NUM, CREATED_AT, END_DATETIME, LOTO_REPORT_ID, START_DATETIME, UPDATED_AT, TASK_TYPE, MACHINE_NAME, MACHINE_NUMBER, WORKER_NAME, ACCIDENT_TYPE)
+VALUES
+    (false, null, '2024-05-09 16:14:49.180938', '2024-05-09 16:14:49.177935', 1, '2024-05-09 16:14:46.202558', '2024-05-09 16:14:49.180938', 'FIX', '수평형 컨베이어 삼면포장기', 'KL-7217', '202100001', null),
+    (false, null, '2024-05-09 16:17:50.974998', '2024-05-09 16:17:50.972219', 2, '2024-05-09 16:17:46.388145', '2024-05-09 16:17:50.974998', 'REPAIR', '수평형 컨베이어 삼면포장기', 'KL-7217', '199500001', null);
