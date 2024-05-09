@@ -1,32 +1,28 @@
 package com.seolo.seolo.presentation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.seolo.seolo.databinding.ActivityMainBinding
-import com.seolo.seolo.fragments.MainFragment
+import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
+import com.seolo.seolo.R
+import com.seolo.seolo.adapters.CarouselStateAdapter
+import com.seolo.seolo.fragments.MainChkFragment
+import com.seolo.seolo.fragments.MainNFCFragment
 
-class MainActivity : FragmentActivity() {
-    private lateinit var binding: ActivityMainBinding
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportActionBar?.hide()  // 액션바 숨기기
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_layout)  // 메인 레이아웃 설정
 
-        // ViewPager2 설정
-        val pagerAdapter = ScreenSlidePagerAdapter(this)
-        binding.viewPager.adapter = pagerAdapter
-    }
+        val viewPager: ViewPager2 = findViewById(R.id.viewPager)  // ViewPager2 인스턴스화
+        val adapter = CarouselStateAdapter(this@MainActivity)  // Adapter 인스턴스화
 
-    private inner class ScreenSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
-        override fun getItemCount(): Int = 2  // 페이지 수
+        // 프래그먼트를 ViewPager2에 추가
+        adapter.addFragment(MainChkFragment.newInstance("LOTO 잠금"))
+        adapter.addFragment(MainNFCFragment.newInstance("NFC 인증"))
 
-        override fun createFragment(position: Int): Fragment {
-            // 각 위치에 따라 다른 프래그먼트 인스턴스를 반환
-            return MainFragment.newInstance(if (position == 0) "LOTO\n잠금" else "NFC 모드", position)
-        }
+        viewPager.adapter = adapter
     }
 }
