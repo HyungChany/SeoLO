@@ -56,7 +56,7 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
         <activity
-            android:name=".presentation.CheckListActivity"
+            android:name=".presentation.ChecklistActivity"
             android:exported="false"
             android:taskAffinity=""
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />

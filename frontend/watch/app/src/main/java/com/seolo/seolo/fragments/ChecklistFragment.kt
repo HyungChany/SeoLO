@@ -9,10 +9,10 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
-import com.seolo.seolo.presentation.CheckListActivity
+import com.seolo.seolo.presentation.ChecklistActivity
 
 // CheckListFragment 클래스 정의
-class CheckListFragment : Fragment() {
+class ChecklistFragment : Fragment() {
     // 체크리스트 텍스트를 저장하는 변수
     private var checklistText: String? = null
 
@@ -45,7 +45,7 @@ class CheckListFragment : Fragment() {
             checkBox.isChecked = !checkBox.isChecked
             if (!wasChecked) {
                 view.postDelayed({
-                    (activity as? CheckListActivity)?.moveToNextPage()
+                    (activity as? ChecklistActivity)?.moveToNextPage()
                 }, 800)
             }
         }
@@ -56,7 +56,7 @@ class CheckListFragment : Fragment() {
             checkBox.isChecked = !checkBox.isChecked
             if (!wasChecked) {
                 view.postDelayed({
-                    (activity as? CheckListActivity)?.moveToNextPage()
+                    (activity as? ChecklistActivity)?.moveToNextPage()
                 }, 800)
             }
         }
@@ -68,8 +68,8 @@ class CheckListFragment : Fragment() {
     companion object {
         private const val ARG_TEXT = "arg_text"
 
-        fun newInstance(text: String): CheckListFragment {
-            return CheckListFragment().apply {
+        fun newInstance(text: String): ChecklistFragment {
+            return ChecklistFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_TEXT, text)
                 }

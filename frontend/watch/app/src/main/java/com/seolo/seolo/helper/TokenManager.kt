@@ -9,6 +9,7 @@ object TokenManager {
     private const val PREFS_FILE_NAME = "encrypted_prefs"
     private const val PREF_ACCESS_TOKEN = "access_token"
     private const val PREF_REFRESH_TOKEN = "refresh_token"
+    private const val PREF_COMPANY_CODE = "company_code"
 
     private fun getPreferences(context: Context): SharedPreferences {
         val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
@@ -34,6 +35,13 @@ object TokenManager {
         getPreferences(context).edit().putString(PREF_REFRESH_TOKEN, token).apply()
     }
 
+    fun setCompanyCode(context: Context, companyCode: String) {
+        getPreferences(context).edit().putString(PREF_COMPANY_CODE, companyCode).apply()
+    }
+
+    fun getCompanyCode(context: Context): String? {
+        return getPreferences(context).getString(PREF_COMPANY_CODE, null)
+    }
 
     fun clearTokens(context: Context) {
         getPreferences(context).edit().clear().apply()

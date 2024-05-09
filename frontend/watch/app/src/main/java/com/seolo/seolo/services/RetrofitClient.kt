@@ -16,12 +16,21 @@ object RetrofitClient {
         .addInterceptor(loggingInterceptor)
         .build()
 
-    val apiService: ApiService by lazy {
+    val loginService: LoginService by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(ApiService::class.java)
+            .create(LoginService::class.java)
+    }
+
+    val checklistService: ChecklistService by lazy {
+        Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(ChecklistService::class.java)
     }
 }

@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.seolo.seolo.R
 import com.seolo.seolo.databinding.FragmentMainBinding
-import com.seolo.seolo.presentation.CheckListActivity
+import com.seolo.seolo.presentation.ChecklistActivity
 import com.seolo.seolo.presentation.NFCActivity
 
 class MainFragment : Fragment() {
@@ -39,7 +39,7 @@ class MainFragment : Fragment() {
         Glide.with(this).asGif().load(R.drawable.main_sample6).into(binding.gifImageView)
 
         binding.root.setOnClickListener {
-            val targetActivity = if (pagePosition == 0) CheckListActivity::class.java else NFCActivity::class.java
+            val targetActivity = if (pagePosition == 0) ChecklistActivity::class.java else NFCActivity::class.java
             startActivity(Intent(requireContext(), targetActivity))
         }
     }

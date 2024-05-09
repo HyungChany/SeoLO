@@ -6,10 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.CarouselStateAdapter
-import com.seolo.seolo.fragments.CheckListFragment
+import com.seolo.seolo.fragments.ChecklistFragment
 
 // CheckListActivity 클래스 정의
-class CheckListActivity : AppCompatActivity() {
+class ChecklistActivity : AppCompatActivity() {
     // ViewPager2 선언
     private lateinit var viewPager: ViewPager2
 
@@ -28,9 +28,9 @@ class CheckListActivity : AppCompatActivity() {
         val adapter = CarouselStateAdapter(this)
 
         // 체크리스트 프래그먼트 추가
-        adapter.addFragment(CheckListFragment.newInstance("Item 1"))
-        adapter.addFragment(CheckListFragment.newInstance("Item 2"))
-        adapter.addFragment(CheckListFragment.newInstance("Item 3"))
+        adapter.addFragment(ChecklistFragment.newInstance("Item 1"))
+        adapter.addFragment(ChecklistFragment.newInstance("Item 2"))
+        adapter.addFragment(ChecklistFragment.newInstance("Item 3"))
 
         // ViewPager2에 어댑터 설정
         viewPager.adapter = adapter
