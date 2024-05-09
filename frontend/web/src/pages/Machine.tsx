@@ -8,7 +8,7 @@ import Equipmentimage from '/assets/images/equipment.png';
 import InputBox from '@/components/inputbox/InputBox.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import { Facilities } from '@/apis/Facilities.ts';
-import { EquipmentList } from '@/apis/Machine';
+import { MachineList } from '@/apis/Machine.ts';
 
 interface OptionType {
   value: string;
@@ -47,7 +47,7 @@ const InformationBox = styled.div`
   background-color: ${Color.WHITE};
   border-radius: 3.125rem;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
-  gap: 14rem;
+  gap: 10rem;
   overflow: hidden;
 `;
 const LeftBox = styled.div`
@@ -69,13 +69,12 @@ const PhotoBox = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
   gap: 0.5rem;
 `;
 const Photo = styled.div`
-  width: 30rem;
-  height: 23.125rem;
+  width: 25rem;
+  height: 16rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -87,7 +86,7 @@ const Preview = styled.img`
   width: 100%;
   height: 100%;
   border-radius: 1.25rem;
-  object-fit: cover;
+  /* object-fit: cover; */
 `;
 const PhotoInputBox = styled.input.attrs({
   type: 'file',
@@ -97,21 +96,23 @@ const PhotoInputBox = styled.input.attrs({
 `;
 const RightBox = styled.div`
   width: 100%;
-  height: 35rem;
+  height: 100%;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  box-sizing: border-box;
 `;
 const CommonBox = styled.div`
   width: 20rem;
-  height: 7rem;
+  height: auto;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+  gap: 0.5rem;
 `;
 const IntroBox = styled.div`
   width: 20rem;
-  height: 4.59rem;
+  height: auto;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
@@ -135,13 +136,39 @@ const Equipment = () => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string>('');
   const [equipmentName, setEquipmentName] = useState<string>('');
   const [equipmentNumber, setEquipmentNumber] = useState<string>('');
-  const [year, setYear] = useState<string>('');
-  const [month, setMonth] = useState<string>('');
+  const [date, setDate] = useState<string>('');
   const [mainManager, setMainManager] = useState<string>('');
   const [subManager, setSubManager] = useState<string>('');
   const [options, setOptions] = useState<OptionType[]>([]);
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
   const [facilities, setFacilities] = useState<number>(0);
+  const [dateError, setDateError] = useState<string>('');
+  const validateDate = (data: string): boolean => {
+    // YYYY-MM-DD 정규식
+    const regex = /^\d{4}-\d{2}-\d{2}$/;
+    if (!data.match(regex)) {
+      // 형식에 맞지 않는 경우
+      setDateError('날짜 형식이 올바르지 않습니다. (예: 2024-05-20)');
+      return false;
+    }
+
+    const d = new Date(date);
+    const dNum = d.getTime();
+    if (!dNum && dNum !== 0) {
+      // NaN 값 체크
+      setDateError('날짜 형식이 올바르지 않습니다. (예: 2024-05-20)');
+      return false;
+    }
+
+    // 입력된 날짜가 현재 날짜 이후인지 체크
+    if (d > new Date()) {
+      setDateError('미래의 날짜는 입력할 수 없습니다.');
+      return false;
+    }
+
+    return d.toISOString().slice(0, 10) === data;
+  };
+
   // const [submitOptions, setSubmitOptions] = useState<OptionType[]>([]);
   const [selectedSubmitOption, setSelectedSubmitOption] =
     useState<OptionType | null>(null);
@@ -151,11 +178,8 @@ const Equipment = () => {
   const handleEquipmentNumber = (e: ChangeEvent<HTMLInputElement>) => {
     setEquipmentNumber(e.target.value);
   };
-  const handleYear = (e: ChangeEvent<HTMLInputElement>) => {
-    setYear(e.target.value);
-  };
-  const handleMonth = (e: ChangeEvent<HTMLInputElement>) => {
-    setMonth(e.target.value);
+  const handleDate = (e: ChangeEvent<HTMLInputElement>) => {
+    setDate(e.target.value);
   };
   const handleMainManager = (e: ChangeEvent<HTMLInputElement>) => {
     setMainManager(e.target.value);
@@ -180,7 +204,11 @@ const Equipment = () => {
   const handleFileUpload = async () => {
     fileInputRef.current?.click();
   };
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    if (dateError) {
+      alert(dateError);
+    }
+  };
   useEffect(() => {
     const fetchData = async () => {
       const data = await Facilities();
@@ -200,7 +228,7 @@ const Equipment = () => {
   useEffect(() => {
     const fetchEquipment = async () => {
       if (selectedOption?.value) {
-        const equipmentData = await EquipmentList(selectedOption.value);
+        const equipmentData = await MachineList(selectedOption.value);
         console.log(equipmentData);
         setFacilities(equipmentData.length);
       }
@@ -280,17 +308,17 @@ const Equipment = () => {
               <IntroBox>
                 <InputBox
                   width={12}
-                  height={4.59}
-                  value={year}
-                  onChange={handleYear}
-                  placeholder="2024"
-                />
-                <InputBox
-                  width={7}
-                  height={4.59}
-                  value={month}
-                  onChange={handleMonth}
-                  placeholder="12"
+                  height={3}
+                  value={date}
+                  onChange={handleDate}
+                  placeholder="2024-05-20"
+                  onBlur={() => {
+                    if (!validateDate(date)) {
+                      console.log('Invalid date');
+                    } else {
+                      setDateError(''); // 오류가 없으면 오류 메시지 초기화
+                    }
+                  }}
                 />
               </IntroBox>
             </CommonBox>

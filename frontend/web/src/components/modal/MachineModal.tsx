@@ -4,7 +4,7 @@ import { Button } from '../button/Button.tsx';
 import * as Color from '@/config/color/Color.ts';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { EquipmentList } from '@/apis/Machine.ts';
+import { MachineList } from '@/apis/Machine.ts';
 interface EquipmentModalProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   option: string;
@@ -77,7 +77,7 @@ const EquipmentModal = ({ onClick, option }: EquipmentModalProps) => {
   const [data, setData] = useState<EquipmentType[]>([]);
   useEffect(() => {
     const fetchEquipment = async () => {
-      const equipmentData = await EquipmentList(option);
+      const equipmentData = await MachineList(option);
       setData(
         equipmentData.map((item: EquipmentType) => ({
           ...item,
