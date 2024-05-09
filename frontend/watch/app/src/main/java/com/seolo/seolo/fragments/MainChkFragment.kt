@@ -14,7 +14,7 @@ import com.seolo.seolo.R
 import com.seolo.seolo.helper.ChecklistManager
 import com.seolo.seolo.helper.TokenManager
 import com.seolo.seolo.model.ChecklistResponse
-import com.seolo.seolo.presentation.LocationActivity
+import com.seolo.seolo.presentation.ChecklistActivity
 import com.seolo.seolo.services.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -71,6 +71,7 @@ class MainChkFragment : Fragment() {
                                     requireContext(), checklistResponse.basic_checklists
                                 )
                             }
+                            navigateToChecklistActivity()
                         } else {
                             // 서버 에러 처리
                             Log.d(
@@ -87,4 +88,10 @@ class MainChkFragment : Fragment() {
                 })
         }
     }
+
+    private fun navigateToChecklistActivity() {
+        val intent = Intent(activity, ChecklistActivity::class.java)
+        startActivity(intent)
+    }
+
 }
