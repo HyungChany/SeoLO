@@ -34,6 +34,7 @@ export const EmployeeDetail = async (employeeNumber: string) => {
     return response.data;
   } catch (error) {
     console.log(error);
+    alert('해당 직원이 존재하지 않습니다.');
   }
 };
 

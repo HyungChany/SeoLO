@@ -62,13 +62,12 @@ const PhotoBox = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
   gap: 1.5rem;
 `;
 const Photo = styled.div`
   width: 100%;
-  height: 30rem;
+  height: 22rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -84,17 +83,18 @@ const Preview = styled.img`
 `;
 const RightBox = styled.div`
   width: 100%;
-  height: 35rem;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
 `;
 const CommonBox = styled.div`
   width: 20rem;
-  height: 7rem;
+  height: auto;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+  gap: 0.5rem;
 `;
 const ButtonBox = styled.div`
   width: 100%;
