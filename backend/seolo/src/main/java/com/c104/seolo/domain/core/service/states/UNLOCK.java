@@ -13,11 +13,12 @@ import com.c104.seolo.domain.task.dto.TaskHistoryDto;
 import com.c104.seolo.domain.task.service.TaskHistoryService;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.security.service.DBUserDetailService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -52,9 +53,9 @@ public class UNLOCK implements CodeState {
         // 1
         coreTokenService.deleteTokenByTokenValue(coreRequest.getTokenValue());
         // 2
-        syncTaskhistory(coreRequest);
+        TaskHistoryDto updatedTaskhistory = syncTaskhistory(coreRequest);
         // 3
-//        createReport(coreRequest);
+        createReport(updatedTaskhistory);
         // 4
         return CoreResponse.builder() // 3
                 .httpStatus(HttpStatus.NO_CONTENT)
@@ -62,14 +63,14 @@ public class UNLOCK implements CodeState {
                 .build();
     }
 
-    protected void syncTaskhistory(CoreRequest coreRequest) {
+    protected TaskHistoryDto syncTaskhistory(CoreRequest coreRequest) {
         TaskHistoryDto latestTaskHistory = taskHistoryService.getLatestTaskHistoryEntityByMachineId(coreRequest.getMachineId());
         taskHistoryService.updateTaskCodeNull(latestTaskHistory.getId());
-        taskHistoryService.updateTaskEndTimeNow(latestTaskHistory.getId());
+        TaskHistoryDto updatedTaskHistory = taskHistoryService.updateTaskEndTimeNow(latestTaskHistory.getId(), LocalDateTime.now());
+        return updatedTaskHistory;
     }
 
-    protected void createReport(CoreRequest coreRequest) {
-        TaskHistoryDto updatedLatestTaskHistory = taskHistoryService.getLatestTaskHistoryEntityByMachineId(coreRequest.getMachineId());
+    protected void createReport(TaskHistoryDto updatedLatestTaskHistory) {
         MachineDto workedMachine = machineService.getMachineByMachineId(updatedLatestTaskHistory.getMachineId());
         AppUser worker = dbUserDetailService.loadUserById(updatedLatestTaskHistory.getId());
 
