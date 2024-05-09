@@ -108,6 +108,7 @@ const Report = () => {
   const [selectedButtonIndex, setSelectedButtonIndex] = useState<number>(0);
   const [reportModal, setReportModal] = useState<boolean>(false);
   const [reportData, setReportData] = useState<EquipmentData[]>([]);
+  const [detailReport, setDetailReport] = useState<number>(1);
   const handleButtonClick = (index: number) => {
     setSelectedButtonIndex(index); // 클릭된 버튼의 인덱스로 상태 업데이트
     console.log(index);
@@ -142,8 +143,9 @@ const Report = () => {
     setReportData(updatedEquipment);
     e.stopPropagation();
   };
-  const handleReport = () => {
+  const handleReport = (index: number) => {
     setReportModal(true);
+    setDetailReport(index);
   };
   const formatDate = (dateString: string) => {
     return dateString.replace('T', ' ').slice(0, 16); // 'T'를 공백으로 대체하고 초 이후를 잘라냄
@@ -178,7 +180,10 @@ const Report = () => {
             handleCloseModal();
           }}
         >
-          <ReportCheckModal onClose={handleCloseModal}></ReportCheckModal>
+          <ReportCheckModal
+            onClose={handleCloseModal}
+            contentIndex={detailReport}
+          ></ReportCheckModal>
         </Overlay>
       )}
       <SelectBox>
@@ -224,9 +229,9 @@ const Report = () => {
           </Title>
         ))}
       </TitleBox>
-      <ContentBox onClick={handleReport}>
+      <ContentBox>
         {reportData.map((data, index) => (
-          <TitleBox>
+          <TitleBox onClick={() => handleReport(index + 1)}>
             <Title
               width="5%"
               justifyContent="center"

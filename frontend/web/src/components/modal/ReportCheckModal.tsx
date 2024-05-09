@@ -2,11 +2,26 @@ import { Modal } from './Modal.tsx';
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 import { Button } from '../button/Button.tsx';
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import InputBox from '../inputbox/InputBox.tsx';
+import { detailReport } from '@/apis/Report.ts';
 
+interface EquipmentData {
+  reportId: number;
+  machineNumber: string;
+  machineName: string;
+  workerNumber: string;
+  workerName: string;
+  tasktype: string;
+  accidentType: string | null;
+  victimsNum: number | null;
+  taskStartDateTime: string;
+  taskEndDateTime: string;
+  accident: boolean;
+}
 interface ReportCheckModalProps {
   onClose: () => void; // 모달을 닫는 함수
+  contentIndex: number;
 }
 
 interface AccidentCheckType {
@@ -83,11 +98,40 @@ const AccidentButton = styled.div<AccidentCheckType>`
   border-radius: 8px;
   cursor: pointer;
 `;
-const ReportCheckModal: React.FC<ReportCheckModalProps> = ({ onClose }) => {
+const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
+  onClose,
+  contentIndex,
+}) => {
   const [modifyModal, setModifyModal] = useState<boolean>(false);
   const [accidentBtn, setAccidentBtn] = useState<boolean>(false);
   const [accidentText, setAccidentText] = useState<string>('');
   const [accidentPeople, setAccidentPeople] = useState<string>('');
+  const [reportData, setReportData] = useState<EquipmentData[]>([]);
+  const formatDate = (dateString: string) => {
+    return dateString.replace('T', ' ').slice(0, 16); // 'T'를 공백으로 대체하고 초 이후를 잘라냄
+  };
+
+  useEffect(() => {
+    const report = async () => {
+      try {
+        const data = await detailReport(contentIndex);
+        const formattedData = {
+          ...data,
+          taskStartDateTime: formatDate(data.taskStartDateTime),
+          taskEndDateTime: formatDate(data.taskEndDateTime),
+          accidentType: data.accidentType === null ? '-' : data.accidentType,
+          victimsNum: data.victimsNum === null ? '-' : data.victimsNum,
+          accident: data.accident ? 'Y' : 'N', // accident 필드를 'Y' 또는 'N'으로 변환
+        };
+        setReportData(formattedData);
+        console.log(data);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    report();
+    console.log(reportData);
+  }, [contentIndex]);
   const leftTitle = [
     '작업자',
     '사번',
