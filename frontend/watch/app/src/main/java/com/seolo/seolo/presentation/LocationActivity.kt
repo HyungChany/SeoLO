@@ -73,7 +73,6 @@ class LocationActivity : AppCompatActivity() {
                         val intent = Intent(this@LocationActivity, EquipmentActivity::class.java)
                         intent.putExtra("machines", ArrayList(machines))
                         startActivity(intent)
-                        finish()
                     } else {
                         Log.e("MachineError", "Error fetching machines: ${response.errorBody()?.string()}")
                     }

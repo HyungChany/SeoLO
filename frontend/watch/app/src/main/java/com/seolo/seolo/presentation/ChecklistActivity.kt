@@ -57,7 +57,6 @@ class ChecklistActivity : AppCompatActivity() {
             val intent = Intent(this, LocationActivity::class.java)
             intent.putExtra("facilities", ArrayList(facilities))
             startActivity(intent)
-            finish()
         }
     }
 
