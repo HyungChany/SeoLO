@@ -10,8 +10,8 @@ export const totalReport = async () => {
         'Company-Code': companyCode,
       },
     });
-    return response.data;
-  } catch (e) {
-    console.log(e);
+    return response.data.reports;
+  } catch (error) {
+    console.log(error);
   }
 };

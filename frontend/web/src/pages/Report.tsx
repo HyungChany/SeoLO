@@ -2,8 +2,8 @@ import { Button } from '@/components/button/Button.tsx';
 import * as Color from '@/config/color/Color.ts';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-// import Check from '/assets/icons/Check.svg';
-// import NonCheck from '/assets/icons/NonCheck.svg';
+import Check from '/assets/icons/Check.svg';
+import NonCheck from '/assets/icons/NonCheck.svg';
 import ReportCheckModal from '@/components/modal/ReportCheckModal.tsx';
 import { totalReport } from '@/apis/Report.ts';
 interface ButtonProps {
@@ -21,6 +21,7 @@ interface EquipmentData {
   taskStartDateTime: string;
   taskEndDateTime: string;
   accident: boolean;
+  selected: boolean;
 }
 interface TitleType {
   width?: string;
@@ -127,36 +128,47 @@ const Report = () => {
     '시작 일시',
     '종료 일시',
   ];
-  // const [equipment, setEquipment] = useState<EquipmentData[]>();
   const handleCloseModal = () => {
-    // e.stopPropagation();
     setReportModal(!reportModal);
   };
-  // const handleSelectToggle = (
-  //   // index: number,
-  //   e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  // ) => {
-  //   // const updatedEquipment = reportData.map((item, idx) => {
-  //   //   if (idx === index) return { ...item, selected: !item.selected };
-  //   //   return item;
-  //   // });
-  //   // setEquipment(updatedEquipment);
-  //   e.stopPropagation();
-  // };
+  const handleSelectToggle = (
+    index: number,
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    const updatedEquipment = reportData.map((item, idx) => {
+      if (idx === index) return { ...item, selected: !item.selected };
+      return item;
+    });
+    setReportData(updatedEquipment);
+    e.stopPropagation();
+  };
   const handleReport = () => {
     setReportModal(true);
   };
+  const formatDate = (dateString: string) => {
+    return dateString.replace('T', ' ').slice(0, 16); // 'T'를 공백으로 대체하고 초 이후를 잘라냄
+  };
+
   useEffect(() => {
     const report = async () => {
       try {
         const data = await totalReport();
-        setReportData(data);
+        const formattedData = data.map((item: EquipmentData) => ({
+          ...item,
+          taskStartDateTime: formatDate(item.taskStartDateTime),
+          taskEndDateTime: formatDate(item.taskEndDateTime),
+          accidentType: item.accidentType === null ? '-' : item.accidentType,
+          victimsNum: item.victimsNum === null ? '-' : item.victimsNum,
+          accident: item.accident === false ? 'N' : 'T',
+        }));
+        setReportData(formattedData);
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     };
     report();
-  });
+  }, []);
+
   return (
     <MainBox>
       {reportModal && (
@@ -213,18 +225,18 @@ const Report = () => {
         ))}
       </TitleBox>
       <ContentBox onClick={handleReport}>
-        {reportData.map((data) => (
+        {reportData.map((data, index) => (
           <TitleBox>
             <Title
               width="5%"
               justifyContent="center"
-              // onClick={(event) => handleSelectToggle(index,event)}
+              onClick={(event) => handleSelectToggle(index, event)}
             >
-              {/* {data.selected ? (
-                <img src={Check} alt="" />
+              {data.selected ? (
+                <img src={Check} alt="" style={{ cursor: 'pointer' }} />
               ) : (
-                <img src={NonCheck} alt="" />
-              )} */}
+                <img src={NonCheck} alt="" style={{ cursor: 'pointer' }} />
+              )}
             </Title>
             <Title>{data.machineNumber}</Title>
             <Title>{data.machineName}</Title>
