@@ -6,6 +6,8 @@ import com.c104.seolo.domain.task.dto.response.TaskHistoryResponse;
 import com.c104.seolo.domain.task.dto.response.TaskListResponse;
 import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
 
+import java.time.LocalDateTime;
+
 public interface TaskHistoryService {
     TaskHistoryResponse getTaskHistory(Long taskId, String companyCode);
     TaskHistoryDto getLatestTaskHistoryEntityByMachineId(Long machineId);
@@ -19,6 +21,6 @@ public interface TaskHistoryService {
 
     void updateTaskCode(Long taskId, CODE taskCode);
     void updateTaskCodeNull(Long taskId);
-    void updateTaskEndTimeNow(Long taskId);
-    void updateTaskStartTimeNow(Long taskId);
+    TaskHistoryDto updateTaskEndTimeNow(Long taskId, LocalDateTime now);
+    void updateTaskStartTimeNow(Long taskId, LocalDateTime now);
 }

@@ -13,6 +13,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Slf4j
 @Service
@@ -23,6 +26,7 @@ public class LOCKED implements CodeState {
 
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public CoreResponse handle(Context context) {
         /*
             1. 데이터를 받은 백엔드 서버는 아래 데이터를 통해 `task_history 테이블에서 작업내역 튜플을 찾는다.
@@ -45,7 +49,8 @@ public class LOCKED implements CodeState {
         }
         // 3
         taskHistoryService.updateTaskCode(currentTask.getId(), CODE.LOCKED);
-        taskHistoryService.updateTaskStartTimeNow(currentTask.getId());
+        taskHistoryService.updateTaskStartTimeNow(currentTask.getId(), LocalDateTime.now());
+        log.info("nowtime: {}", LocalDateTime.now());
 
         return CoreResponse.builder() // 3
                 .httpStatus(HttpStatus.OK)

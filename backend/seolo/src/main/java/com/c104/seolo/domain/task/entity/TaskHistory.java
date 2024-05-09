@@ -37,7 +37,7 @@ public class TaskHistory extends BaseEntity {
     @JoinColumn(name = "machine_id")
     private Machine machine;
 
-    @Column(name = "task_start_datetime", updatable = false)
+    @Column(name = "task_start_datetime")
     private LocalDateTime taskStartDateTime;
 
     @Column(name = "task_end_datetime")
