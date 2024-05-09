@@ -11,7 +11,7 @@ import Employee from '@/components/modal/EmployeeModal.tsx';
 import React, { useEffect, useState } from 'react';
 import { Facilities } from '@/apis/Facilities.ts';
 import { MachineList } from '@/apis/Machine.ts';
-import { EmployeeList } from '@/apis/Employee.ts';
+import { RegistratedEmployee } from '@/apis/Employee.ts';
 
 interface OptionType {
   value: number;
@@ -99,7 +99,7 @@ const CompanyInformation = () => {
   }, [selectedOption]);
   useEffect(() => {
     const fetchEmployee = async () => {
-      const data = await EmployeeList();
+      const data = await RegistratedEmployee();
       setEmployees(data.length);
     };
     fetchEmployee();
