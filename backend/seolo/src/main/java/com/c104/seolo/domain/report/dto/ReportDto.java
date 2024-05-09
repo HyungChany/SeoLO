@@ -14,6 +14,7 @@ public class ReportDto {
     private Long reportId;
     private String machineNumber;
     private String machineName;
+    private String workerNumber;
     private String workerName;
     private TASKTYPE tasktype;
     private boolean isAccident;
@@ -23,10 +24,11 @@ public class ReportDto {
     private LocalDateTime taskEndDateTime;
 
     @Builder
-    public ReportDto(Long reportId, String machineNumber, String machineName, String workerName, TASKTYPE tasktype, boolean isAccident, String accidentType, Integer victimsNum, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime) {
+    public ReportDto(Long reportId, String machineNumber, String machineName, String workerNumber, String workerName, TASKTYPE tasktype, boolean isAccident, String accidentType, Integer victimsNum, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime) {
         this.reportId = reportId;
         this.machineNumber = machineNumber;
         this.machineName = machineName;
+        this.workerNumber = workerNumber;
         this.workerName = workerName;
         this.tasktype = tasktype;
         this.isAccident = isAccident;
@@ -40,6 +42,7 @@ public class ReportDto {
         return Report.builder()
                 .machineNumber(machineNumber)
                 .machineName(machineName)
+                .workerNumber(workerNumber)
                 .workerName(workerName)
                 .taskType(tasktype)
                 .isAccident(isAccident)
@@ -55,6 +58,7 @@ public class ReportDto {
                 .reportId(report.getId())
                 .machineNumber(report.getMachineNumber())
                 .machineName(report.getMachineName())
+                .workerNumber(report.getWorkerNumber())
                 .workerName(report.getWorkerName())
                 .tasktype(report.getTasktype())
                 .isAccident(report.isAccident())

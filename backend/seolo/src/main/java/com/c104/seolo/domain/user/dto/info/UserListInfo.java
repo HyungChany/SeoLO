@@ -14,14 +14,14 @@ public class UserListInfo {
     private String name;
     private String title;
     private String team;
-    private String thumbnail;
+    private String role;
 
     @Builder
-    public UserListInfo(Long id, String name, String titles, String teams, String thumbnail) {
+    public UserListInfo(Long id, String name, String titles, String teams, String role) {
         this.id = id;
         this.name = name;
         this.title = titles;
         this.team = teams;
-        this.thumbnail = thumbnail;
+        this.role = role;
     }
 }

@@ -25,6 +25,9 @@ public class Report extends BaseEntity {
     @Column(name = "machine_name", length = 30, nullable = false)
     private String machineName;
 
+    @Column(name = "worker_number", length = 30, nullable = false)
+    private String workerNumber;
+
     @Column(name = "worker_name", length = 30, nullable = false)
     private String workerName;
 
@@ -52,6 +55,7 @@ public class Report extends BaseEntity {
     private Report(Builder builder) {
         this.machineNumber = builder.machineNumber;
         this.machineName = builder.machineName;
+        this.workerNumber = builder.workerNumber;
         this.workerName = builder.workerName;
         this.tasktype = builder.taskType;
         this.isAccident = builder.isAccident;
@@ -64,6 +68,7 @@ public class Report extends BaseEntity {
     public static class Builder {
         private String machineNumber;
         private String machineName;
+        private String workerNumber;
         private String workerName;
         private TASKTYPE taskType;
         private boolean isAccident = false;
@@ -85,6 +90,14 @@ public class Report extends BaseEntity {
                 throw new IllegalArgumentException("machineName cannot be null");
             }
             this.machineName = newMachineName;
+            return this;
+        }
+
+        public Builder workerNumber(String newWorkerNumber) {
+            if (newWorkerNumber == null) {
+                throw new IllegalArgumentException("workerNumber cannot be null");
+            }
+            this.workerNumber = newWorkerNumber;
             return this;
         }
 
@@ -130,7 +143,7 @@ public class Report extends BaseEntity {
         }
 
         public Report build() {
-            if (machineNumber == null || machineName == null || workerName == null || taskType == null) {
+            if (machineNumber == null || machineName == null || workerNumber == null || workerName == null || taskType == null) {
                 throw new IllegalStateException("Cannot build Report object, one or more required fields are not set");
             }
             return new Report(this);
