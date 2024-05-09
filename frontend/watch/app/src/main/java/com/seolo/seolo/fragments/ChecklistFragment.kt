@@ -1,6 +1,7 @@
 package com.seolo.seolo.fragments
 
 import android.os.Bundle
+import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +39,7 @@ class ChecklistFragment : Fragment() {
 
         // TextView에 체크리스트 텍스트 설정
         textView.text = checklistText
+        textView.movementMethod = ScrollingMovementMethod()
 
         // 체크박스를 클릭하면 다음 페이지로 이동하는 이벤트 처리
         textBox.setOnClickListener {
