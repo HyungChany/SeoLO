@@ -36,25 +36,31 @@ class _MyLotoState extends State<MyLoto> {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<MyTasksViewModel>(context);
-    return Column(
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.4,
-          child: PageView.builder(
-            itemCount: viewModel.myTasksModel!.length,
-            controller: _pageController,
-            onPageChanged: (int index) {
-              setState(() {
-                currentIndex = index;
-              });
-            },
-            itemBuilder: (BuildContext context, int index) {
-              return _buildListItem(index);
-            },
-          ),
-        ),
-      ],
-    );
+    return viewModel.myTasksModel == []
+        ? const Center(child: Text('작성된 LOTO가 없습니다.'))
+        : viewModel.isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : Column(
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    child: PageView.builder(
+                      itemCount: viewModel.myTasksModel!.length,
+                      controller: _pageController,
+                      onPageChanged: (int index) {
+                        setState(() {
+                          currentIndex = index;
+                        });
+                      },
+                      itemBuilder: (BuildContext context, int index) {
+                        return _buildListItem(index);
+                      },
+                    ),
+                  ),
+                ],
+              );
   }
 
   Widget _buildListItem(int index) {
@@ -75,14 +81,19 @@ class _MyLotoState extends State<MyLoto> {
           AnimatedContainer(
             duration: Duration(milliseconds: 500),
             curve: Curves.easeInOut,
-            transform: Matrix4.identity()..translate(index == currentIndex ? 0.0 : index < currentIndex ? 20.0 : -20.0),
+            transform: Matrix4.identity()
+              ..translate(index == currentIndex
+                  ? 0.0
+                  : index < currentIndex
+                      ? 20.0
+                      : -20.0),
             child: Transform.scale(
               scale: index == currentIndex ? 1.0 : 0.75,
               child: CommonCard(
                 facility: viewModel.myTasksModel![index].facilityName,
                 machine: viewModel.myTasksModel![index].machineName,
-                start: viewModel.myTasksModel![index].startTime ?? '',
-                end: viewModel.myTasksModel![index].endTime ?? '',
+                start: viewModel.myTasksModel![index].startTime ?? '시작 전',
+                end: viewModel.myTasksModel![index].endTime ?? '종료 전',
                 center: index == currentIndex ? true : false,
               ),
             ),
