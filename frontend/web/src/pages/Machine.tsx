@@ -8,10 +8,10 @@ import Equipmentimage from '/assets/images/equipment.png';
 import InputBox from '@/components/inputbox/InputBox.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import { Facilities } from '@/apis/Facilities.ts';
-import { MachineList } from '@/apis/Machine.ts';
+import { MachineList, MachineRegistration } from '@/apis/Machine.ts';
 
 interface OptionType {
-  value: string;
+  value: number;
   label: string;
 }
 interface FacilityType {
@@ -207,6 +207,22 @@ const Equipment = () => {
   const handleSubmit = () => {
     if (dateError) {
       alert(dateError);
+    }
+    if (selectedSubmitOption) {
+      const fetchMachine = async () => {
+        const machineData = {
+          facilityId: selectedSubmitOption.value,
+          machineName: equipmentName,
+          machineCode: equipmentNumber,
+          machineThum: imagePreviewUrl,
+          introductionDate: date,
+          mainManagerNum: mainManager,
+          subManagerNum: subManager,
+        };
+        console.log(machineData);
+        await MachineRegistration(machineData);
+      };
+      fetchMachine();
     }
   };
   useEffect(() => {

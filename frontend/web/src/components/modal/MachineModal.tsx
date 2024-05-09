@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { MachineList } from '@/apis/Machine.ts';
 interface EquipmentModalProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  option: string;
+  option: number;
 }
 interface EquipmentType {
   id: string;

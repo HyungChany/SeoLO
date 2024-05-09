@@ -1,12 +1,12 @@
 import { api } from './Base.ts';
 interface MachinesType {
-  facilityId: string;
+  facilityId: number;
   machineName: string;
   machineCode: string;
   machineThum: string;
   introductionDate: string;
-  mainManagerId: string;
-  subManagerId: string;
+  mainManagerNum: string;
+  subManagerNum: string;
 }
 export const MachineRegistration = async (machineData: MachinesType) => {
   try {
@@ -18,13 +18,14 @@ export const MachineRegistration = async (machineData: MachinesType) => {
         'Company-Code': companyCode,
       },
     });
+    alert('장비등록에 성공하였습니다.');
     return response.data;
   } catch (error) {
     console.log(error);
   }
 };
 
-export const MachineList = async (facilityId: string) => {
+export const MachineList = async (facilityId: number) => {
   try {
     const accessToken = sessionStorage.getItem('accessToken');
     const companyCode = sessionStorage.getItem('companyCode');

@@ -14,7 +14,7 @@ import { MachineList } from '@/apis/Machine.ts';
 import { EmployeeList } from '@/apis/Employee.ts';
 
 interface OptionType {
-  value: string;
+  value: number;
   label: string;
 }
 interface FacilityType {

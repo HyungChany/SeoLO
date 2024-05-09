@@ -4,7 +4,7 @@ import Select, { ActionMeta, SingleValue } from 'react-select';
 import * as Color from '@/config/color/Color.ts';
 
 interface OptionType {
-  value: string;
+  value: number;
   label: string;
 }
 
