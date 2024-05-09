@@ -79,19 +79,27 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> {
                                       viewModel.templates[index].taskTemplateId;
                                   selectName = viewModel
                                       .templates[index].taskTemplateName;
-                                  selectPrecaution = viewModel.templates[index].taskPrecaution;
+                                  selectPrecaution =
+                                      viewModel.templates[index].taskPrecaution;
                                   updateTaskTemplate(viewModel
                                       .templates[index].taskTemplateName);
                                 })),
                       ),
                     ),
-                    LargeInputBox(hintText: '내용을 입력해주세요', precaution: selectPrecaution,),
+                    LargeInputBox(
+                      hintText: '내용을 입력해 주세요',
+                      precaution: selectPrecaution,
+                      onTextSaved: (text) {
+                        selectPrecaution = text;
+                      },
+                    ),
                     const SizedBox(
                       height: 30,
                     ),
                     CommonTextButton(
                         text: '확인',
                         onTap: () {
+                          coreViewModel.setTaskPrecaution(selectPrecaution!);
                           coreViewModel.setTaskTemplateId(selectId);
                           coreViewModel.setTaskTemplateName(selectName);
                           Navigator.pushNamed(context, '/selectDay');
