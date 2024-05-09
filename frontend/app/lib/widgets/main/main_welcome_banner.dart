@@ -12,18 +12,29 @@ class MainWelcomeBanner extends StatefulWidget {
 
 class _MainWelcomeBannerState extends State<MainWelcomeBanner> {
   content() {
-    final viewModel = Provider.of<MyInfoViewModel>(context, listen: false);
+    final viewModel = Provider.of<MyInfoViewModel>(context);
     return RichText(
         text: TextSpan(
             style: const TextStyle(
                 fontSize: 23, fontWeight: FontWeight.bold, color: Colors.black),
             children: [
-          TextSpan(text: viewModel.myInfoModel?.employeeName, style: TextStyle(color: blue400)),
+          viewModel.isLoading ? TextSpan(text: '') : TextSpan(text: viewModel.myInfoModel!.employeeName, style: TextStyle(color: blue400)),
           const TextSpan(text: '님, 오늘도 '),
           const TextSpan(text: '서로 ', style: TextStyle(color: safetyBlue)),
           const TextSpan(text: '지켰나요?')
         ]));
   }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   final viewModel = Provider.of<MyInfoViewModel>(context, listen: false);
+  //   viewModel.myInfo();
+  //   setState(() {
+  //     userName = viewModel.myInfoModel!.employeeName;
+  //   });
+  // }
+
 
   @override
   Widget build(BuildContext context) {

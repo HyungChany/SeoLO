@@ -1,9 +1,11 @@
 import 'package:app/models/user/login_model.dart';
 import 'package:app/models/user/my_info_model.dart';
+import 'package:app/models/user/my_tasks_model.dart';
 import 'package:app/models/user/password_change_model.dart';
 import 'package:app/models/user/password_check_model.dart';
 import 'package:app/models/user/pin_change_model.dart';
 import 'package:app/models/user/pin_login_model.dart';
+import 'package:app/view_models/user/my_info_view_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -180,6 +182,39 @@ class UserService {
       if (response.statusCode == 200) {
         return {
           'success': true,
+        };
+      } else {
+        return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
+      }
+    } on Dio.DioException catch (e) {
+      return {
+        'success': false,
+        'statusCode': e.response?.statusCode,
+        'message': e.response?.data['message'],
+      };
+    }
+  }
+
+  ///////////////////////// 나의 loto //////////////////////////////////
+  Future<Map<String, dynamic>> myTasks() async {
+    final MyInfoViewModel myInfoViewModel = MyInfoViewModel();
+    MyInfoModel myInfoModel;
+
+    await myInfoViewModel.myInfo();
+    myInfoModel = myInfoViewModel.myInfoModel!;
+
+    try {
+      Dio.Response response = await _dio.get('$baseUrl/tasks/assignment/${myInfoModel.employeeNum}');
+      if (response.statusCode == 200) {
+        debugPrint('${response.data['tasks']}');
+        List<MyTasksModel> tasks = [];
+        for (var task in response.data['tasks']) {
+          tasks.add(
+            MyTasksModel.fromJson(task),
+          );
+        }
+        return {
+          'success': true, 'tasks': tasks
         };
       } else {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
