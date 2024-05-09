@@ -39,12 +39,11 @@ class WheelPickerAdapter(private val selects: List<String>) :
         // 자동 줄바꿈 및 최대 줄 수 설정
         textView.setSingleLine(false)
         textView.maxLines = 2
-        textView.gravity = Gravity.CENTER_VERTICAL
+        textView.gravity = Gravity.CENTER_HORIZONTAL
         textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
-        textView.typeface = Typeface.DEFAULT
-        textView.setBackgroundColor(ContextCompat.getColor(parent.context, R.color.ONYX))
-        textView.textSize = 14f // 글꼴 크기를 14sp로 조정
-        textView.setPadding(130, 2, 130, 2) // 상하좌우에 패딩 추가
+        textView.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
+        textView.textSize = 14f
+        textView.setPadding(130, 0, 130, 0)
 
         return ViewHolder(view)
     }
@@ -52,7 +51,7 @@ class WheelPickerAdapter(private val selects: List<String>) :
     // ViewHolder에 데이터를 바인딩하는 메서드
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // TextView에 선택 항목 텍스트 설정
-        holder.textView.text = selects[position].toString()
+        holder.textView.text = selects[position]
         // TextView 텍스트 색상 설정
         holder.textView.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.SNOW))
     }

@@ -29,7 +29,7 @@ class LocationActivity : AppCompatActivity() {
         setContentView(R.layout.basic_wheel_picker_layout)
 
         facilities = intent.getParcelableArrayListExtra<FacilityItem>("facilities") ?: arrayListOf()
-        val facilityNames = listOf(" ") + facilities.map { it.name } + " "
+        val facilityNames = listOf("　") + facilities.map { it.name } + listOf("　")
 
         val locationPicker = findViewById<WheelPickerRecyclerView>(R.id.basic_wheel_picker_view)
         val locationAdapter = WheelPickerAdapter(facilityNames)
