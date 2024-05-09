@@ -1,11 +1,28 @@
 import 'package:app/models/core/issue_model.dart';
+import 'package:app/models/user/my_info_model.dart';
 import 'package:app/services/core_service.dart';
+import 'package:app/view_models/user/my_info_view_model.dart';
 import 'package:flutter/material.dart';
 
 class CoreIssueViewModel extends ChangeNotifier {
   final CoreService _coreService = CoreService();
+  final MyInfoViewModel _myInfoViewModel = MyInfoViewModel();
 
-  CoreIssueModel _coreIssueModel = CoreIssueModel(
+  CoreIssueViewModel() {
+    _fetchMyInfo();
+  }
+
+  late MyInfoModel myInfo;
+  late CoreIssueModel _coreIssueModel;
+
+
+  Future<void> _fetchMyInfo() async {
+    await _myInfoViewModel.myInfo();
+    myInfo = _myInfoViewModel.myInfoModel!;
+
+    final manager = '${myInfo.employeeTeam} ${myInfo.employeeName} ${myInfo.employeeTitle}';
+
+    _coreIssueModel = CoreIssueModel(
       lockerUid: '',
       machineId: 0,
       taskTemplateId: 0,
@@ -14,9 +31,14 @@ class CoreIssueViewModel extends ChangeNotifier {
       facilityName: '',
       machineName: '',
       machineCode: '',
-      manager: '',
+      manager: manager,
       taskTemplateName: '',
-      endDay: '');
+      endDay: '',
+    );
+
+    notifyListeners();
+  }
+
 
   bool _isLoading = false;
   String? _errorMessage;
@@ -162,22 +184,6 @@ class CoreIssueViewModel extends ChangeNotifier {
         machineName: _coreIssueModel.machineName,
         machineCode: value,
         manager: _coreIssueModel.manager,
-        taskTemplateName: _coreIssueModel.taskTemplateName,
-        endDay: _coreIssueModel.endDay);
-    notifyListeners();
-  }
-
-  void setManager(String value) {
-    _coreIssueModel = CoreIssueModel(
-        lockerUid: _coreIssueModel.lockerUid,
-        machineId: _coreIssueModel.machineId,
-        taskTemplateId: _coreIssueModel.taskTemplateId,
-        taskPrecaution: _coreIssueModel.taskPrecaution,
-        endTime: _coreIssueModel.endTime,
-        facilityName: _coreIssueModel.facilityName,
-        machineName: _coreIssueModel.machineName,
-        machineCode: _coreIssueModel.machineCode,
-        manager: value,
         taskTemplateName: _coreIssueModel.taskTemplateName,
         endDay: _coreIssueModel.endDay);
     notifyListeners();
