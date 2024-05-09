@@ -1,5 +1,6 @@
 package com.seolo.seolo.adapters
 
+import android.graphics.Typeface
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +29,23 @@ class WheelPickerAdapter(private val selects: List<String>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         // 레이아웃 인플레이션
         val view = LayoutInflater.from(parent.context)
-            .inflate(android.R.layout.simple_list_item_1, parent, false)
+            .inflate(android.R.layout.simple_list_item_activated_1, parent, false)
+
+        val textView = view.findViewById<TextView>(android.R.id.text1)
+        // TextView의 너비와 높이 설정
+        textView.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        // 자동 줄바꿈 및 최대 줄 수 설정
+        textView.setSingleLine(false)
+        textView.maxLines = 2
+        textView.gravity = Gravity.CENTER_VERTICAL
+        textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
+        textView.typeface = Typeface.DEFAULT
+        textView.setBackgroundColor(ContextCompat.getColor(parent.context, R.color.ONYX))
+        textView.textSize = 14f // 글꼴 크기를 14sp로 조정
+        textView.setPadding(130, 2, 130, 2) // 상하좌우에 패딩 추가
+
         return ViewHolder(view)
     }
 

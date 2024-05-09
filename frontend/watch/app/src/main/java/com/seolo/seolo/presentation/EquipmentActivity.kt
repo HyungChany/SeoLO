@@ -2,6 +2,7 @@ package com.seolo.seolo.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.seolo.seolo.R
@@ -26,8 +27,8 @@ class EquipmentActivity : AppCompatActivity() {
 
         // WheelPicker 초기화 및 어댑터 설정
         equipments = intent.getParcelableArrayListExtra<MachineItem>("machines") ?: arrayListOf()
-        val equipmentsName = listOf(" ") + equipments.map { it.machineName } + " "
-
+        val equipmentsName = listOf("　") + equipments.map { it.machineName } + ("　")
+        Log.d(  "EquipmentActivity", "equipmentsName: $equipmentsName")
         val equipmentPicker = findViewById<WheelPickerRecyclerView>(R.id.basic_wheel_picker_view)
         val equipmentAdapter = WheelPickerAdapter(equipmentsName)
         equipmentPicker.adapter = equipmentAdapter
