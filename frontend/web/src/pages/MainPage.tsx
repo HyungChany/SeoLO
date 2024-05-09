@@ -2,6 +2,7 @@ import CheckList from '@/../assets/icons/CheckList.svg?react';
 import ListModify from '@/../assets/icons/ListModify.svg?react';
 import logoutIcon from '@/../assets/icons/Logout.png';
 import Position from '@/../assets/icons/Position.svg?react';
+import { Logout } from '@/apis/Login.ts';
 import { Spacer } from '@/components/basic/Spacer.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import Card from '@/components/card/Card.tsx';
@@ -12,6 +13,7 @@ import * as Color from '@/config/color/Color.ts';
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 import { MapContainer } from 'react-leaflet';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Background = styled.div`
@@ -90,6 +92,7 @@ const LogoutBtn = styled.button`
   border: 2px solid rgba(0, 0, 0, 0.2);
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   margin: 0 auto;
+  cursor: pointer;
 `;
 
 const LogoutIcon = styled.img`
@@ -149,7 +152,7 @@ const Handle = () => {};
 const MainPage = () => {
   const [modifyMode, setModifyMode] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<string | null>(null);
-
+  const navigate = useNavigate();
   // 작업장 편집모드 활성화, 비활성화
   const changeModifyMode = () => {
     setModifyMode((prevMode) => !prevMode);
@@ -167,7 +170,17 @@ const MainPage = () => {
       reader.readAsDataURL(file);
     }
   };
-
+  const handleLogout = () => {
+    const fetchLogout = async () => {
+      try {
+        await Logout();
+        navigate('/login');
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchLogout();
+  };
   return (
     <>
       <Background>
@@ -242,7 +255,7 @@ const MainPage = () => {
                 </RowContainer>
               )}
             </SideMenuBox>
-            <LogoutBtn onClick={() => console.log('클릭')}>
+            <LogoutBtn onClick={handleLogout}>
               <LogoutIcon src={logoutIcon} />
               로그아웃
             </LogoutBtn>
@@ -276,21 +289,21 @@ const MainPage = () => {
               </CardDrawing>
             )}
             <Cards>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
                     <div style={{ marginTop: '0.5rem' }}>등록 장비</div>
                   </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
                     <div style={{ marginTop: '0.5rem' }}>등록 LOTO</div>
                   </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
                     <div
@@ -306,7 +319,7 @@ const MainPage = () => {
                   </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
                     <div
@@ -322,7 +335,7 @@ const MainPage = () => {
                   </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
                     <div
