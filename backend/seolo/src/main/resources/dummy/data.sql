@@ -173,14 +173,8 @@ values ('LOTO에 대해 작업자 교육이 이루어졌는가?'),
 
 INSERT INTO task_template(task_template_type, task_template_precaution)
 values ('FIX', '수리중입니다.'),
-       ('FIX', '메인 장치 수리중입니다.'),
-       ('FIX', '보조 장치 수리중입니다.'),
        ('REPAIR', '점검중입니다.'),
-       ('REPAIR', '정기 점검중입니다.'),
-       ('REPAIR', '임시 점검중입니다.'),
        ('CLEAN', '청소중입니다.'),
-       ('CLEAN', '정기 청소중입니다.'),
-       ('CLEAN', '임시 청소중입니다.'),
        ('ETC', '');
 
 INSERT INTO locker(locker_battery, locker_is_locked, locker_uid, company_code, created_at, updated_at, locker_encryption_key)
