@@ -85,7 +85,7 @@ public class MachineServiceImpl implements MachineService {
                             String subManagerName = subnManagerOptional.map(MachineManagerInfo::getName).orElse(null);
 
                             return MachineListDto.builder()
-                                    .id(info.getId())
+                                    .machineId(info.getId())
                                     .facilityId(info.getFacilityId())
                                     .facilityName(info.getFacilityName())
                                     .machineName(info.getMachineName())
