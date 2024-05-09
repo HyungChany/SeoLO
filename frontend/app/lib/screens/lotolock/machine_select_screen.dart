@@ -52,7 +52,7 @@ class _MachineSelectScreenState extends State<MachineSelectScreen> {
                           coreViewModel.setMachineId(viewModel.machines[index].machineId);
                           coreViewModel.setMachineName(viewModel.machines[index].machineName);
                           coreViewModel.setMachineCode(viewModel.machines[index].machineCode);
-                          Navigator.pushNamed(context, '/selectDay');
+                          Navigator.pushNamed(context, '/taskTemplate');
                         },);
                     },
                   ))

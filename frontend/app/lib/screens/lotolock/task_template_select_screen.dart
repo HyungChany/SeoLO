@@ -19,6 +19,7 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> {
   String? taskOption;
   int selectId = 0;
   String selectName = '';
+  String? selectPrecaution = '';
 
   void updateTaskTemplate(String option) {
     setState(() {
@@ -51,53 +52,54 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> {
     final coreViewModel = Provider.of<CoreIssueViewModel>(context);
     return Scaffold(
       appBar: const Header(title: '작업 내역', back: true),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width * 0.8,
-                height: MediaQuery
-                    .of(context)
-                    .size
-                    .height * 0.4,
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  children: List.generate(
-                      taskIcon.length,
-                          (index) =>
-                          CommonIconButton(
-                              text: viewModel.templates[index].taskTemplateName,
-                              iconImage: taskIcon[index],
-                              shape: BoxShape.circle,
-                              isSelected: taskOption ==
-                                  viewModel.templates[index].taskTemplateName,
-                              onTap: () {
-                                selectId = viewModel.templates[index].taskTemplateId;
-                                selectName = viewModel.templates[index].taskTemplateName;
-                                updateTaskTemplate(
-                                    viewModel.templates[index].taskTemplateName);
-                              })),
+      body: viewModel.isLoading
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Center(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      child: GridView.count(
+                        crossAxisCount: 2,
+                        children: List.generate(
+                            taskIcon.length,
+                            (index) => CommonIconButton(
+                                text:
+                                    viewModel.templates[index].taskTemplateName,
+                                iconImage: taskIcon[index],
+                                shape: BoxShape.circle,
+                                isSelected: taskOption ==
+                                    viewModel.templates[index].taskTemplateName,
+                                onTap: () {
+                                  selectId =
+                                      viewModel.templates[index].taskTemplateId;
+                                  selectName = viewModel
+                                      .templates[index].taskTemplateName;
+                                  selectPrecaution = viewModel.templates[index].taskPrecaution;
+                                  updateTaskTemplate(viewModel
+                                      .templates[index].taskTemplateName);
+                                })),
+                      ),
+                    ),
+                    LargeInputBox(hintText: '내용을 입력해주세요', precaution: selectPrecaution,),
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    CommonTextButton(
+                        text: '확인',
+                        onTap: () {
+                          coreViewModel.setTaskTemplateId(selectId);
+                          coreViewModel.setTaskTemplateName(selectName);
+                          Navigator.pushNamed(context, '/selectDay');
+                        })
+                  ],
                 ),
               ),
-              LargeInputBox(hintText: '내용을 입력해주세요'),
-              const SizedBox(
-                height: 30,
-              ),
-              CommonTextButton(
-                  text: '확인',
-                  onTap: () {
-                    coreViewModel.setTaskTemplateId(selectId);
-                    coreViewModel.setTaskTemplateName(selectName);
-                    Navigator.pushNamed(context, '/selectDay');
-                  })
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }

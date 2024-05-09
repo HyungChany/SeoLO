@@ -1,18 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:app/view_models/core/core_issue_view_model.dart';
 
 class LargeInputBox extends StatefulWidget {
   final String hintText;
+  final String? precaution;
 
-  const LargeInputBox({Key? key, required this.hintText}) : super(key: key);
+  const LargeInputBox({Key? key, required this.hintText, this.precaution}) : super(key: key);
 
   @override
-  _LargeInputBoxState createState() => _LargeInputBoxState();
+  State<LargeInputBox> createState() => _LargeInputBoxState();
 }
 
 class _LargeInputBoxState extends State<LargeInputBox> {
   final TextEditingController _controller = TextEditingController();
   final int _maxLength = 300;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.precaution != null) {
+      _controller.text = widget.precaution!;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant LargeInputBox oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.precaution != null && widget.precaution != oldWidget.precaution) {
+      _controller.text = widget.precaution!;
+    }
+  }
 
   @override
   void dispose() {
@@ -22,6 +41,7 @@ class _LargeInputBoxState extends State<LargeInputBox> {
 
   @override
   Widget build(BuildContext context) {
+    final coreViewModel = Provider.of<CoreIssueViewModel>(context);
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
       height: MediaQuery.of(context).size.height * 0.4,
@@ -29,6 +49,7 @@ class _LargeInputBoxState extends State<LargeInputBox> {
         alignment: Alignment.topRight,
         children: [
           TextField(
+            onChanged: (value) {coreViewModel.setTaskPrecaution(value);},
             controller: _controller,
             keyboardType: TextInputType.multiline,
             maxLines: 10,
