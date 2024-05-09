@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class SelectList extends StatefulWidget {
   final String title;
+  final VoidCallback onTap;
 
-  const SelectList({super.key, required this.title});
+  const SelectList({super.key, required this.title, required this.onTap});
   @override
   State<SelectList> createState() =>
       _SelectListState();
@@ -13,9 +14,7 @@ class _SelectListState extends State<SelectList>{
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.pushReplacementNamed(context, '/worklist');
-      },
+      onTap: widget.onTap,
       child: Container(
         height: 60,
         padding: EdgeInsets.only(left: 30), // 왼쪽에서 16픽셀 떨어진 곳에 Text를 배치

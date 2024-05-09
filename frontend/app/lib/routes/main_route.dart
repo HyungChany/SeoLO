@@ -13,9 +13,9 @@ import 'package:app/screens/profile/profile_screen.dart';
 import 'package:app/screens/test_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:app/screens/lotolock/checklist_screen.dart';
-import 'package:app/screens/lotolock/workplace_select_screen.dart';
 import 'package:app/screens/lotolock/facility_select_screen.dart';
-import 'package:app/screens/lotolock/worklist_select_screen.dart';
+import 'package:app/screens/lotolock/machine_select_screen.dart';
+import 'package:app/screens/lotolock/task_template_select_screen.dart';
 import 'package:app/screens/lotolock/day_select_screen.dart';
 import 'package:app/screens/lotolock/time_select_screen.dart';
 import 'package:app/screens/lotolock/worklist_check_screen.dart';
@@ -34,12 +34,12 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
     case '/workplace':
       return MaterialPageRoute(
           builder: (context) => const WorkPlaceSelectScreen());
-    case '/facility':
+    case '/machine':
       return MaterialPageRoute(
-          builder: (context) => const FacilitySelectScreen());
-    case '/worklist':
+          builder: (context) => const MachineSelectScreen());
+    case '/taskTemplate':
       return MaterialPageRoute(
-          builder: (context) => const WorkListSelectScreen());
+          builder: (context) => const TaskTemplateSelectScreen());
     case '/profile':
       return MaterialPageRoute(builder: (context) => ProfileScreen());
     case '/changePassword':
@@ -54,9 +54,9 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => ChangePinCheckScreen());
     case '/nfc':
       return MaterialPageRoute(builder: (context) => NfcScreen());
-    case '/dayselect':
+    case '/selectDay':
       return MaterialPageRoute(builder: (context) => DaySelect());
-    case '/timeselect':
+    case '/selectTime':
       return MaterialPageRoute(builder: (context) => TimeSelect());
     case '/worklistcheck':
       return MaterialPageRoute(builder: (context) => WorkListCheckScreen());
