@@ -5,11 +5,17 @@ import com.c104.seolo.domain.core.dto.response.CoreResponse;
 import com.c104.seolo.domain.core.service.CodeState;
 import com.c104.seolo.domain.core.service.Context;
 import com.c104.seolo.domain.core.service.CoreTokenService;
+import com.c104.seolo.domain.machine.dto.MachineDto;
+import com.c104.seolo.domain.machine.service.MachineService;
+import com.c104.seolo.domain.report.dto.NewReport;
+import com.c104.seolo.domain.report.service.ReportService;
 import com.c104.seolo.domain.task.dto.TaskHistoryDto;
 import com.c104.seolo.domain.task.service.TaskHistoryService;
+import com.c104.seolo.domain.user.entity.AppUser;
+import com.c104.seolo.global.security.service.DBUserDetailService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +25,9 @@ import org.springframework.stereotype.Service;
 public class UNLOCK implements CodeState {
     private final CoreTokenService coreTokenService;
     private final TaskHistoryService taskHistoryService;
+    private final ReportService reportService;
+    private final DBUserDetailService dbUserDetailService;
+    private final MachineService machineService;
 
     @Override
     public CoreResponse handle(Context context) {
@@ -42,19 +51,37 @@ public class UNLOCK implements CodeState {
         CoreRequest coreRequest = context.getCoreRequest();
         // 1
         coreTokenService.deleteTokenByTokenValue(coreRequest.getTokenValue());
-
         // 2
-        TaskHistoryDto latestTaskHistory = taskHistoryService.getLatestTaskHistoryEntityByMachineId(coreRequest.getMachineId());
-        taskHistoryService.updateTaskCodeNull(latestTaskHistory.getId());
-        taskHistoryService.updateTaskEndTimeNow(latestTaskHistory.getId());
-
+        syncTaskhistory(coreRequest);
         // 3
-
-
+//        createReport(coreRequest);
         // 4
         return CoreResponse.builder() // 3
                 .httpStatus(HttpStatus.NO_CONTENT)
                 .message("자물쇠가 열림처리 되었습니다. 토큰이 삭제되었습니다. 진행했던 작업내역이 보고서로 저장됩니다. ")
                 .build();
+    }
+
+    protected void syncTaskhistory(CoreRequest coreRequest) {
+        TaskHistoryDto latestTaskHistory = taskHistoryService.getLatestTaskHistoryEntityByMachineId(coreRequest.getMachineId());
+        taskHistoryService.updateTaskCodeNull(latestTaskHistory.getId());
+        taskHistoryService.updateTaskEndTimeNow(latestTaskHistory.getId());
+    }
+
+    protected void createReport(CoreRequest coreRequest) {
+        TaskHistoryDto updatedLatestTaskHistory = taskHistoryService.getLatestTaskHistoryEntityByMachineId(coreRequest.getMachineId());
+        MachineDto workedMachine = machineService.getMachineByMachineId(updatedLatestTaskHistory.getMachineId());
+        AppUser worker = dbUserDetailService.loadUserById(updatedLatestTaskHistory.getId());
+
+        NewReport newReport = NewReport.builder()
+                .machineNumber(workedMachine.getNumber())
+                .machineName(workedMachine.getName())
+                .workerName(worker.getUsername())
+                .taskType(updatedLatestTaskHistory.getTaskTemplate().getTaskType())
+                .taskStartDateTime(updatedLatestTaskHistory.getTaskStartDateTime())
+                .taskEndDateTime(updatedLatestTaskHistory.getTaskEndDateTime())
+                .build();
+
+        reportService.enrollReport(newReport);
     }
 }

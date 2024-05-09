@@ -18,22 +18,18 @@ public class MachineDto {
     private MachineSubcategory machineSubcategory;
     private String name;
     private String number;
-    private Float longitude;
-    private Float latitude;
     private String company;
     private String thum;
     private LockerType lockerType;
     private Date introductionDate;
 
     @Builder
-    public MachineDto(Long id, Facility facility, MachineSubcategory machineSubcategory, String name, String number, Float longitude, Float latitude, String company, String thum, LockerType lockerType, Date introductionDate) {
+    public MachineDto(Long id, Facility facility, MachineSubcategory machineSubcategory, String name, String number, String company, String thum, LockerType lockerType, Date introductionDate) {
         this.id = id;
         this.facility = facility;
         this.machineSubcategory = machineSubcategory;
         this.name = name;
         this.number = number;
-        this.longitude = longitude;
-        this.latitude = latitude;
         this.company = company;
         this.thum = thum;
         this.lockerType = lockerType;
@@ -47,8 +43,6 @@ public class MachineDto {
                 .machineSubcategory(machine.getMachineSubcategory())
                 .name(machine.getName())
                 .number(machine.getNumber())
-                .longitude(machine.getLongitude())
-                .latitude(machine.getLatitude())
                 .company(machine.getCompany())
                 .thum(machine.getThum())
                 .lockerType(machine.getLockerType())
@@ -63,8 +57,6 @@ public class MachineDto {
                 .machineSubcategory(machineSubcategory)
                 .name(name)
                 .number(number)
-                .longitude(longitude)
-                .latitude(latitude)
                 .company(company)
                 .thum(thum)
                 .lockerType(lockerType)
