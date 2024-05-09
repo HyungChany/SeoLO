@@ -4,6 +4,7 @@ import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 import 'package:app/models/loto/checklist_model.dart';
+
 class LotoService {
   final _dio = Dio.Dio();
   final _storage = const FlutterSecureStorage();
@@ -32,19 +33,18 @@ class LotoService {
       );
       if (response.statusCode == 200) {
         List<ChecklistModel> userCheckList = [];
-          for (var item in response.data['basic_checklists']) {
-            userCheckList.add(
-              ChecklistModel.fromJson(item),
-            );
-      }if (response.data['checklists'] != []){
-          for (var item in response.data['checklists']){
-            userCheckList.add(
-              ChecklistModel.fromJson(item)
-            );
+        for (var item in response.data['basic_checklists']) {
+          userCheckList.add(
+            ChecklistModel.fromJson(item),
+          );
+        }
+        if (response.data['checklists'] != []) {
+          for (var item in response.data['checklists']) {
+            userCheckList.add(ChecklistModel.fromJson(item));
           }
         }
-          return {'success' : true, 'userCheckList' : userCheckList};
-     }else{
+        return {'success': true, 'userCheckList': userCheckList};
+      } else {
         return {'success': false};
       }
     } on Dio.DioException catch (e) {
@@ -67,8 +67,8 @@ class LotoService {
           );
         }
 
-        return {'success' : true, 'machines' : machines};
-      }else{
+        return {'success': true, 'machines': machines};
+      } else {
         return {'success': false};
       }
     } on Dio.DioException catch (e) {
@@ -80,27 +80,25 @@ class LotoService {
 
 class LoggingInterceptor extends Dio.Interceptor {
   @override
-  void onRequest(Dio.RequestOptions options,
-      Dio.RequestInterceptorHandler handler) {
+  void onRequest(
+      Dio.RequestOptions options, Dio.RequestInterceptorHandler handler) {
     debugPrint("REQUEST[${options.method}] => PATH: ${options.path}");
     debugPrint("Request Header: ${options.headers}");
     super.onRequest(options, handler);
   }
 
   @override
-  void onResponse(Dio.Response response,
-      Dio.ResponseInterceptorHandler handler) {
+  void onResponse(
+      Dio.Response response, Dio.ResponseInterceptorHandler handler) {
     debugPrint(
-        "RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions
-            .path}");
+        "RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}");
     super.onResponse(response, handler);
   }
 
   @override
   void onError(Dio.DioError err, Dio.ErrorInterceptorHandler handler) {
     debugPrint(
-        "ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions
-            .path}");
+        "ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}");
     super.onError(err, handler);
   }
 }

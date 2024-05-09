@@ -1,3 +1,4 @@
+import 'package:app/view_models/core/core_issue_view_model.dart';
 import 'package:app/view_models/loto/machine_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/checklist/check_banner.dart';
@@ -23,7 +24,7 @@ class _MachineSelectScreenState extends State<MachineSelectScreen> {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<MachineViewModel>(context);
-
+    final coreViewModel = Provider.of<CoreIssueViewModel>(context);
     return Scaffold(
       appBar: Header(
         title: '설비 선택',
@@ -31,7 +32,10 @@ class _MachineSelectScreenState extends State<MachineSelectScreen> {
       ),
       body: Center(
         child: SizedBox(
-          width: MediaQuery.of(context).size.width,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
           child: Column(
             children: [
               CheckBanner(word: '설비', content: '를 선택 해주세요'),
@@ -42,7 +46,14 @@ class _MachineSelectScreenState extends State<MachineSelectScreen> {
                   child: ListView.builder(
                     itemCount: viewModel.machines.length,
                     itemBuilder: (context, index) {
-                      return SelectList(title: viewModel.machines[index].machineName);
+                      return SelectList(
+                        title: viewModel.machines[index].machineName,
+                        onTap: () {
+                          coreViewModel.setMachineId(viewModel.machines[index].machineId);
+                          coreViewModel.setMachineName(viewModel.machines[index].machineName);
+                          coreViewModel.setMachineCode(viewModel.machines[index].machineCode);
+                          Navigator.pushNamed(context, '/worklist');
+                        },);
                     },
                   ))
             ],

@@ -39,7 +39,7 @@ class _WorkPlaceSelectScreenState extends State<WorkPlaceSelectScreen> {
                   child: ListView.builder(
                 itemCount: workPlaceList.length,
                 itemBuilder: (context, index) {
-                  return SelectList(title: workPlaceList[index]);
+                  return SelectList(title: workPlaceList[index], onTap: () {},);
                 },
               ))
             ],
