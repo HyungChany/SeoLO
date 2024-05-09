@@ -1,5 +1,5 @@
 import 'package:app/main.dart';
-import 'package:app/view_models/checklist/checklist_view_model.dart';
+import 'package:app/view_models/loto/checklist_view_model.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
 import 'package:app/routes/main_route.dart';
 import 'package:app/screens/login/login_screen.dart';
-import 'package:app/view_models/checklist/checklist_view_model.dart';
+import 'package:app/view_models/loto/checklist_view_model.dart';
 import 'package:app/view_models/main/news_view_model.dart';
 import 'package:app/view_models/user/login_view_model.dart';
 import 'package:app/view_models/user/my_info_view_model.dart';

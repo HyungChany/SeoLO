@@ -1,11 +1,12 @@
+import 'package:app/models/loto/machine_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
-import 'package:app/models/checklist/checklist_model.dart';
+import 'package:app/models/loto/checklist_model.dart';
 class LotoService {
   final _dio = Dio.Dio();
-  final _storage = FlutterSecureStorage();
+  final _storage = const FlutterSecureStorage();
   final baseUrl = dotenv.env['API_URL'] ?? '';
 
   LotoService() {
@@ -44,6 +45,30 @@ class LotoService {
         }
           return {'success' : true, 'userCheckList' : userCheckList};
      }else{
+        return {'success': false};
+      }
+    } on Dio.DioException catch (e) {
+      debugPrint(e.message);
+      return {'success': false, 'statusCode': e.response?.statusCode};
+    }
+  }
+
+  ///////////////////////// machine //////////////////////////////////
+  Future<Map<String, dynamic>> getMachines() async {
+    try {
+      Dio.Response response = await _dio.get(
+        '$baseUrl/machines/facility/1',
+      );
+      if (response.statusCode == 200) {
+        List<MachineModel> machines = [];
+        for (var item in response.data['machines']) {
+          machines.add(
+            MachineModel.fromJson(item),
+          );
+        }
+
+        return {'success' : true, 'machines' : machines};
+      }else{
         return {'success': false};
       }
     } on Dio.DioException catch (e) {
