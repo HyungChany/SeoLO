@@ -2,12 +2,19 @@ package com.seolo.seolo.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.CarouselStateAdapter
 import com.seolo.seolo.fragments.ChecklistFragment
 import com.seolo.seolo.helper.ChecklistManager
+import com.seolo.seolo.helper.TokenManager
+import com.seolo.seolo.model.FacilityResponse
+import com.seolo.seolo.services.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ChecklistActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
@@ -17,6 +24,7 @@ class ChecklistActivity : AppCompatActivity() {
         setTheme(android.R.style.Theme_DeviceDefault)
         supportActionBar?.hide()
         setContentView(R.layout.checklist_layout)
+        requestFacilities()
 
         // ViewPager2와 어댑터 설정
         viewPager = findViewById(R.id.viewPagerChecklist)
@@ -47,6 +55,34 @@ class ChecklistActivity : AppCompatActivity() {
             val intent = Intent(this, LocationActivity::class.java)
             startActivity(intent)
             finish()
+        }
+    }
+
+    private fun requestFacilities() {
+        val accessToken = TokenManager.getAccessToken(this)
+        val companyCode = TokenManager.getCompanyCode(this)
+        if (accessToken != null && companyCode != null) {
+            RetrofitClient.factoryService.getFacilities("Bearer $accessToken", companyCode)
+                .enqueue(object : Callback<FacilityResponse> {
+                    override fun onResponse(
+                        call: Call<FacilityResponse>, response: Response<FacilityResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            response.body()?.facilities?.forEach {
+                                Log.d("Facility", "ID: ${it.id}, Name: ${it.name}")
+                            }
+                        } else {
+                            Log.e(
+                                "FacilityError",
+                                "Error fetching facilities: ${response.errorBody()?.string()}"
+                            )
+                        }
+                    }
+
+                    override fun onFailure(call: Call<FacilityResponse>, t: Throwable) {
+                        Log.e("FacilityError", "Network error: ${t.message}")
+                    }
+                })
         }
     }
 }

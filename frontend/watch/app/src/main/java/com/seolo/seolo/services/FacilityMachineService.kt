@@ -1,6 +1,7 @@
 package com.seolo.seolo.services
 
-import com.seolo.seolo.model.ChecklistResponse
+import com.seolo.seolo.model.FacilityResponse
+import com.seolo.seolo.model.MachineResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -10,7 +11,7 @@ interface FacilityService {
     @GET("facilities")
     fun getFacilities(
         @Header("Authorization") authorization: String, @Header("Company-Code") companyCode: String
-    ): Call<ChecklistResponse>
+    ): Call<FacilityResponse>
 }
 
 interface MachineService {
@@ -19,5 +20,5 @@ interface MachineService {
         @Path("facilityId") facilityId: String,
         @Header("Authorization") authorization: String,
         @Header("Company-Code") companyCode: String
-    ): Call<ChecklistResponse>
+    ): Call<MachineResponse>
 }
