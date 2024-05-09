@@ -3,6 +3,7 @@ package com.c104.seolo.domain.facility.controller;
 import com.c104.seolo.domain.facility.dto.request.FacilityRequest;
 import com.c104.seolo.domain.facility.dto.response.FacilityResponse;
 import com.c104.seolo.domain.facility.service.FacilityService;
+import com.c104.seolo.domain.report.dto.response.ReportsReponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

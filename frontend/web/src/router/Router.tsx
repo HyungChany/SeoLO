@@ -7,7 +7,7 @@ import Navigation from '@/components/navigation/Navigation.tsx';
 import LoginPage from '@/pages/LoginPage.tsx';
 import MainPage from '@/pages/MainPage.tsx';
 import CurrentLOTO from '@/pages/CurrentLOTO.tsx';
-import Equipment from '@/pages/Equipment.tsx';
+import Equipment from '@/pages/Machine.tsx';
 import Employee from '@/pages/Employee.tsx';
 import PrivateRoute from '@/components/routesetting/PrivateRoute.tsx';
 import CheckListPage from '@/pages/CheckListPage.tsx';

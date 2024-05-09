@@ -4,12 +4,12 @@ VALUES ('SFY001KOR', 'SSAFY', 'dummy', '123-45-67890', '123-45-67890-1', CURRENT
 
 INSERT INTO employee (employee_num, company_code, employee_name, employee_title, employee_team, employee_birthday, employee_thum, employee_join_date, employee_leave_date, created_at, updated_at)
 VALUES
-    ('202100001', 'SFY001KOR', '김진명', '대리', '개발팀', '1996-02-23', 'default', '2021-07-12', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('202000001', 'SFY001KOR', '오유진', '사원', '개발팀', '1975-06-08', 'default', '2023-12-11', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('199500001', 'SFY001KOR', '오민상', '과장', '생산기술팀', '1994-01-22', 'default', '2018-09-08', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('200500001', 'SFY001KOR', '한지훈', '사원', '영업팀', '1967-03-12', 'default', '2005-11-20', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('201500001', 'SFY001KOR', '장정민', '사원', '개발팀', '1996-08-20', 'default', '2015-09-20', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('200500002', 'SFY001KOR', '김영철', '대리', '품질관리팀', '1970-12-01', 'default', '2005-06-25', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('202100001', 'SFY001KOR', '김진명', '대리', '개발팀', '1996-02-23', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/jm.jpg', '2021-07-12', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('202000001', 'SFY001KOR', '오유진', '사원', '개발팀', '1999-06-08', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/ujin.jpg', '2023-12-11', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('199500001', 'SFY001KOR', '오민상', '과장', '생산기술팀', '1975-01-22', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/minsang.jpg', '2018-09-08', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('200500001', 'SFY001KOR', '오정민', '사원', '영업팀', '1967-03-12', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/jeogmin.jpg', '2005-11-20', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('201500001', 'SFY001KOR', '이현비', '사원', '개발팀', '1996-08-20', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/hb.jpg', '2015-09-20', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('200500002', 'SFY001KOR', '조형찬', '대리', '품질관리팀', '1989-12-01', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/hc.jpg', '2005-06-25', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('200700001', 'SFY001KOR', '한건희', '대리', '생산기술팀', '1959-03-27', 'default', '2007-08-21', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('202100002', 'SFY001KOR', '정형찬', '사원', '개발팀', '1972-03-17', 'default', '2021-02-23', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('200400001', 'SFY001KOR', '이지훈', '사원', '경영지원팀', '1960-11-04', 'default', '2004-06-02', '2013-06-07', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -172,16 +172,10 @@ values ('LOTO에 대해 작업자 교육이 이루어졌는가?'),
        ('모든 작업자들에게 LOTO 제거를 공지하였는가?');
 
 INSERT INTO task_template(task_template_type, task_template_precaution)
-values ('FIX', '수리중입니다.'),
-       ('FIX', '메인 장치 수리중입니다.'),
-       ('FIX', '보조 장치 수리중입니다.'),
-       ('REPAIR', '점검중입니다.'),
-       ('REPAIR', '정기 점검중입니다.'),
-       ('REPAIR', '임시 점검중입니다.'),
-       ('CLEAN', '청소중입니다.'),
-       ('CLEAN', '정기 청소중입니다.'),
-       ('CLEAN', '임시 청소중입니다.'),
-       ('ETC', '');
+values ('정비', '정비 중입니다.'),
+       ('청소', '청소 중입니다.'),
+       ('수리', '수리 중입니다.'),
+       ('기타', '');
 
 INSERT INTO locker(locker_battery, locker_is_locked, locker_uid, company_code, created_at, updated_at, locker_encryption_key)
 values (100, false, 'MURBMjRHMzE=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Y3R5pIjVCzW1uz0XJFs123=='),
@@ -251,6 +245,16 @@ VALUES
     ('스프링포밍 머신');
 
 INSERT INTO machine
-    (MACHINE_LATITUDE, MACHINE_LONGITUDE, CREATED_AT, FACILITY_ID, MACHINE_ID, MACHINE_INTRODUCTION_DATE, MACHINE_SUBCATEGORY, UPDATED_AT, MACHINE_LOCKER_TYPE, MACHINE_NAME, MACHINE_NUMBER, MACHINE_COMPANY, MACHINE_THUM)
+    (CREATED_AT, FACILITY_ID, MACHINE_ID, MACHINE_INTRODUCTION_DATE, MACHINE_SUBCATEGORY, UPDATED_AT, MACHINE_LOCKER_TYPE, MACHINE_NAME, MACHINE_NUMBER, MACHINE_COMPANY, MACHINE_THUM)
 VALUES
-    (0, 0, '2024-05-07 14:37:42.935150', 1, 1, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', 'machineName', 'machineCode', null, 'machineThum');
+    ('2024-05-07 14:37:42.935150', 1, 1, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '수평형 컨베이어 삼면포장기', 'KL-7217', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL7217.jpg'),
+    ('2024-05-07 14:37:42.935150', 1, 2, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', 'CNC조각기', 'KL-5709', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL5709.jpg'),
+    ('2024-05-07 14:37:42.935150', 1, 3, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '자동라벨기/스티커부착기', 'KL-0515', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL0515.jpg'),
+    ('2024-05-07 14:37:42.935150', 1, 4, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '레이저각인기', 'KL-8818', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL8818.jpeg');
+
+
+INSERT INTO loto_report
+    (IS_ACCIDENT, VICTIMS_NUM, CREATED_AT, END_DATETIME, LOTO_REPORT_ID, START_DATETIME, UPDATED_AT, TASK_TYPE, MACHINE_NAME, MACHINE_NUMBER, WORKER_NAME, WORKER_NUMBER ,ACCIDENT_TYPE)
+VALUES
+    (false, null, '2024-05-09 16:14:49.180938', '2024-05-09 16:14:49.177935', 1, '2024-05-09 16:14:46.202558', '2024-05-09 16:14:49.180938', '수리', '수평형 컨베이어 삼면포장기', 'KL-7217', '김진명' ,'202100001', null),
+    (false, null, '2024-05-09 16:17:50.974998', '2024-05-09 16:17:50.972219', 2, '2024-05-09 16:17:46.388145', '2024-05-09 16:17:50.974998', '정비', '수평형 컨베이어 삼면포장기', 'KL-7217', '오민상' ,'199500001', null);

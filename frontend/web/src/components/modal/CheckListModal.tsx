@@ -20,7 +20,10 @@ const Modal = styled.div`
   font-size: 1.6rem;
 `;
 
-const CheckListModal = ({ onClick, context }: CheckListModalProps) => {
+const CheckListModal: React.FC<CheckListModalProps> = ({
+  onClick,
+  context,
+}) => {
   return <Modal onClick={onClick}>{context}</Modal>;
 };
 

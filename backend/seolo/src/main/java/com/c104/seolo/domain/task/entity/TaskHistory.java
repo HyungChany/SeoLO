@@ -2,7 +2,6 @@ package com.c104.seolo.domain.task.entity;
 
 import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.machine.entity.Machine;
-import com.c104.seolo.domain.task.enums.TaskStatus;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.common.BaseEntity;
 import jakarta.persistence.*;
@@ -38,7 +37,7 @@ public class TaskHistory extends BaseEntity {
     @JoinColumn(name = "machine_id")
     private Machine machine;
 
-    @Column(name = "task_start_datetime", updatable = false)
+    @Column(name = "task_start_datetime")
     private LocalDateTime taskStartDateTime;
 
     @Column(name = "task_end_datetime")

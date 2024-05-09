@@ -1,32 +1,38 @@
 package com.seolo.seolo.presentation
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.R
+import com.seolo.seolo.adapters.CarouselStateAdapter
+import com.seolo.seolo.fragments.LoginFragment
+import com.seolo.seolo.fragments.LoginPartTwoFragment
 
-// LoginActivity 클래스 정의
 class LoginActivity : AppCompatActivity() {
+    private lateinit var viewPager: ViewPager2
+
+    var companyCode: String = ""
+    var username: String = ""
+    var password: String = ""
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 테마 설정
-        setTheme(android.R.style.Theme_DeviceDefault)
-        // 액션바 숨기기
+        setContentView(R.layout.activity_main)
         supportActionBar?.hide()
-        // 레이아웃 설정
-        setContentView(R.layout.login_layout)
 
-        // 예시 로그인 토큰
-        val loginToken = "qwer1234"
+        viewPager = findViewById(R.id.viewPager)
+        val adapter = CarouselStateAdapter(this)
+        adapter.addFragment(LoginFragment.newInstance("회사코드를 입력하세요."))
+        adapter.addFragment(LoginFragment.newInstance("사번을 입력하세요."))
+        adapter.addFragment(LoginPartTwoFragment())
+        viewPager.adapter = adapter
+    }
 
-        // 로그인 토큰이 존재하는 경우 MainActivity로 이동
-        if (loginToken != " ") {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            // 현재 LoginActivity 종료
-            finish()
-        } else {
-            // 로그인 토큰이 존재하지 않는 경우 아무 작업도 하지 않음
+    fun nextPage() {
+        val currentItem = viewPager.currentItem
+        if (currentItem < (viewPager.adapter?.itemCount ?: 0)) {
+            viewPager.setCurrentItem(currentItem + 1, true)
         }
     }
 }

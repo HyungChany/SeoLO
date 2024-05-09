@@ -4,9 +4,10 @@ import * as Color from '@/config/color/Color.ts';
 import InputBox from '../inputbox/InputBox.tsx';
 import { ChangeEvent, useState } from 'react';
 import { postCheckList } from '@/apis/CheckList.ts';
-import { useNavigate } from 'react-router-dom';
+
 interface CheckListModalProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  onClose: () => void;
 }
 const Box = styled.div`
   width: 60%;
@@ -41,20 +42,21 @@ const Input = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const CreateCheckListModal = ({ onClick }: CheckListModalProps) => {
+const CreateCheckListModal = ({ onClose, onClick }: CheckListModalProps) => {
   const [checklist, setChecklist] = useState<string>('');
   const handleChecklist = (e: ChangeEvent<HTMLInputElement>) => {
     setChecklist(e.target.value);
   };
-  const navigate = useNavigate();
+
   const handleSubmit = () => {
     if (checklist) {
       const fetchData = async () => {
         const checklistData = { context: checklist };
         await postCheckList(checklistData);
+        onClose();
+        window.location.reload();
       };
       fetchData();
-      navigate('/checklist');
     }
   };
   return (

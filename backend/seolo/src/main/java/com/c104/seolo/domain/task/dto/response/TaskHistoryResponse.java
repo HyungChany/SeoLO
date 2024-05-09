@@ -1,6 +1,6 @@
 package com.c104.seolo.domain.task.dto.response;
 
-import com.c104.seolo.domain.task.enums.TaskType;
+import com.c104.seolo.domain.task.enums.TASKTYPE;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.FutureOrPresent;
@@ -32,7 +32,7 @@ public class TaskHistoryResponse {
     @NotNull
     private String workerTitle;
     @NotNull
-    private TaskType taskType;
+    private TASKTYPE taskType;
     @PastOrPresent
     private LocalDateTime taskStartTime;
     @FutureOrPresent

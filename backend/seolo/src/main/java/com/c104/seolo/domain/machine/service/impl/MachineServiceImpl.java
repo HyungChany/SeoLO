@@ -85,7 +85,7 @@ public class MachineServiceImpl implements MachineService {
                             String subManagerName = subnManagerOptional.map(MachineManagerInfo::getName).orElse(null);
 
                             return MachineListDto.builder()
-                                    .id(info.getId())
+                                    .machineId(info.getId())
                                     .facilityId(info.getFacilityId())
                                     .facilityName(info.getFacilityName())
                                     .machineName(info.getMachineName())
@@ -131,8 +131,6 @@ public class MachineServiceImpl implements MachineService {
                 .number(machineRequest.getMachineCode())
                 .thum(machineRequest.getMachineThum())
                 .introductionDate(machineRequest.getIntroductionDate())
-                .longitude(0.0f)
-                .latitude(0.0f)
                 .lockerType(LockerType.NO)
                 .build();
         Machine savedMachine = machineRepository.save(machine);
@@ -206,9 +204,6 @@ public class MachineServiceImpl implements MachineService {
             if (!machine.getFacility().getCompany().getCompanyCode().equals(companyCode)) {
                 throw new CommonException(MachineErrorCode.NOT_COMPANY_MACHINE);
             }
-
-            machine.setLatitude(latitude);
-            machine.setLongitude(longitude);
             machineRepository.save(machine);
         });
     }

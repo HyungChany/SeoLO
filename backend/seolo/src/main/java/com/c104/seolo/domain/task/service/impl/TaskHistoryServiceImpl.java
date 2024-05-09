@@ -136,19 +136,22 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
     }
 
     @Override
-    public void updateTaskEndTimeNow(Long taskId) {
-        updateTask(taskId, taskHistory -> taskHistory.setTaskEndDateTime(LocalDateTime.now()));
+    public TaskHistoryDto updateTaskEndTimeNow(Long taskId, LocalDateTime now) {
+        TaskHistory updatedTaskHistory = updateTask(taskId, taskHistory -> taskHistory.setTaskEndDateTime(now));
+        return TaskHistoryDto.of(updatedTaskHistory);
     }
 
     @Override
-    public void updateTaskStartTimeNow(Long taskId) {
-        updateTask(taskId, taskHistory -> taskHistory.setTaskStartDateTime(LocalDateTime.now()));
+    public void updateTaskStartTimeNow(Long taskId, LocalDateTime now) {
+        updateTask(taskId, taskHistory -> taskHistory.setTaskStartDateTime(now));
     }
 
-    private void updateTask(Long taskId, Consumer<TaskHistory> taskUpdater) {
+    private TaskHistory updateTask(Long taskId, Consumer<TaskHistory> taskUpdater) {
         TaskHistory taskHistory = taskHistoryRepository.findById(taskId)
                 .orElseThrow(() -> new CommonException(TaskErrorCode.NOT_EXIST_TASK));
         taskUpdater.accept(taskHistory);
         taskHistoryRepository.save(taskHistory);
+        taskHistoryRepository.flush();
+        return taskHistory;
     }
 }

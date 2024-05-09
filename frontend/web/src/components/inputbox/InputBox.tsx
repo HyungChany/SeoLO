@@ -1,14 +1,16 @@
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, FocusEvent } from 'react';
 
 interface InputBoxProps {
   width: number;
   height: number;
   value: string | number;
-  placeholder: string;
+  placeholder?: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   isPassword?: boolean;
+  children?: React.ReactNode;
+  onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
 }
 
 const InputBoxContainer = styled.input<InputBoxProps>`
@@ -32,7 +34,7 @@ const InputBox = (props: InputBoxProps) => {
       {isPassword ? (
         <InputBoxContainer type="password" {...rest} />
       ) : (
-        <InputBoxContainer {...props} />
+        <InputBoxContainer {...props}>{props.children}</InputBoxContainer>
       )}
     </>
   );

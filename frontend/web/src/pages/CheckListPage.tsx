@@ -153,7 +153,12 @@ const CheckListPage = () => {
   ) => {
     e.stopPropagation();
   };
-
+  const handleCloseCreateModal = () => {
+    setCreateCheckListModal(false);
+  };
+  const handleCloseDeleteModal = () => {
+    setDeleteCheckListModal(false);
+  };
   useEffect(() => {
     const fetchLists = async () => {
       const data = await getCheckList();
@@ -163,6 +168,7 @@ const CheckListPage = () => {
     };
     fetchLists();
   }, []);
+
   return (
     <>
       <BackGround>
@@ -179,12 +185,16 @@ const CheckListPage = () => {
             <DeleteCheckListModal
               onClick={handleModalClick}
               checklistId={currentChecklist.id}
+              onClose={handleCloseDeleteModal}
             />
           </Overlay>
         )}
         {createCheckListModal && (
           <Overlay onClick={handleCloseModal}>
-            <CreateCheckListModal onClick={handleModalClick} />
+            <CreateCheckListModal
+              onClick={handleModalClick}
+              onClose={handleCloseCreateModal}
+            />
           </Overlay>
         )}
         <Box>
