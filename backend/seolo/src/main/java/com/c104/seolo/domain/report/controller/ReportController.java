@@ -1,14 +1,12 @@
 package com.c104.seolo.domain.report.controller;
 
+import com.c104.seolo.domain.report.dto.ReportDto;
 import com.c104.seolo.domain.report.dto.response.ReportsReponse;
 import com.c104.seolo.domain.report.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/reports")
@@ -21,5 +19,11 @@ public class ReportController {
     @GetMapping
     public ReportsReponse getAllReports() {
         return reportService.getAllReports();
+    }
+
+    @Secured("ROLE_MANAGER")
+    @GetMapping("/{reportId}")
+    public ReportDto getReport(@PathVariable Long reportId) {
+        return reportService.getReport(reportId);
     }
 }

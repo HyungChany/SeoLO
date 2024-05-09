@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.task.controller;
 
+import com.c104.seolo.domain.task.dto.response.RenameTaskTemplateResponse;
 import com.c104.seolo.domain.task.dto.response.TaskTemplateResponse;
 import com.c104.seolo.domain.task.service.TaskTemplateService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class TaskTemplateController {
     private final TaskTemplateService taskTemplateService;
 
     @GetMapping
-    public ResponseEntity<TaskTemplateResponse> getTaskTemplates() {
-        return ResponseEntity.ok(taskTemplateService.getTemplates());
+    public RenameTaskTemplateResponse getTaskTemplates() {
+        return taskTemplateService.getTemplates();
     }
 }
