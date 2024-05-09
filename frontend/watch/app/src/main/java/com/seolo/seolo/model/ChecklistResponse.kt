@@ -1,7 +1,7 @@
 package com.seolo.seolo.model
 
 data class ChecklistResponse(
-    val checklists: List<ChecklistItem>
+    val basic_checklists: List<ChecklistItem>
 )
 
 data class ChecklistItem(
