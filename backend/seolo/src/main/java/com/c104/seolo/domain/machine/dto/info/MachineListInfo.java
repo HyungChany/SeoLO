@@ -10,7 +10,6 @@ import java.util.Date;
 public class MachineListInfo {
     private Long facilityId;
     private String facilityName;
-
     private Long id;
     private String machineName;
     private String machineCode;

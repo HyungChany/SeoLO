@@ -38,12 +38,6 @@ public class Machine extends BaseEntity {
     @Column(name = "machine_number", length = 30, nullable = false)
     private String number;
 
-    @Column(name = "machine_longitude", nullable = false, columnDefinition = "FLOAT DEFAULT 0.0")
-    private Float longitude;
-
-    @Column(name = "machine_latitude", nullable = false, columnDefinition = "FLOAT DEFAULT 0.0")
-    private Float latitude;
-
     @Column(name = "machine_company", length = 50)
     private String company;
 
@@ -58,14 +52,13 @@ public class Machine extends BaseEntity {
     private Date introductionDate;
 
     @Builder
-    private Machine(Long id, Facility facility, MachineSubcategory machineSubcategory, String name, String number, Float longitude, Float latitude, String company, String thum, LockerType lockerType, Date introductionDate) {
+    private Machine(Long id, Facility facility, MachineSubcategory machineSubcategory, String name, String number, String company, String thum, LockerType lockerType, Date introductionDate) {
         this.id = id;
         this.facility = facility;
         this.machineSubcategory = machineSubcategory;
         this.name = name;
         this.number = number;
-        this.longitude = longitude;
-        this.latitude = latitude;
+
         this.company = company;
         this.thum = thum;
         this.lockerType = lockerType;
