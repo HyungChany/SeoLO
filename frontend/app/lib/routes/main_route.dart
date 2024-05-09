@@ -54,9 +54,9 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => ChangePinCheckScreen());
     case '/nfc':
       return MaterialPageRoute(builder: (context) => NfcScreen());
-    case '/dayselect':
+    case '/selectDay':
       return MaterialPageRoute(builder: (context) => DaySelect());
-    case '/timeselect':
+    case '/selectTime':
       return MaterialPageRoute(builder: (context) => TimeSelect());
     case '/worklistcheck':
       return MaterialPageRoute(builder: (context) => WorkListCheckScreen());
