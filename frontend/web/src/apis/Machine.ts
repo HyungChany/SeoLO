@@ -41,3 +41,19 @@ export const MachineList = async (facilityId: number) => {
     console.log(error);
   }
 };
+
+export const MachinePhoto = async (machine: FormData) => {
+  try {
+    const accessToken = sessionStorage.getItem('accessToken');
+    const companyCode = sessionStorage.getItem('companyCode');
+    const response = await api.post(`/file`, machine, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Company-Code': companyCode,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
