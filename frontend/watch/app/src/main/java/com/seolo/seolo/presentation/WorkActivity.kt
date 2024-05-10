@@ -27,8 +27,7 @@ class WorkActivity : AppCompatActivity() {
         adapter.addFragment(WorksFragment.newInstance(R.drawable.img_maintenance, "정비"))
         adapter.addFragment(WorksFragment.newInstance(R.drawable.img_clean, "청소"))
         adapter.addFragment(WorksFragment.newInstance(R.drawable.img_repair, "수리"))
-        adapter.addFragment(WorksFragment.newInstance(R.drawable.img_etc, "기타"))
-        adapter.addFragment(LastWorksFragment.newInstance(R.drawable.img_mic, "음성"))
+        adapter.addFragment(LastWorksFragment.newInstance(R.drawable.img_etc, "기타"))
 
         viewPager.adapter = adapter
 

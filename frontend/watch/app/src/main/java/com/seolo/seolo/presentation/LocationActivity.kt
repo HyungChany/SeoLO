@@ -64,7 +64,7 @@ class LocationActivity : AppCompatActivity() {
         val service = RetrofitClient.machineService
 
         if (token != null && companyCode != null) {
-            service.getMachines(facilityId, "Bearer $token", companyCode).enqueue(object :
+            service.getMachines( "Bearer $token", companyCode, facilityId).enqueue(object :
                 Callback<MachineResponse> {
                 override fun onResponse(call: Call<MachineResponse>, response: Response<MachineResponse>) {
                     if (response.isSuccessful) {
