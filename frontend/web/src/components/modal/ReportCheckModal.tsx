@@ -18,6 +18,9 @@ interface EquipmentData {
   taskStartDateTime: string;
   taskEndDateTime: string;
   accident: boolean;
+  facilityName: string;
+  workerTeam: string;
+  workerTitle: string;
 }
 interface ReportCheckModalProps {
   onClose: () => void; // 모달을 닫는 함수
@@ -185,9 +188,9 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
                 <>
                   <RightContent>{reportData.workerName}</RightContent>
                   <RightContent>{reportData.workerNumber}</RightContent>
-                  <RightContent>품질관리팀</RightContent>
-                  <RightContent>주임</RightContent>
-                  <RightContent>1공장 검사라인</RightContent>
+                  <RightContent>{reportData.workerTeam}</RightContent>
+                  <RightContent>{reportData.workerTitle}</RightContent>
+                  <RightContent>{reportData.facilityName}</RightContent>
                   <RightContent>{reportData.machineName}</RightContent>
                   <RightContent>{reportData.machineNumber}</RightContent>
                 </>
