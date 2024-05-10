@@ -117,6 +117,7 @@ const ButtonBox = styled.div`
   height: auto;
   display: flex;
   gap: 2rem;
+  /* border: 1px solid ${Color.GRAY100}; */
 `;
 const CheckListPage = () => {
   const [checkListModal, setCheckListModal] = useState<boolean>(false);
@@ -212,10 +213,10 @@ const CheckListPage = () => {
                     width={5}
                     height={1.5625}
                     $backgroundColor={Color.GRAY100}
-                    $borderColor={'white'}
+                    $borderColor={Color.GRAY100}
                     $borderRadius={0.3125}
                     $hoverBackgroundColor={'white'}
-                    $hoverBorderColor={'white'}
+                    $hoverBorderColor={Color.GRAY100}
                     children={'상세보기'}
                   ></Button>
                 </ListBox>
@@ -234,10 +235,10 @@ const CheckListPage = () => {
                       width={5}
                       height={1.5625}
                       $backgroundColor={Color.GRAY100}
-                      $borderColor={'white'}
+                      $borderColor={Color.GRAY100}
                       $borderRadius={0.3125}
                       $hoverBackgroundColor={'white'}
-                      $hoverBorderColor={'white'}
+                      $hoverBorderColor={Color.GRAY100}
                       children={'상세보기'}
                     ></Button>
                     <Button
@@ -245,10 +246,10 @@ const CheckListPage = () => {
                       width={3.5}
                       height={1.5625}
                       $backgroundColor={Color.GRAY100}
-                      $borderColor={'white'}
+                      $borderColor={Color.GRAY100}
                       $borderRadius={0.3125}
                       $hoverBackgroundColor={'white'}
-                      $hoverBorderColor={'white'}
+                      $hoverBorderColor={Color.GRAY100}
                       children={'삭제'}
                     ></Button>
                   </ButtonBox>
