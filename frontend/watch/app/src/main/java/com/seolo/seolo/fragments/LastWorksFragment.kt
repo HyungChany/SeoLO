@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
 import com.seolo.seolo.presentation.DatePickerActivity
 
+
 // WorksFragment 클래스 정의
 class LastWorksFragment : Fragment() {
     // 이미지 리소스 ID와 작업 정보를 저장하는 변수 선언
