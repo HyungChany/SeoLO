@@ -28,7 +28,7 @@ class LocationActivity : AppCompatActivity() {
         supportActionBar?.hide()
         setContentView(R.layout.basic_wheel_picker_layout)
 
-        facilities = intent.getParcelableArrayListExtra<FacilityItem>("facilities") ?: arrayListOf()
+        facilities = intent.getParcelableArrayListExtra("facilities") ?: arrayListOf()
         val facilityNames = listOf("　") + facilities.map { it.name } + listOf("　")
 
         val locationPicker = findViewById<WheelPickerRecyclerView>(R.id.basic_wheel_picker_view)
@@ -58,6 +58,7 @@ class LocationActivity : AppCompatActivity() {
         }
     }
 
+    // 기계 목록 요청 메서드
     private fun getMachines(facilityId: String) {
         val token = TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)

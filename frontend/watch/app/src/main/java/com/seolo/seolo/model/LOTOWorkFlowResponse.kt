@@ -27,7 +27,7 @@ data class MachineItem(
 
 
 data class TaskResponse(
-    @SerializedName("task_template_list") val tasks: List<TaskItem>
+    @SerializedName("templates") val tasks: List<TaskItem>
 )
 
 
