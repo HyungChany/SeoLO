@@ -13,8 +13,14 @@ import java.util.Locale
 class TimePickerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 기본 테마 설정
         setTheme(android.R.style.Theme_DeviceDefault)
+
+        // 액션바 숨기기
         supportActionBar?.hide()
+
+        // XML 레이아웃 설정
         setContentView(R.layout.time_picker_layout)
 
         val confirmButton: Button = findViewById(R.id.confirm_button)

@@ -12,7 +12,6 @@ import com.seolo.seolo.fragments.LastLOTOInfoFragment
 import com.seolo.seolo.fragments.LOTOInfoFragment
 import com.seolo.seolo.helper.SessionManager
 
-// LOTOInfoActivity 클래스 정의
 class LOTOInfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
