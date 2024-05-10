@@ -173,6 +173,9 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
   const handleAccidentPeopleText = (e: ChangeEvent<HTMLInputElement>) => {
     setAccidentPeople(e.target.value);
   };
+  const handleModify = () => {
+    onClose();
+  };
   return (
     <Modal onClick={handleInnerClick}>
       <Box>
@@ -267,7 +270,7 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
               $borderRadius={2.5}
               $hoverBackgroundColor={Color.GRAY300}
               $hoverBorderColor={Color.GRAY100}
-              onClick={handleCloseModal}
+              onClick={handleModify}
             >
               확인
             </Button>
