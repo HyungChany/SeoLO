@@ -6,8 +6,7 @@ import com.c104.seolo.domain.report.dto.response.ReportsReponse;
 
 public interface ReportService {
     void enrollReport(NewReport newReport);
-
     ReportsReponse getAllReports();
-
     ReportDto getReport(Long reportId);
+    ReportDto updateReport(Long reportId, boolean isAccident, String accidentType, Integer victimsNum);
 }

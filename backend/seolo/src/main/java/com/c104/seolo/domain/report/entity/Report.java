@@ -59,6 +59,12 @@ public class Report extends BaseEntity {
     @Column(name = "end_datetime")
     private LocalDateTime taskEndDateTime;
 
+    public void updateReportDetails(boolean isAccident, String accidentType, Integer victimsNum) {
+        this.isAccident = isAccident;
+        this.accidentType = accidentType;
+        this.victimsNum = victimsNum;
+    }
+
     protected Report() {}
 
     private Report(Builder builder) {
