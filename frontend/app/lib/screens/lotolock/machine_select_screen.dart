@@ -25,12 +25,12 @@ class _MachineSelectScreenState extends State<MachineSelectScreen> {
     final viewModel = Provider.of<MachineViewModel>(context);
     final coreViewModel = Provider.of<CoreIssueViewModel>(context);
     return Scaffold(
-      appBar: Header(
+      appBar: const Header(
         title: '설비 선택',
         back: true,
       ),
       body: viewModel.isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : Center(
@@ -38,8 +38,8 @@ class _MachineSelectScreenState extends State<MachineSelectScreen> {
                 width: MediaQuery.of(context).size.width,
                 child: Column(
                   children: [
-                    CheckBanner(word: '설비', content: '를 선택 해주세요'),
-                    SizedBox(
+                    const CheckBanner(word: '설비', content: '를 선택 해주세요'),
+                    const SizedBox(
                       height: 20,
                     ),
                     Expanded(

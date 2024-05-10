@@ -32,9 +32,9 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const MainScreen());
     case '/checklist':
       return MaterialPageRoute(builder: (context) => CheckScreen());
-    case '/workplace':
+    case '/facility':
       return MaterialPageRoute(
-          builder: (context) => const WorkPlaceSelectScreen());
+          builder: (context) => const FacilitySelectScreen());
     case '/machine':
       return MaterialPageRoute(
           builder: (context) => const MachineSelectScreen());

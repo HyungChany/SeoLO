@@ -79,7 +79,7 @@ class _CheckScreenState extends State<CheckScreen> {
                         .every((element) => element)
                         ? () {
                       Navigator.pushReplacementNamed(
-                          context, '/machine');
+                          context, '/facility');
                     }
                         : () {
                       showDialog(
