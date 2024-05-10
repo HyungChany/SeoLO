@@ -1,6 +1,7 @@
 package com.c104.seolo.domain.machine.service;
 
 import com.c104.seolo.domain.machine.dto.MachineDto;
+import com.c104.seolo.domain.machine.dto.MachineIdName;
 import com.c104.seolo.domain.machine.dto.MachineInfo;
 import com.c104.seolo.domain.machine.dto.MachineSpaceDto;
 import com.c104.seolo.domain.machine.dto.request.MachineRequest;
@@ -16,4 +17,5 @@ public interface MachineService {
     void deleteMachine(Long machineId, String companyCode);
     MachineListResponse findMachineByCompanyAndFacility(String companyCode, Long facilityId);
     MachineDto getMachineByMachineId(Long machineId);
+    List<MachineIdName> getMachineByFacilityId(Long facilityId);
 }

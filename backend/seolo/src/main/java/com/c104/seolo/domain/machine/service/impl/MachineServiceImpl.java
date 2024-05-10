@@ -3,10 +3,7 @@ package com.c104.seolo.domain.machine.service.impl;
 import com.c104.seolo.domain.facility.entity.Facility;
 import com.c104.seolo.domain.facility.exception.FacilityErrorCode;
 import com.c104.seolo.domain.facility.repository.FacilityRepository;
-import com.c104.seolo.domain.machine.dto.MachineDto;
-import com.c104.seolo.domain.machine.dto.MachineInfo;
-import com.c104.seolo.domain.machine.dto.MachineListDto;
-import com.c104.seolo.domain.machine.dto.MachineSpaceDto;
+import com.c104.seolo.domain.machine.dto.*;
 import com.c104.seolo.domain.machine.dto.info.MachineListInfo;
 import com.c104.seolo.domain.machine.dto.info.MachineManagerInfo;
 import com.c104.seolo.domain.machine.dto.request.MachineRequest;
@@ -245,5 +242,14 @@ public class MachineServiceImpl implements MachineService {
     @Override
     public MachineDto getMachineByMachineId(Long machineId) {
         return MachineDto.of(machineRepository.findById(machineId).orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE)));
+    }
+
+    @Override
+    public List<MachineIdName> getMachineByFacilityId(Long facilityId) {
+        List<Machine> machines = machineRepository.findByFacilityId(facilityId);
+
+        return machines.stream()
+                .map(machine -> new MachineIdName(machine.getId(), machine.getName()))
+                .collect(Collectors.toList());
     }
 }
