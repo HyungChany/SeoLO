@@ -25,8 +25,14 @@ data class MachineItem(
     @SerializedName("machine_name") val machineName: String,
 ) : Parcelable
 
-@Parcelize
+
 data class TaskResponse(
+    @SerializedName("task_template_list") val tasks: List<TaskItem>
+)
+
+
+@Parcelize
+data class TaskItem(
     @SerializedName("task_template_id") val taskTemplateId: Int,
     @SerializedName("task_template_name") val taskTemplateName: String,
     @SerializedName("task_precaution") val taskPrecaution: String,
