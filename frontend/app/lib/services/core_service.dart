@@ -41,6 +41,60 @@ class CoreService {
       return {'success': false, 'statusCode': e.response?.statusCode};
     }
   }
+
+  ///////////////////////// check //////////////////////////////////
+  Future<Map<String, dynamic>> coreCheck() async {
+    try {
+      Dio.Response response = await _dio.post(
+        '$baseUrl/core/CHECK', data: ''
+      );
+      if (response.statusCode == 200) {
+        debugPrint(response.data);
+        return {'success': true, };
+      } else {
+        return {'success': false};
+      }
+    } on Dio.DioException catch (e) {
+      debugPrint(e.message);
+      return {'success': false, 'statusCode': e.response?.statusCode};
+    }
+  }
+
+  ///////////////////////// unlock //////////////////////////////////
+  Future<Map<String, dynamic>> coreUnlock() async {
+    try {
+      Dio.Response response = await _dio.post(
+          '$baseUrl/core/UNLOCK', data: ''
+      );
+      if (response.statusCode == 200) {
+        debugPrint(response.data);
+        return {'success': true, };
+      } else {
+        return {'success': false};
+      }
+    } on Dio.DioException catch (e) {
+      debugPrint(e.message);
+      return {'success': false, 'statusCode': e.response?.statusCode};
+    }
+  }
+
+  ///////////////////////// locked //////////////////////////////////
+  Future<Map<String, dynamic>> coreLocked() async {
+    try {
+      Dio.Response response = await _dio.post(
+          '$baseUrl/core/LOCKED', data: ''
+      );
+      if (response.statusCode == 200) {
+        debugPrint(response.data);
+        return {'success': true, };
+      } else {
+        return {'success': false};
+      }
+    } on Dio.DioException catch (e) {
+      debugPrint(e.message);
+      return {'success': false, 'statusCode': e.response?.statusCode};
+    }
+  }
 }
 
 class LoggingInterceptor extends Dio.Interceptor {

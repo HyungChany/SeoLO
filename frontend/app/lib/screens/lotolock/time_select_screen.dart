@@ -32,7 +32,7 @@ class _TimeSelectState extends State<TimeSelect> {
         .parse('${DateTime.now().hour}:${DateTime.now().minute}');
 
     DateTime endDay;
-    endDay = DateFormat('yyyy-MM-dd').parse(coreViewModel.endDay);
+    endDay = DateFormat('yyyy-MM-dd').parse(coreViewModel.endDay!);
 
     return Scaffold(
       appBar: const Header(title: '시간 선택', back: true),

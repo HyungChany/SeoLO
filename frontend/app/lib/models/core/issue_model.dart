@@ -1,27 +1,30 @@
 class CoreIssueModel {
-  final String lockerUid;
-  final int machineId;
-  final int taskTemplateId;
-  final String taskPrecaution;
-  final String endTime;
-  final String facilityName;
-  final String machineName;
-  final String manager;
-  final String taskTemplateName;
-  final String endDay;
-
+  final String? lockerUid;
+  final int? machineId;
+  final int? taskTemplateId;
+  final String? taskPrecaution;
+  final String? endTime;
+  final String? facilityName;
+  final String? machineName;
+  final String? manager;
+  final String? taskTemplateName;
+  final String? endDay;
+  final String? nextCode;
+  final String? tokenValue;
 
   CoreIssueModel({
-    required this.lockerUid,
-    required this.machineId,
-    required this.taskTemplateId,
-    required this.taskPrecaution,
-    required this.endTime,
-    required this.facilityName,
-    required this.machineName,
-    required this.manager,
-    required this.taskTemplateName,
-    required this.endDay,
+    this.lockerUid,
+    this.machineId,
+    this.taskTemplateId,
+    this.taskPrecaution,
+    this.endTime,
+    this.facilityName,
+    this.machineName,
+    this.manager,
+    this.taskTemplateName,
+    this.endDay,
+    this.nextCode,
+    this.tokenValue,
   });
 
   Map<String, dynamic> toJson() => {
@@ -31,5 +34,12 @@ class CoreIssueModel {
     'task_precaution': taskPrecaution,
     'end_time': endTime,
   };
+
+  factory CoreIssueModel.fromJson(Map<String, dynamic> json) {
+    return CoreIssueModel(
+      nextCode: json['next_code'],
+      tokenValue: json['tokenValue'],
+    );
+  }
 }
 

@@ -42,19 +42,19 @@ class CoreIssueViewModel extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
 
-  String get facilityName => _coreIssueModel.facilityName;
+  String? get facilityName => _coreIssueModel.facilityName;
 
-  String get machineName => _coreIssueModel.machineName;
+  String? get machineName => _coreIssueModel.machineName;
 
-  String get manager => _coreIssueModel.manager;
+  String? get manager => _coreIssueModel.manager;
 
-  String get endTime => _coreIssueModel.endTime;
+  String? get endTime => _coreIssueModel.endTime;
 
-  String get taskTemplateName => _coreIssueModel.taskTemplateName;
+  String? get taskTemplateName => _coreIssueModel.taskTemplateName;
 
-  String get taskPrecaution => _coreIssueModel.taskPrecaution;
+  String? get taskPrecaution => _coreIssueModel.taskPrecaution;
 
-  String get endDay => _coreIssueModel.endDay;
+  String? get endDay => _coreIssueModel.endDay;
 
   bool get isLoading => _isLoading;
 
