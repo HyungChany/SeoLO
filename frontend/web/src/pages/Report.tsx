@@ -224,7 +224,11 @@ const Report = () => {
           <Title
             key={index}
             width={index === 0 ? '5%' : undefined}
-            justifyContent={index === 0 || index === 5 ? 'center' : undefined}
+            justifyContent={
+              index === 0 || index === 5 || index === 3 || index === 4
+                ? 'center'
+                : undefined
+            }
           >
             {data}
           </Title>
@@ -246,8 +250,8 @@ const Report = () => {
             </Title>
             <Title>{data.machineNumber}</Title>
             <Title>{data.machineName}</Title>
-            <Title>{data.workerName}</Title>
-            <Title>{data.tasktype}</Title>
+            <Title justifyContent="center">{data.workerName}</Title>
+            <Title justifyContent="center">{data.tasktype}</Title>
             <Title justifyContent="center">{data.accident}</Title>
             <Title>{data.accidentType}</Title>
             <Title>{data.victimsNum}</Title>
