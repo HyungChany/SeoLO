@@ -39,7 +39,7 @@ public class LockerServiceImpl implements LockerService {
         return lockerInfos.stream()
                 .map(info -> LockerDto.builder()
                         .id(info.getId())
-                        .uid(new String( Base64.getDecoder().decode(info.getUid()), StandardCharsets.UTF_8))
+                        .uid(info.getUid())
                         .isLocked(info.getLocked())
                         .battery(info.getBattery())
                         .build())
@@ -68,13 +68,14 @@ public class LockerServiceImpl implements LockerService {
     @Override
     @Transactional
     public void enrollLocker(String companyCode, LockerEnrollRequest lockerEnrollRequest) {
-        SecretKey binarySercertKey = AesEncryption.generateKey();
+        // 랜덤 대칭키를 생성한다.
+        SecretKey binarySecretKey = AesEncryption.generateKey();
 
-        // locker DB 저장시 uid와 대칭키는 보안을 위해 base64로 인코딩한다
+        // 대칭키는 base64로 인코딩 후 DB에 저장한다.
         Locker newLocker = Locker.builder()
                 .company(companyService.findCompanyEntityByCompanyCode(companyCode))
-                .uid(Base64.getEncoder().encodeToString(lockerEnrollRequest.getLockerUid().getBytes(StandardCharsets.UTF_8)))
-                .encryptionKey(AesEncryption.getBase64EncodedKey(binarySercertKey))
+                .uid(lockerEnrollRequest.getLockerUid())
+                .encryptionKey(AesEncryption.getBase64EncodedKey(binarySecretKey))
                 .build();
 
 
@@ -83,9 +84,7 @@ public class LockerServiceImpl implements LockerService {
 
     @Override
     public Locker getLockerByUid(String lockerUid) {
-        String lockerEncoded = Base64.getEncoder().encodeToString(lockerUid.getBytes(StandardCharsets.UTF_8));
-        log.info("encoded locker: {}", lockerEncoded );
-        return lockerRepository.findByUid(lockerEncoded).orElseThrow(
+        return lockerRepository.findByUid(lockerUid).orElseThrow(
                 () -> new CommonException(LockerErrorCode.NOT_EXIST_LOCKER));
     }
 }
