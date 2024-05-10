@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.WheelPickerAdapter
 import com.seolo.seolo.helper.SessionManager
+import com.seolo.seolo.helper.SessionManager.selectedMachineName
 import com.seolo.seolo.helper.TokenManager
 import com.seolo.seolo.model.MachineItem
 import com.seolo.seolo.model.TaskItem
@@ -48,6 +49,7 @@ class EquipmentActivity : AppCompatActivity() {
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 val position = layoutManager.findFirstVisibleItemPosition()
                 selectedMachineId = equipments.getOrNull(position)?.machineId.toString()
+                selectedMachineName = equipments.getOrNull(position)?.machineName.toString()
             }
         })
 

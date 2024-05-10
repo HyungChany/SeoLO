@@ -27,19 +27,23 @@ class LOTOInfoActivity : AppCompatActivity() {
         val viewPager: ViewPager2 = findViewById(R.id.viewPager)
         val adapter = CarouselStateAdapter(this@LOTOInfoActivity)
 
-        // SessionManager의 값 로깅
-        Log.d("SessionManager", "Selected Facility Name: ${SessionManager.selectedFacilityName}")
-        Log.d("SessionManager", "Selected Machine ID: ${SessionManager.selectedMachineId}")
-        Log.d("SessionManager", "Selected Task Template ID: ${SessionManager.selectedTaskTemplateId}")
-        Log.d("SessionManager", "Selected Task Precaution: ${SessionManager.selectedTaskPrecaution}")
-        Log.d("SessionManager", "Selected Date: ${SessionManager.selectedDate}")
-        Log.d("SessionManager", "Selected Time: ${SessionManager.selectedTime}")
+        // SessionManager에서 정보 받아오기
+        val facilityName = SessionManager.selectedFacilityName
+        val machineID = SessionManager.selectedMachineId
+        val machineName = SessionManager.selectedMachineName
+        val taskTemplateID = SessionManager.selectedTaskTemplateId
+        val taskPrecaution = SessionManager.selectedTaskPrecaution
+        val date = SessionManager.selectedDate + SessionManager.selectedTime
+        val simpleDate =
+            SessionManager.selectedSimpleDate + "\n" + SessionManager.selectedSimpleTime
 
         // Fragment 추가
-        adapter.addFragment(LOTOInfoFragment.newInstance("Title 1", "Content 1"))
-        adapter.addFragment(LOTOInfoFragment.newInstance("Title 2", "Content 2"))
-        adapter.addFragment(LOTOInfoFragment.newInstance("Title 3", "Content 3"))
-        adapter.addFragment(LastLOTOInfoFragment.newInstance("Title 4", "Content 4"))
+        facilityName?.let { LOTOInfoFragment.newInstance("작업장", it) }
+            ?.let { adapter.addFragment(it) }
+        machineName?.let { LOTOInfoFragment.newInstance("장비", it) }?.let { adapter.addFragment(it) }
+        taskPrecaution?.let { LOTOInfoFragment.newInstance("작업내용", it) }
+            ?.let { adapter.addFragment(it) }
+        adapter.addFragment(LastLOTOInfoFragment.newInstance("종료 예상 시간", simpleDate))
 
         // ViewPager2에 어댑터 설정
         viewPager.adapter = adapter

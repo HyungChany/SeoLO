@@ -31,9 +31,11 @@ class TimePickerActivity : AppCompatActivity() {
             val selectedHour = timePicker.hour
             val selectedMinute = timePicker.minute
             val timeString = String.format(Locale.ROOT,"T%02d:%02d:00", selectedHour, selectedMinute)
+            val simpleTimeString = String.format(Locale.ROOT,"%02d:%02d", selectedHour, selectedMinute)
 
             // SessionManager에 시간 저장
             SessionManager.selectedTime = timeString
+            SessionManager.selectedSimpleTime = simpleTimeString
 
             // LOTOInfoActivity로 이동하는 인텐트 생성
             val intent = Intent(this, LOTOInfoActivity::class.java)

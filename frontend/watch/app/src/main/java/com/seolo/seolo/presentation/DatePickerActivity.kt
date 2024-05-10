@@ -34,9 +34,11 @@ class DatePickerActivity : AppCompatActivity() {
             val selectedMonth = datePicker.month
             val selectedDay = datePicker.day
             val dateString = "$selectedYear-${selectedMonth + 1}-$selectedDay-"
+            val SimpleDateString = "$selectedYear. ${selectedMonth + 1}. $selectedDay"
 
             // SessionManager에 날짜 저장
             SessionManager.selectedDate = dateString
+            SessionManager.selectedSimpleDate = SimpleDateString
 
             // TimePickerActivity로 이동하는 인텐트 생성
             val intent = Intent(this, TimePickerActivity::class.java)
