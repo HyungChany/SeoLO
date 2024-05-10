@@ -4,6 +4,7 @@ import 'package:app/services/loto_service.dart';
 
 class MachineViewModel extends ChangeNotifier{
   final LotoService _lotoService = LotoService();
+  late int facilityId;
 
   List <MachineModel> _machines = [];
   bool _isLoading = false;
@@ -13,13 +14,17 @@ class MachineViewModel extends ChangeNotifier{
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
+  void setFacilityId(value) async {
+    facilityId = value;
+  }
+
   void loadInitialData() async{
     _machines = [];
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
-    final result = await _lotoService.getMachines();
+    final result = await _lotoService.getMachines(facilityId);
     if (!result['success']){
       _isLoading = false;
       _errorMessage = 'API 연결에 실패했습니다';

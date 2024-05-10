@@ -1,4 +1,6 @@
+import 'package:app/view_models/core/core_issue_view_model.dart';
 import 'package:app/view_models/loto/facility_view_model.dart';
+import 'package:app/view_models/loto/machine_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/checklist/check_banner.dart';
 import 'package:app/widgets/checklist/select_list.dart';
@@ -22,6 +24,8 @@ class _FacilitySelectScreenState extends State<FacilitySelectScreen> {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<FacilityViewModel>(context);
+    final machineViewModel = Provider.of<MachineViewModel>(context);
+    final coreViewModel = Provider.of<CoreIssueViewModel>(context);
     return Scaffold(
       appBar: const Header(
         title: '작업장 선택',
@@ -40,18 +44,28 @@ class _FacilitySelectScreenState extends State<FacilitySelectScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Expanded(
-                        child: ListView.builder(
-                      itemCount: viewModel.facilities.length,
-                      itemBuilder: (context, index) {
-                        return SelectList(
-                          title: viewModel.facilities[index].facilityName,
-                          onTap: () {
-                            Navigator.pushNamed(context, '/machine');
-                          },
-                        );
-                      },
-                    ))
+                    viewModel.facilities.isEmpty
+                        ? const Center(
+                            child: Text(
+                              '작업 가능한 장비가 없습니다.',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          )
+                        : Expanded(
+                            child: ListView.builder(
+                            itemCount: viewModel.facilities.length,
+                            itemBuilder: (context, index) {
+                              return SelectList(
+                                title: viewModel.facilities[index].facilityName,
+                                onTap: () {
+                                  coreViewModel.setFacilityName(viewModel.facilities[index].facilityName);
+                                  machineViewModel.setFacilityId(
+                                      viewModel.facilities[index].facilityId);
+                                  Navigator.pushNamed(context, '/machine');
+                                },
+                              );
+                            },
+                          ))
                   ],
                 ),
               ),

@@ -42,24 +42,28 @@ class _MachineSelectScreenState extends State<MachineSelectScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    Expanded(
-                        child: ListView.builder(
-                      itemCount: viewModel.machines.length,
-                      itemBuilder: (context, index) {
-                        return SelectList(
-                          title: viewModel.machines[index].machineName,
-                          onTap: () {
-                            coreViewModel.setMachineId(
-                                viewModel.machines[index].machineId);
-                            coreViewModel.setMachineName(
-                                viewModel.machines[index].machineName);
-                            coreViewModel.setMachineCode(
-                                viewModel.machines[index].machineCode);
-                            Navigator.pushNamed(context, '/taskTemplate');
-                          },
-                        );
-                      },
-                    ))
+                    viewModel.machines.isEmpty
+                        ? const Center(
+                            child: Text('작업 가능한 설비가 없습니다.', style: TextStyle(fontSize: 20),),
+                          )
+                        : Expanded(
+                            child: ListView.builder(
+                            itemCount: viewModel.machines.length,
+                            itemBuilder: (context, index) {
+                              return SelectList(
+                                title: viewModel.machines[index].machineName,
+                                onTap: () {
+                                  coreViewModel.setMachineId(
+                                      viewModel.machines[index].machineId);
+                                  coreViewModel.setMachineName(
+                                      viewModel.machines[index].machineName);
+                                  // coreViewModel.setMachineCode(
+                                  //     viewModel.machines[index].machineCode);
+                                  Navigator.pushNamed(context, '/taskTemplate');
+                                },
+                              );
+                            },
+                          ))
                   ],
                 ),
               ),

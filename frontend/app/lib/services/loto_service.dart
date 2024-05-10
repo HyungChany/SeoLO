@@ -87,14 +87,14 @@ class LotoService {
     }
   }
   ///////////////////////// machine //////////////////////////////////
-  Future<Map<String, dynamic>> getMachines() async {
+  Future<Map<String, dynamic>> getMachines(int facilityID) async {
     try {
       Dio.Response response = await _dio.get(
-        '$baseUrl/machines/facility/1',
+        '$baseUrl/machines/facilities/$facilityID/easy',
       );
       if (response.statusCode == 200) {
         List<MachineModel> machines = [];
-        for (var item in response.data['machines']) {
+        for (var item in response.data['machine_id_name_list']) {
           machines.add(
             MachineModel.fromJson(item),
           );
