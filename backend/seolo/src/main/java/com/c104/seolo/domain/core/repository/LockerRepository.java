@@ -4,6 +4,7 @@ import com.c104.seolo.domain.core.dto.info.LockerInfo;
 import com.c104.seolo.domain.core.entity.Locker;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,4 +17,7 @@ public interface LockerRepository extends CrudRepository<Locker, Long> {
             "WHERE l.company.companyCode = :companyCode")
     List<LockerInfo> findAllByCompanyCode(String companyCode);
     Optional<Locker> findByUid(String uid);
+
+    @Query("SELECT COUNT(l) FROM Locker l WHERE l.company.companyCode = :companyCode")
+    long countByCompanyCode(@Param("companyCode") String companyCode);
 }
