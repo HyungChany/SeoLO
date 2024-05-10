@@ -12,10 +12,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ReportDto {
     private Long reportId;
+    private String facilityName;
     private String machineNumber;
     private String machineName;
     private String workerNumber;
     private String workerName;
+    private String workerTeam;
+    private String workerTitle;
     private TASKTYPE tasktype;
     private boolean isAccident;
     private String accidentType;
@@ -24,12 +27,15 @@ public class ReportDto {
     private LocalDateTime taskEndDateTime;
 
     @Builder
-    public ReportDto(Long reportId, String machineNumber, String machineName, String workerNumber, String workerName, TASKTYPE tasktype, boolean isAccident, String accidentType, Integer victimsNum, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime) {
+    public ReportDto(Long reportId, String facilityName, String machineNumber, String machineName, String workerNumber, String workerName, String workerTeam, String workerTitle, TASKTYPE tasktype, boolean isAccident, String accidentType, Integer victimsNum, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime) {
         this.reportId = reportId;
+        this.facilityName = facilityName;
         this.machineNumber = machineNumber;
         this.machineName = machineName;
         this.workerNumber = workerNumber;
         this.workerName = workerName;
+        this.workerTeam = workerTeam;
+        this.workerTitle = workerTitle;
         this.tasktype = tasktype;
         this.isAccident = isAccident;
         this.accidentType = accidentType;
@@ -38,28 +44,16 @@ public class ReportDto {
         this.taskEndDateTime = taskEndDateTime;
     }
 
-    public Report toEntity() {
-        return Report.builder()
-                .machineNumber(machineNumber)
-                .machineName(machineName)
-                .workerNumber(workerNumber)
-                .workerName(workerName)
-                .taskType(tasktype)
-                .isAccident(isAccident)
-                .accidentType(accidentType)
-                .victimsNum(victimsNum)
-                .taskStartDateTime(taskStartDateTime)
-                .taskEndDateTime(taskEndDateTime)
-                .build();
-    }
-
     public static ReportDto of(Report report) {
         return ReportDto.builder()
                 .reportId(report.getId())
+                .facilityName(report.getFacilityName())
                 .machineNumber(report.getMachineNumber())
                 .machineName(report.getMachineName())
                 .workerNumber(report.getWorkerNumber())
                 .workerName(report.getWorkerName())
+                .workerTeam(report.getWorkerTeam())
+                .workerTitle(report.getWorkerTitle())
                 .tasktype(report.getTasktype())
                 .isAccident(report.isAccident())
                 .accidentType(report.getAccidentType())

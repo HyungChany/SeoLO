@@ -19,6 +19,9 @@ public class Report extends BaseEntity {
     @Column(name = "loto_report_id", nullable = false)
     private Long id;
 
+    @Column(name = "facility_name", length = 20, nullable = false)
+    private String facilityName;
+
     @Column(name = "machine_number", length = 30, nullable = false)
     private String machineNumber;
 
@@ -30,6 +33,12 @@ public class Report extends BaseEntity {
 
     @Column(name = "worker_name", length = 30, nullable = false)
     private String workerName;
+
+    @Column(name = "worker_team", length = 30, nullable = false)
+    private String workerTeam;
+
+    @Column(name = "worker_title", length = 30, nullable = false)
+    private String workerTitle;
 
     @Column(name = "task_type", length = 15, nullable = false)
     @Enumerated(EnumType.STRING)
@@ -53,10 +62,13 @@ public class Report extends BaseEntity {
     protected Report() {}
 
     private Report(Builder builder) {
+        this.facilityName = builder.facilityName;
         this.machineNumber = builder.machineNumber;
         this.machineName = builder.machineName;
         this.workerNumber = builder.workerNumber;
         this.workerName = builder.workerName;
+        this.workerTeam = builder.workerTeam;
+        this.workerTitle = builder.workerTitle;
         this.tasktype = builder.taskType;
         this.isAccident = builder.isAccident;
         this.accidentType = builder.accidentType;
@@ -66,16 +78,27 @@ public class Report extends BaseEntity {
     }
 
     public static class Builder {
+        private String facilityName;
         private String machineNumber;
         private String machineName;
         private String workerNumber;
         private String workerName;
+        private String workerTeam;
+        private String workerTitle;
         private TASKTYPE taskType;
         private boolean isAccident = false;
         private String accidentType;
         private Integer victimsNum = 0;
         private LocalDateTime taskStartDateTime;
         private LocalDateTime taskEndDateTime;
+
+        public Builder facilityName(String newFacilityName) {
+            if (newFacilityName == null) {
+                throw new IllegalArgumentException("facilityName cannot be null");
+            }
+            this.facilityName = newFacilityName;
+            return this;
+        }
 
         public Builder machineNumber(String newMachineNumber) {
             if (newMachineNumber == null) {
@@ -100,6 +123,23 @@ public class Report extends BaseEntity {
             this.workerNumber = newWorkerNumber;
             return this;
         }
+
+        public Builder workerTeam(String newWorkerTeam) {
+            if (newWorkerTeam == null) {
+                throw new IllegalArgumentException("workerTeam cannot be null");
+            }
+            this.workerTeam = newWorkerTeam;
+            return this;
+        }
+
+        public Builder workerTitle(String newWorkerTitle) {
+            if (newWorkerTitle == null) {
+                throw new IllegalArgumentException("workerTitle cannot be null");
+            }
+            this.workerTitle = newWorkerTitle;
+            return this;
+        }
+
 
         public Builder workerName(String newWorkerName) {
             if (newWorkerName == null) {
@@ -143,11 +183,33 @@ public class Report extends BaseEntity {
         }
 
         public Report build() {
-            if (machineNumber == null || machineName == null || workerNumber == null || workerName == null || taskType == null) {
-                throw new IllegalStateException("Cannot build Report object, one or more required fields are not set");
+            if (facilityName == null) {
+                throw new IllegalStateException("Cannot build Report object: facilityName is null");
+            }
+            if (machineNumber == null) {
+                throw new IllegalStateException("Cannot build Report object: machineNumber is null");
+            }
+            if (workerTeam == null) {
+                throw new IllegalStateException("Cannot build Report object: workerTeam is null");
+            }
+            if (workerTitle == null) {
+                throw new IllegalStateException("Cannot build Report object: workerTitle is null");
+            }
+            if (machineName == null) {
+                throw new IllegalStateException("Cannot build Report object: machineName is null");
+            }
+            if (workerNumber == null) {
+                throw new IllegalStateException("Cannot build Report object: workerNumber is null");
+            }
+            if (workerName == null) {
+                throw new IllegalStateException("Cannot build Report object: workerName is null");
+            }
+            if (taskType == null) {
+                throw new IllegalStateException("Cannot build Report object: taskType is null");
             }
             return new Report(this);
         }
+
     }
     public static Builder builder() {
         return new Builder();
