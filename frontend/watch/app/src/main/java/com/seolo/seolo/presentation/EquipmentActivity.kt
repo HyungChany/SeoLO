@@ -2,16 +2,19 @@ package com.seolo.seolo.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.WheelPickerAdapter
+import com.seolo.seolo.model.MachineItem
 import sh.tyy.wheelpicker.core.WheelPickerRecyclerView
 
 // EquipmentActivity 클래스 정의
 class EquipmentActivity : AppCompatActivity() {
     // 장비 목록 초기화
-    private val equipments = listOf(" ", "장비1", "장비2", "장비3", "장비4", "장비5", " ")
+    private lateinit var equipments: ArrayList<MachineItem>
+
 
     // Activity가 생성될 때 호출되는 메서드
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,13 +26,16 @@ class EquipmentActivity : AppCompatActivity() {
         setContentView(R.layout.basic_wheel_picker_layout)
 
         // WheelPicker 초기화 및 어댑터 설정
+        equipments = intent.getParcelableArrayListExtra<MachineItem>("machines") ?: arrayListOf()
+        val equipmentsName = listOf("　") + equipments.map { it.machineName } + ("　")
+        Log.d(  "EquipmentActivity", "equipmentsName: $equipmentsName")
         val equipmentPicker = findViewById<WheelPickerRecyclerView>(R.id.basic_wheel_picker_view)
-        val equipmentAdapter = WheelPickerAdapter(equipments)
+        val equipmentAdapter = WheelPickerAdapter(equipmentsName)
         equipmentPicker.adapter = equipmentAdapter
 
         // WheelPicker를 중앙으로 스크롤
         equipmentPicker.post {
-            val middlePosition = equipments.size / 2
+            val middlePosition = equipmentsName.size / 2
             equipmentPicker.layoutManager?.scrollToPosition(middlePosition)
         }
 

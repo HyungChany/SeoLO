@@ -28,12 +28,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDto getEmployeeByEmployeeNum(String companyCode, String employeeNum) {
+    public EmployeeDto getEmployeeByEmployeeNum(String employeeNum) {
         Employee employeeOptional = employeeRepository.findEmployeeByEmployeeNum(employeeNum)
                 .orElseThrow(() -> new CommonException(EmployeeErrorCode.NOT_EXIST_EMPLOYEE));
         return EmployeeDto.builder()
                 .EmployeeNum(employeeOptional.getEmployeeNum())
                 .EmployeeName(employeeOptional.getEmployeeName())
+                .CompanyCode(employeeOptional.getCompanycode())
                 .EmployeeTitle(employeeOptional.getEmployeeTitle())
                 .EmployeeTeam(employeeOptional.getEmployeeTeam())
                 .EmployeeBirthday(employeeOptional.getEmployeeBirthday())

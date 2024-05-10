@@ -3,6 +3,7 @@ package com.c104.seolo.domain.machine.controller;
 import com.c104.seolo.domain.machine.dto.MachineInfo;
 import com.c104.seolo.domain.machine.dto.MachineSpaceDto;
 import com.c104.seolo.domain.machine.dto.request.MachineRequest;
+import com.c104.seolo.domain.machine.dto.response.MachineListForChoiceResponse;
 import com.c104.seolo.domain.machine.dto.response.MachineListResponse;
 import com.c104.seolo.domain.machine.service.MachineService;
 import lombok.RequiredArgsConstructor;
@@ -79,5 +80,10 @@ public class MachineController {
             @PathVariable("facilityId") Long facilityId
     ) {
         return ResponseEntity.ok(machineService.findMachineByCompanyAndFacility(companyCode, facilityId));
+    }
+
+    @GetMapping("/facilities/{facilityId}/easy")
+    public MachineListForChoiceResponse getMachineList(@PathVariable Long facilityId) {
+        return new MachineListForChoiceResponse(machineService.getMachineByFacilityId(facilityId));
     }
 }

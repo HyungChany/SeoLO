@@ -13,6 +13,8 @@
         android:padding="16dp"
         android:textColor="@color/SNOW"
         android:textSize="18sp"
+        android:singleLine="false"
+        android:maxLines="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

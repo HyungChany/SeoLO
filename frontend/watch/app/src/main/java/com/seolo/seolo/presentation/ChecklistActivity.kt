@@ -15,10 +15,11 @@ import com.seolo.seolo.services.RetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import com.seolo.seolo.model.FacilityItem
 
 class ChecklistActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
-    private var facilitiesList: List<String> = emptyList()
+    private var facilities: List<FacilityItem> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,9 +55,8 @@ class ChecklistActivity : AppCompatActivity() {
             viewPager.currentItem = currentItem + 1
         } else {
             val intent = Intent(this, LocationActivity::class.java)
-            intent.putExtra("facilities", ArrayList(facilitiesList))
+            intent.putExtra("facilities", ArrayList(facilities))
             startActivity(intent)
-            finish()
         }
     }
 
@@ -70,7 +70,7 @@ class ChecklistActivity : AppCompatActivity() {
                         call: Call<FacilityResponse>, response: Response<FacilityResponse>
                     ) {
                         if (response.isSuccessful) {
-                            facilitiesList = response.body()?.facilities?.map { it.name } ?: emptyList()
+                            facilities = response.body()?.facilities ?: emptyList()
                             response.body()?.facilities?.forEach {
                                 Log.d("Facility", "ID: ${it.id}, Name: ${it.name}")
                             }
