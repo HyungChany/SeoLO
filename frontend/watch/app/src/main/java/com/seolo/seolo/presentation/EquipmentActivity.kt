@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.WheelPickerAdapter
+import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.helper.TokenManager
 import com.seolo.seolo.model.MachineItem
 import com.seolo.seolo.model.TaskItem
@@ -21,29 +24,42 @@ import sh.tyy.wheelpicker.core.WheelPickerRecyclerView
 class EquipmentActivity : AppCompatActivity() {
     private lateinit var equipments: ArrayList<MachineItem>
     private var tasksTemplate: List<TaskItem> = emptyList()
+    private var selectedMachineId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportActionBar?.hide()
         setContentView(R.layout.basic_wheel_picker_layout)
+        supportActionBar?.hide()
 
         equipments = intent.getParcelableArrayListExtra("machines") ?: arrayListOf()
-        val equipmentsName = listOf("　") + equipments.map { it.machineName } + ("　")
+        val equipmentsName = listOf("　") + equipments.map { it.machineName } + listOf("　")
         val equipmentPicker = findViewById<WheelPickerRecyclerView>(R.id.basic_wheel_picker_view)
         val equipmentAdapter = WheelPickerAdapter(equipmentsName)
         equipmentPicker.adapter = equipmentAdapter
+
         equipmentPicker.post {
             val middlePosition = equipmentsName.size / 2
             equipmentPicker.layoutManager?.scrollToPosition(middlePosition)
         }
 
+        equipmentPicker.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val position = layoutManager.findFirstVisibleItemPosition()
+                selectedMachineId = equipments.getOrNull(position)?.machineId.toString()
+            }
+        })
+
         val confirmButton = findViewById<Button>(R.id.confirm_button)
         confirmButton.setOnClickListener {
-            getTasks {
-                val intent = Intent(this@EquipmentActivity, WorkActivity::class.java).apply {
-                    putExtra("tasks", ArrayList(it))
+            selectedMachineId?.let {
+                SessionManager.selectedMachineId = it
+                getTasks {
+                    val intent = Intent(this@EquipmentActivity, WorkActivity::class.java)
+                    intent.putExtra("tasks", ArrayList(it))
+                    startActivity(intent)
                 }
-                startActivity(intent)
             }
         }
     }

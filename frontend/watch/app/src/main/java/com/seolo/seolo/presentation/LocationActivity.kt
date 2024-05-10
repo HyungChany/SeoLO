@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.WheelPickerAdapter
+import com.seolo.seolo.helper.SessionManager.selectedFacilityName
 import com.seolo.seolo.helper.TokenManager
 import com.seolo.seolo.model.FacilityItem
 import com.seolo.seolo.model.MachineResponse
@@ -40,13 +41,15 @@ class LocationActivity : AppCompatActivity() {
             locationPicker.layoutManager?.scrollToPosition(middlePosition)
         }
 
-        // 선택된 위치의 ID를 저장
+        // 선택된 위치의 ID, Name를 저장
         locationPicker.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 val position = layoutManager.findFirstVisibleItemPosition()
                 selectedFacilityId = facilities.getOrNull(position)?.id.toString()
+                selectedFacilityName = facilities.getOrNull(position)?.name.toString()
+
             }
         })
 

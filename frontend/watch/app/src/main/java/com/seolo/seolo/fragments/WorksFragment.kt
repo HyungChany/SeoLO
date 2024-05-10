@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
+import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.presentation.DatePickerActivity
 
 class WorksFragment : Fragment() {
@@ -36,10 +37,13 @@ class WorksFragment : Fragment() {
         view.findViewById<ImageView>(R.id.workImageView).setImageResource(imageResourceId)
         view.findViewById<TextView>(R.id.workTextView).text = taskTemplateName
 
-
-        // View를 클릭하면 LOTOInfoActivity로 이동하는 이벤트 처리
+        // 클릭 이벤트
         view.setOnClickListener {
             val context = view.context
+            // 선택된 작업 정보를 SessionManager에 저장
+            SessionManager.selectedTaskTemplateId = taskTemplateId.toString()
+            SessionManager.selectedTaskPrecaution = taskPrecaution
+
             Log.d("WorksFragment", "Task ID: $taskTemplateId, Task Name: $taskTemplateName, Precaution: $taskPrecaution")
             val intent = Intent(context, DatePickerActivity::class.java)
             context.startActivity(intent)

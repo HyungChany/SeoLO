@@ -69,7 +69,7 @@ class WorkActivity : AppCompatActivity() {
             "정비" -> R.drawable.img_maintenance
             "청소" -> R.drawable.img_clean
             "수리" -> R.drawable.img_repair
-            else -> R.drawable.img_etc  // 기타 작업에 대한 기본 이미지
+            else -> R.drawable.img_etc
         }
     }
 }

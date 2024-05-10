@@ -1,6 +1,7 @@
 package com.seolo.seolo.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.adapters.CarouselStateAdapter
 import com.seolo.seolo.fragments.LastLOTOInfoFragment
 import com.seolo.seolo.fragments.LOTOInfoFragment
+import com.seolo.seolo.helper.SessionManager
 
 // LOTOInfoActivity 클래스 정의
 class LOTOInfoActivity : AppCompatActivity() {
@@ -24,6 +26,14 @@ class LOTOInfoActivity : AppCompatActivity() {
         // ViewPager2와 CarouselStateAdapter 설정
         val viewPager: ViewPager2 = findViewById(R.id.viewPager)
         val adapter = CarouselStateAdapter(this@LOTOInfoActivity)
+
+        // SessionManager의 값 로깅
+        Log.d("SessionManager", "Selected Facility Name: ${SessionManager.selectedFacilityName}")
+        Log.d("SessionManager", "Selected Machine ID: ${SessionManager.selectedMachineId}")
+        Log.d("SessionManager", "Selected Task Template ID: ${SessionManager.selectedTaskTemplateId}")
+        Log.d("SessionManager", "Selected Task Precaution: ${SessionManager.selectedTaskPrecaution}")
+        Log.d("SessionManager", "Selected Date: ${SessionManager.selectedDate}")
+        Log.d("SessionManager", "Selected Time: ${SessionManager.selectedTime}")
 
         // Fragment 추가
         adapter.addFragment(LOTOInfoFragment.newInstance("Title 1", "Content 1"))
