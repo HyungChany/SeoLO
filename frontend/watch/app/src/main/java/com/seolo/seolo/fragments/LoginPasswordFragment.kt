@@ -61,6 +61,7 @@ class LoginPartTwoFragment : Fragment() {
                             requireContext(), tokenResponse.issuedToken.accessToken
                         )
                         TokenManager.setCompanyCode(requireContext(), companyCode)
+                        TokenManager.setUserName(requireContext(), username)
 
                         // 로그인 성공 시 처리 로직
                         val intent = Intent(activity, MainActivity::class.java)
