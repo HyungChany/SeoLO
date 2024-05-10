@@ -146,6 +146,7 @@ const Report = () => {
   const handleReport = (index: number) => {
     setReportModal(true);
     setDetailReport(index);
+    console.log('인덱스', index);
   };
   const formatDate = (dateString: string) => {
     return dateString.replace('T', ' ').slice(0, 16); // 'T'를 공백으로 대체하고 초 이후를 잘라냄
@@ -231,7 +232,7 @@ const Report = () => {
       </TitleBox>
       <ContentBox>
         {reportData.map((data, index) => (
-          <TitleBox onClick={() => handleReport(index + 1)}>
+          <TitleBox onClick={() => handleReport(data.reportId)}>
             <Title
               width="5%"
               justifyContent="center"
