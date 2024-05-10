@@ -53,4 +53,14 @@ public class ReportServiceImpl implements ReportService {
 
         return ReportDto.of(report);
     }
+
+    @Override
+    public ReportDto updateReport(Long reportId, boolean isAccident, String accidentType, Integer victimsNum) {
+        Report report = reportRepository.findById(reportId).orElseThrow(
+                () -> new CommonException(ReportErrorCode.NOT_EXIST_REPORT));
+
+        report.updateReportDetails(isAccident, accidentType, victimsNum);
+        reportRepository.save(report);
+        return ReportDto.of(report);
+    }
 }
