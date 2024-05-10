@@ -20,6 +20,7 @@ public class EmployeeDto {
     private String EmployeeNum;
     @NotNull
     private String EmployeeName;
+    private String CompanyCode;
     @NotNull
     private String EmployeeTitle;
     @NotNull
