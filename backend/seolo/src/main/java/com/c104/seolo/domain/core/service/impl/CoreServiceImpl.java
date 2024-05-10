@@ -7,24 +7,25 @@ import com.c104.seolo.domain.core.exception.CoreErrorCode;
 import com.c104.seolo.domain.core.service.CodeState;
 import com.c104.seolo.domain.core.service.Context;
 import com.c104.seolo.domain.core.service.CoreService;
+import com.c104.seolo.domain.core.service.LockerService;
 import com.c104.seolo.global.exception.CommonException;
 import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class CoreServiceImpl implements CoreService {
 
     private static final String BASE_PACKAGE = "com.c104.seolo.domain.core.service.states.";
     private final ApplicationContext applicationContext;
+    private final LockerService lockerService;
 
-    @Autowired
-    public CoreServiceImpl(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
 
     @Override
     public CoreResponse coreAuth(String code, CCodePrincipal cCodePrincipal, String companyCode, CoreRequest coreRequest) {
@@ -33,6 +34,11 @@ public class CoreServiceImpl implements CoreService {
         */
         CodeState codeState = setStateByReflection(code);
         Context context = initContext(codeState, cCodePrincipal, companyCode, coreRequest);
+        if (coreRequest.getBatteryInfo() != null && coreRequest.getLockerUid() != null) {
+            // 배터리 정보가 오는 경우 배터리 자물쇠의 배터리 업데이트
+            lockerService.updateBatteryByLockerUid(coreRequest.getLockerUid(), coreRequest.getBatteryInfo());
+        }
+
         CoreResponse coreResponse = context.doLogic();
         return coreResponse;
     }
