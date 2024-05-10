@@ -54,6 +54,8 @@ class CoreIssueViewModel extends ChangeNotifier {
 
   String get taskPrecaution => _coreIssueModel.taskPrecaution;
 
+  String get endDay => _coreIssueModel.endDay;
+
   bool get isLoading => _isLoading;
 
   String? get errorMessage => _errorMessage;

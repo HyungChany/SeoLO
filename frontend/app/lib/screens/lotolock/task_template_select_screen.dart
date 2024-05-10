@@ -1,6 +1,7 @@
 import 'package:app/view_models/core/core_issue_view_model.dart';
 import 'package:app/view_models/loto/task_templates_view_model.dart';
 import 'package:app/widgets/button/common_icon_button.dart';
+import 'package:app/widgets/dialog/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/inputbox/common_largeinputbox.dart';
@@ -25,6 +26,11 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> {
     setState(() {
       if (taskOption == option) {
         taskOption = null; // 이미 선택된 항목을 다시 선택하면 선택 해제
+        setState(() {
+          selectId = 0;
+          selectName = '';
+          selectPrecaution = '';
+        });
       } else {
         taskOption = option;
       }
@@ -99,10 +105,22 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> {
                     CommonTextButton(
                         text: '확인',
                         onTap: () {
-                          coreViewModel.setTaskPrecaution(selectPrecaution!);
-                          coreViewModel.setTaskTemplateId(selectId);
-                          coreViewModel.setTaskTemplateName(selectName);
-                          Navigator.pushNamed(context, '/selectDay');
+                          if (selectId != 0) {
+                            coreViewModel.setTaskPrecaution(selectPrecaution!);
+                            coreViewModel.setTaskTemplateId(selectId);
+                            coreViewModel.setTaskTemplateName(selectName);
+                            Navigator.pushNamed(context, '/selectDay');
+                          } else {
+                            showDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (BuildContext context) {
+                                  return const CommonDialog(
+                                    content: '항목을 선택해 주세요.',
+                                    buttonText: '확인',
+                                  );
+                                });
+                          }
                         })
                   ],
                 ),

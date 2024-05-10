@@ -8,7 +8,8 @@ import 'package:flutter/material.dart';
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
-  _MainScreenState createState() => _MainScreenState();
+  @override
+  State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
@@ -24,6 +25,9 @@ class _MainScreenState extends State<MainScreen> {
     }
     if (index == 1) {
       Navigator.pushNamed(context, '/bluetooth');
+      setState(() {
+        _selectedIndex = 0;
+      });
     }
     if (index == 2) {
       Navigator.pushReplacementNamed(context, '/profile');
@@ -50,8 +54,8 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
         bottomNavigationBar: CustomBottomNavigationBar(
-          selectedIndex: _selectedIndex, // 현재 선택된 인덱스를 전달
-          onItemTapped: _onItemTapped, // 탭 선택 이벤트 처리 메소드를 전달
+          selectedIndex: _selectedIndex,
+          onItemTapped: _onItemTapped,
         ) ,
     );
   }

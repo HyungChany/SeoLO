@@ -35,7 +35,7 @@ class _MyLotoState extends State<MyLoto> {
     return viewModel.myTasksModel == []
         ? const Center(child: Text('작성된 LOTO가 없습니다.'))
         : viewModel.isLoading
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(),
               )
             : Column(
@@ -71,7 +71,7 @@ class _MyLotoState extends State<MyLoto> {
           currentIndex = index;
           _pageController.animateToPage(
             index,
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             curve: Curves.easeInOut,
           );
         });
@@ -79,7 +79,7 @@ class _MyLotoState extends State<MyLoto> {
       child: Stack(
         children: [
           AnimatedContainer(
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             curve: Curves.easeInOut,
             transform: Matrix4.identity()
               ..translate(index == currentIndex
