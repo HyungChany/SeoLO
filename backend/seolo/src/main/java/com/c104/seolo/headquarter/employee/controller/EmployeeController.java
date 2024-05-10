@@ -30,7 +30,7 @@ public class EmployeeController {
             @RequestHeader("Company-Code") String companyCode,
             @PathVariable String employeeNum
     ) {
-        return ResponseEntity.ok(employeeService.getEmployeeByEmployeeNum(companyCode, employeeNum));
+        return ResponseEntity.ok(employeeService.getEmployeeByEmployeeNum(employeeNum));
     }
 }
 

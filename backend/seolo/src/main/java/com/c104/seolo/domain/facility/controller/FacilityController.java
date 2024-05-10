@@ -58,4 +58,9 @@ public class FacilityController {
         facilityService.deleteFacility(companyCode, facilityId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{employeeNum}")
+    public FacilityResponse getFacilitiesOfEmployee(@PathVariable String employeeNum) {
+        return facilityService.findFacilitiesByEmployeeNum(employeeNum);
+    }
 }
