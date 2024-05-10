@@ -23,7 +23,7 @@ class _MainScreenState extends State<MainScreen> {
       Navigator.pushReplacementNamed(context, '/main');
     }
     if (index == 1) {
-      Navigator.pushNamed(context, '/nfc');
+      Navigator.pushNamed(context, '/bluetooth');
     }
     if (index == 2) {
       Navigator.pushReplacementNamed(context, '/profile');

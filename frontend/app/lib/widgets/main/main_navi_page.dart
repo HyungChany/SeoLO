@@ -19,7 +19,7 @@ class _MainNaviPageState extends State<MainNaviPage> {
 
   final List<String> pageText = ['NFC 태그', '내 작업 일지', 'LOTO 잠금', 'LOTO 절차'];
 
-  final List<String> pageTap = ['/nfc', '/profile', '/checklist', '/lotoProcess'];
+  final List<String> pageTap = ['/bluetooth', '/profile', '/checklist', '/lotoProcess'];
 
   @override
   Widget build(BuildContext context) {

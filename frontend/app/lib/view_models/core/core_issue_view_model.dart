@@ -30,7 +30,6 @@ class CoreIssueViewModel extends ChangeNotifier {
       endTime: '',
       facilityName: '',
       machineName: '',
-      machineCode: '',
       manager: manager,
       taskTemplateName: '',
       endDay: '',
@@ -46,8 +45,6 @@ class CoreIssueViewModel extends ChangeNotifier {
   String get facilityName => _coreIssueModel.facilityName;
 
   String get machineName => _coreIssueModel.machineName;
-
-  String get machineCode => _coreIssueModel.machineCode;
 
   String get manager => _coreIssueModel.manager;
 
@@ -70,7 +67,6 @@ class CoreIssueViewModel extends ChangeNotifier {
         endTime: _coreIssueModel.endTime,
         facilityName: _coreIssueModel.facilityName,
         machineName: _coreIssueModel.machineName,
-        machineCode: _coreIssueModel.machineCode,
         manager: _coreIssueModel.manager,
         taskTemplateName: _coreIssueModel.taskTemplateName,
     endDay: _coreIssueModel.endDay);
@@ -86,7 +82,6 @@ class CoreIssueViewModel extends ChangeNotifier {
         endTime: _coreIssueModel.endTime,
         facilityName: _coreIssueModel.facilityName,
         machineName: _coreIssueModel.machineName,
-        machineCode: _coreIssueModel.machineCode,
         manager: _coreIssueModel.manager,
         taskTemplateName: _coreIssueModel.taskTemplateName,
         endDay: _coreIssueModel.endDay);
@@ -102,7 +97,6 @@ class CoreIssueViewModel extends ChangeNotifier {
         endTime: _coreIssueModel.endTime,
         facilityName: _coreIssueModel.facilityName,
         machineName: _coreIssueModel.machineName,
-        machineCode: _coreIssueModel.machineCode,
         manager: _coreIssueModel.manager,
         taskTemplateName: _coreIssueModel.taskTemplateName,
         endDay: _coreIssueModel.endDay);
@@ -118,7 +112,6 @@ class CoreIssueViewModel extends ChangeNotifier {
         endTime: _coreIssueModel.endTime,
         facilityName: _coreIssueModel.facilityName,
         machineName: _coreIssueModel.machineName,
-        machineCode: _coreIssueModel.machineCode,
         manager: _coreIssueModel.manager,
         taskTemplateName: _coreIssueModel.taskTemplateName,
         endDay: _coreIssueModel.endDay);
@@ -134,7 +127,6 @@ class CoreIssueViewModel extends ChangeNotifier {
         endTime: '${_coreIssueModel.endDay}T$value:00',
         facilityName: _coreIssueModel.facilityName,
         machineName: _coreIssueModel.machineName,
-        machineCode: _coreIssueModel.machineCode,
         manager: _coreIssueModel.manager,
         taskTemplateName: _coreIssueModel.taskTemplateName,
         endDay: _coreIssueModel.endDay);
@@ -150,7 +142,6 @@ class CoreIssueViewModel extends ChangeNotifier {
         endTime: _coreIssueModel.endTime,
         facilityName: value,
         machineName: _coreIssueModel.machineName,
-        machineCode: _coreIssueModel.machineCode,
         manager: _coreIssueModel.manager,
         taskTemplateName: _coreIssueModel.taskTemplateName,
         endDay: _coreIssueModel.endDay);
@@ -166,23 +157,6 @@ class CoreIssueViewModel extends ChangeNotifier {
         endTime: _coreIssueModel.endTime,
         facilityName: _coreIssueModel.facilityName,
         machineName: value,
-        machineCode: _coreIssueModel.machineCode,
-        manager: _coreIssueModel.manager,
-        taskTemplateName: _coreIssueModel.taskTemplateName,
-        endDay: _coreIssueModel.endDay);
-    notifyListeners();
-  }
-
-  void setMachineCode(String value) {
-    _coreIssueModel = CoreIssueModel(
-        lockerUid: _coreIssueModel.lockerUid,
-        machineId: _coreIssueModel.machineId,
-        taskTemplateId: _coreIssueModel.taskTemplateId,
-        taskPrecaution: _coreIssueModel.taskPrecaution,
-        endTime: _coreIssueModel.endTime,
-        facilityName: _coreIssueModel.facilityName,
-        machineName: _coreIssueModel.machineName,
-        machineCode: value,
         manager: _coreIssueModel.manager,
         taskTemplateName: _coreIssueModel.taskTemplateName,
         endDay: _coreIssueModel.endDay);
@@ -198,7 +172,6 @@ class CoreIssueViewModel extends ChangeNotifier {
         endTime: _coreIssueModel.endTime,
         facilityName: _coreIssueModel.facilityName,
         machineName: _coreIssueModel.machineName,
-        machineCode: _coreIssueModel.machineCode,
         manager: _coreIssueModel.manager,
         taskTemplateName: value,
         endDay: _coreIssueModel.endDay);
@@ -214,7 +187,6 @@ class CoreIssueViewModel extends ChangeNotifier {
         endTime: _coreIssueModel.endTime,
         facilityName: _coreIssueModel.facilityName,
         machineName: _coreIssueModel.machineName,
-        machineCode: _coreIssueModel.machineCode,
         manager: _coreIssueModel.manager,
         taskTemplateName: _coreIssueModel.taskTemplateName,
         endDay: value);

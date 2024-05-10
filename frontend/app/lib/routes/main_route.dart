@@ -1,3 +1,4 @@
+import 'package:app/screens/bluetooth/bluetooth_screen.dart';
 import 'package:app/screens/loading/loading_screen.dart';
 import 'package:app/screens/login/login_screen.dart';
 import 'package:app/screens/login/pin_login_screen.dart';
@@ -31,9 +32,9 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => const MainScreen());
     case '/checklist':
       return MaterialPageRoute(builder: (context) => CheckScreen());
-    case '/workplace':
+    case '/facility':
       return MaterialPageRoute(
-          builder: (context) => const WorkPlaceSelectScreen());
+          builder: (context) => const FacilitySelectScreen());
     case '/machine':
       return MaterialPageRoute(
           builder: (context) => const MachineSelectScreen());
@@ -54,6 +55,8 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => ChangePinCheckScreen());
     case '/nfc':
       return MaterialPageRoute(builder: (context) => NfcScreen());
+    case '/bluetooth':
+      return MaterialPageRoute(builder: (context) => BluetoothScreen());
     case '/selectDay':
       return MaterialPageRoute(builder: (context) => DaySelect());
     case '/selectTime':

@@ -48,6 +48,7 @@ dependencies:
   flutter_secure_storage: ^9.0.0 # token 담을 스토리지
   local_auth_android: ^1.0.38
   flutter_launcher_icons: ^0.13.1 #앱 아이콘 설정
+  flutter_blue_plus: ^1.32.5
 
 dev_dependencies:
   flutter_test:
