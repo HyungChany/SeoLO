@@ -28,17 +28,20 @@ class WorkActivity : AppCompatActivity() {
 
         tasks?.let {
             for ((index, task) in it.withIndex()) {
-                // 마지막 Fragment일 경우 LastWorksFragment를 사용
                 if (index == it.size - 1) {
                     val lastFragment = LastWorksFragment.newInstance(
                         getDrawableId(task.taskTemplateName),
-                        task.taskTemplateName
+                        task.taskTemplateId,
+                        task.taskTemplateName,
+                        task.taskPrecaution
                     )
                     adapter.addFragment(lastFragment)
                 } else {
                     val fragment = WorksFragment.newInstance(
                         getDrawableId(task.taskTemplateName),
-                        task.taskTemplateName
+                        task.taskTemplateId,
+                        task.taskTemplateName,
+                        task.taskPrecaution
                     )
                     adapter.addFragment(fragment)
                 }

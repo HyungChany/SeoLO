@@ -26,7 +26,6 @@ class ChecklistActivity : AppCompatActivity() {
         setTheme(android.R.style.Theme_DeviceDefault)
         supportActionBar?.hide()
         setContentView(R.layout.checklist_layout)
-        requestFacilities()
 
         // ViewPager2와 어댑터 설정
         viewPager = findViewById(R.id.viewPagerChecklist)
@@ -46,6 +45,8 @@ class ChecklistActivity : AppCompatActivity() {
         }
 
         viewPager.adapter = adapter
+
+        getFacilities()
     }
 
     fun moveToNextPage() {
@@ -60,7 +61,7 @@ class ChecklistActivity : AppCompatActivity() {
         }
     }
 
-    private fun requestFacilities() {
+    private fun getFacilities() {
         val accessToken = TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)
         val username = TokenManager.getUserName(this)
