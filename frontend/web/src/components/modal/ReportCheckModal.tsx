@@ -18,6 +18,9 @@ interface EquipmentData {
   taskStartDateTime: string;
   taskEndDateTime: string;
   accident: boolean;
+  facilityName: string;
+  workerTeam: string;
+  workerTitle: string;
 }
 interface ReportCheckModalProps {
   onClose: () => void; // 모달을 닫는 함수
@@ -106,7 +109,7 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
   const [accidentBtn, setAccidentBtn] = useState<boolean>(false);
   const [accidentText, setAccidentText] = useState<string>('');
   const [accidentPeople, setAccidentPeople] = useState<string>('');
-  const [reportData, setReportData] = useState<EquipmentData[]>([]);
+  const [reportData, setReportData] = useState<EquipmentData | null>(null);
   const formatDate = (dateString: string) => {
     return dateString.replace('T', ' ').slice(0, 16); // 'T'를 공백으로 대체하고 초 이후를 잘라냄
   };
@@ -121,7 +124,6 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
           taskEndDateTime: formatDate(data.taskEndDateTime),
           accidentType: data.accidentType === null ? '-' : data.accidentType,
           victimsNum: data.victimsNum === null ? '-' : data.victimsNum,
-          accident: data.accident ? 'Y' : 'N', // accident 필드를 'Y' 또는 'N'으로 변환
         };
         setReportData(formattedData);
         console.log(data);
@@ -130,7 +132,7 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
       }
     };
     report();
-    console.log(reportData);
+    // console.log(reportData);
   }, [contentIndex]);
   const leftTitle = [
     '작업자',
@@ -141,15 +143,7 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
     '장비 명',
     '장비 번호',
   ];
-  const leftContent = [
-    '오해원',
-    '1010315',
-    '품질보증팀',
-    '주임',
-    '1공장 검사라인',
-    'L / W - 2',
-    '3578DA1423',
-  ];
+
   const rightTitle = [
     'LOTO 목적',
     '시작 시간',
@@ -158,14 +152,7 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
     '사고 유형',
     '인명 피해',
   ];
-  const rightContent = [
-    '정비',
-    '2021.05.20 12:00',
-    '2021.05.20 13:00',
-    '감전 사고',
-    '없음',
-    '0',
-  ];
+
   const handleInnerClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
@@ -197,9 +184,17 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
               ))}
             </TitleContentBox>
             <TitleContentBox>
-              {leftContent.map((content) => (
-                <RightContent>{content}</RightContent>
-              ))}
+              {reportData && (
+                <>
+                  <RightContent>{reportData.workerName}</RightContent>
+                  <RightContent>{reportData.workerNumber}</RightContent>
+                  <RightContent>{reportData.workerTeam}</RightContent>
+                  <RightContent>{reportData.workerTitle}</RightContent>
+                  <RightContent>{reportData.facilityName}</RightContent>
+                  <RightContent>{reportData.machineName}</RightContent>
+                  <RightContent>{reportData.machineNumber}</RightContent>
+                </>
+              )}
             </TitleContentBox>
           </Container>
           <Container>
@@ -209,55 +204,56 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
               ))}
             </TitleContentBox>
             <TitleContentBox>
-              {rightContent.map((content, index) => {
-                if (modifyModal && index === 3) {
-                  return (
-                    <>
-                      {accidentBtn ? (
-                        <AccidentButton
-                          backgroundColor={Color.SAMSUNG_BLUE}
-                          color={Color.WHITE}
-                          onClick={handleAccidentClick}
-                        >
-                          발생
-                        </AccidentButton>
+              {reportData && (
+                <>
+                  <RightContent>{reportData.tasktype}</RightContent>
+                  <RightContent>{reportData.taskStartDateTime}</RightContent>
+                  <RightContent>{reportData.taskEndDateTime}</RightContent>
+                  <RightContent>
+                    {!modifyModal ? (
+                      reportData.accident ? (
+                        '발생'
                       ) : (
-                        <AccidentButton
-                          backgroundColor={Color.GRAY200}
-                          color={Color.BLACK}
-                          onClick={handleAccidentClick}
-                        >
-                          없음
-                        </AccidentButton>
-                      )}
-                    </>
-                  );
-                } else if (modifyModal && index === 4) {
-                  return (
-                    <RightContent>
+                        '없음'
+                      )
+                    ) : (
+                      <AccidentButton
+                        backgroundColor={
+                          accidentBtn ? Color.SAMSUNG_BLUE : Color.GRAY200
+                        }
+                        color={accidentBtn ? Color.WHITE : Color.BLACK}
+                        onClick={handleAccidentClick}
+                      >
+                        {accidentBtn ? '발생' : '없음'}
+                      </AccidentButton>
+                    )}
+                  </RightContent>
+                  <RightContent>
+                    {modifyModal ? (
                       <InputBox
                         width={10}
                         height={2.3}
                         value={accidentText}
                         onChange={handleAccidentText}
                       />
-                    </RightContent>
-                  );
-                } else if (modifyModal && index === 5) {
-                  return (
-                    <RightContent>
+                    ) : (
+                      reportData.accidentType
+                    )}
+                  </RightContent>
+                  <RightContent>
+                    {modifyModal ? (
                       <InputBox
                         width={4}
                         height={2.3}
                         value={accidentPeople}
                         onChange={handleAccidentPeopleText}
                       />
-                    </RightContent>
-                  );
-                } else {
-                  return <RightContent key={content}>{content}</RightContent>;
-                }
-              })}
+                    ) : (
+                      reportData.victimsNum
+                    )}
+                  </RightContent>
+                </>
+              )}
             </TitleContentBox>
           </Container>
         </ContentBox>
