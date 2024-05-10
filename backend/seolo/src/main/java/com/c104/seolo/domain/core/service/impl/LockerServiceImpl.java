@@ -85,4 +85,14 @@ public class LockerServiceImpl implements LockerService {
         return lockerRepository.findByUid(lockerUid).orElseThrow(
                 () -> new CommonException(LockerErrorCode.NOT_EXIST_LOCKER));
     }
+
+    @Override
+    public void updateBatteryByLockerUid(String lockerUid, Integer battery) {
+        Locker locker = lockerRepository.findByUid(lockerUid).orElseThrow(
+                () -> new CommonException(LockerErrorCode.NOT_EXIST_LOCKER)
+        );
+
+        locker.changeBattery(battery);
+        lockerRepository.save(locker);
+    }
 }
