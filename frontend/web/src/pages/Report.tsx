@@ -1,4 +1,3 @@
-// import { Button } from '@/components/button/Button.tsx';
 import * as Color from '@/config/color/Color.ts';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -26,6 +25,21 @@ interface EquipmentData {
   workerTeam: string;
   workerTitle: string;
   facilityName: string;
+}
+interface CsvEquipmentData {
+  '보고서 ID': number;
+  '장비 번호': string;
+  '장비 명': string;
+  담당자: string;
+  'LOTO 목적': string;
+  '사고 여부': string;
+  '사고 유형': string;
+  '인명피해(명)': string;
+  '시작 일시': string;
+  '종료 일시': string;
+  작업팀: string;
+  직급: string;
+  작업장: string;
 }
 interface TitleType {
   width?: string;
@@ -121,6 +135,23 @@ const Report = () => {
   // const handleSubmit = () => {
   //   console.log('클릭');
   // };
+  const transformDataForCsv = (data: EquipmentData[]): CsvEquipmentData[] => {
+    return data.map((item) => ({
+      '보고서 ID': item.reportId,
+      '장비 번호': item.machineNumber,
+      '장비 명': item.machineName,
+      담당자: item.workerName,
+      'LOTO 목적': item.tasktype,
+      '사고 여부': item.accident ? '있음' : '없음',
+      '사고 유형': item.accidentType || '없음',
+      '인명피해(명)': item.victimsNum?.toString() || '-',
+      '시작 일시': item.taskStartDateTime,
+      '종료 일시': item.taskEndDateTime,
+      작업팀: item.workerTeam,
+      직급: item.workerTitle,
+      작업장: item.facilityName,
+    }));
+  };
   const selectTitle = ['전체', '일', '주', '월', '년'];
   const titleList = [
     '선택',
@@ -164,7 +195,14 @@ const Report = () => {
   const formatDate = (dateString: string) => {
     return dateString.replace('T', ' ').slice(0, 16); // 'T'를 공백으로 대체하고 초 이후를 잘라냄
   };
+  const [transformedCsvData, setTransformedCsvData] = useState<
+    CsvEquipmentData[]
+  >([]);
 
+  // csvData가 변경될 때마다 자동으로 데이터를 변환
+  useEffect(() => {
+    setTransformedCsvData(transformDataForCsv(csvData));
+  }, [csvData]);
   useEffect(() => {
     const report = async () => {
       try {
@@ -217,21 +255,7 @@ const Report = () => {
             </SelectButton>
           ))}
         </ButtonBox>
-        {/* <Button
-          width={8}
-          height={3}
-          $backgroundColor={Color.GRAY200}
-          $borderColor={Color.GRAY200}
-          $borderRadius={1.25}
-          $hoverBackgroundColor={Color.GRAY200}
-          $hoverBorderColor={Color.GRAY200}
-          onClick={handleSubmit}
-          fontSize={'1.25rem'}
-          fontWeight={'bold'}
-        >
-          .csv로 내보내기
-        </Button> */}
-        <CsvDownloadButton data={csvData} delimiter="," />
+        <CsvDownloadButton data={transformedCsvData} delimiter="," />
       </SelectBox>
       <TitleBox>
         {titleList.map((data, index) => (
