@@ -36,7 +36,6 @@ public class ReportServiceImpl implements ReportService {
         List<Report> allReports = reportRepository.findAll();
 
         Collections.reverse(allReports);
-
         List<ReportDto> reportDtos = new ArrayList<>();
         allReports.forEach(report -> reportDtos.add(ReportDto.of(report)));
 

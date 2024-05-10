@@ -42,27 +42,26 @@ public class AesEncryption {
         return originalKey;
     }
 
-    public static String encrypt(String data, SecretKey secretKey) {
+    public static byte[] encrypt(String data, SecretKey secretKey) {
         try {
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-            byte[] encryptedData = cipher.doFinal(data.getBytes());
-            return Base64.getEncoder().encodeToString(encryptedData);
+            return cipher.doFinal(data.getBytes());
         } catch (Exception e) {
-            log.error("AES 암호화 중 에러발생" + e.getMessage());
+            log.error("AES 암호화 중 에러발생: " + e.getMessage());
             throw new CommonException(AesEncryptionErrorCode.ENCRYPTION_ERROR);
         }
     }
 
-    public static String decrypt(String encryptedData, SecretKey secretKey) {
+
+    public static String decrypt(byte[] encryptedData, SecretKey secretKey) {
         try {
             Cipher cipher = Cipher.getInstance(ALGORITHM);
             cipher.init(Cipher.DECRYPT_MODE, secretKey);
-            byte[] decodedData = Base64.getDecoder().decode(encryptedData);
-            byte[] decryptedData = cipher.doFinal(decodedData);
+            byte[] decryptedData = cipher.doFinal(encryptedData);
             return new String(decryptedData);
         } catch (Exception e) {
-            log.error("AES 복호화 중 에러발생" + e.getMessage());
+            log.error("AES 복호화 중 에러발생: " + e.getMessage());
             throw new CommonException(AesEncryptionErrorCode.DECRYPTION_ERROR);
         }
     }

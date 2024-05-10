@@ -9,4 +9,6 @@ public interface CoreTokenService {
     boolean isTokenExistedForUserId(Long userId);
     void deleteTokenByUserId(Long userId);
     void deleteTokenByTokenValue(String tokenValue);
+    boolean validateTokenWithUser(String tokenValue, Long userId);
+    boolean validateTokenWithLocker(String tokenValue, String lockerId);
 }

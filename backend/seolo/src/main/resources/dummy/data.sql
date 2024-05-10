@@ -177,16 +177,29 @@ values ('정비', '정비 중입니다.'),
        ('수리', '수리 중입니다.'),
        ('기타', '');
 
-INSERT INTO locker(locker_battery, locker_is_locked, locker_uid, company_code, created_at, updated_at, locker_encryption_key)
-values (100, false, 'MURBMjRHMzE=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Y3R5pIjVCzW1uz0XJFs123=='),
-       (10, true, 'MURBMjRHMzI=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'abXQxLvYzK2QwFDyrux345=='),
-       (80, false, 'MURBMjRHMzM=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'CdT54ZOmKJGH5Gd1Mkp678=='),
-       (98, false, 'MURBMjRHMzQ=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,'ZvcM41Zr5Nj2FBSaQlm901=='),
-       (29, false, 'MURBMjRHMzU=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'XjR55ZmnmPQ2Jb3Vg4t234=='),
-       (80, false, 'MURBMjRHMzY=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Hng2Q3XPY7aV0FzQwRp567=='),
-       (88, true, 'MURBMjRHMzc=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'BvcM91Zr3Dj7FBSqPno890=='),
-       (91, false, 'MURBMjRHMzg=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Ope34ZmnmC5TUb9Vh6t123=='),
-       (37, false, 'MURBMjRHMzk=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Mjn8D5XmZTg6Rb0Ph3q456==');
+-- INSERT INTO locker(locker_battery, locker_is_locked, locker_uid, company_code, created_at, updated_at, locker_encryption_key)
+-- values (100, false, 'MURBMjRHMzE=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Y3R5pIjVCzW1uz0XJFs123=='),
+--        (10, true, 'MURBMjRHMzI=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'abXQxLvYzK2QwFDyrux345=='),
+--        (80, false, 'MURBMjRHMzM=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'CdT54ZOmKJGH5Gd1Mkp678=='),
+--        (98, false, 'MURBMjRHMzQ=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,'ZvcM41Zr5Nj2FBSaQlm901=='),
+--        (29, false, 'MURBMjRHMzU=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'XjR55ZmnmPQ2Jb3Vg4t234=='),
+--        (80, false, 'MURBMjRHMzY=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Hng2Q3XPY7aV0FzQwRp567=='),
+--        (88, true, 'MURBMjRHMzc=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'BvcM91Zr3Dj7FBSqPno890=='),
+--        (91, false, 'MURBMjRHMzg=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Ope34ZmnmC5TUb9Vh6t123=='),
+--        (37, false, 'MURBMjRHMzk=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Mjn8D5XmZTg6Rb0Ph3q456==');
+
+INSERT INTO locker (locker_battery, locker_is_locked, created_at, locker_id, updated_at, company_code, locker_encryption_key, locker_uid)
+    VALUES
+    (100, false, '2024-05-10 16:12:53.296591', 1, '2024-05-10 16:12:53.296591', 'SFY001KOR', 'EsF0JwMZcTL2EcXAjUae0Q==', '1DA24G01'),
+    (10, true, '2024-05-10 16:12:55.492353', 2, '2024-05-10 16:12:55.492353', 'SFY001KOR', '6TLmUCZhww0DoEKhQZFOHg==', '1DA24G02'),
+    (33, false, '2024-05-10 16:12:58.387418', 3, '2024-05-10 16:12:58.387418', 'SFY001KOR', '4l6y7KE3+eCaWCoIgr4z0w==', '1DA24G03'),
+    (80, false, '2024-05-10 16:13:00.926239', 4, '2024-05-10 16:13:00.926239', 'SFY001KOR', 'j6sUC1pUiwDiOaMcHN92Xw==', '1DA24G04'),
+    (43, false, '2024-05-10 16:13:03.842874', 5, '2024-05-10 16:13:03.842874', 'SFY001KOR', 'K1dxA+RqNTbToADO0y6YLQ==', '1DA24G05'),
+    (22, false, '2024-05-10 16:13:06.309538', 6, '2024-05-10 16:13:06.309538', 'SFY001KOR', 'am+ex3/pdWC91Eq3J29C2g==', '1DA24G06'),
+    (87, false, '2024-05-10 16:13:09.233656', 7, '2024-05-10 16:13:09.233656', 'SFY001KOR', 'qBTgGEatO245odWL+nQYhg==', '1DA24G07'),
+    (64, true, '2024-05-10 16:13:11.847460', 8, '2024-05-10 16:13:11.847460', 'SFY001KOR', 'ca4qnbGeWucX3+FRSTqDQw==', '1DA24G08'),
+    (52, false, '2024-05-10 16:13:14.543031', 9, '2024-05-10 16:13:14.543031', 'SFY001KOR', 'rngYK1p4rzOyhwTXD0U4aA==', '1DA24G09');
+
 
 
 insert into facility(created_at, updated_at, facility_company_code, facility_name, facility_address, facility_layout, facility_thum)

@@ -8,6 +8,7 @@ import com.c104.seolo.domain.core.service.CodeState;
 import com.c104.seolo.domain.core.service.Context;
 import com.c104.seolo.domain.core.service.CoreTokenService;
 import com.c104.seolo.domain.task.service.TaskHistoryService;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,7 @@ public class ISSUE implements CodeState {
     }
 
     @Override
+    @Transactional
     public CoreResponse handle(Context context) {
         /*
         1. 백엔드 서버는 작업내역 데이터를 DB에 저장한다.

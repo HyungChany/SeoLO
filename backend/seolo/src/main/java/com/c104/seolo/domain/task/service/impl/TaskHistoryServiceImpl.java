@@ -80,19 +80,8 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
                                   String endTime,
                                   String taskPrecaution) {
 
-
         AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
 
-//        1. AppUserDto정보를 바탕으로 새로운 AppUser라는 객체를 만들어서 넣는건가?
-//        -> 근데 이러면 정보가 다를 수 있잖아 AppUserDto가 AppUser 객체를 만드는데
-//        -> 충분한 데이터를 안보낼 수도 있잖아
-//        -> 충분한 데이터를 가지고 있어도 둘이 같은건가? DB에서 바로 온 애가아닌데
-//        -> 그렇게 만든 새로운 AppUser를 수정하고 save하면 먹힘? -> save하려면 얘가 어차피 UserRepository 의존해야하잖아
-
-//        2. 그러면 UserRepositotory에서 AppUserDto에 있는 뭐 식별자 같은걸로
-//        -> 유저 정보를 조회해서 객체로 받아왔어
-//        -> 그러면 유저가아닌 다른 도메인에서 UserRepository를 의존받아서 조회해야하는거잖아?
-//        -> 그렇다면 왜 굳이 조회하는 서비스 메서드를 만든거임? 애초에 걍 처음부터 그 메서드에서 조회를하지
         TaskTemplateDto template = taskTemplateService.getTemplate(taskTemplateId);
         MachineDto machine = machineService.getMachineByMachineId(machineId);
 

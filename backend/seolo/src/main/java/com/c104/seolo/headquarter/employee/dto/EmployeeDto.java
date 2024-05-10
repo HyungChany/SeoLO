@@ -11,24 +11,36 @@ import lombok.ToString;
 import java.time.LocalDate;
 import java.util.Date;
 
-@Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ToString
 @Getter
 public class EmployeeDto {
     @NotNull
-    private String EmployeeNum;
+    private String employeeNum;
     @NotNull
-    private String EmployeeName;
-    private String CompanyCode;
+    private String employeeName;
+    private String companyCode;
     @NotNull
-    private String EmployeeTitle;
+    private String employeeTitle;
     @NotNull
-    private String EmployeeTeam;
+    private String employeeTeam;
     @PastOrPresent
-    private LocalDate EmployeeBirthday;
-    private String EmployeeThum;
+    private LocalDate employeeBirthday;
+    private String employeeThum;
     @PastOrPresent
     private Date employeeJoinDate;
     private Date employeeLeaveDate;
+
+    @Builder
+    public EmployeeDto(String employeeNum, String employeeName, String companyCode, String employeeTitle, String employeeTeam, LocalDate employeeBirthday, String employeeThum, Date employeeJoinDate, Date employeeLeaveDate) {
+        this.employeeNum = employeeNum;
+        this.employeeName = employeeName;
+        this.companyCode = companyCode;
+        this.employeeTitle = employeeTitle;
+        this.employeeTeam = employeeTeam;
+        this.employeeBirthday = employeeBirthday;
+        this.employeeThum = employeeThum;
+        this.employeeJoinDate = employeeJoinDate;
+        this.employeeLeaveDate = employeeLeaveDate;
+    }
 }

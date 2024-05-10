@@ -2,6 +2,7 @@ package com.c104.seolo.domain.core.service.states;
 
 import com.c104.seolo.domain.core.dto.request.CoreRequest;
 import com.c104.seolo.domain.core.dto.response.CoreResponse;
+import com.c104.seolo.domain.core.exception.CoreTokenErrorCode;
 import com.c104.seolo.domain.core.service.CodeState;
 import com.c104.seolo.domain.core.service.Context;
 import com.c104.seolo.domain.core.service.CoreTokenService;
@@ -12,6 +13,7 @@ import com.c104.seolo.domain.report.service.ReportService;
 import com.c104.seolo.domain.task.dto.TaskHistoryDto;
 import com.c104.seolo.domain.task.service.TaskHistoryService;
 import com.c104.seolo.domain.user.entity.AppUser;
+import com.c104.seolo.global.exception.CommonException;
 import com.c104.seolo.global.security.service.DBUserDetailService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,7 @@ public class UNLOCK implements CodeState {
     private final MachineService machineService;
 
     @Override
+    @Transactional
     public CoreResponse handle(Context context) {
         /*
         행동코드 모듈 UNLOCK
@@ -52,13 +55,25 @@ public class UNLOCK implements CodeState {
         */
 
         CoreRequest coreRequest = context.getCoreRequest();
+        String tokenValue = coreRequest.getTokenValue();
         // 1
-        coreTokenService.deleteTokenByTokenValue(coreRequest.getTokenValue());
+        // 토큰 검증
+        if (!coreTokenService.validateTokenWithUser(tokenValue, context.getCCodePrincipal().getId())) {
+            // 불일치 시 예외처리
+            throw new CommonException(CoreTokenErrorCode.NOT_SAME_WITH_USER);
+        }
+
+        if (!coreTokenService.validateTokenWithLocker(tokenValue, coreRequest.getLockerUid())) {
+            // 불일치 시 예외처리
+            throw new CommonException(CoreTokenErrorCode.NOT_SAME_WITH_LOCKER);
+        }
+        // 토큰삭제
+        coreTokenService.deleteTokenByTokenValue(tokenValue);
+
         // 2
         TaskHistoryDto updatedTaskhistory = syncTaskhistory(coreRequest);
         // 3
         createReport(updatedTaskhistory);
-        // 4
         return CoreResponse.builder() // 3
                 .httpStatus(HttpStatus.NO_CONTENT)
                 .message("자물쇠가 열림처리 되었습니다. 토큰이 삭제되었습니다. 진행했던 작업내역이 보고서로 저장됩니다. ")
