@@ -40,21 +40,22 @@ class CommonIconButton extends StatefulWidget {
 class _CommonIconButtonState extends State<CommonIconButton>{
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return GestureDetector(
       onTap: widget.onTap,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         // 세로로 세울 애들이 누구인지
         children: [
           // 아이콘이 있는 부분
           Container(
-            height: widget.shape == BoxShape.rectangle ? MediaQuery.of(context).size.height * 0.13 : MediaQuery.of(context).size.height * 0.13,
-            width: widget.shape == BoxShape.rectangle ? MediaQuery.of(context).size.width * 0.3 : MediaQuery.of(context).size.width * 0.3,
+            height: widget.shape == BoxShape.rectangle ? MediaQuery.of(context).size.height * 0.16 : MediaQuery.of(context).size.height * 0.13,
+            width: widget.shape == BoxShape.rectangle ? MediaQuery.of(context).size.width * 0.35 : MediaQuery.of(context).size.width * 0.3,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-                color: widget.shape == BoxShape.rectangle ? mint200 : gray100,
+                color: widget.shape == BoxShape.rectangle ? const Color.fromRGBO(229, 247, 232, 1) : gray100,
                 shape: widget.shape,
                 border:Border.all(
-                  color: widget.isSelected ? samsungBlue : Colors.white,
+                  color: widget.isSelected ? samsungBlue : Colors.transparent,
                   width: 2
                 ),
                 borderRadius: widget.shape == BoxShape.rectangle
@@ -65,14 +66,13 @@ class _CommonIconButtonState extends State<CommonIconButton>{
                   image: AssetImage(widget.iconImage),
                 )),
           ),
-          SizedBox(height: 10,),
           // 텍스트 부분
           Text(
             widget.text,
             textAlign: TextAlign.center,
             style: TextStyle(
               color: widget.isSelected ? samsungBlue : Colors.black,
-              fontSize: 20,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           )

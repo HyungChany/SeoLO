@@ -24,18 +24,16 @@ class _MainNaviPageState extends State<MainNaviPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.4,
+      height: MediaQuery.of(context).size.height * 0.5,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(255, 250, 250, 1),
+        color: const Color.fromRGBO(255, 250, 250, 1),
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [shadow],
+        boxShadow: const [shadow],
       ),
       child: Center(
         child: GridView.count(
           crossAxisCount: 2,
-          mainAxisSpacing: 10.0,
-          crossAxisSpacing: 10.0,
-          padding: EdgeInsets.all(9.0),
+          mainAxisSpacing: 35.0,
           shrinkWrap: true,
           children: List.generate(
             pageIcon.length,

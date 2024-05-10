@@ -46,6 +46,7 @@ class _MainScreenState extends State<MainScreen> {
             child: const Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                SizedBox(height: 10,),
                 MainWelcomeBanner(),
                 MainNewsBanner(),
                 MainNaviPage(),
