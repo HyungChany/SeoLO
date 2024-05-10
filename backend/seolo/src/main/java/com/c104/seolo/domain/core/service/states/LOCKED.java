@@ -22,9 +22,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class LOCKED implements CodeState {
     private final TaskHistoryService taskHistoryService;
-
-
-
+    
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CoreResponse handle(Context context) {

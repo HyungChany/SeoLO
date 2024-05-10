@@ -77,11 +77,14 @@ public class UNLOCK implements CodeState {
         AppUser worker = dbUserDetailService.loadUserById(updatedLatestTaskHistory.getId());
 
         NewReport newReport = NewReport.builder()
+                .facilityName(workedMachine.getFacility().getFacilityName())
                 .machineNumber(workedMachine.getNumber())
                 .machineName(workedMachine.getName())
                 .workerNumber(worker.getUsername())
                 .workerName(worker.getEmployee().getEmployeeName())
-                .taskType(updatedLatestTaskHistory.getTaskTemplate().getTaskType())
+                .workerTeam(worker.getEmployee().getEmployeeTeam())
+                .workerTitle(worker.getEmployee().getEmployeeTitle())
+                .tasktype(updatedLatestTaskHistory.getTaskTemplate().getTaskType())
                 .taskStartDateTime(updatedLatestTaskHistory.getTaskStartDateTime())
                 .taskEndDateTime(updatedLatestTaskHistory.getTaskEndDateTime())
                 .build();
