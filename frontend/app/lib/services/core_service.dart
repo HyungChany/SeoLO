@@ -28,11 +28,16 @@ class CoreService {
   Future<Map<String, dynamic>> coreIssue(CoreIssueModel coreIssueModel) async {
     try {
       Dio.Response response = await _dio.post(
-        '$baseUrl/core/ISSUE', data: coreIssueModel.toJson(),
+        '$baseUrl/core/ISSUE',
+        data: coreIssueModel.toJson(),
       );
       if (response.statusCode == 200) {
-        debugPrint(response.data);
-        return {'success': true, };
+        // debugPrint(response.data);
+        CoreIssueModel coreIssueModel =
+            CoreIssueModel.fromJson(response.data['employee']);
+        return {
+          'success': true,
+        };
       } else {
         return {'success': false};
       }
@@ -45,12 +50,12 @@ class CoreService {
   ///////////////////////// check //////////////////////////////////
   Future<Map<String, dynamic>> coreCheck() async {
     try {
-      Dio.Response response = await _dio.post(
-        '$baseUrl/core/CHECK', data: ''
-      );
+      Dio.Response response = await _dio.post('$baseUrl/core/CHECK', data: '');
       if (response.statusCode == 200) {
         debugPrint(response.data);
-        return {'success': true, };
+        return {
+          'success': true,
+        };
       } else {
         return {'success': false};
       }
@@ -63,12 +68,12 @@ class CoreService {
   ///////////////////////// unlock //////////////////////////////////
   Future<Map<String, dynamic>> coreUnlock() async {
     try {
-      Dio.Response response = await _dio.post(
-          '$baseUrl/core/UNLOCK', data: ''
-      );
+      Dio.Response response = await _dio.post('$baseUrl/core/UNLOCK', data: '');
       if (response.statusCode == 200) {
         debugPrint(response.data);
-        return {'success': true, };
+        return {
+          'success': true,
+        };
       } else {
         return {'success': false};
       }
@@ -81,12 +86,12 @@ class CoreService {
   ///////////////////////// locked //////////////////////////////////
   Future<Map<String, dynamic>> coreLocked() async {
     try {
-      Dio.Response response = await _dio.post(
-          '$baseUrl/core/LOCKED', data: ''
-      );
+      Dio.Response response = await _dio.post('$baseUrl/core/LOCKED', data: '');
       if (response.statusCode == 200) {
         debugPrint(response.data);
-        return {'success': true, };
+        return {
+          'success': true,
+        };
       } else {
         return {'success': false};
       }

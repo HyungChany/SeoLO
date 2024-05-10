@@ -206,7 +206,7 @@ class UserService {
     try {
       Dio.Response response = await _dio.get('$baseUrl/tasks/assignment/${myInfoModel.employeeNum}');
       if (response.statusCode == 200) {
-        debugPrint('${response.data['tasks']}');
+        // debugPrint('${response.data['tasks']}');
         List<MyTasksModel> tasks = [];
         for (var task in response.data['tasks']) {
           tasks.add(

@@ -36,16 +36,12 @@ class SmallInputBox extends StatelessWidget {
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
-          border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8.0))),
+          focusColor: blue400,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.0)),
           hintText: hintText,
           // TextField의 hintText 속성에 생성자를 통해 받은 hintText를 사용
           hintStyle: const TextStyle(
               color: gray200, fontSize: 18.0, fontWeight: FontWeight.w400),
-          enabledBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFFececec))),
-          focusedBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFFececec))),
         ),
       ),
     );
