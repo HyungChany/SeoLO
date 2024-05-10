@@ -29,8 +29,10 @@ class EquipmentActivity : AppCompatActivity() {
     // 액티비티 생성 시 호출되는 메서드
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.basic_wheel_picker_layout)
+        // 액션바 숨기기
         supportActionBar?.hide()
+        // 레이아웃 설정
+        setContentView(R.layout.basic_wheel_picker_layout)
 
         // 인텐트로부터 기계 목록 가져오기
         equipments = intent.getParcelableArrayListExtra("machines") ?: arrayListOf()
