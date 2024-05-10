@@ -1,4 +1,4 @@
-import { Button } from '@/components/button/Button.tsx';
+// import { Button } from '@/components/button/Button.tsx';
 import * as Color from '@/config/color/Color.ts';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -6,6 +6,7 @@ import Check from '/assets/icons/Check.svg';
 import NonCheck from '/assets/icons/NonCheck.svg';
 import ReportCheckModal from '@/components/modal/ReportCheckModal.tsx';
 import { totalReport } from '@/apis/Report.ts';
+import CsvDownloadButton from 'react-json-to-csv';
 interface ButtonProps {
   backgroundColor: string;
   color: string;
@@ -22,6 +23,9 @@ interface EquipmentData {
   taskEndDateTime: string;
   accident: boolean;
   selected: boolean;
+  workerTeam: string;
+  workerTitle: string;
+  facilityName: string;
 }
 interface TitleType {
   width?: string;
@@ -109,13 +113,14 @@ const Report = () => {
   const [reportModal, setReportModal] = useState<boolean>(false);
   const [reportData, setReportData] = useState<EquipmentData[]>([]);
   const [detailReport, setDetailReport] = useState<number>(1);
+  const [csvData, setCsvData] = useState<EquipmentData[]>([]);
   const handleButtonClick = (index: number) => {
     setSelectedButtonIndex(index); // 클릭된 버튼의 인덱스로 상태 업데이트
     console.log(index);
   };
-  const handleSubmit = () => {
-    console.log('클릭');
-  };
+  // const handleSubmit = () => {
+  //   console.log('클릭');
+  // };
   const selectTitle = ['전체', '일', '주', '월', '년'];
   const titleList = [
     '선택',
@@ -135,6 +140,7 @@ const Report = () => {
   const handleSelectToggle = (
     index: number,
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    data: EquipmentData,
   ) => {
     const updatedEquipment = reportData.map((item, idx) => {
       if (idx === index) return { ...item, selected: !item.selected };
@@ -142,11 +148,18 @@ const Report = () => {
     });
     setReportData(updatedEquipment);
     e.stopPropagation();
+    if (updatedEquipment[index].selected) {
+      setCsvData((prevData) => [...prevData, data]);
+    } else {
+      setCsvData((prevData) =>
+        prevData.filter((d) => d.reportId !== data.reportId),
+      );
+    }
   };
+  console.log(csvData);
   const handleReport = (index: number) => {
     setReportModal(true);
     setDetailReport(index);
-    console.log('인덱스', index);
   };
   const formatDate = (dateString: string) => {
     return dateString.replace('T', ' ').slice(0, 16); // 'T'를 공백으로 대체하고 초 이후를 잘라냄
@@ -204,7 +217,7 @@ const Report = () => {
             </SelectButton>
           ))}
         </ButtonBox>
-        <Button
+        {/* <Button
           width={8}
           height={3}
           $backgroundColor={Color.GRAY200}
@@ -217,7 +230,8 @@ const Report = () => {
           fontWeight={'bold'}
         >
           .csv로 내보내기
-        </Button>
+        </Button> */}
+        <CsvDownloadButton data={csvData} delimiter="," />
       </SelectBox>
       <TitleBox>
         {titleList.map((data, index) => (
@@ -240,7 +254,7 @@ const Report = () => {
             <Title
               width="5%"
               justifyContent="center"
-              onClick={(event) => handleSelectToggle(index, event)}
+              onClick={(event) => handleSelectToggle(index, event, data)}
             >
               {data.selected ? (
                 <img src={Check} alt="" style={{ cursor: 'pointer' }} />
