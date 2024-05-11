@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:autofillHints="PINNumber"
             android:gravity="center"
-            android:hint="@string/password_placeholder"
+            android:hint="@string/redo_pin_placeholder"
             android:inputType="numberPassword"
             android:maxLength="4"
             android:textColor="@color/GRAY400"

@@ -1,11 +1,12 @@
 package com.seolo.seolo.presentation
 
-import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
 import com.seolo.seolo.helper.TokenManager
 import com.seolo.seolo.model.PINRequest
@@ -15,22 +16,36 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PinNumberActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.pin_layout)
-        supportActionBar?.hide()
+class RedoPinNumberFragment : Fragment() {
+
+    companion object {
+        fun newInstance(): RedoPinNumberFragment {
+            return RedoPinNumberFragment()
+        }
     }
 
-    fun onConfirmButtonClick(view: View) {
-        val pinNumberEditText = findViewById<EditText>(R.id.pinNumberEditText)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.redo_pin_layout, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.findViewById<View>(R.id.confirm_button).setOnClickListener {
+            onConfirmButtonClick(view)
+        }
+    }
+
+    private fun onConfirmButtonClick(view: View) {
+        val pinNumberEditText = view.findViewById<EditText>(R.id.pinNumberEditText)
         val pinNumber = pinNumberEditText.text.toString()
         sendPinToServer(pinNumber)
     }
 
     private fun sendPinToServer(pinNumber: String) {
-        val accessToken = TokenManager.getAccessToken(this)
-        val companyCode = TokenManager.getCompanyCode(this)
+        val accessToken = TokenManager.getAccessToken(requireContext())
+        val companyCode = TokenManager.getCompanyCode(requireContext())
 
         val pinRequest = PINRequest(pinNumber)
 
@@ -43,32 +58,24 @@ class PinNumberActivity : AppCompatActivity() {
                 if (response.isSuccessful && response.body() != null) {
                     val responseBody = response.body()!!
                     if (responseBody.authenticated) {
-                        Toast.makeText(this@PinNumberActivity, "인증 성공!", Toast.LENGTH_SHORT).show()
-                        navigateToMainActivity()
+                        Toast.makeText(requireContext(), "인증 성공!", Toast.LENGTH_SHORT).show()
                     } else {
                         val failMessage =
                             "인증 실패: 실패 횟수 ${responseBody.fail_count}, 오류 코드: ${responseBody.auth_error_code}"
-                        Toast.makeText(this@PinNumberActivity, failMessage, Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(requireContext(), failMessage, Toast.LENGTH_SHORT).show()
                     }
                 } else {
                     Toast.makeText(
-                        this@PinNumberActivity, "서버 에러: ${response.code()}", Toast.LENGTH_SHORT
+                        requireContext(), "서버 에러: ${response.code()}", Toast.LENGTH_SHORT
                     ).show()
                 }
             }
 
             override fun onFailure(call: Call<PINResponse>, t: Throwable) {
                 Toast.makeText(
-                    this@PinNumberActivity, "통신 실패: ${t.message}", Toast.LENGTH_SHORT
+                    requireContext(), "통신 실패: ${t.message}", Toast.LENGTH_SHORT
                 ).show()
             }
         })
-    }
-
-    private fun navigateToMainActivity() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 }
