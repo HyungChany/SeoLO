@@ -21,6 +21,13 @@ object RetrofitClient {
             .create(LoginService::class.java)
     }
 
+    // PIN 번호 확인 요청
+    val pinService: PINService by lazy {
+        Retrofit.Builder().baseUrl(BASE_URL).client(client)
+            .addConverterFactory(GsonConverterFactory.create()).build()
+            .create(PINService::class.java)
+    }
+
     // 체크리스트 목록 요청
     val checklistService: ChecklistService by lazy {
         Retrofit.Builder().baseUrl(BASE_URL).client(client)
