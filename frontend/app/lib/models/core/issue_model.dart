@@ -6,7 +6,6 @@ class CoreIssueModel {
   final String endTime;
   final String facilityName;
   final String machineName;
-  final String machineCode;
   final String manager;
   final String taskTemplateName;
   final String endDay;
@@ -20,7 +19,6 @@ class CoreIssueModel {
     required this.endTime,
     required this.facilityName,
     required this.machineName,
-    required this.machineCode,
     required this.manager,
     required this.taskTemplateName,
     required this.endDay,

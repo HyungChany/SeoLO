@@ -10,14 +10,13 @@ class WorkListCheckScreen extends StatefulWidget {
   const WorkListCheckScreen({super.key});
 
   @override
-  _WorkListCheckScreenState createState() => _WorkListCheckScreenState();
+  State<WorkListCheckScreen> createState() => _WorkListCheckScreenState();
 }
 
 class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
   List<String> workListTitle = [
     '작업장',
     '장비 명',
-    '장비 번호',
     '작업 담당자',
     '종료 예상 시간',
     '작업 내용'
@@ -30,7 +29,6 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
     final List<String> workListContent = [
       viewModel.facilityName,
       viewModel.machineName,
-      viewModel.machineCode,
       viewModel.manager,
       viewModel.endTime,
       viewModel.taskTemplateName,

@@ -10,10 +10,13 @@ import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
 import com.seolo.seolo.presentation.LoginActivity
 
+// 로그인 화면의 프래그먼트 클래스
 class LoginFragment : Fragment() {
+
     companion object {
         private const val ARG_HINT = "hint"
 
+        // 프래그먼트 인스턴스 생성 메서드
         fun newInstance(hint: String): LoginFragment {
             val fragment = LoginFragment()
             val args = Bundle()
@@ -23,26 +26,31 @@ class LoginFragment : Fragment() {
         }
     }
 
-    private lateinit var EditText: EditText
+    private lateinit var editText: EditText
 
+    // 프래그먼트의 UI를 생성하는 함수
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // 레이아웃 인플레이트하여 View 객체 생성
         val view = inflater.inflate(R.layout.login_layout, container, false)
-        EditText = view.findViewById(R.id.EditText)
+        editText = view.findViewById(R.id.EditText)
         val hint = arguments?.getString(ARG_HINT)
-        EditText.hint = hint
+        editText.hint = hint
 
+        // 다음 버튼 클릭 이벤트 처리
         val nextButton: Button = view.findViewById(R.id.next_button)
         nextButton.setOnClickListener {
-            // LoginActivity의 변수에 값을 저장
             if (hint == "회사코드를 입력하세요.") {
-                (activity as LoginActivity).companyCode = EditText.text.toString()
+                // LoginActivity의 companyCode 설정
+                (activity as LoginActivity).companyCode = editText.text.toString()
             } else if (hint == "사번을 입력하세요.") {
-                (activity as LoginActivity).username = EditText.text.toString()
+                // LoginActivity의 username 설정
+                (activity as LoginActivity).username = editText.text.toString()
             }
 
+            // LoginActivity의 nextPage 호출
             (activity as LoginActivity).nextPage()
         }
 

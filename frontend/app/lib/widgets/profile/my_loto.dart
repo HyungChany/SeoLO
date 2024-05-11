@@ -11,10 +11,6 @@ class MyLoto extends StatefulWidget {
 }
 
 class _MyLotoState extends State<MyLoto> {
-  final List<String> facilities = ['1공장', '2공장', '3공장', '4공장'];
-  final List<String> machines = ['장비1', '장비2', '장비3', '장비4'];
-  final List<String> starts = ['1시', '2시', '3시', '4시'];
-  final List<String> ends = ['5시', '6시', '7시', '8시'];
   int currentIndex = 0;
   late PageController _pageController;
 
@@ -39,25 +35,29 @@ class _MyLotoState extends State<MyLoto> {
     return viewModel.myTasksModel == []
         ? const Center(child: Text('작성된 LOTO가 없습니다.'))
         : viewModel.isLoading
-            ? Center(
+            ? const Center(
                 child: CircularProgressIndicator(),
               )
             : Column(
                 children: [
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.4,
-                    child: PageView.builder(
-                      itemCount: viewModel.myTasksModel!.length,
-                      controller: _pageController,
-                      onPageChanged: (int index) {
-                        setState(() {
-                          currentIndex = index;
-                        });
-                      },
-                      itemBuilder: (BuildContext context, int index) {
-                        return _buildListItem(index);
-                      },
-                    ),
+                    child: viewModel.myTasksModel!.isEmpty
+                        ? const Center(
+                            child: Text('작업 내역이 없습니다.', style: TextStyle(fontSize: 20),),
+                          )
+                        : PageView.builder(
+                            itemCount: viewModel.myTasksModel!.length,
+                            controller: _pageController,
+                            onPageChanged: (int index) {
+                              setState(() {
+                                currentIndex = index;
+                              });
+                            },
+                            itemBuilder: (BuildContext context, int index) {
+                              return _buildListItem(index);
+                            },
+                          ),
                   ),
                 ],
               );
@@ -71,7 +71,7 @@ class _MyLotoState extends State<MyLoto> {
           currentIndex = index;
           _pageController.animateToPage(
             index,
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             curve: Curves.easeInOut,
           );
         });
@@ -79,7 +79,7 @@ class _MyLotoState extends State<MyLoto> {
       child: Stack(
         children: [
           AnimatedContainer(
-            duration: Duration(milliseconds: 500),
+            duration: const Duration(milliseconds: 500),
             curve: Curves.easeInOut,
             transform: Matrix4.identity()
               ..translate(index == currentIndex

@@ -2,6 +2,7 @@ import 'package:app/routes/main_route.dart';
 import 'package:app/screens/login/login_screen.dart';
 import 'package:app/view_models/core/core_issue_view_model.dart';
 import 'package:app/view_models/loto/checklist_view_model.dart';
+import 'package:app/view_models/loto/facility_view_model.dart';
 import 'package:app/view_models/loto/machine_view_model.dart';
 import 'package:app/view_models/loto/task_templates_view_model.dart';
 import 'package:app/view_models/main/news_view_model.dart';
@@ -71,6 +72,7 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (_) => MyTasksViewModel()),
           ChangeNotifierProvider(create: (_) => CoreIssueViewModel()),
           ChangeNotifierProvider(create: (_) => ChecklistViewModel()),
+          ChangeNotifierProvider(create: (_) => FacilityViewModel()),
           ChangeNotifierProvider(create: (_) => MachineViewModel()),
           ChangeNotifierProvider(create: (_) => TaskTemplatesViewModel()),
         ],

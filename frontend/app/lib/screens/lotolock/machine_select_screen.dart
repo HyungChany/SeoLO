@@ -25,12 +25,12 @@ class _MachineSelectScreenState extends State<MachineSelectScreen> {
     final viewModel = Provider.of<MachineViewModel>(context);
     final coreViewModel = Provider.of<CoreIssueViewModel>(context);
     return Scaffold(
-      appBar: Header(
+      appBar: const Header(
         title: '설비 선택',
         back: true,
       ),
       body: viewModel.isLoading
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : Center(
@@ -38,28 +38,32 @@ class _MachineSelectScreenState extends State<MachineSelectScreen> {
                 width: MediaQuery.of(context).size.width,
                 child: Column(
                   children: [
-                    CheckBanner(word: '설비', content: '를 선택 해주세요'),
-                    SizedBox(
+                    const CheckBanner(word: '설비', content: '를 선택 해주세요'),
+                    const SizedBox(
                       height: 20,
                     ),
-                    Expanded(
-                        child: ListView.builder(
-                      itemCount: viewModel.machines.length,
-                      itemBuilder: (context, index) {
-                        return SelectList(
-                          title: viewModel.machines[index].machineName,
-                          onTap: () {
-                            coreViewModel.setMachineId(
-                                viewModel.machines[index].machineId);
-                            coreViewModel.setMachineName(
-                                viewModel.machines[index].machineName);
-                            coreViewModel.setMachineCode(
-                                viewModel.machines[index].machineCode);
-                            Navigator.pushNamed(context, '/taskTemplate');
-                          },
-                        );
-                      },
-                    ))
+                    viewModel.machines.isEmpty
+                        ? const Center(
+                            child: Text('작업 가능한 설비가 없습니다.', style: TextStyle(fontSize: 20),),
+                          )
+                        : Expanded(
+                            child: ListView.builder(
+                            itemCount: viewModel.machines.length,
+                            itemBuilder: (context, index) {
+                              return SelectList(
+                                title: viewModel.machines[index].machineName,
+                                onTap: () {
+                                  coreViewModel.setMachineId(
+                                      viewModel.machines[index].machineId);
+                                  coreViewModel.setMachineName(
+                                      viewModel.machines[index].machineName);
+                                  // coreViewModel.setMachineCode(
+                                  //     viewModel.machines[index].machineCode);
+                                  Navigator.pushNamed(context, '/taskTemplate');
+                                },
+                              );
+                            },
+                          ))
                   ],
                 ),
               ),

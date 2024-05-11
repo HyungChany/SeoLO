@@ -2,6 +2,7 @@ package com.seolo.seolo.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,56 +10,79 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
+import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.presentation.DatePickerActivity
 
-// WorksFragment 클래스 정의
+// 작업 목록을 표시하는 Fragment 클래스
 class WorksFragment : Fragment() {
-    // 이미지 리소스 ID와 작업 정보를 저장하는 변수 선언
-    private var imageResourceId: Int? = null
-    private var work: String? = null
+    private var imageResourceId: Int = 0
+    private var taskTemplateId: Int = 0
+    private var taskTemplateName: String? = null
+    private var taskPrecaution: String? = null
 
-    // Fragment가 생성될 때 호출되는 메서드
+    // Fragment가 생성될 때 호출되는 함수
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            // 전달된 인자에서 이미지 리소스 ID와 작업 정보를 가져와 변수에 저장
+            // 전달된 인수를 사용하여 프래그먼트 초기화
             imageResourceId = it.getInt(ARG_IMAGE_RESOURCE_ID)
-            work = it.getString(ARG_WORK)
+            taskTemplateId = it.getInt(ARG_TASK_TEMPLATE_ID)
+            taskTemplateName = it.getString(ARG_TASK_TEMPLATE_NAME)
+            taskPrecaution = it.getString(ARG_TASK_PRECAUTION)
         }
     }
 
-    // Fragment의 View를 생성하고 반환하는 메서드
+    // Fragment의 UI를 생성하는 함수
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // work_layout 레이아웃을 inflate하여 View 객체 생성
+        // 레이아웃을 인플레이트하여 View 객체 생성
         val view = inflater.inflate(R.layout.work_layout, container, false)
+        // 이미지 및 텍스트 설정
+        view.findViewById<ImageView>(R.id.workImageView).setImageResource(imageResourceId)
+        view.findViewById<TextView>(R.id.workTextView).text = taskTemplateName
 
-        // ImageView와 TextView를 찾아서 값을 설정
-        val imageView: ImageView = view.findViewById(R.id.workImageView)
-        imageResourceId?.let { imageView.setImageResource(it) }
-        val textView: TextView = view.findViewById(R.id.workTextView)
-        textView.text = work
-
-        // View를 클릭하면 LOTOInfoActivity로 이동하는 이벤트 처리
+        // 클릭 이벤트 처리
         view.setOnClickListener {
             val context = view.context
+            // 선택된 작업 정보를 세션 관리자에 저장
+            SessionManager.selectedTaskTemplateId = taskTemplateId.toString()
+            SessionManager.selectedTaskPrecaution = taskPrecaution
+
+            // 로그 출력
+            Log.d(
+                "WorksFragment",
+                "Task ID: $taskTemplateId, Task Name: $taskTemplateName, Precaution: $taskPrecaution"
+            )
+            // DatePickerActivity로 이동하는 Intent 생성 및 실행
             val intent = Intent(context, DatePickerActivity::class.java)
             context.startActivity(intent)
         }
+
         return view
     }
 
-    // 이미지 리소스 ID와 작업 정보를 인자로 받아 WorksFragment 인스턴스를 생성하는 메서드
     companion object {
+        // 전달할 인수의 키 값 정의
         private const val ARG_IMAGE_RESOURCE_ID = "imageResourceId"
-        private const val ARG_WORK = "work"
+        private const val ARG_TASK_TEMPLATE_ID = "taskTemplateId"
+        private const val ARG_TASK_TEMPLATE_NAME = "taskTemplateName"
+        private const val ARG_TASK_PRECAUTION = "taskPrecaution"
 
-        fun newInstance(imageResourceId: Int, work: String): WorksFragment {
+        // Fragment 인스턴스 생성을 위한 정적 메서드
+        fun newInstance(
+            imageResourceId: Int,
+            taskTemplateId: Int,
+            taskTemplateName: String,
+            taskPrecaution: String
+        ): WorksFragment {
             val fragment = WorksFragment()
-            val args = Bundle()
-            args.putInt(ARG_IMAGE_RESOURCE_ID, imageResourceId)
-            args.putString(ARG_WORK, work)
+            val args = Bundle().apply {
+                putInt(ARG_IMAGE_RESOURCE_ID, imageResourceId)
+                putInt(ARG_TASK_TEMPLATE_ID, taskTemplateId)
+                putString(ARG_TASK_TEMPLATE_NAME, taskTemplateName)
+                putString(ARG_TASK_PRECAUTION, taskPrecaution)
+            }
             fragment.arguments = args
             return fragment
         }

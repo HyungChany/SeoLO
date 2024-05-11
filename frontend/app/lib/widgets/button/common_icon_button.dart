@@ -16,8 +16,9 @@ import '../../main.dart';
 // onTap: () {})
 
 class CommonIconButton extends StatefulWidget {
+
   @override
-  _CommonIconButtonState createState() => _CommonIconButtonState();
+  State<CommonIconButton> createState() => _CommonIconButtonState();
   // final => 더이상 변경되지 않는 값
   // 필수가 아니라면 뒤에 ?
   final String text; // 버튼 내용

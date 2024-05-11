@@ -1,5 +1,8 @@
+import 'package:app/models/loto/facility_model.dart';
 import 'package:app/models/loto/machine_model.dart';
 import 'package:app/models/loto/task_templates_model.dart';
+import 'package:app/models/user/my_info_model.dart';
+import 'package:app/view_models/user/my_info_view_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -54,15 +57,44 @@ class LotoService {
     }
   }
 
-  ///////////////////////// machine //////////////////////////////////
-  Future<Map<String, dynamic>> getMachines() async {
+  ///////////////////////// facility //////////////////////////////////
+  Future<Map<String, dynamic>> getFacilities() async {
+    final MyInfoViewModel myInfoViewModel = MyInfoViewModel();
+    MyInfoModel myInfoModel;
+
+    await myInfoViewModel.myInfo();
+    myInfoModel = myInfoViewModel.myInfoModel!;
+
     try {
       Dio.Response response = await _dio.get(
-        '$baseUrl/machines/facility/1',
+        '$baseUrl/facilities/${myInfoModel.employeeNum}',
+      );
+      if (response.statusCode == 200) {
+        List<FacilityModel> facilities = [];
+        for (var item in response.data['facilities']) {
+          facilities.add(
+            FacilityModel.fromJson(item),
+          );
+        }
+
+        return {'success': true, 'facilities': facilities};
+      } else {
+        return {'success': false};
+      }
+    } on Dio.DioException catch (e) {
+      debugPrint(e.message);
+      return {'success': false, 'statusCode': e.response?.statusCode, 'message': e.message};
+    }
+  }
+  ///////////////////////// machine //////////////////////////////////
+  Future<Map<String, dynamic>> getMachines(int facilityID) async {
+    try {
+      Dio.Response response = await _dio.get(
+        '$baseUrl/machines/facilities/$facilityID/easy',
       );
       if (response.statusCode == 200) {
         List<MachineModel> machines = [];
-        for (var item in response.data['machines']) {
+        for (var item in response.data['machine_id_name_list']) {
           machines.add(
             MachineModel.fromJson(item),
           );
@@ -78,7 +110,7 @@ class LotoService {
     }
   }
 
-  ///////////////////////// machine //////////////////////////////////
+  ///////////////////////// task template //////////////////////////////////
   Future<Map<String, dynamic>> getTaskTemplates() async {
     try {
       Dio.Response response = await _dio.get(

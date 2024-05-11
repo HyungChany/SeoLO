@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.seolo.seolo.R
 
-// LockActivity 클래스 정의
 class LockActivity : AppCompatActivity() {
     // Activity가 생성될 때 호출되는 메서드
     override fun onCreate(savedInstanceState: Bundle?) {
