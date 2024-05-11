@@ -31,13 +31,13 @@ class SplashActivity : ComponentActivity() {
         if (TokenManager.getAccessToken(this).isNullOrEmpty()) {
             navigateToLoginActivity()
         } else {
-            navigateToMainActivity()
+            navigateToPinNumberActivity()
         }
     }
 
-    // 메인 액티비티로 이동
-    private fun navigateToMainActivity() {
-        val intent = Intent(this, MainActivity::class.java)
+    // PIN 입력 액티비티로 이동
+    private fun navigateToPinNumberActivity() {
+        val intent = Intent(this, PinNumberActivity::class.java)
         startActivity(intent)
         finish()
     }
