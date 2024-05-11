@@ -1,12 +1,12 @@
 package com.c104.seolo.domain.facility.service;
 
 import com.c104.seolo.domain.facility.dto.request.FacilityRequest;
-import com.c104.seolo.domain.facility.dto.response.FacilityResponse;
+import com.c104.seolo.domain.facility.dto.response.FacilityListResponse;
 
 public interface FacilityService {
-    FacilityResponse findFacilityByCompany(String companyCode);
+    FacilityListResponse findFacilityByCompany(String companyCode);
     void createFacility(FacilityRequest facilityRequest, String companyCode);
     void updateFacility(FacilityRequest facilityRequest, String companyCode, Long facilityId);
     void deleteFacility(String companyCode, Long facilityId);
-    FacilityResponse findFacilitiesByEmployeeNum(String employeeNum);
+    FacilityListResponse findFacilitiesByEmployeeNum(String employeeNum);
 }

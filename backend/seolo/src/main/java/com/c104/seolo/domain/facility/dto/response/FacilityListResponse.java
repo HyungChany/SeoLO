@@ -13,6 +13,6 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ToString
 @Getter
-public class FacilityResponse {
+public class FacilityListResponse {
     List<FacilityDto> facilities;
 }

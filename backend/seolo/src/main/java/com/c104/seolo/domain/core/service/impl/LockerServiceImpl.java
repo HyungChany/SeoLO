@@ -76,7 +76,6 @@ public class LockerServiceImpl implements LockerService {
                 .encryptionKey(AesEncryption.getBase64EncodedKey(binarySecretKey))
                 .build();
 
-
         lockerRepository.save(newLocker);
     }
 

@@ -10,6 +10,7 @@ import lombok.Getter;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Getter
 public class ReportUpdateRequest {
+
     @NotNull
     private boolean isAccident;
 

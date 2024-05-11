@@ -2,10 +2,12 @@ package com.c104.seolo.domain.task.repository;
 
 import com.c104.seolo.domain.task.dto.info.TaskHistoryInfo;
 import com.c104.seolo.domain.task.entity.TaskHistory;
+import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,4 +40,10 @@ public interface TaskHistoryRepository extends JpaRepository<TaskHistory, Long> 
             "u.employee.employeeTeam, u.employee.employeeName, u.employee.employeeTitle " +
             ") FROM TaskHistory t join t.user u join t.machine m where t.user.employee.employeeNum = :employeeNum order by t.taskStartDateTime desc ")
     List<TaskHistoryInfo> getTaskHistoryByEmployeeNum(String employeeNum);
+
+    @Query("SELECT COUNT(th) FROM TaskHistory th WHERE th.machine.facility.id = :facilityId")
+    Long countByFacilityId(@Param("facilityId") Long facilityId);
+
+    @Query("SELECT COUNT(th) FROM TaskHistory th WHERE th.machine.facility.id = :facilityId AND th.createdAt >= :startOfDay AND th.createdAt < :endOfDay")
+    Long countByFacilityIdAndCreatedAtBetween(@Param("facilityId") Long facilityId, @Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);
 }

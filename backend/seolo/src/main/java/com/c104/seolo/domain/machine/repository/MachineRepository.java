@@ -28,4 +28,7 @@ public interface MachineRepository extends JpaRepository<Machine, Long> {
     Optional<MachineInfo> findInfoById(@Param("machineId") Long machineId);
 
     List<Machine> findByFacilityId(Long facilityId);
+
+    @Query("SELECT COUNT(m) FROM Machine m WHERE m.facility.id = :facilityId")
+    Long countByFacilityId(@Param("facilityId") Long facilityId);
 }
