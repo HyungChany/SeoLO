@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.CarouselStateAdapter
-import com.seolo.seolo.fragments.LoginFragment
+import com.seolo.seolo.fragments.LoginPartOneFragment
 import com.seolo.seolo.fragments.LoginPartTwoFragment
 
 class LoginActivity : AppCompatActivity() {
@@ -25,8 +25,8 @@ class LoginActivity : AppCompatActivity() {
         viewPager = findViewById(R.id.viewPager)
         val adapter = CarouselStateAdapter(this)
         // 로그인 프래그먼트 및 두 번째 로그인 프래그먼트 추가
-        adapter.addFragment(LoginFragment.newInstance("회사코드를 입력하세요."))
-        adapter.addFragment(LoginFragment.newInstance("사번을 입력하세요."))
+        adapter.addFragment(LoginPartOneFragment.newInstance("회사코드를 입력하세요."))
+        adapter.addFragment(LoginPartOneFragment.newInstance("사번을 입력하세요."))
         adapter.addFragment(LoginPartTwoFragment())
         viewPager.adapter = adapter
     }

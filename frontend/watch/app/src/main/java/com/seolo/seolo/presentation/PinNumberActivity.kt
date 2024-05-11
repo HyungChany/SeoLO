@@ -40,27 +40,39 @@ class PinNumberActivity : AppCompatActivity() {
             )
         }?.enqueue(object : Callback<PINResponse> {
             override fun onResponse(call: Call<PINResponse>, response: Response<PINResponse>) {
-                if (response.isSuccessful && response.body() != null) {
-                    val responseBody = response.body()!!
-                    if (responseBody.authenticated) {
-                        Toast.makeText(this@PinNumberActivity, "인증 성공!", Toast.LENGTH_SHORT).show()
-                        navigateToMainActivity()
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                        if (responseBody.authenticated) {
+                            Toast.makeText(this@PinNumberActivity, "인증 성공!", Toast.LENGTH_SHORT)
+                                .show()
+                            navigateToMainActivity()
+                        } else {
+                            val failMessage = "실패 횟수 ${responseBody.fail_count}"
+                            Toast.makeText(
+                                this@PinNumberActivity,
+                                "PIN 번호가 틀렸습니다. 실패횟수:${failMessage}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } else {
-                        val failMessage =
-                            "인증 실패: 실패 횟수 ${responseBody.fail_count}, 오류 코드: ${responseBody.auth_error_code}"
-                        Toast.makeText(this@PinNumberActivity, failMessage, Toast.LENGTH_SHORT)
-                            .show()
+                        // 서버 응답은 성공했지만 body가 null인 경우
+                        Toast.makeText(
+                            this@PinNumberActivity, "서버 응답이 올바르지 않습니다.", Toast.LENGTH_SHORT
+                        ).show()
                     }
                 } else {
+                    // 서버 응답 실패
                     Toast.makeText(
-                        this@PinNumberActivity, "서버 에러: ${response.code()}", Toast.LENGTH_SHORT
+                        this@PinNumberActivity, "서버 응답이 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT
                     ).show()
                 }
             }
 
             override fun onFailure(call: Call<PINResponse>, t: Throwable) {
+                // 네트워크 연결 실패
                 Toast.makeText(
-                    this@PinNumberActivity, "통신 실패: ${t.message}", Toast.LENGTH_SHORT
+                    this@PinNumberActivity, "네트워크에 연결할 수 없습니다. 인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT
                 ).show()
             }
         })

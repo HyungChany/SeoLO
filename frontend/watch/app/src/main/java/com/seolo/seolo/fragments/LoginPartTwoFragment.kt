@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
 import com.seolo.seolo.helper.TokenManager
@@ -61,9 +62,9 @@ class LoginPartTwoFragment : Fragment() {
             override fun onResponse(
                 call: Call<TokenResponse>, response: Response<TokenResponse>
             ) {
-                response.body()?.let { tokenResponse ->
-                    if (tokenResponse.issuedToken.accessToken.isNotEmpty()) {
-
+                if (response.isSuccessful) {
+                    val tokenResponse = response.body()
+                    if (tokenResponse != null && tokenResponse.issuedToken.accessToken.isNotEmpty()) {
                         // 발급된 토큰 저장
                         TokenManager.setAccessToken(
                             requireContext(), tokenResponse.issuedToken.accessToken
@@ -76,11 +77,20 @@ class LoginPartTwoFragment : Fragment() {
                         startActivity(intent)
                         activity.finish()
                     }
+                } else {
+                    // 로그인 실패 시 토스트 메시지 출력
+                    Toast.makeText(
+                        requireContext(), "사번, 비밀번호 또는 회사 코드가 틀렸습니다.", Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
+            // 통신 실패 시 토스트 메시지 출력
             override fun onFailure(call: Call<TokenResponse>, t: Throwable) {
-                // 로그인 실패 시 처리 로직
+                Toast.makeText(
+                    requireContext(), "네트워크 연결을 다시 한 번 확인 해주세요.", Toast.LENGTH_SHORT
+                ).show()
+
             }
         })
     }

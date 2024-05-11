@@ -11,14 +11,14 @@ import com.seolo.seolo.R
 import com.seolo.seolo.presentation.LoginActivity
 
 // 로그인 화면의 프래그먼트 클래스
-class LoginFragment : Fragment() {
+class LoginPartOneFragment : Fragment() {
 
     companion object {
         private const val ARG_HINT = "hint"
 
         // 프래그먼트 인스턴스 생성 메서드
-        fun newInstance(hint: String): LoginFragment {
-            val fragment = LoginFragment()
+        fun newInstance(hint: String): LoginPartOneFragment {
+            val fragment = LoginPartOneFragment()
             val args = Bundle()
             args.putString(ARG_HINT, hint)
             fragment.arguments = args

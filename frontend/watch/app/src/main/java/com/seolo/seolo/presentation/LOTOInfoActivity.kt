@@ -1,14 +1,13 @@
 package com.seolo.seolo.presentation
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import com.seolo.seolo.R
 import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.adapters.CarouselStateAdapter
-import com.seolo.seolo.fragments.LastLOTOInfoFragment
+import com.seolo.seolo.fragments.LOTOInfoLastFragment
 import com.seolo.seolo.fragments.LOTOInfoFragment
 import com.seolo.seolo.helper.SessionManager
 
@@ -42,7 +41,7 @@ class LOTOInfoActivity : AppCompatActivity() {
         machineName?.let { LOTOInfoFragment.newInstance("장비", it) }?.let { adapter.addFragment(it) }
         taskPrecaution?.let { LOTOInfoFragment.newInstance("작업내용", it) }
             ?.let { adapter.addFragment(it) }
-        adapter.addFragment(LastLOTOInfoFragment.newInstance("종료 예상 시간", simpleDate))
+        adapter.addFragment(LOTOInfoLastFragment.newInstance("종료 예상 시간", simpleDate))
 
         // ViewPager2에 어댑터 설정
         viewPager.adapter = adapter

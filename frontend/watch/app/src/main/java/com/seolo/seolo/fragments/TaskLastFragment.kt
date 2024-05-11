@@ -14,7 +14,7 @@ import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.presentation.DatePickerActivity
 
 // 마지막 작업 목록을 표시하는 Fragment 클래스
-class LastWorksFragment : Fragment() {
+class TaskLastFragment : Fragment() {
     private var imageResourceId: Int = 0
     private var taskTemplateId: Int = 0
     private var taskTemplateName: String? = null
@@ -75,8 +75,8 @@ class LastWorksFragment : Fragment() {
             taskTemplateId: Int,
             taskTemplateName: String,
             taskPrecaution: String
-        ): LastWorksFragment {
-            val fragment = LastWorksFragment()
+        ): TaskLastFragment {
+            val fragment = TaskLastFragment()
             val args = Bundle().apply {
                 putInt(ARG_IMAGE_RESOURCE_ID, imageResourceId)
                 putInt(ARG_TASK_TEMPLATE_ID, taskTemplateId)

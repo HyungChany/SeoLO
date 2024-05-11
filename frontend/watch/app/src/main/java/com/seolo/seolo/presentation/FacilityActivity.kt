@@ -19,7 +19,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import sh.tyy.wheelpicker.core.WheelPickerRecyclerView
 
-class LocationActivity : AppCompatActivity() {
+class FacilityActivity : AppCompatActivity() {
     // 필드 초기화
     private lateinit var facilities: ArrayList<FacilityItem>
     private var selectedFacilityId: String? = null
@@ -80,7 +80,7 @@ class LocationActivity : AppCompatActivity() {
                         val machines = response.body()?.machines ?: listOf()
                         Log.d("MachineResponse", "Machines: $machines")
                         // EquipmentActivity로 이동하고 기계 목록 전달
-                        val intent = Intent(this@LocationActivity, EquipmentActivity::class.java)
+                        val intent = Intent(this@FacilityActivity, EquipmentActivity::class.java)
                         intent.putExtra("machines", ArrayList(machines))
                         startActivity(intent)
                     } else {

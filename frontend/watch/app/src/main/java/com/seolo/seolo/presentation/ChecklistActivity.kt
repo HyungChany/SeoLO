@@ -62,7 +62,7 @@ class ChecklistActivity : AppCompatActivity() {
             viewPager.currentItem = currentItem + 1
         } else {
             // 시설물 정보를 담아 LocationActivity로 이동
-            val intent = Intent(this, LocationActivity::class.java)
+            val intent = Intent(this, FacilityActivity::class.java)
             intent.putExtra("facilities", ArrayList(facilities))
             startActivity(intent)
         }

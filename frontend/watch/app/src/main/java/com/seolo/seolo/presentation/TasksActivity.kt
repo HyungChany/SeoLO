@@ -8,11 +8,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.CarouselStateAdapter
-import com.seolo.seolo.fragments.LastWorksFragment
-import com.seolo.seolo.fragments.WorksFragment
+import com.seolo.seolo.fragments.TaskLastFragment
+import com.seolo.seolo.fragments.TasksFragment
 import com.seolo.seolo.model.TaskItem
 
-class WorkActivity : AppCompatActivity() {
+class TasksActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,7 +34,7 @@ class WorkActivity : AppCompatActivity() {
             for ((index, task) in it.withIndex()) {
                 if (index == it.size - 1) {
                     // 마지막 작업 프래그먼트 추가
-                    val lastFragment = LastWorksFragment.newInstance(
+                    val lastFragment = TaskLastFragment.newInstance(
                         getDrawableId(task.taskTemplateName),
                         task.taskTemplateId,
                         task.taskTemplateName,
@@ -43,7 +43,7 @@ class WorkActivity : AppCompatActivity() {
                     adapter.addFragment(lastFragment)
                 } else {
                     // 일반 작업 프래그먼트 추가
-                    val fragment = WorksFragment.newInstance(
+                    val fragment = TasksFragment.newInstance(
                         getDrawableId(task.taskTemplateName),
                         task.taskTemplateId,
                         task.taskTemplateName,
