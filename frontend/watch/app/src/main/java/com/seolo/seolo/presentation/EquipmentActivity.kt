@@ -66,7 +66,7 @@ class EquipmentActivity : AppCompatActivity() {
                 // 작업 목록 가져오기
                 getTasks {
                     // WorkActivity로 이동하고 작업 목록 전달
-                    val intent = Intent(this@EquipmentActivity, WorkActivity::class.java)
+                    val intent = Intent(this@EquipmentActivity, TasksActivity::class.java)
                     intent.putExtra("tasks", ArrayList(it))
                     startActivity(intent)
                 }

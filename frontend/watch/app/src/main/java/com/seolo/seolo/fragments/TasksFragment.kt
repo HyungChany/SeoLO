@@ -14,7 +14,7 @@ import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.presentation.DatePickerActivity
 
 // 작업 목록을 표시하는 Fragment 클래스
-class WorksFragment : Fragment() {
+class TasksFragment : Fragment() {
     private var imageResourceId: Int = 0
     private var taskTemplateId: Int = 0
     private var taskTemplateName: String? = null
@@ -75,8 +75,8 @@ class WorksFragment : Fragment() {
             taskTemplateId: Int,
             taskTemplateName: String,
             taskPrecaution: String
-        ): WorksFragment {
-            val fragment = WorksFragment()
+        ): TasksFragment {
+            val fragment = TasksFragment()
             val args = Bundle().apply {
                 putInt(ARG_IMAGE_RESOURCE_ID, imageResourceId)
                 putInt(ARG_TASK_TEMPLATE_ID, taskTemplateId)
