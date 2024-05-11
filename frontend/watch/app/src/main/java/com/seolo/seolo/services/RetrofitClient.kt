@@ -33,8 +33,8 @@ object RetrofitClient {
 // PIN 번호 변경 요청
     val NewPinService: NewPINService by lazy {
         Retrofit.Builder().baseUrl(BASE_URL).client(client)
-            .addConverterFactory(GsonConverterFactory.create())
             .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(NewPINService::class.java)
     }

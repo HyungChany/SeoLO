@@ -1,6 +1,7 @@
 package com.seolo.seolo.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,9 +71,14 @@ class RedoPinNumberFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<String>, t: Throwable) {
-                    Toast.makeText(requireContext(), "통신 실패: ${t.message}", Toast.LENGTH_SHORT)
-                        .show()
+                    Log.e("PIN Change Error", "통신 실패", t)
+                    Toast.makeText(
+                        requireContext(),
+                        "통신 실패: ${t.localizedMessage}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
+
             })
         }
     }
