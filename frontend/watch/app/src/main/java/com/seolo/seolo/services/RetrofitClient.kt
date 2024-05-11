@@ -4,6 +4,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object RetrofitClient {
     private const val BASE_URL = "https://k10c104.p.ssafy.io/api/"
@@ -26,6 +27,16 @@ object RetrofitClient {
         Retrofit.Builder().baseUrl(BASE_URL).client(client)
             .addConverterFactory(GsonConverterFactory.create()).build()
             .create(PINService::class.java)
+    }
+
+    // PIN 번호 변경 요청
+// PIN 번호 변경 요청
+    val NewPinService: NewPINService by lazy {
+        Retrofit.Builder().baseUrl(BASE_URL).client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(ScalarsConverterFactory.create())
+            .build()
+            .create(NewPINService::class.java)
     }
 
     // 체크리스트 목록 요청
