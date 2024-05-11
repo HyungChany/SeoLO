@@ -2,7 +2,7 @@ package com.c104.seolo.domain.report.controller;
 
 import com.c104.seolo.domain.machine.dto.request.ReportUpdateRequest;
 import com.c104.seolo.domain.report.dto.ReportDto;
-import com.c104.seolo.domain.report.dto.response.ReportsReponse;
+import com.c104.seolo.domain.report.dto.response.ReportsResponse;
 import com.c104.seolo.domain.report.service.ReportService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class ReportController {
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_MANAGER")
     @GetMapping
-    public ReportsReponse getAllReports() {
+    public ReportsResponse getAllReports() {
         return reportService.getAllReports();
     }
 

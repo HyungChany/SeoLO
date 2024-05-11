@@ -2,7 +2,7 @@ package com.c104.seolo.domain.report.service.impl;
 
 import com.c104.seolo.domain.report.dto.NewReport;
 import com.c104.seolo.domain.report.dto.ReportDto;
-import com.c104.seolo.domain.report.dto.response.ReportsReponse;
+import com.c104.seolo.domain.report.dto.response.ReportsResponse;
 import com.c104.seolo.domain.report.entity.Report;
 import com.c104.seolo.domain.report.exception.ReportErrorCode;
 import com.c104.seolo.domain.report.repository.ReportRepository;
@@ -32,14 +32,14 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ReportsReponse getAllReports() {
+    public ReportsResponse getAllReports() {
         List<Report> allReports = reportRepository.findAll();
 
         Collections.reverse(allReports);
         List<ReportDto> reportDtos = new ArrayList<>();
         allReports.forEach(report -> reportDtos.add(ReportDto.of(report)));
 
-        return ReportsReponse.builder()
+        return ReportsResponse.builder()
                 .reports(reportDtos)
                 .build();
     }

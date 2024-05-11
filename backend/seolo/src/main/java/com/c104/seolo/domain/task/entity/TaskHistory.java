@@ -70,5 +70,4 @@ public class TaskHistory extends BaseEntity {
     }
 
     public TaskHistory() {}
-
 }
