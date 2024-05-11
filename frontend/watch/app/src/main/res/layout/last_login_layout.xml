@@ -24,7 +24,7 @@
         android:gravity="center"
         android:hint="@string/password_login"
         android:inputType="textPassword"
-        android:textColor="@color/SNOW"
+        android:textColor="@color/GRAY400"
         android:textColorHint="@color/GRAY400"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
