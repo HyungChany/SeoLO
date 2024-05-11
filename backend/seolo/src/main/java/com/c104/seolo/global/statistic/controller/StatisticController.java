@@ -1,7 +1,7 @@
 package com.c104.seolo.global.statistic.controller;
 
 import com.c104.seolo.global.statistic.dto.request.MainStatRequest;
-import com.c104.seolo.global.statistic.dto.response.StatisticResponse;
+import com.c104.seolo.global.statistic.dto.response.MainStatisticResponse;
 import com.c104.seolo.global.statistic.service.StatisticService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +15,7 @@ public class StatisticController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/main")
-    public StatisticResponse getMainStatistics(@RequestBody MainStatRequest mainStatRequest, @RequestHeader("Company-Code") String companyCode) {
+    public MainStatisticResponse getMainStatistics(@RequestBody MainStatRequest mainStatRequest, @RequestHeader("Company-Code") String companyCode) {
         return statisticService.getMainStatistics(mainStatRequest.getFacilityId(), companyCode);
     }
 }

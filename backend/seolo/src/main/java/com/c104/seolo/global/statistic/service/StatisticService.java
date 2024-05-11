@@ -1,10 +1,10 @@
 package com.c104.seolo.global.statistic.service;
 
-import com.c104.seolo.global.statistic.dto.response.StatisticResponse;
+import com.c104.seolo.global.statistic.dto.response.MainStatisticResponse;
 
 public interface StatisticService {
 
-    StatisticResponse getMainStatistics(Long facilityId, String companyCode);
+    MainStatisticResponse getMainStatistics(Long facilityId, String companyCode);
     Long countAllMachinesByFacility(Long facilityId);
     Long countAllLockerByCompanyCode(String companyCode);
     Long countTodayTaskHistoriesByFacilityId(Long facilityId);

@@ -3,7 +3,7 @@ package com.c104.seolo.domain.facility.service.impl;
 import com.c104.seolo.domain.facility.dto.FacilityDto;
 import com.c104.seolo.domain.facility.dto.info.FacilityInfo;
 import com.c104.seolo.domain.facility.dto.request.FacilityRequest;
-import com.c104.seolo.domain.facility.dto.response.FacilityResponse;
+import com.c104.seolo.domain.facility.dto.response.FacilityListResponse;
 import com.c104.seolo.domain.facility.entity.Facility;
 import com.c104.seolo.domain.facility.exception.FacilityErrorCode;
 import com.c104.seolo.domain.facility.repository.FacilityRepository;
@@ -36,7 +36,7 @@ public class FacilityServiceImpl implements FacilityService {
     private final MachineManagerRepository machineManagerRepository;
 
     @Override
-    public FacilityResponse findFacilityByCompany(String companyCode) {
+    public FacilityListResponse findFacilityByCompany(String companyCode) {
         if (!facilityRepository.existsByCompany(companyCode)) {
             throw new CommonException(FacilityErrorCode.NOT_EXIST_FACILITY);
         }
@@ -50,7 +50,7 @@ public class FacilityServiceImpl implements FacilityService {
                         .build())
                 .collect(Collectors.toList());
 
-        return FacilityResponse.builder()
+        return FacilityListResponse.builder()
                 .facilities(facilityDtos)
                 .build();
     }
@@ -119,7 +119,7 @@ public class FacilityServiceImpl implements FacilityService {
     }
 
     @Override
-    public FacilityResponse findFacilitiesByEmployeeNum(String employeeNum) {
+    public FacilityListResponse findFacilitiesByEmployeeNum(String employeeNum) {
         // 사원에게 할당된 작업장 조회하기
         // 1. 사원번호로 사원 정보(회사코드)를 조회한다
         // 2. 회사 코드를 이용해서 작업장 DB를 모두 조회한다.

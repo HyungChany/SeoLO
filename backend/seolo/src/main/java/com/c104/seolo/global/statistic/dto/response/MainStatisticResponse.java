@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class StatisticResponse {
+public class MainStatisticResponse {
     private Long NumAllMachinesInThisFacility;
     private Long NumAllLockersInThisCompany;
     private Long NumToodyTaskHistorieseInThisFacility;
@@ -16,7 +16,7 @@ public class StatisticResponse {
 
     @Builder
 
-    public StatisticResponse(Long numAllMachinesInThisFacility, Long numAllLockersInThisCompany, Long numToodyTaskHistorieseInThisFacility, Long numThisWeekTaskHistorieseInThisFacility, Long numAllAccidentsInThisCompany) {
+    public MainStatisticResponse(Long numAllMachinesInThisFacility, Long numAllLockersInThisCompany, Long numToodyTaskHistorieseInThisFacility, Long numThisWeekTaskHistorieseInThisFacility, Long numAllAccidentsInThisCompany) {
         NumAllMachinesInThisFacility = numAllMachinesInThisFacility;
         NumAllLockersInThisCompany = numAllLockersInThisCompany;
         NumToodyTaskHistorieseInThisFacility = numToodyTaskHistorieseInThisFacility;

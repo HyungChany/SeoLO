@@ -4,7 +4,7 @@ import com.c104.seolo.domain.core.repository.LockerRepository;
 import com.c104.seolo.domain.machine.repository.MachineRepository;
 import com.c104.seolo.domain.report.repository.ReportRepository;
 import com.c104.seolo.domain.task.repository.TaskHistoryRepository;
-import com.c104.seolo.global.statistic.dto.response.StatisticResponse;
+import com.c104.seolo.global.statistic.dto.response.MainStatisticResponse;
 import com.c104.seolo.global.statistic.service.StatisticService;
 import com.c104.seolo.global.util.DateUtils;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +23,8 @@ public class StatisticServiceImpl implements StatisticService {
     private final ReportRepository reportRepository;
 
     @Override
-    public StatisticResponse getMainStatistics(Long facilityId, String companyCode) {
-        return StatisticResponse.builder()
+    public MainStatisticResponse getMainStatistics(Long facilityId, String companyCode) {
+        return MainStatisticResponse.builder()
                 .numAllMachinesInThisFacility(countAllMachinesByFacility(facilityId))
                 .numAllLockersInThisCompany(countAllLockerByCompanyCode(companyCode))
                 .numToodyTaskHistorieseInThisFacility(countTodayTaskHistoriesByFacilityId(facilityId))

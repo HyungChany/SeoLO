@@ -11,6 +11,9 @@ import com.c104.seolo.global.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -62,4 +65,20 @@ public class ReportServiceImpl implements ReportService {
         reportRepository.save(report);
         return ReportDto.of(report);
     }
+
+    @Override
+    public ReportsResponse getReportsByDateRange(LocalDate startDate, LocalDate endDate) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+        List<Report> targetReports = reportRepository.findAllByTaskStartDateTimeBetween(startDateTime, endDateTime);
+
+        Collections.reverse(targetReports);
+        List<ReportDto> reportDtos = new ArrayList<>();
+        targetReports.forEach(report -> reportDtos.add(ReportDto.of(report)));
+
+        return ReportsResponse.builder()
+                .reports(reportDtos)
+                .build();
+    }
+
 }
