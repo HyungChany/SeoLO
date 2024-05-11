@@ -1,5 +1,6 @@
 package com.seolo.seolo.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -62,6 +63,11 @@ class RedoPinNumberFragment : Fragment() {
                             Toast.makeText(
                                 requireContext(), "PIN 변경 성공. 로그아웃합니다.", Toast.LENGTH_SHORT
                             ).show()
+                            TokenManager.clearTokens(requireContext())
+                            Intent(requireContext(), SplashActivity::class.java).apply {
+                                startActivity(this)
+                                requireActivity().finish()
+                            }
                         }
                     } else {
                         Toast.makeText(
@@ -73,9 +79,7 @@ class RedoPinNumberFragment : Fragment() {
                 override fun onFailure(call: Call<String>, t: Throwable) {
                     Log.e("PIN Change Error", "통신 실패", t)
                     Toast.makeText(
-                        requireContext(),
-                        "통신 실패: ${t.localizedMessage}",
-                        Toast.LENGTH_SHORT
+                        requireContext(), "통신 실패: ${t.localizedMessage}", Toast.LENGTH_SHORT
                     ).show()
                 }
 
