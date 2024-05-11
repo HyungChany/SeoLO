@@ -2,6 +2,7 @@ package com.seolo.seolo.presentation
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputFilter
 import android.view.View
 import android.widget.EditText
 import android.widget.Toast
