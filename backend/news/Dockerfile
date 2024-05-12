@@ -19,15 +19,12 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # 소스 코드 복사
 COPY ./ /app
+
 # gunicorn 설치
 RUN pip install gunicorn
 
-# Python 경로 설정
-ENV PYTHONPATH=/app/myproject
+# Python 경로 설정 (my_setting.py 파일이 있는 디렉토리를 포함)
+ENV PYTHONPATH=/app/news/news
 
 # Docker 컨테이너 내에서 실행될 명령을 지정합니다.
-
-# Django 애플리케이션 실행
-# CMD ["python", "manage.py", "runserver" ]
-
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "news.wsgi:application"]
