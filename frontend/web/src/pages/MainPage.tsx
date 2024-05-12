@@ -21,6 +21,7 @@ import styled from 'styled-components';
 interface NumberType {
   color: string;
   marginTop?: string;
+  marginBottom?: string;
 }
 interface FacilityType {
   id: string;
@@ -68,8 +69,10 @@ const LeftContainer = styled.div`
 
 const HeaderContainer = styled.div`
   position: relative;
+  display: flex;
+  justify-content: center;
   text-align: center;
-  margin: 7% 1%;
+  margin: 4% 0 12%;
 `;
 
 const Line = styled.div`
@@ -106,21 +109,30 @@ const RowContainer = styled.div`
 
 const LogoutBtn = styled.button`
   display: flex;
-  width: 12rem;
+  width: 10rem;
   font-family: NYJGothicB;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   justify-content: space-evenly;
   align-items: center;
   background-color: ${Color.GRAY100};
   border-radius: 0.625rem;
   border: 2px solid rgba(0, 0, 0, 0.2);
-  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 5px 6px rgba(0, 0, 0, 0.3);
   margin: 0 auto;
+  padding: 0.3rem 0;
   cursor: pointer;
+
+  &:hover {
+    background-color: ${Color.RED};
+  }
+
+  &:active {
+    background-color: ${Color.RED1};
+  }
 `;
 
 const LogoutIcon = styled.img`
-  width: 50px;
+  width: 2.3rem;
 `;
 
 const PositionIcon = styled(Position)`
@@ -184,10 +196,11 @@ const NumberContainer = styled.div<NumberType>`
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 5.625rem;
+  font-size: 6rem;
   font-weight: 700;
   color: ${(props) => props.color};
-  margin-top: ${(props) => props.marginTop};
+  margin-top: ${(props) => props.marginTop || '0'};
+  margin-bottom: ${(props) => props.marginBottom || '0'};
 `;
 
 const Handle = () => {};
@@ -317,7 +330,7 @@ const MainPage = () => {
                   <Button
                     onClick={changeModifyMode}
                     width={3.5}
-                    height={1}
+                    height={2}
                     $backgroundColor={Color.GRAY100}
                     $borderColor={Color.GRAY100}
                     $borderRadius={0.3}
@@ -330,7 +343,7 @@ const MainPage = () => {
                   <Button
                     onClick={changeModifyMode}
                     width={3.5}
-                    height={1}
+                    height={2}
                     $backgroundColor={Color.GRAY100}
                     $borderColor={Color.GRAY100}
                     $borderRadius={0.3}
@@ -383,39 +396,39 @@ const MainPage = () => {
             )}
             <Cards>
               <Card
-                width={'11rem'}
-                height={'10rem'}
-                onClick={Handle}
+                width={11}
+                height={11}
+                // onClick={Handle}
                 flexDirection="column"
               >
                 <InnerContainer>
                   <Typo.H4>
-                    <div style={{ marginTop: '0.5rem' }}>등록 장비</div>
+                    <div style={{ marginTop: '0.3rem' }}>등록 장비</div>
                   </Typo.H4>
                 </InnerContainer>
-                <NumberContainer color={Color.GREEN400} marginTop="1.5rem">
+                <NumberContainer color={Color.GREEN400} marginTop="1rem">
                   {mainInformation?.num_all_machines_in_this_facility}
                 </NumberContainer>
               </Card>
               <Card
-                width={'11rem'}
-                height={'10rem'}
-                onClick={Handle}
+                width={11}
+                height={11}
+                // onClick={Handle}
                 flexDirection="column"
               >
                 <InnerContainer>
                   <Typo.H4>
-                    <div style={{ marginTop: '0.5rem' }}>자물쇠 현황</div>
+                    <div style={{ marginTop: '0.3rem' }}>자물쇠 현황</div>
                   </Typo.H4>
                 </InnerContainer>
-                <NumberContainer color={Color.GREEN400} marginTop="1.5rem">
+                <NumberContainer color={Color.GREEN400} marginTop="1rem">
                   {mainInformation?.num_all_lockers_in_this_company}
                 </NumberContainer>
               </Card>
               <Card
-                width={'11rem'}
-                height={'10rem'}
-                onClick={Handle}
+                width={11}
+                height={11}
+                // onClick={Handle}
                 flexDirection="column"
               >
                 <InnerContainer>
@@ -426,12 +439,12 @@ const MainPage = () => {
                         justifyContent: 'space-between',
                       }}
                     >
-                      <div style={{ margin: '0.5rem 0.5rem 0 0' }}>오늘의</div>
+                      <div style={{ marginTop: '0.3rem' }}>오늘의</div>
                       <Typo.H2 color={Color.RED100}>LOTO</Typo.H2>
                     </div>
                     작업내역
                   </Typo.H4>
-                  <NumberContainer color={Color.RED100}>
+                  <NumberContainer color={Color.RED100} marginTop="-0.7rem">
                     {
                       mainInformation?.num_toody_task_historiese_in_this_facility
                     }
@@ -439,9 +452,9 @@ const MainPage = () => {
                 </InnerContainer>
               </Card>
               <Card
-                width={'11rem'}
-                height={'10rem'}
-                onClick={Handle}
+                width={11}
+                height={11}
+                // onClick={Handle}
                 flexDirection="column"
               >
                 <InnerContainer>
@@ -452,22 +465,22 @@ const MainPage = () => {
                         justifyContent: 'space-between',
                       }}
                     >
-                      <div style={{ margin: '0.5rem 0.3rem 0 0' }}>이번 주</div>
+                      <div style={{ marginTop: '0.3rem' }}>이번 주</div>
                       <Typo.H2 color={Color.RED100}>LOTO</Typo.H2>
                     </div>
                     사용현황
                   </Typo.H4>
                 </InnerContainer>
-                <NumberContainer color={Color.RED100}>
+                <NumberContainer color={Color.RED100} marginTop="-0.7rem">
                   {
                     mainInformation?.num_this_week_task_historiese_in_this_facility
                   }
                 </NumberContainer>
               </Card>
               <Card
-                width={'11rem'}
-                height={'10rem'}
-                onClick={Handle}
+                width={11}
+                height={11}
+                // onClick={Handle}
                 flexDirection="column"
               >
                 <InnerContainer>
@@ -478,13 +491,13 @@ const MainPage = () => {
                         justifyContent: 'space-between',
                       }}
                     >
-                      <div style={{ margin: '0.5rem 0.8rem 0 0' }}>이번 달</div>
+                      <div style={{ marginTop: '0.3rem' }}>이번 달</div>
                       <Typo.H2 color={Color.RED100}>재해</Typo.H2>
                     </div>
                     발생현황
                   </Typo.H4>
                 </InnerContainer>
-                <NumberContainer color={Color.RED100}>
+                <NumberContainer color={Color.RED100} marginTop="-0.7rem">
                   {mainInformation?.num_all_accidents_in_this_company}
                 </NumberContainer>
               </Card>

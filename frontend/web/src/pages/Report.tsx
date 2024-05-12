@@ -317,7 +317,7 @@ const Report = () => {
             />
             {/* </LocalizationProvider> */}
 
-            <div>~</div>
+            <div style={{ fontSize: '2rem', marginBottom: '0.6rem' }}>~</div>
             {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
             <DatePicker
               // value={endDate}
@@ -330,23 +330,24 @@ const Report = () => {
               disableFuture
             />
           </LocalizationProvider>
-
-          <Button
-            onClick={() => handleSearch(formatStartDate, formatEndDate)}
-            width={4}
-            height={2.5}
-            fontWeight={900}
-            fontSize={1}
-            $backgroundColor={Color.GRAY200}
-            $borderColor={Color.GRAY200}
-            $borderRadius={0.5}
-            $hoverBackgroundColor={Color.GRAY300}
-            $hoverBorderColor={Color.GRAY300}
-          >
-            검색
-          </Button>
+          <div style={{ marginLeft: '1rem' }}>
+            <Button
+              onClick={() => handleSearch(formatStartDate, formatEndDate)}
+              width={4}
+              height={2.5}
+              fontWeight={900}
+              fontSize={1.2}
+              $backgroundColor={Color.GRAY200}
+              $borderColor={Color.GRAY200}
+              $borderRadius={0.5}
+              $hoverBackgroundColor={Color.GRAY300}
+              $hoverBorderColor={Color.GRAY300}
+            >
+              검색
+            </Button>
+          </div>
         </DaySelectBox>
-        <CsvButton data={transformedCsvData} delimiter="," >
+        <CsvButton data={transformedCsvData} delimiter=",">
           .CSV 다운로드
         </CsvButton>
       </SelectBox>
