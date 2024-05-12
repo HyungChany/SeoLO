@@ -41,6 +41,7 @@ const Box = styled.div`
   flex-direction: column;
   box-sizing: border-box;
   gap: 2rem;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
 `;
 const DeleteCheckListModal = ({
   onClick,

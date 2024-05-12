@@ -33,7 +33,6 @@ spring:
     redis:
       host: k10c104.p.ssafy.io
       port: ${common.redis.session-store.port}
-
   cloud:
     aws:
       credentials:

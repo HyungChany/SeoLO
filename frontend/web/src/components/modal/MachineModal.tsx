@@ -55,6 +55,7 @@ const ChanpterBox = styled.div`
   width: 100%;
   height: auto;
   align-items: center;
+  margin-top: 1rem;
 `;
 const TitleBox = styled.div`
   width: 20%;
@@ -94,7 +95,7 @@ const EquipmentModal = ({ onClick, option }: EquipmentModalProps) => {
         <Button
           onClick={handleButtonClick}
           width={5}
-          height={2.5}
+          height={2}
           $backgroundColor={Color.WHITE}
           $borderColor={Color.GRAY100}
           $borderRadius={2.5}

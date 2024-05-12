@@ -8,6 +8,7 @@ pipeline {
         CREDENTIALS_ID = 'seolo-git-token'
         GITHUB_CREDENTIALS_ID = 'seolo-github-token'
         GITHUB_REPO_URL = 'https://github.com/makeUgreat/seolo-config.git'
+        GITHUB_REPO_URL_DJANGO = 'https://github.com/makeUgreat/seolo-django-config.git'
         PROFILES_ACTIVE = 'dev'
     }
 
@@ -66,6 +67,14 @@ pipeline {
                         sh 'mkdir -p confidence'
                         dir('confidence') {
                             git branch: 'master', credentialsId: env.GITHUB_CREDENTIALS_ID, url: env.GITHUB_REPO_URL
+                        }
+                    }
+
+                    // 새로운 서브모듈 클론
+                    dir('backend/news/news') {
+                        sh 'mkdir -p setting'
+                        dir('setting') {
+                            git branch: 'master', credentialsId: env.GITHUB_CREDENTIALS_ID, url: env.GITHUB_REPO_URL_DJANGO
                         }
                     }
                 }
