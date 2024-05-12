@@ -13,9 +13,25 @@ interface DropdownProps {
   selectedOption: OptionType | null;
   onOptionChange: (option: OptionType) => void;
   placeholder?: string;
+  onClick?: () => void;
 }
 
-const DropDownBox = styled.div`
+// const DropDownBox = styled.div`
+//   display: flex;
+//   width: 19.375rem;
+//   height: 5rem;
+//   padding: 1.125rem 0.9375rem;
+//   justify-content: center;
+//   align-items: center;
+//   border-radius: 0.625rem;
+//   border: 1px solid ${Color.GRAY300};
+//   background: ${Color.SNOW};
+//   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+//   box-sizing: border-box;
+// `;
+const Box = styled.div`
+  width: auto;
+  height: auto;
   display: flex;
   width: 17.5rem;
   height: 2.7rem;
@@ -29,7 +45,6 @@ const DropDownBox = styled.div`
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   box-sizing: border-box;
 `;
-
 const StyledSelect = styled(Select<OptionType>).attrs({
   classNamePrefix: 'react-select',
 })`
@@ -94,15 +109,18 @@ const Dropdown: React.FC<DropdownProps> = ({
     event.stopPropagation(); // 이벤트 버블링 방지
   };
   return (
-    <DropDownBox onClick={handleClick}>
+    // <DropDownBox onClick={handleClick}>
+    <Box onClick={handleClick}>
       <StyledSelect
         options={options}
         onChange={handleOptionChange}
         menuIsOpen={undefined} // 메뉴 개폐 상태는 내부적으로 관리되므로 undefined 처리
         placeholder={placeholder || '선택하세요'}
         value={selectedOption}
+        openMenuOnClick
       />
-    </DropDownBox>
+    </Box>
+    // {/* // </DropDownBox> */}
   );
 };
 
