@@ -33,7 +33,7 @@ const Background = styled.div`
   box-sizing: border-box;
 `;
 const ImgBox = styled.img`
-  width: 13rem;
+  width: 13.5rem;
 `;
 const Overlay = styled.div`
   position: fixed;

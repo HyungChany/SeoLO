@@ -17,9 +17,10 @@ interface DropdownProps {
 
 const DropDownBox = styled.div`
   display: flex;
-  width: 19.375rem;
-  height: 5rem;
+  width: 17.5rem;
+  height: 2.7rem;
   padding: 1.125rem 0.9375rem;
+  margin: 0 1.5rem;
   justify-content: center;
   align-items: center;
   border-radius: 0.625rem;
@@ -33,7 +34,7 @@ const StyledSelect = styled(Select<OptionType>).attrs({
   classNamePrefix: 'react-select',
 })`
   .react-select__control {
-    background-color: ${Color.SNOW};
+    background-color: white;
     width: 17.5rem;
     height: 100%;
     border: 1px solid ${Color.GRAY300};
@@ -60,12 +61,13 @@ const StyledSelect = styled(Select<OptionType>).attrs({
     color: black;
   }
   .react-select__option--is-selected {
-    background-color: ${Color.SNOW};
-    color: ${Color.GRAY300};
+    background-color: ${Color.GRAY200};
+    color: black;
   }
   .react-select__option--is-focused {
-    border: 1px solid #afaeb7;
+    box-shadow: 0 0 0 1px black inset;
     color: black;
+    box-sizing: border-box;
   }
   .react-select__placeholder {
     color: ${Color.BLACK};

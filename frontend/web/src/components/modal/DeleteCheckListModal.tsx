@@ -13,7 +13,7 @@ const Text = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 900;
   justify-content: center;
   font-family: NYJGothicEB;
@@ -72,6 +72,7 @@ const DeleteCheckListModal = ({
           $hoverBackgroundColor={Color.RED100}
           $hoverBorderColor={Color.RED100}
           children={'삭제'}
+          fontSize={1.2}
         ></Button>
       </ButtonContainer>
     </Box>

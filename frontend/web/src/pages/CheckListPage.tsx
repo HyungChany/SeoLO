@@ -47,6 +47,7 @@ const ListBox = styled.div`
   padding: 1.5rem;
   box-sizing: border-box;
   justify-content: space-between;
+  cursor: pointer;
 `;
 const PlusListBox = styled.div`
   width: 100%;
@@ -60,15 +61,17 @@ const PlusListBox = styled.div`
   justify-content: space-between;
   padding: 1.5rem;
   box-sizing: border-box;
+  cursor: pointer;
 `;
 
 const ContentBox = styled.div`
-  width: 80%;
+  width: 92%;
   height: 100%;
   flex-shrink: 0;
+  margin-right: 1rem;
   display: flex;
   align-items: center;
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 900;
   font-family: NYJGothicEB;
 `;
@@ -94,7 +97,7 @@ const PlusContent = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
-  font-size: 2.5rem;
+  font-size: 3.5rem;
   font-weight: 900;
   justify-content: center;
   font-family: NYJGothicEB;
@@ -106,11 +109,12 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); // 반투명 검은색 배경
+  background-color: rgba(0, 0, 0, 0.6); // 반투명 검은색 배경
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 10;
+  font-weight: 600;
 `;
 const ButtonBox = styled.div`
   width: 10.5rem;
@@ -201,13 +205,13 @@ const CheckListPage = () => {
           <>
             {lists &&
               lists.map((list) => (
-                <ListBox>
-                  <ContentBox key={list.id}>
+                <ListBox onClick={() => handleCheckListClick(list)}>
+                  <ContentBox>
                     <ContentWrapper>
                       <Content>{list.context}</Content>
                     </ContentWrapper>
                   </ContentBox>
-                  <Button
+                  {/* <Button
                     onClick={() => handleCheckListClick(list)}
                     width={5}
                     height={1.5625}
@@ -217,19 +221,19 @@ const CheckListPage = () => {
                     $hoverBackgroundColor={'white'}
                     $hoverBorderColor={'white'}
                     children={'상세보기'}
-                  ></Button>
+                  ></Button> */}
                 </ListBox>
               ))}
             {plusLists &&
               plusLists.map((list) => (
                 <PlusListBox>
-                  <ContentBox key={list.id}>
+                  <ContentBox onClick={() => handleCheckListClick(list)}>
                     <ContentWrapper>
                       <Content>{list.context}</Content>
                     </ContentWrapper>
                   </ContentBox>
                   <ButtonBox>
-                    <Button
+                    {/* <Button
                       onClick={() => handleCheckListClick(list)}
                       width={5}
                       height={1.5625}
@@ -239,17 +243,18 @@ const CheckListPage = () => {
                       $hoverBackgroundColor={'white'}
                       $hoverBorderColor={'white'}
                       children={'상세보기'}
-                    ></Button>
+                    ></Button> */}
                     <Button
                       onClick={() => handleDeleteCheckListClick(list)}
-                      width={3.5}
-                      height={1.5625}
+                      width={4}
+                      height={2.5}
                       $backgroundColor={Color.GRAY100}
-                      $borderColor={'white'}
+                      $borderColor={Color.GRAY100}
                       $borderRadius={0.3125}
-                      $hoverBackgroundColor={'white'}
-                      $hoverBorderColor={'white'}
+                      $hoverBackgroundColor={Color.GRAY200}
+                      $hoverBorderColor={Color.GRAY200}
                       children={'삭제'}
+                      fontSize={1.1}
                     ></Button>
                   </ButtonBox>
                 </PlusListBox>

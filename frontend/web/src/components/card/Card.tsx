@@ -23,8 +23,9 @@ const CardContainer = styled.div<CardProps>`
   flex-direction: ${(props) => props.flexDirection};
   align-items: ${(props) => props.alignItems};
   gap: ${(props) => `${props.gap}rem`};
-  padding: 0.5rem;
+  padding: 2rem 0.5rem;
   box-sizing: border-box;
+  cursor: ${(props) => props.onClick ? 'pointer' : 'auto'};
 `;
 
 const Card = (props: CardProps) => {
