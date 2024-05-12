@@ -26,6 +26,7 @@ const Background = styled.div`
   overflow-x: auto;
   position: relative;
 `;
+
 const MainContainer = styled.div`
   box-sizing: content-box;
   min-width: 1280px;
@@ -75,6 +76,7 @@ const SideMenuBox = styled.div`
   flex-grow: 1;
   width: 100%;
 `;
+
 const RowContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -98,18 +100,22 @@ const LogoutBtn = styled.button`
 const LogoutIcon = styled.img`
   width: 50px;
 `;
+
 const PositionIcon = styled(Position)`
   width: 2.5rem;
   margin-right: 5%;
 `;
+
 const CheckListIcon = styled(CheckList)`
   width: 2.5rem;
   margin-right: 5%;
 `;
+
 const ListModifyIcon = styled(ListModify)`
   width: 2.5rem;
   margin-right: 5%;
 `;
+
 const RightContainer = styled.div`
   width: 75%;
   height: 100%;
@@ -117,6 +123,7 @@ const RightContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
 `;
+
 const Cards = styled.div`
   width: 100%;
   display: flex;
@@ -134,10 +141,12 @@ const CardDrawing = styled.div`
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.25);
   overflow: hidden;
   transition: background-color 0.3s;
+
   &:hover {
     background-color: ${Color.GRAY100};
     cursor: pointer;
   }
+
   &:active {
     background-color: ${Color.GRAY200};
   }
@@ -153,6 +162,7 @@ const MainPage = () => {
   const [modifyMode, setModifyMode] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<string | null>(null);
   const navigate = useNavigate();
+
   // 작업장 편집모드 활성화, 비활성화
   const changeModifyMode = () => {
     setModifyMode((prevMode) => !prevMode);
@@ -170,6 +180,8 @@ const MainPage = () => {
       reader.readAsDataURL(file);
     }
   };
+
+  // 로그아웃
   const handleLogout = () => {
     const fetchLogout = async () => {
       try {
@@ -181,6 +193,7 @@ const MainPage = () => {
     };
     fetchLogout();
   };
+
   return (
     <>
       <Background>
@@ -270,7 +283,9 @@ const MainPage = () => {
                   style={{ height: '100%', width: '100%', overflow: 'hidden' }}
                   attributionControl={false}
                 >
-                  {imageFile && <Leaflet imageFile={imageFile} />}
+                  {imageFile && (
+                    <Leaflet imageFile={imageFile} modifyMode={modifyMode} />
+                  )}
                 </MapContainer>
               </CardDrawing>
             ) : (
@@ -284,6 +299,10 @@ const MainPage = () => {
                 <label htmlFor="fileInput">
                   <Typo.Body0B color={Color.GRAY400}>
                     저장된 도면이 없습니다. 도면을 추가하세요.
+                  </Typo.Body0B>
+                  <Spacer space={'1rem'} />
+                  <Typo.Body0B color={Color.GRAY400}>
+                    권장 이미지 비율은 다음과 같습니다. 가로 5: 세로 3
                   </Typo.Body0B>
                 </label>
               </CardDrawing>
