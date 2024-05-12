@@ -135,16 +135,16 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     Navigator.pushReplacementNamed(context, '/checklist');
                   }
                   if (_receivedValues[0] == 'CHECK') {
-                    Navigator.pushReplacementNamed(context, '/main');
+                    Navigator.pushReplacementNamed(context, '/otherWorklistCheck');
                   }
                   if (_receivedValues[0] == 'UNLOCK') {
                     unlockVM.coreUnlock().then((_) {
-                      Navigator.pushReplacementNamed(context, '/main');
+                      Navigator.pushReplacementNamed(context, '/successLock');
                     });
                   }
                   if (_receivedValues[0] == 'LOCKED') {
                     lockedVM.coreLocked().then((_) {
-                      Navigator.pushReplacementNamed(context, '/main');
+                      Navigator.pushReplacementNamed(context, '/successLock');
                     });
                   }
                   // if (characteristic.properties.read) {
