@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat
 class BluetoothAdapter(private val context: Context) {
     private var bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
     private val REQUEST_BLUETOOTH_SCAN = 100
+    val REQUEST_ENABLE_BT = 101
 
 
     // Bluetooth가 지원되는지 여부를 반환
