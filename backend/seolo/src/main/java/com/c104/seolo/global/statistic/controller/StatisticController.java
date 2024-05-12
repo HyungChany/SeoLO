@@ -1,6 +1,5 @@
 package com.c104.seolo.global.statistic.controller;
 
-import com.c104.seolo.global.statistic.dto.request.MainStatRequest;
 import com.c104.seolo.global.statistic.dto.response.MainStatisticResponse;
 import com.c104.seolo.global.statistic.service.StatisticService;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +13,9 @@ public class StatisticController {
     private final StatisticService statisticService;
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/main")
-    public MainStatisticResponse getMainStatistics(@RequestBody MainStatRequest mainStatRequest, @RequestHeader("Company-Code") String companyCode) {
-        return statisticService.getMainStatistics(mainStatRequest.getFacilityId(), companyCode);
+    @GetMapping("/main/{facilityId}")
+    public MainStatisticResponse getMainStatistics(@PathVariable Long facilityId,
+                                                   @RequestHeader("Company-Code") String companyCode) {
+        return statisticService.getMainStatistics(facilityId, companyCode);
     }
 }

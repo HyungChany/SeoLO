@@ -30,6 +30,18 @@ services:
     networks:
       - jenkins-network
 
+  news-server:
+    container_name: seolo-news
+    build:
+      context: ../backend/news
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - TZ=Asia/Seoul
+    networks:
+      - jenkins-network
+
 networks:
   jenkins-network:
     external: true

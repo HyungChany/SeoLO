@@ -17,7 +17,7 @@ const Modal = styled.div`
   align-items: center;
   display: flex;
   padding: 1.5rem;
-  font-size: 1.6rem;
+  font-size: 2rem;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
 `;
 

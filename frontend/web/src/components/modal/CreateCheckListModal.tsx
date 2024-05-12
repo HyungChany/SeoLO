@@ -11,10 +11,9 @@ interface CheckListModalProps {
 }
 const Box = styled.div`
   width: 60%;
-  height: 15rem;
+  height: 13rem;
   display: flex;
   flex-direction: column;
-  gap: 2rem;
   border: 1px solid ${Color.GRAY100};
   background-color: ${Color.GRAY50};
   border-radius: 1.25rem;
@@ -26,7 +25,8 @@ const ButtonBox = styled.div`
   display: flex;
   justify-content: space-between;
   box-sizing: border-box;
-  padding: 1.5rem;
+  padding: 0 2rem;
+  margin: 1.7rem 0 2.3rem 0;
   align-items: center;
 `;
 const Title = styled.div`
@@ -34,7 +34,7 @@ const Title = styled.div`
   height: auto;
   display: flex;
   align-items: center;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
 `;
 const Input = styled.div`
   width: auto;
@@ -65,13 +65,15 @@ const CreateCheckListModal = ({ onClose, onClick }: CheckListModalProps) => {
       <ButtonBox>
         <Title>체크리스트 추가</Title>
         <Button
-          width={5}
-          height={2.5}
+          width={5.5}
+          height={2.8}
           $backgroundColor={Color.WHITE}
-          $borderColor={Color.GRAY100}
+          $borderColor={Color.GRAY200}
           $borderRadius={2.5}
-          $hoverBackgroundColor={Color.GRAY300}
-          $hoverBorderColor={Color.GRAY100}
+          $hoverBackgroundColor={Color.BLUE100}
+          $hoverBorderColor={Color.BLUE100}
+          fontSize={1.2}
+          fontWeight={900}
           onClick={handleSubmit}
         >
           확인
@@ -80,7 +82,7 @@ const CreateCheckListModal = ({ onClose, onClick }: CheckListModalProps) => {
       <Input>
         <InputBox
           width={50}
-          height={4}
+          height={3.5}
           value={checklist}
           onChange={handleChecklist}
           placeholder="체크리스트를 입력하세요"

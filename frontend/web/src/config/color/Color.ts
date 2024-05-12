@@ -2,6 +2,8 @@ export const WHITE: string = '#FFFFFF';
 export const SNOW: string = '#FFFAFA';
 export const ONYX: string = '#353935';
 export const BLACK: string = '#0D0D0D';
+export const RED: string = '#ff9999';
+export const RED1: string = '#ff7777';
 
 export const SAFETY_RED: string = '#FF0000';
 export const SAFETY_YELLOW: string = '#FFFF00';
