@@ -1,12 +1,26 @@
-import React, { useState, useRef, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 import Card from '@/components/card/Card.tsx';
-import Dropdown from '@/components/dropdown/DropDown.tsx';
 import * as Typo from '@/components/typography/Typography.tsx';
 import InputBox from '@/components/inputbox/InputBox.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import People from '/assets/images/people.png';
+import {
+  EmployeeDetail,
+  EmployeeRegistration,
+  RegistratedEmployee,
+} from '@/apis/Employee.ts';
+interface EmployeeType {
+  employee_join_date: string;
+  employee_leave_date: string;
+  employee_num: string;
+  employee_name: string;
+  employee_title: string;
+  employee_team: string;
+  employee_birthday: string;
+  employee_thum: string;
+}
 const Background = styled.div`
   width: 100%;
   height: 100%;
@@ -19,7 +33,6 @@ const Box = styled.div`
   width: 92%;
   height: 90%;
   display: flex;
-  justify-content: space-between;
   gap: 2rem;
 `;
 const ImgBox = styled.img`
@@ -27,7 +40,7 @@ const ImgBox = styled.img`
   height: 13rem;
 `;
 const InformationBox = styled.div`
-  width: 60rem;
+  width: 80rem;
   height: 100%;
   display: flex;
   padding-top: 1rem;
@@ -37,34 +50,28 @@ const InformationBox = styled.div`
   background-color: ${Color.WHITE};
   border-radius: 3.125rem;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
-  justify-content: space-between;
+  gap: 12rem;
+  overflow: hidden;
 `;
 const LeftBox = styled.div`
   width: 25.0625rem;
-  height: 35rem;
+  height: 100%;
   display: flex;
-  justify-content: space-between;
+
   flex-direction: column;
   gap: 1.5rem;
 `;
-const DropdownBox = styled.div`
-  width: 19.375rem;
-  height: 10rem;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-`;
+
 const PhotoBox = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1.5rem;
 `;
 const Photo = styled.div`
-  width: 25.0625rem;
-  height: 23.125rem;
+  width: 100%;
+  height: 22rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -78,71 +85,105 @@ const Preview = styled.img`
   border-radius: 1.25rem;
   object-fit: cover;
 `;
-const PhotoInputBox = styled.input.attrs({
-  type: 'file',
-  accept: 'image/*', // 이미지 파일만 받도록 설정
-})`
-  display: none;
-`;
 const RightBox = styled.div`
-  width: 20rem;
-  height: 35rem;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.5rem;
 `;
 const CommonBox = styled.div`
   width: 20rem;
-  height: 7rem;
+  height: auto;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+  gap: 0.5rem;
 `;
 const ButtonBox = styled.div`
-  width: 20rem;
+  width: 100%;
   height: 3rem;
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
 `;
-
+const ContentBox = styled.div`
+  width: 20rem;
+  height: 4rem;
+  display: flex;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  background-color: ${Color.GRAY100};
+  border: 1px solid ${Color.GRAY300};
+  border-radius: 8px;
+  font-size: 1.25rem;
+  align-items: center;
+`;
+const Content = styled.div`
+  width: auto;
+  height: auto;
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: ${Color.BLACK};
+`;
+const SearchBox = styled.div`
+  width: 100%;
+  height: auto;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+`;
 const Employee = () => {
-  const [imagePreviewUrl, setImagePreviewUrl] = useState<string>('');
-  const [equipmentName, setEquipmentName] = useState<string>('');
+  // const [imagePreviewUrl, setImagePreviewUrl] = useState<string>('');
   const [equipmentNumber, setEquipmentNumber] = useState<string>('');
-  const [team, setTeam] = useState<string>('');
-  const [position, setPosition] = useState<string>('');
-  const handleEquipmentName = (e: ChangeEvent<HTMLInputElement>) => {
-    setEquipmentName(e.target.value);
-  };
+  const companyCode = sessionStorage.getItem('companyCode');
+  const [EmployeeNumber, setEmployeeNumber] = useState<number>(0);
+  const [employeeInformation, setEmployeeInformation] =
+    useState<EmployeeType | null>(null);
   const handleEquipmentNumber = (e: ChangeEvent<HTMLInputElement>) => {
     setEquipmentNumber(e.target.value);
   };
-  const handleTeam = (e: ChangeEvent<HTMLInputElement>) => {
-    setTeam(e.target.value);
-  };
-  const handlePosition = (e: ChangeEvent<HTMLInputElement>) => {
-    setPosition(e.target.value);
-  };
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      const file = event.target.files[0];
-
-      // Create an image preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreviewUrl(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+  const handleSubmit = async () => {
+    try {
+      if (employeeInformation && companyCode) {
+        const formattedBirthday = employeeInformation.employee_birthday.replace(
+          /-/g,
+          '',
+        );
+        const employeeData = {
+          username: equipmentNumber,
+          password: 'A' + 'a' + formattedBirthday + '@', // 초기 비밀번호는 Aa생년월일@
+          company_code: companyCode,
+        };
+        const response = await EmployeeRegistration(employeeData);
+        console.log(response);
+        window.location.reload();
+      } else {
+        alert('사번을 입력해주세요.');
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
-
-  const handleFileUpload = async () => {
-    fileInputRef.current?.click();
+  const handleCancel = () => {
+    setEquipmentNumber('');
   };
-  const handleSubmit = () => {};
+  const handleSearch = () => {
+    const fetchData = async () => {
+      const data = await EmployeeDetail(equipmentNumber);
+      setEmployeeInformation(data);
+
+      console.log(data);
+    };
+    fetchData();
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await RegistratedEmployee();
+      setEmployeeNumber(data.length);
+    };
+    fetchData();
+  }, []);
   return (
     <Background>
       <Box>
@@ -155,68 +196,82 @@ const Employee = () => {
         >
           <Typo.H3 color={Color.BLACK}>등록 임직원현황</Typo.H3>
           <ImgBox src={People} />
-          <Typo.H0 color={Color.BLACK}>125</Typo.H0>
+          <Typo.H0 color={Color.BLACK}>{EmployeeNumber}</Typo.H0>
         </Card>
         <InformationBox>
           <LeftBox>
-            <DropdownBox>
-              <Typo.H3>등록 작업장</Typo.H3>
-              <Dropdown />
-            </DropdownBox>
-            <PhotoBox onClick={handleFileUpload}>
-              <Typo.H3>작업장 사진</Typo.H3>
-              <Photo>
-                {imagePreviewUrl ? (
-                  <Preview src={imagePreviewUrl} alt="Uploaded Image Preview" />
-                ) : (
-                  '사진을 업로드해주세요'
-                )}
-                <PhotoInputBox ref={fileInputRef} onChange={handleFileChange} />
-              </Photo>
-            </PhotoBox>
-          </LeftBox>
-          <RightBox>
-            <CommonBox>
-              <Typo.H3>이름</Typo.H3>
-              <InputBox
-                width={20}
-                height={4}
-                value={equipmentName}
-                onChange={handleEquipmentName}
-                placeholder="이름을 입력하세요"
-              />
-            </CommonBox>
             <CommonBox>
               <Typo.H3>사번</Typo.H3>
-              <InputBox
-                width={20}
-                height={4}
-                value={equipmentNumber}
-                onChange={handleEquipmentNumber}
-                placeholder="사번을 입력하세요"
-              />
+
+              <SearchBox>
+                <InputBox
+                  width={16}
+                  height={4}
+                  value={equipmentNumber}
+                  onChange={handleEquipmentNumber}
+                  placeholder="사번을 입력하세요"
+                />
+                <Button
+                  width={4}
+                  height={3}
+                  $backgroundColor={Color.GRAY200}
+                  $borderColor={Color.GRAY200}
+                  $borderRadius={1.25}
+                  $hoverBackgroundColor={Color.GRAY200}
+                  $hoverBorderColor={Color.GRAY200}
+                  onClick={handleSearch}
+                  fontSize={'1.25rem'}
+                  fontWeight={'bold'}
+                >
+                  검색
+                </Button>
+              </SearchBox>
+            </CommonBox>
+            <CommonBox>
+              <Typo.H3>이름</Typo.H3>
+              <ContentBox>
+                {employeeInformation ? (
+                  <Content>{employeeInformation.employee_name}</Content>
+                ) : (
+                  <Content></Content>
+                )}
+              </ContentBox>
             </CommonBox>
             <CommonBox>
               <Typo.H3>소속 부서</Typo.H3>
-              <InputBox
-                width={20}
-                height={4}
-                value={team}
-                onChange={handleTeam}
-                placeholder="소속부서를 입력하세요"
-              />
+              <ContentBox>
+                {employeeInformation ? (
+                  <Content>{employeeInformation.employee_team}</Content>
+                ) : (
+                  <Content></Content>
+                )}
+              </ContentBox>
             </CommonBox>
             <CommonBox>
               <Typo.H3>직급</Typo.H3>
-              <InputBox
-                width={20}
-                height={4}
-                value={position}
-                onChange={handlePosition}
-                placeholder="직급을 입력하세요"
-              />
+              <ContentBox>
+                {employeeInformation ? (
+                  <Content>{employeeInformation.employee_title}</Content>
+                ) : (
+                  <Content></Content>
+                )}
+              </ContentBox>
             </CommonBox>
-
+          </LeftBox>
+          <RightBox>
+            <PhotoBox>
+              <Typo.H3>작업장 사진</Typo.H3>
+              <Photo>
+                {employeeInformation ? (
+                  <Preview
+                    src={employeeInformation.employee_thum}
+                    alt="Uploaded Image Preview"
+                  />
+                ) : (
+                  '사진'
+                )}
+              </Photo>
+            </PhotoBox>
             <ButtonBox>
               <Button
                 width={5.25}
@@ -226,7 +281,7 @@ const Employee = () => {
                 $borderRadius={1.25}
                 $hoverBackgroundColor={Color.GRAY200}
                 $hoverBorderColor={Color.GRAY200}
-                onClick={handleSubmit}
+                onClick={handleCancel}
                 fontSize={'1.25rem'}
                 fontWeight={'bold'}
               >

@@ -23,6 +23,9 @@ spring:
       ddl-auto: create-drop
     database-platform: org.hibernate.dialect.H2Dialect
     defer-datasource-initialization: true # true -> ddl-auto 이후 data.sql 실행 옵션
+    properties:
+      hibernate:
+        format_sql: true
   jwt:
     access: ${common.redis.session-store.accessKey}
     refresh: ${common.redis.session-store.refreshKey}
@@ -32,6 +35,15 @@ spring:
     redis:
       host: k10c104.p.ssafy.io
       port: ${common.redis.session-store.port}
+  cloud:
+    aws:
+      credentials:
+        accessKey: ${common.aws.credentials.access-key}
+        secretKey: ${common.aws.credentials.secret-key}
+      region:
+        static: ${common.aws.region.static}
+      s3:
+        bucket: ${common.aws.s3.bucket}
 
 logging:
   level:

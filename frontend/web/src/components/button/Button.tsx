@@ -10,6 +10,7 @@ interface ButtonProps {
   $borderRadius: number;
   $hoverBackgroundColor: string;
   $hoverBorderColor: string;
+  $hoverTextColor?: string;
   children: React.ReactNode;
   fontWeight?: number | string;
   fontSize?: number | string;
@@ -23,7 +24,7 @@ const ButtonContainer = styled.button<ButtonProps>`
     typeof props.height === 'number' ? `${props.height}rem` : props.height};
   border-radius: ${(props) => props.$borderRadius}rem;
   border: 1px solid ${(props) => props.$borderColor};
-  font-size: ${(props) => props.$borderRadius}rem;
+  font-size: ${(props) => props.fontSize}rem;
   font-weight: ${(props) => props.fontWeight || 'normal'};
   padding: 0.7rem;
   align-items: center;
@@ -35,6 +36,7 @@ const ButtonContainer = styled.button<ButtonProps>`
     background-color: ${(props) =>
       props.$hoverBackgroundColor || props.$backgroundColor};
     border-color: ${(props) => props.$hoverBorderColor || props.$borderColor};
+    color: ${(props) => props.$hoverTextColor};
   }
 `;
 
@@ -81,6 +83,7 @@ export const Button = ({
   children,
   fontWeight,
   fontSize,
+  $hoverTextColor,
 }: ButtonProps) => (
   <ButtonContainer
     onClick={onClick}
@@ -93,6 +96,7 @@ export const Button = ({
     width={width}
     fontWeight={fontWeight}
     fontSize={fontSize}
+    $hoverTextColor={$hoverTextColor}
   >
     {children}
   </ButtonContainer>

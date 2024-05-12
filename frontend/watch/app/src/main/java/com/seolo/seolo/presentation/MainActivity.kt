@@ -1,79 +1,29 @@
-/* While this template provides a good starting point for using Wear Compose, you can always
- * take a look at https://github.com/android/wear-os-samples/tree/main/ComposeStarter and
- * https://github.com/android/wear-os-samples/tree/main/ComposeAdvanced to find the most up to date
- * changes to the libraries and their usages.
- */
-
 package com.seolo.seolo.presentation
 
-import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import androidx.activity.ComponentActivity
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
+import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.R
-import com.seolo.seolo.presentation.theme.SeoLoTheme
+import com.seolo.seolo.adapters.CarouselStateAdapter
+import com.seolo.seolo.fragments.MainChkFragment
+import com.seolo.seolo.fragments.MainNFCFragment
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
-
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        supportActionBar?.hide()  // 액션바 숨기기
 
-        // 버튼을 통해 ExampleActivity로 전환
-        val button: Button = findViewById(R.id.button_example)
-        button.setOnClickListener {
-//            val intent = Intent(this, CarouselActivity::class.java)
-//            val intent = Intent(this, LockActivity::class.java)
-//            val intent = Intent(this, RealMainActivity::class.java)
-//            val intent = Intent(this, LocationActivity::class.java)
-//            val intent = Intent(this, EquipmentActivity::class.java)
-            val intent = Intent(this, WorkActivity::class.java)
-            startActivity(intent)
+        setContentView(R.layout.activity_layout)  // 메인 레이아웃 설정
+
+        val viewPager: ViewPager2 = findViewById(R.id.viewPager)  // ViewPager2 인스턴스화
+        val adapter = CarouselStateAdapter(this@MainActivity)  // Adapter 인스턴스화
+
+        // 프래그먼트를 ViewPager2에 추가
+        adapter.addFragment(MainChkFragment.newInstance("LOTO 잠금"))
+        adapter.addFragment(MainNFCFragment.newInstance("NFC 인증"))
+        adapter.addFragment(RedoPinNumberFragment.newInstance())
+
+        viewPager.adapter = adapter
     }
-}
-}
-
-@Composable
-fun WearApp(greetingName: String) {
-    SeoLoTheme {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background),
-            contentAlignment = Alignment.Center
-        ) {
-            Greeting(greetingName = greetingName)
-        }
-    }
-}
-
-@Composable
-fun Greeting(greetingName: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.hello_world, greetingName)
-    )
-}
-
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
-@Composable
-fun DefaultPreview() {
-    WearApp("Preview Android")
 }

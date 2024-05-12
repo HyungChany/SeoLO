@@ -60,7 +60,6 @@ public class JwtValidationFilter extends OncePerRequestFilter {
         Long userId = claims.getBody().get("userId", Long.class);
         String companyCode = claims.getBody().get("companyCode", String.class);
         List<String> roles = claims.getBody().get("authorities", List.class);
-        log.info("역할 :{}",roles);
 
         List<GrantedAuthority> authorities = roles.stream()
                 .map(SimpleGrantedAuthority::new)

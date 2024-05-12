@@ -1,7 +1,7 @@
 package com.c104.seolo.domain.facility.controller;
 
 import com.c104.seolo.domain.facility.dto.request.FacilityRequest;
-import com.c104.seolo.domain.facility.dto.response.FacilityResponse;
+import com.c104.seolo.domain.facility.dto.response.FacilityListResponse;
 import com.c104.seolo.domain.facility.service.FacilityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +20,7 @@ public class FacilityController {
 
     @Secured("ROLE_MANAGER")
     @GetMapping
-    public ResponseEntity<FacilityResponse> getFacilities(
+    public ResponseEntity<FacilityListResponse> getFacilities(
             @RequestHeader("Company-Code") String companyCode
     ) {
         return ResponseEntity.ok(facilityService.findFacilityByCompany(companyCode));
@@ -56,5 +56,10 @@ public class FacilityController {
     ) {
         facilityService.deleteFacility(companyCode, facilityId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{employeeNum}")
+    public FacilityListResponse getFacilitiesOfEmployee(@PathVariable String employeeNum) {
+        return facilityService.findFacilitiesByEmployeeNum(employeeNum);
     }
 }

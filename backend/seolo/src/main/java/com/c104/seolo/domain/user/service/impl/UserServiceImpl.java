@@ -1,9 +1,12 @@
 package com.c104.seolo.domain.user.service.impl;
 
+import com.c104.seolo.domain.user.dto.info.UserListInfo;
 import com.c104.seolo.domain.user.dto.request.UserJoinRequest;
+import com.c104.seolo.domain.user.dto.request.UserPwdCheckRequest;
 import com.c104.seolo.domain.user.dto.request.UserPwdResetRequest;
 import com.c104.seolo.domain.user.dto.response.UserInfoResponse;
 import com.c104.seolo.domain.user.dto.response.UserJoinResponse;
+import com.c104.seolo.domain.user.dto.response.UserListResponse;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.domain.user.enums.ROLES;
 import com.c104.seolo.domain.user.exception.UserErrorCode;
@@ -21,7 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -75,7 +79,7 @@ public class UserServiceImpl implements UserService {
     public UserInfoResponse getUserInfo(CCodePrincipal cCodePrincipal) {
         AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
 
-        UserInfoResponse res = UserInfoResponse.builder()
+        return UserInfoResponse.builder()
                 .id(appUser.getId())
                 .employee(appUser.getEmployee())
                 .ROLES(appUser.getROLES())
@@ -83,9 +87,16 @@ public class UserServiceImpl implements UserService {
                 .PIN(appUser.getPIN())
                 .isLocked(appUser.isLocked())
                 .build();
-        return res;
     }
 
+    @Override
+    public void checkSamePassword(CCodePrincipal cCodePrincipal, UserPwdCheckRequest userPwdCheckRequest) {
+        AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
+
+        if (!passwordEncoder.matches(userPwdCheckRequest.getNowPassword(),appUser.getPassword())) {
+            throw new AuthException(AuthErrorCode.INVALID_PASSWORD_FOR_CHECK);
+        }
+    }
 
     @Transactional
     @Override
@@ -103,5 +114,17 @@ public class UserServiceImpl implements UserService {
         // 3. 일치하면 기존 비밀번호 데이터를 새로 설정하는 비밀번호로 바꾸고 로그아웃시킨다.
         user.changePassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
+    }
+
+    @Override
+    public UserListResponse getUserList(String companyCode) {
+        List<AppUser> appUsers = userRepository.findAppUserByCompanyCode(companyCode);
+
+        List<UserListInfo> userListInfos = new ArrayList<>();
+        appUsers.forEach(userinfo -> userListInfos.add(UserListInfo.ofButTranslateRoleToKorean(userinfo)));
+
+        return UserListResponse.builder()
+                .workers(userListInfos)
+                .build();
     }
 }

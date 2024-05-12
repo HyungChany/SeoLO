@@ -7,22 +7,45 @@ import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.seolo.seolo.R
+import com.seolo.seolo.helper.TokenManager
 
+// SplashActivity 클래스 정의
 class SplashActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 시스템 스플래시 스크린 API 초기화
-        installSplashScreen()
+        // 스플래시 스크린 설치
+        val splashScreen = installSplashScreen()
 
-        // 사용자 정의 스플래시 레이아웃 설정
+        // 스플래시 레이아웃 설정
         setContentView(R.layout.splash_layout)
 
-        // 일정 시간 후 MainActivity로 이동
+        // 스플래시 화면을 잠시 유지한 후 토큰 체크 함수 호출
         Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()  // SplashActivity를 스택에서 제거
-        }, 3000)  // 3000ms = 3초 동안 스플래시 화면 표시
+            checkTokenAndNavigate()
+        }, 2000)
+    }
+
+    // 토큰 체크 및 화면 전환
+    private fun checkTokenAndNavigate() {
+        if (TokenManager.getAccessToken(this).isNullOrEmpty()) {
+            navigateToLoginActivity()
+        } else {
+            navigateToPinNumberActivity()
+        }
+    }
+
+    // PIN 입력 액티비티로 이동
+    private fun navigateToPinNumberActivity() {
+        val intent = Intent(this, PinNumberActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    // 로그인 액티비티로 이동
+    private fun navigateToLoginActivity() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 }

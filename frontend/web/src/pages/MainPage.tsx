@@ -2,6 +2,7 @@ import CheckList from '@/../assets/icons/CheckList.svg?react';
 import ListModify from '@/../assets/icons/ListModify.svg?react';
 import logoutIcon from '@/../assets/icons/Logout.png';
 import Position from '@/../assets/icons/Position.svg?react';
+import { Logout } from '@/apis/Login.ts';
 import { Spacer } from '@/components/basic/Spacer.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import Card from '@/components/card/Card.tsx';
@@ -12,6 +13,7 @@ import * as Color from '@/config/color/Color.ts';
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 import { MapContainer } from 'react-leaflet';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Background = styled.div`
@@ -24,6 +26,7 @@ const Background = styled.div`
   overflow-x: auto;
   position: relative;
 `;
+
 const MainContainer = styled.div`
   box-sizing: content-box;
   min-width: 1280px;
@@ -73,6 +76,7 @@ const SideMenuBox = styled.div`
   flex-grow: 1;
   width: 100%;
 `;
+
 const RowContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -90,23 +94,28 @@ const LogoutBtn = styled.button`
   border: 2px solid rgba(0, 0, 0, 0.2);
   box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
   margin: 0 auto;
+  cursor: pointer;
 `;
 
 const LogoutIcon = styled.img`
   width: 50px;
 `;
+
 const PositionIcon = styled(Position)`
   width: 2.5rem;
   margin-right: 5%;
 `;
+
 const CheckListIcon = styled(CheckList)`
   width: 2.5rem;
   margin-right: 5%;
 `;
+
 const ListModifyIcon = styled(ListModify)`
   width: 2.5rem;
   margin-right: 5%;
 `;
+
 const RightContainer = styled.div`
   width: 75%;
   height: 100%;
@@ -114,6 +123,7 @@ const RightContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
 `;
+
 const Cards = styled.div`
   width: 100%;
   display: flex;
@@ -131,10 +141,12 @@ const CardDrawing = styled.div`
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.25);
   overflow: hidden;
   transition: background-color 0.3s;
+
   &:hover {
     background-color: ${Color.GRAY100};
     cursor: pointer;
   }
+
   &:active {
     background-color: ${Color.GRAY200};
   }
@@ -149,6 +161,7 @@ const Handle = () => {};
 const MainPage = () => {
   const [modifyMode, setModifyMode] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   // 작업장 편집모드 활성화, 비활성화
   const changeModifyMode = () => {
@@ -166,6 +179,19 @@ const MainPage = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  // 로그아웃
+  const handleLogout = () => {
+    const fetchLogout = async () => {
+      try {
+        await Logout();
+        navigate('/login');
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchLogout();
   };
 
   return (
@@ -242,7 +268,7 @@ const MainPage = () => {
                 </RowContainer>
               )}
             </SideMenuBox>
-            <LogoutBtn onClick={() => console.log('클릭')}>
+            <LogoutBtn onClick={handleLogout}>
               <LogoutIcon src={logoutIcon} />
               로그아웃
             </LogoutBtn>
@@ -257,7 +283,9 @@ const MainPage = () => {
                   style={{ height: '100%', width: '100%', overflow: 'hidden' }}
                   attributionControl={false}
                 >
-                  {imageFile && <Leaflet imageFile={imageFile} />}
+                  {imageFile && (
+                    <Leaflet imageFile={imageFile} modifyMode={modifyMode} />
+                  )}
                 </MapContainer>
               </CardDrawing>
             ) : (
@@ -272,51 +300,70 @@ const MainPage = () => {
                   <Typo.Body0B color={Color.GRAY400}>
                     저장된 도면이 없습니다. 도면을 추가하세요.
                   </Typo.Body0B>
+                  <Spacer space={'1rem'} />
+                  <Typo.Body0B color={Color.GRAY400}>
+                    권장 이미지 비율은 다음과 같습니다. 가로 5: 세로 3
+                  </Typo.Body0B>
                 </label>
               </CardDrawing>
             )}
             <Cards>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
-                    <div style={{ marginTop:'0.5rem' }}>등록 장비</div>
+                    <div style={{ marginTop: '0.5rem' }}>등록 장비</div>
                   </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
-                <Typo.H4>
-                    <div style={{ marginTop:'0.5rem' }}>등록 LOTO</div>
+                  <Typo.H4>
+                    <div style={{ marginTop: '0.5rem' }}>등록 LOTO</div>
                   </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
-                    <div style={{ display: 'flex', justifyContent: 'space-between'}}>
-                      <div style={{ margin:'0.5rem 0.5rem 0 0' }}>오늘의</div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <div style={{ margin: '0.5rem 0.5rem 0 0' }}>오늘의</div>
                       <Typo.H2 color={Color.RED100}>LOTO</Typo.H2>
                     </div>
                     사용현황
                   </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
-                    <div style={{ display: 'flex', justifyContent: 'space-between'}}>
-                      <div style={{ margin:'0.5rem 0.3rem 0 0' }}>이번 주</div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <div style={{ margin: '0.5rem 0.3rem 0 0' }}>이번 주</div>
                       <Typo.H2 color={Color.RED100}>LOTO</Typo.H2>
                     </div>
                     사용현황
                   </Typo.H4>
                 </InnerContainer>
               </Card>
-              <Card width={'10rem'} height={'10rem'} onClick={Handle}>
+              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
                 <InnerContainer>
                   <Typo.H4>
-                    <div style={{ display: 'flex', justifyContent: 'space-between'}}>
-                      <div style={{ margin:'0.5rem 0.8rem 0 0' }}>이번 달</div>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                      }}
+                    >
+                      <div style={{ margin: '0.5rem 0.8rem 0 0' }}>이번 달</div>
                       <Typo.H2 color={Color.RED100}>재해</Typo.H2>
                     </div>
                     발생현황

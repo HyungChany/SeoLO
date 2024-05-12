@@ -3,11 +3,13 @@ import 'package:flutter/services.dart';
 
 class LargeInputBox extends StatefulWidget {
   final String hintText;
+  final String? precaution;
+  final void Function(String) onTextSaved;
 
-  const LargeInputBox({Key? key, required this.hintText}) : super(key: key);
+  const LargeInputBox({super.key, required this.hintText, this.precaution, required this.onTextSaved});
 
   @override
-  _LargeInputBoxState createState() => _LargeInputBoxState();
+  State<LargeInputBox> createState() => _LargeInputBoxState();
 }
 
 class _LargeInputBoxState extends State<LargeInputBox> {
@@ -15,9 +17,30 @@ class _LargeInputBoxState extends State<LargeInputBox> {
   final int _maxLength = 300;
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.precaution != null) {
+      _controller.text = widget.precaution!;
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant LargeInputBox oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.precaution != null && widget.precaution != oldWidget.precaution) {
+      _controller.text = widget.precaution!;
+    }
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  void _sendTextToScreen() {
+    String text = _controller.text;
+    widget.onTextSaved(text);
   }
 
   @override
@@ -29,6 +52,7 @@ class _LargeInputBoxState extends State<LargeInputBox> {
         alignment: Alignment.topRight,
         children: [
           TextField(
+            onChanged: (text) {_sendTextToScreen();},
             controller: _controller,
             keyboardType: TextInputType.multiline,
             maxLines: 10,

@@ -18,6 +18,6 @@ public class MachineRequest {
     private String machineCode;
     private String machineThum;
     private Date introductionDate;
-    private Long mainManagerId;
-    private Long subManagerId;
+    private String mainManagerNum;
+    private String subManagerNum;
 }

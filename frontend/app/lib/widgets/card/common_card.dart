@@ -7,13 +7,15 @@ class CommonCard extends StatefulWidget {
   final String machine;
   final String start;
   final String end;
+  final bool center;
 
   const CommonCard(
       {super.key,
       required this.facility,
       required this.machine,
       required this.start,
-      required this.end});
+      required this.end,
+      required this.center});
 
   @override
   _CommonCardState createState() => _CommonCardState();
@@ -27,32 +29,91 @@ class _CommonCardState extends State<CommonCard> {
     {'title': '종료시간', 'content': widget.end},
   ];
 
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+  lotoCard() {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width * 0.35,
+          height: MediaQuery.of(context).size.height * 0.25,
+          decoration: BoxDecoration(
+            color: const Color.fromRGBO(237, 244, 251, 1),
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: const [shadow],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: data.map((item) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                child: RowContent(
+                  title: item['title']!,
+                  content: item['content']!,
+                  line: 2,
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+        if (!widget.center) Container(
+          width: MediaQuery.of(context).size.width * 0.35,
+          height: MediaQuery.of(context).size.height * 0.25,
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+      ],
+    );
+  }
 
-    double width = screenWidth * 0.35;
-    double height = screenHeight * 0.23;
+  pressLotoCard() {
     return Container(
-      width: width,
-      height: height,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(237, 244, 251, 1), // 컨테이너 배경색
-        borderRadius: BorderRadius.circular(10.0), // 모서리 둥글기
+        color: const Color.fromRGBO(237, 244, 251, 1),
+        borderRadius: BorderRadius.circular(10.0),
         boxShadow: const [shadow],
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 위젯 사이에 고르게 간격 추가
+        // mainAxisAlignment: MainAxisAlignment.start,
+        // mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: data.map((item) {
           return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            // 각 RowContent 위젯 사이에 패딩 추가
-            child: RowContent(title: item['title']!, content: item['content']!),
-          );
+              padding: const EdgeInsets.symmetric(vertical: 4.0),
+              child: RowContent(
+                title: item['title']!,
+                content: item['content']!,
+                line: 5,
+              ));
         }).toList(),
       ),
-      // 컨테이너 내부의 자식 위젯들을 추가합니다.
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    OverlayEntry? overlayEntry;
+
+    return GestureDetector(
+        onLongPress: () {
+          overlayEntry = OverlayEntry(
+            builder: (context) => Center(
+              child: Material(
+                color: Colors.transparent,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.5,
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: pressLotoCard(),
+                ),
+              ),
+            ),
+          );
+          Overlay.of(context).insert(overlayEntry!);
+        },
+        onLongPressEnd: (details) {
+          overlayEntry?.remove();
+        },
+        child: lotoCard());
   }
 }

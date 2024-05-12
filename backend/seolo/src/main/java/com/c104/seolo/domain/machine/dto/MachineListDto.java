@@ -13,7 +13,7 @@ import java.util.Date;
 @Getter
 @Setter
 public class MachineListDto {
-    private Long id;
+    private Long machineId;
     private Long facilityId;
     private String facilityName;
     private String machineName;

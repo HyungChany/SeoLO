@@ -15,6 +15,5 @@ public class UserPwdResetRequest {
     @PasswordConstraint
     private String newPassword;
 
-    @PasswordConstraint
     private String checkNewPassword;
 }

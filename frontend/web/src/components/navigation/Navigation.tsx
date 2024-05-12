@@ -53,13 +53,13 @@ const Navigation = () => {
       <NavigatorContent>
         <Title to="/">SeoLo</Title>
         <Menu>
-          <MenuLink to="/1">
+          <MenuLink to="/report">
             <Typo.H3>LOTO 일지</Typo.H3>
           </MenuLink>
-          <MenuLink to="/2">
+          <MenuLink to="/currentloto">
             <Typo.H3>LOTO 현황</Typo.H3>
           </MenuLink>
-          <MenuLink to="/3">
+          <MenuLink to="/checklist">
             <Typo.H3>체크리스트 관리</Typo.H3>
           </MenuLink>
           <MenuLink to="/information">

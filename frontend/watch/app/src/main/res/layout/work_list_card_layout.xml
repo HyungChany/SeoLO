@@ -1,0 +1,67 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/BLACK"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:id="@+id/centerLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/card"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.61"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.61">
+
+        <TextView
+            android:id="@+id/TitleView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sample_text"
+            android:textAlignment="center"
+            android:textColor="@color/SAMSUNG_BLUE"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/ContentView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:text="@string/sample_text"
+            android:textAlignment="center"
+            android:textColor="@color/BLACK"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/slideRightIcon"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="@string/right"
+        android:src="@drawable/img_right"
+        app:layout_constraintBottom_toBottomOf="@id/centerLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/centerLayout" />
+
+    <ImageView
+        android:id="@+id/slideLeftIcon"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginStart="8dp"
+        android:contentDescription="@string/left"
+        android:src="@drawable/img_left"
+        app:layout_constraintBottom_toBottomOf="@id/centerLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/centerLayout" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

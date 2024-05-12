@@ -7,8 +7,11 @@ import Navigation from '@/components/navigation/Navigation.tsx';
 import LoginPage from '@/pages/LoginPage.tsx';
 import MainPage from '@/pages/MainPage.tsx';
 import CurrentLOTO from '@/pages/CurrentLOTO.tsx';
-import Equipment from '@/pages/Equipment.tsx';
+import Equipment from '@/pages/Machine.tsx';
 import Employee from '@/pages/Employee.tsx';
+import PrivateRoute from '@/components/routesetting/PrivateRoute.tsx';
+import CheckListPage from '@/pages/CheckListPage.tsx';
+import Report from '@/pages/Report.tsx';
 
 const Container = styled.div`
   display: flex;
@@ -29,25 +32,38 @@ const With = (element: JSX.Element) => (
   </Container>
 );
 
-const mainRoutes = [{ path: '/', element: With(<MainPage />) }];
+const mainRoutes = [
+  {
+    path: '/',
+    element: <PrivateRoute>{With(<MainPage />)}</PrivateRoute>,
+  },
+];
 
 const loginRoute = { path: '/login', element: <LoginPage /> };
 const informationRoute = [
   {
     path: '/information',
-    element: With(<CompanyInformation />),
+    element: <PrivateRoute>{With(<CompanyInformation />)}</PrivateRoute>,
   },
   {
     path: '/currentloto',
-    element: With(<CurrentLOTO />),
+    element: <PrivateRoute>{With(<CurrentLOTO />)}</PrivateRoute>,
   },
   {
     path: '/equipment',
-    element: With(<Equipment />),
+    element: <PrivateRoute>{With(<Equipment />)}</PrivateRoute>,
   },
   {
     path: '/employee',
-    element: With(<Employee />),
+    element: <PrivateRoute>{With(<Employee />)}</PrivateRoute>,
+  },
+  {
+    path: '/checklist',
+    element: With(<CheckListPage />),
+  },
+  {
+    path: '/report',
+    element: With(<Report />),
   },
 ];
 const exampleRoute = { path: '/example', element: <Example /> };

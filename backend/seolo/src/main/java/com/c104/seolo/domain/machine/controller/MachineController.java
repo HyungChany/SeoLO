@@ -1,8 +1,9 @@
 package com.c104.seolo.domain.machine.controller;
 
-import com.c104.seolo.domain.machine.dto.MachineDto;
+import com.c104.seolo.domain.machine.dto.MachineInfo;
 import com.c104.seolo.domain.machine.dto.MachineSpaceDto;
 import com.c104.seolo.domain.machine.dto.request.MachineRequest;
+import com.c104.seolo.domain.machine.dto.response.MachineListForChoiceResponse;
 import com.c104.seolo.domain.machine.dto.response.MachineListResponse;
 import com.c104.seolo.domain.machine.service.MachineService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class MachineController {
 
     @Secured("ROLE_MANAGER")
     @GetMapping("/{machineId}")
-    public ResponseEntity<MachineDto> getMachine(
+    public ResponseEntity<MachineInfo> getMachine(
             @RequestHeader("Company-Code") String companyCode,
             @PathVariable Long machineId
     ) {
@@ -63,11 +64,26 @@ public class MachineController {
     }
 
     @Secured("ROLE_MANAGER")
+    @DeleteMapping("/{machineId}")
+    public ResponseEntity<Void> deleteMachine(
+            @RequestHeader("Company-Code") String companyCode,
+            @PathVariable("machineId") Long machineId
+    ) {
+        machineService.deleteMachine(machineId, companyCode);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Secured("ROLE_MANAGER")
     @GetMapping("/facility/{facilityId}")
     public ResponseEntity<MachineListResponse> getMachineList(
             @RequestHeader("Company-Code") String companyCode,
             @PathVariable("facilityId") Long facilityId
     ) {
         return ResponseEntity.ok(machineService.findMachineByCompanyAndFacility(companyCode, facilityId));
+    }
+
+    @GetMapping("/facilities/{facilityId}/easy")
+    public MachineListForChoiceResponse getMachineList(@PathVariable Long facilityId) {
+        return new MachineListForChoiceResponse(machineService.getMachineByFacilityId(facilityId));
     }
 }

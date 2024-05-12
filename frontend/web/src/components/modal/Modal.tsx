@@ -12,7 +12,7 @@ interface ModalProps {
 // 스타일 정의
 const ModalContainer = styled.div<ModalProps>`
   width: 50%;
-  height: 37.5rem;
+  height: 30rem;
   border-radius: 3.125rem;
   border: 1px solid ${Color.GRAY100};
   background-color: ${Color.GRAY50};

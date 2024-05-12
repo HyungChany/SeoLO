@@ -34,6 +34,16 @@ spring:
       host: k10c104.p.ssafy.io
       port: ${common.redis.session-store.port}
 
+  cloud:
+    aws:
+      credentials:
+        accessKey: ${common.aws.credentials.access-key}
+        secretKey: ${common.aws.credentials.secret-key}
+      region:
+        static: ${common.aws.region.static}
+      s3:
+        bucket: ${common.aws.s3.bucket}
+
 logging:
   level:
     org.springframework.web: DEBUG

@@ -3,10 +3,7 @@ package com.c104.seolo.domain.machine.service.impl;
 import com.c104.seolo.domain.facility.entity.Facility;
 import com.c104.seolo.domain.facility.exception.FacilityErrorCode;
 import com.c104.seolo.domain.facility.repository.FacilityRepository;
-import com.c104.seolo.domain.machine.dto.MachineDto;
-import com.c104.seolo.domain.machine.dto.MachineListDto;
-import com.c104.seolo.domain.machine.dto.MachineSpaceDto;
-import com.c104.seolo.domain.machine.dto.info.MachineInfo;
+import com.c104.seolo.domain.machine.dto.*;
 import com.c104.seolo.domain.machine.dto.info.MachineListInfo;
 import com.c104.seolo.domain.machine.dto.info.MachineManagerInfo;
 import com.c104.seolo.domain.machine.dto.request.MachineRequest;
@@ -42,9 +39,9 @@ public class MachineServiceImpl implements MachineService {
     private final UserRepository userRepository;
 
     @Override
-    public MachineDto findMachineByMachineId(String companyCode, Long machineId) {
-        Optional<MachineInfo> machineOptional = machineRepository.findInfoById(machineId);
-        MachineInfo machine = machineOptional.orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
+    public MachineInfo findMachineByMachineId(String companyCode, Long machineId) {
+        Optional<com.c104.seolo.domain.machine.dto.info.MachineInfo> machineOptional = machineRepository.findInfoById(machineId);
+        com.c104.seolo.domain.machine.dto.info.MachineInfo machine = machineOptional.orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
 
         if (!machine.getCompanyCode().equals(companyCode)) {
             throw new CommonException(MachineErrorCode.NOT_COMPANY_MACHINE);
@@ -58,7 +55,7 @@ public class MachineServiceImpl implements MachineService {
         Long subManagerId = subnManagerOptional.map(MachineManagerInfo::getMachineManagerId).orElse(null);
         String subManagerName = subnManagerOptional.map(MachineManagerInfo::getName).orElse(null);
 
-        return MachineDto.builder()
+        return MachineInfo.builder()
                 .id(machine.getId())
                 .facilityId(machine.getFacilityId())
                 .facilityName(machine.getFacilityName())
@@ -85,7 +82,7 @@ public class MachineServiceImpl implements MachineService {
                             String subManagerName = subnManagerOptional.map(MachineManagerInfo::getName).orElse(null);
 
                             return MachineListDto.builder()
-                                    .id(info.getId())
+                                    .machineId(info.getId())
                                     .facilityId(info.getFacilityId())
                                     .facilityName(info.getFacilityName())
                                     .machineName(info.getMachineName())
@@ -101,9 +98,9 @@ public class MachineServiceImpl implements MachineService {
                 .orElse(Collections.emptyList());
     }
 
-    private void createMachineManager(Long userId, Machine machine, Role role) {
-        if (userId != null) {
-            userRepository.findById(userId).ifPresent(user -> {
+    private void createMachineManager(String employeeNum, Machine machine, Role role) {
+        if (employeeNum != null) {
+            userRepository.findAppUserByEmployeeNum(employeeNum).ifPresent(user -> {
                 MachineManager mm = MachineManager.builder()
                         .machine(machine)
                         .user(user)
@@ -121,7 +118,7 @@ public class MachineServiceImpl implements MachineService {
         if (!facility.getCompany().getCompanyCode().equals(companyCode)) {
             throw new CommonException(FacilityErrorCode.NOT_COMPANY_FACILITY);
         }
-        if (machineRequest.getMainManagerId().equals(machineRequest.getSubManagerId())) {
+        if (machineRequest.getMainManagerNum().equals(machineRequest.getSubManagerNum())) {
             throw new CommonException(MachineErrorCode.CANNOT_SEND_SAME_MANAGER);
         }
 
@@ -131,14 +128,12 @@ public class MachineServiceImpl implements MachineService {
                 .number(machineRequest.getMachineCode())
                 .thum(machineRequest.getMachineThum())
                 .introductionDate(machineRequest.getIntroductionDate())
-                .longitude(0.0f)
-                .latitude(0.0f)
                 .lockerType(LockerType.NO)
                 .build();
         Machine savedMachine = machineRepository.save(machine);
 
-        createMachineManager(machineRequest.getMainManagerId(), savedMachine, Role.Main);
-        createMachineManager(machineRequest.getSubManagerId(), savedMachine, Role.Sub);
+        createMachineManager(machineRequest.getMainManagerNum(), savedMachine, Role.Main);
+        createMachineManager(machineRequest.getSubManagerNum(), savedMachine, Role.Sub);
     }
 
     @Override
@@ -147,11 +142,11 @@ public class MachineServiceImpl implements MachineService {
         if (!machine.getFacility().getCompany().getCompanyCode().equals(companyCode)) {
             throw new CommonException(MachineErrorCode.NOT_COMPANY_MACHINE);
         }
-        if (machineRequest.getMainManagerId().equals(machineRequest.getSubManagerId())) {
+        if (machineRequest.getMainManagerNum().equals(machineRequest.getSubManagerNum())) {
             throw new CommonException(MachineErrorCode.CANNOT_SEND_SAME_MANAGER);
         }
 
-        Optional<AppUser> mainManagerOptional = userRepository.findById(machineRequest.getMainManagerId());
+        Optional<AppUser> mainManagerOptional = userRepository.findAppUserByEmployeeNum(machineRequest.getMainManagerNum());
         if (mainManagerOptional.isEmpty()) {
             throw new CommonException(MachineErrorCode.NOT_EXIST_MACHINE_MANAGER);
         }
@@ -161,7 +156,7 @@ public class MachineServiceImpl implements MachineService {
             }
         });
 
-        Optional<AppUser> subManagerOptional = userRepository.findById(machineRequest.getSubManagerId());
+        Optional<AppUser> subManagerOptional = userRepository.findAppUserByEmployeeNum(machineRequest.getSubManagerNum());
         if (subManagerOptional.isEmpty()) {
             throw new CommonException(MachineErrorCode.NOT_EXIST_MACHINE_MANAGER);
         }
@@ -206,11 +201,25 @@ public class MachineServiceImpl implements MachineService {
             if (!machine.getFacility().getCompany().getCompanyCode().equals(companyCode)) {
                 throw new CommonException(MachineErrorCode.NOT_COMPANY_MACHINE);
             }
-
-            machine.setLatitude(latitude);
-            machine.setLongitude(longitude);
             machineRepository.save(machine);
         });
+    }
+
+    @Override
+    public void deleteMachine(Long machineId, String companyCode) {
+        Machine machine = machineRepository.findById(machineId)
+                .orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE));
+
+        if (!machine.getFacility().getCompany().getCompanyCode().equals(companyCode)) {
+            throw new CommonException(MachineErrorCode.NOT_COMPANY_MACHINE);
+        }
+
+        MachineManager mainManager = machineManagerRepository.findMachineManagerByMachineIdAndRole(machineId, Role.Main);
+        MachineManager subManager = machineManagerRepository.findMachineManagerByMachineIdAndRole(machineId, Role.Sub);
+
+        machineManagerRepository.delete(mainManager);
+        machineManagerRepository.delete(subManager);
+        machineRepository.delete(machine);
     }
 
     @Override
@@ -228,5 +237,19 @@ public class MachineServiceImpl implements MachineService {
         return MachineListResponse.builder()
                 .machines(Optional.of(machineDtoList))
                 .build();
+    }
+
+    @Override
+    public MachineDto getMachineByMachineId(Long machineId) {
+        return MachineDto.of(machineRepository.findById(machineId).orElseThrow(() -> new CommonException(MachineErrorCode.NOT_EXIST_MACHINE)));
+    }
+
+    @Override
+    public List<MachineIdName> getMachineByFacilityId(Long facilityId) {
+        List<Machine> machines = machineRepository.findByFacilityId(facilityId);
+
+        return machines.stream()
+                .map(machine -> new MachineIdName(machine.getId(), machine.getName()))
+                .collect(Collectors.toList());
     }
 }

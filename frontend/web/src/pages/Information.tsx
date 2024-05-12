@@ -6,10 +6,21 @@ import * as Typo from '@/components/typography/Typography.tsx';
 import Equipment from '/assets/images/equipment.png';
 import People from '/assets/images/people.png';
 import Dropdown from '@/components/dropdown/DropDown.tsx';
-import EquipmentModal from '@/components/modal/EquipmentModal.tsx';
-import Employee from '@/components/modal/Employee.tsx';
-import React, { useState } from 'react';
+import EquipmentModal from '@/components/modal/MachineModal.tsx';
+import Employee from '@/components/modal/EmployeeModal.tsx';
+import React, { useEffect, useState } from 'react';
+import { Facilities } from '@/apis/Facilities.ts';
+import { MachineList } from '@/apis/Machine.ts';
+import { RegistratedEmployee } from '@/apis/Employee.ts';
 
+interface OptionType {
+  value: number;
+  label: string;
+}
+interface FacilityType {
+  id: string;
+  name: string;
+}
 const Background = styled.div`
   width: 100%;
   height: 100%;
@@ -23,7 +34,6 @@ const Background = styled.div`
 `;
 const ImgBox = styled.img`
   width: 13rem;
-  height: 13rem;
 `;
 const Overlay = styled.div`
   position: fixed;
@@ -40,8 +50,16 @@ const Overlay = styled.div`
 const CompanyInformation = () => {
   const [equipModal, setEquipModal] = useState<boolean>(false);
   const [employeeModal, setEmployeeModal] = useState<boolean>(false);
+  const [options, setOptions] = useState<OptionType[]>([]);
+  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+  const [facilities, setFacilities] = useState<number>(0);
+  const [employees, setEmployees] = useState<number>(0);
   const handleEquipmentClick = () => {
-    setEquipModal(true);
+    if (selectedOption) {
+      setEquipModal(true);
+    } else {
+      alert('공장을 선택하세요.');
+    }
   };
   const handleEmployeeClick = () => {
     setEmployeeModal(true);
@@ -58,11 +76,45 @@ const CompanyInformation = () => {
   ) => {
     e.stopPropagation();
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await Facilities();
+      const newOptions = data.map((facility: FacilityType) => ({
+        value: facility.id,
+        label: facility.name,
+      }));
+      setOptions(newOptions);
+    };
+    fetchData();
+  }, []);
+  useEffect(() => {
+    const fetchEquipment = async () => {
+      if (selectedOption?.value) {
+        const equipmentData = await MachineList(selectedOption.value);
+        console.log(equipmentData);
+        setFacilities(equipmentData.length);
+      }
+    };
+    fetchEquipment();
+  }, [selectedOption]);
+  useEffect(() => {
+    const fetchEmployee = async () => {
+      const data = await RegistratedEmployee();
+      setEmployees(data.length);
+    };
+    fetchEmployee();
+  }, []);
+  const handleOptionChange = (option: OptionType): void => {
+    setSelectedOption(option);
+  };
   return (
     <Background>
-      {equipModal && (
+      {equipModal && selectedOption && (
         <Overlay onClick={handleCloseModal}>
-          <EquipmentModal onClick={handleModalClick} />
+          <EquipmentModal
+            onClick={handleModalClick}
+            option={selectedOption.value}
+          />
         </Overlay>
       )}
       {employeeModal && (
@@ -79,7 +131,7 @@ const CompanyInformation = () => {
       >
         <Typo.H3 color={Color.BLACK}>등록 작업장 수</Typo.H3>
         <ImgBox src={WorkPlace} />
-        <Typo.H0 color={Color.BLACK}>3</Typo.H0>
+        <Typo.H0 color={Color.BLACK}>{options.length}</Typo.H0>
       </Card>
       <Card
         width={22}
@@ -90,9 +142,14 @@ const CompanyInformation = () => {
         onClick={handleEquipmentClick}
       >
         <Typo.H3 color={Color.BLACK}>현재 작업장의 장비 현황</Typo.H3>
-        <Dropdown />
+        <Dropdown
+          options={options}
+          selectedOption={selectedOption}
+          onOptionChange={handleOptionChange}
+          placeholder="공장을 선택하세요"
+        />
         <ImgBox src={Equipment} />
-        <Typo.H0 color={Color.BLACK}>34</Typo.H0>
+        <Typo.H0 color={Color.BLACK}>{facilities}</Typo.H0>
       </Card>
       <Card
         width={22}
@@ -104,7 +161,7 @@ const CompanyInformation = () => {
       >
         <Typo.H3 color={Color.BLACK}>등록 임직원현황</Typo.H3>
         <ImgBox src={People} />
-        <Typo.H0 color={Color.BLACK}>125</Typo.H0>
+        <Typo.H0 color={Color.BLACK}>{employees}</Typo.H0>
       </Card>
     </Background>
   );

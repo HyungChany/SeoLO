@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -17,6 +18,10 @@ android {
             useSupportLibrary = true
         }
 
+    }
+
+    buildFeatures {
+        viewBinding = true
     }
 
     buildTypes {
@@ -62,11 +67,19 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.viewpager2)
     implementation(libs.material)
-    implementation("com.github.bumptech.glide:glide:4.12.0")
     implementation("sh.tyy:wheelpicker:0.4.0")
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    implementation("androidx.security:security-crypto:1.0.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.google.code.gson:gson:2.8.6")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-scalars:2.9.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation ("com.google.android.material:material:1.4.0")
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
-    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 }

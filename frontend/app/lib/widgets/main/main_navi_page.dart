@@ -1,5 +1,5 @@
 import 'package:app/main.dart';
-import 'package:app/widgets/common_icon_button.dart';
+import 'package:app/widgets/button/common_icon_button.dart';
 import 'package:flutter/material.dart';
 
 class MainNaviPage extends StatefulWidget {
@@ -19,7 +19,7 @@ class _MainNaviPageState extends State<MainNaviPage> {
 
   final List<String> pageText = ['NFC 태그', '내 작업 일지', 'LOTO 잠금', 'LOTO 절차'];
 
-  final List<String> pageTap = ['/lock', '/lock', '/test', '/test'];
+  final List<String> pageTap = ['/bluetooth', '/profile', '/checklist', '/lotoProcess'];
 
   @override
   Widget build(BuildContext context) {
