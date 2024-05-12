@@ -51,6 +51,7 @@ export const Leaflet = ({ imageFile }: ImageMapProps): JSX.Element | null => {
   const customIcon = L.icon({
     iconUrl: '@/../assets/icons/Position.png',
     iconSize: [30, 42],
+    iconAnchor: [15, 42],
   });
 
   if (!imageFile || !bounds) return null;
