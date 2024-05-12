@@ -203,7 +203,7 @@ const NumberContainer = styled.div<NumberType>`
   margin-bottom: ${(props) => props.marginBottom || '0'};
 `;
 
-const Handle = () => {};
+// const Handle = () => {};
 
 const MainPage = () => {
   const [modifyMode, setModifyMode] = useState<boolean>(false);
