@@ -158,7 +158,8 @@ VALUES
 
 INSERT INTO app_user (USER_IS_LOCKED, USER_PIN, CREATED_AT, UPDATED_AT, USER_ID, EMPLOYEE_NUM, USER_STAT, USER_ROLE, USER_PWD) VALUES
                                                                                                                                    (false, '$2a$10$l1FAI5aM0A9ocigVa7L34eU6IvWO/nu0Vln5/ZawHkCdDtcVXBZvm', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, '202100001', 'INIT', 'ROLE_MANAGER', '$2a$10$pT.Qqif0f1VbpAT2OSCvCe88qQqYWX2//YXi.T722zEKj/N9gr3Ue'),
-                                                                                                                                   (false, '$2a$10$FXTUrU8805Vnxtzv3cH2aO82F4h3nyAQe/C/NWTRBdxD2beWkusLS', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, '199500001', 'INIT', 'ROLE_WORKER', '$2a$10$8lOqas3sQFbrpesrOM80oO14xs4finryPmroZMnbu/mKdh7VZhZ9q');
+                                                                                                                                   (false, '$2a$10$FXTUrU8805Vnxtzv3cH2aO82F4h3nyAQe/C/NWTRBdxD2beWkusLS', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, '199500001', 'INIT', 'ROLE_WORKER', '$2a$10$8lOqas3sQFbrpesrOM80oO14xs4finryPmroZMnbu/mKdh7VZhZ9q'),
+                                                                                                                                   (false, '$2a$10$FXTUrU8805Vnxtzv3cH2aO82F4h3nyAQe/C/NWTRBdxD2beWkusLS', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3, '200500001', 'INIT', 'ROLE_MANAGER', '$2a$10$8lOqas3sQFbrpesrOM80oO14xs4finryPmroZMnbu/mKdh7VZhZ9q');;
 
 INSERT INTO check_list_template(check_list_template_context)
 values ('LOTO에 대해 작업자 교육이 이루어졌는가?'),

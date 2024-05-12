@@ -11,8 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-from my_settings import *
-
+from setting.my_setting import *
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -57,7 +56,7 @@ APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379",
+        "LOCATION": "redis://k10c104.p.ssafy.io:6379/1",
         "TIMEOUT": 10800, # 3H
         "OPTIONS": {
             "CONNECTION_CLASS": "django_redis.connection.DefaultConnection",

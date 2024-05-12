@@ -40,7 +40,6 @@ sqlparse==0.5.0
 tzdata==2024.1
 tzlocal==5.2
 urllib3==2.2.1
-
 ```
 
 ### Locust
