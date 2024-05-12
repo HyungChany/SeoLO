@@ -53,22 +53,13 @@ SCHEDULER_DEFAULT = True
 APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 
 # redis
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": "redis://k10c104.p.ssafy.io:6379/1",
-#         "TIMEOUT": 10800, # 3H
-#         "OPTIONS": {
-#             "CONNECTION_CLASS": "django_redis.connection.DefaultConnection",
-#         }
-#     }
-# }
 CACHES = {
-    'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://k10c104.p.ssafy.io:6379/1',
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://k10c104.p.ssafy.io:6379/1",
+        "TIMEOUT": 10800, # 3H
+        "OPTIONS": {
+            "CONNECTION_CLASS": "django_redis.connection.DefaultConnection",
         }
     }
 }
