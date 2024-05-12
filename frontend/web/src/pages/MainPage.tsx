@@ -285,6 +285,10 @@ const MainPage = () => {
                   <Typo.Body0B color={Color.GRAY400}>
                     저장된 도면이 없습니다. 도면을 추가하세요.
                   </Typo.Body0B>
+                  <Spacer space={'1rem'} />
+                  <Typo.Body0B color={Color.GRAY400}>
+                    권장 이미지 비율은 다음과 같습니다. 가로 5: 세로 3
+                  </Typo.Body0B>
                 </label>
               </CardDrawing>
             )}
