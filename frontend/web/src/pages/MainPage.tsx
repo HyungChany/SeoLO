@@ -134,10 +134,12 @@ const CardDrawing = styled.div`
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.25);
   overflow: hidden;
   transition: background-color 0.3s;
+
   &:hover {
     background-color: ${Color.GRAY100};
     cursor: pointer;
   }
+
   &:active {
     background-color: ${Color.GRAY200};
   }
@@ -270,7 +272,9 @@ const MainPage = () => {
                   style={{ height: '100%', width: '100%', overflow: 'hidden' }}
                   attributionControl={false}
                 >
-                  {imageFile && <Leaflet imageFile={imageFile} />}
+                  {imageFile && (
+                    <Leaflet imageFile={imageFile} modifyMode={modifyMode} />
+                  )}
                 </MapContainer>
               </CardDrawing>
             ) : (

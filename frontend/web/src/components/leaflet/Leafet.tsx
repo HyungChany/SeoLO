@@ -11,9 +11,13 @@ import * as Typo from '@/components/typography/Typography.tsx';
 
 interface ImageMapProps {
   imageFile: string | null;
+  modifyMode: boolean;
 }
 
-export const Leaflet = ({ imageFile }: ImageMapProps): JSX.Element | null => {
+export const Leaflet = ({
+  imageFile,
+  modifyMode,
+}: ImageMapProps): JSX.Element | null => {
   const [bounds, setBounds] = useState<L.LatLngBounds | null>(null);
   const [markers, setMarkers] = useState<L.LatLng[]>([]);
   const map = useMap();
@@ -43,8 +47,11 @@ export const Leaflet = ({ imageFile }: ImageMapProps): JSX.Element | null => {
 
   useMapEvents({
     click: (e) => {
-      const newMarker = e.latlng;
-      setMarkers((currentMarkers) => [...currentMarkers, newMarker]);
+      if (modifyMode) {
+        // modifyMode가 true일 때만 마커 추가
+        const newMarker = e.latlng;
+        setMarkers((currentMarkers) => [...currentMarkers, newMarker]);
+      }
     },
   });
 
