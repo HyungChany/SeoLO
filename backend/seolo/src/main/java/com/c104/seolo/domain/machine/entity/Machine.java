@@ -58,7 +58,6 @@ public class Machine extends BaseEntity {
         this.machineSubcategory = machineSubcategory;
         this.name = name;
         this.number = number;
-
         this.company = company;
         this.thum = thum;
         this.lockerType = lockerType;
@@ -66,4 +65,5 @@ public class Machine extends BaseEntity {
     }
 
     public Machine() {}
+
 }

@@ -20,15 +20,15 @@ public class Marker extends BaseEntity {
     @JoinColumn(name = "facility_id", nullable = false)
     private Facility facility;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "machine_id")
     private Machine machine;
 
     @Column(name = "marker_x", nullable = false)
-    private double locationX;
+    private Double locationX;
 
     @Column(name = "marker_y", nullable = false)
-    private double locationY;
+    private Double locationY;
 
     protected Marker() {}
 
@@ -63,7 +63,7 @@ public class Marker extends BaseEntity {
 
         public Builder locationX(double newLocationX) {
             if (newLocationX < 0) {
-                throw new IllegalArgumentException("LocationX cannot be negative and null");
+                throw new IllegalArgumentException("LocationX cannot be negative");
             }
             this.locationX = newLocationX;
             return this;
@@ -71,28 +71,13 @@ public class Marker extends BaseEntity {
 
         public Builder locationY(double newLocationY) {
             if (newLocationY < 0) {
-                throw new IllegalArgumentException("LocationY cannot be negative and null");
+                throw new IllegalArgumentException("LocationY cannot be negative");
             }
             this.locationY = newLocationY;
             return this;
         }
 
         public Marker build() {
-            if (facility == null) {
-                throw new IllegalArgumentException("Facility cannot be null");
-            }
-
-            if (machine == null) {
-                throw new IllegalArgumentException("Machine cannot be null");
-            }
-
-            if (locationX < 0) {
-                throw new IllegalArgumentException("LocationX cannot be negative and null");
-            }
-
-            if (locationY < 0) {
-                throw new IllegalArgumentException("LocationY cannot be negative and null");
-            }
             return new Marker(this);
         }
     }
