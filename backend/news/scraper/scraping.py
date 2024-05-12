@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 def scrape():
     news_data = []
-    conn = redis.StrictRedis.from_url('redis://127.0.0.1:6379')
+    conn = redis.StrictRedis.from_url('redis://k10c104.p.ssafy.io:6380/0')
 
     url = 'https://search.daum.net/search?w=news&nil_search=btn&DA=STC&enc=utf8&cluster=y&cluster_page=1&q=%EC%95%88%EC%A0%84&p=1&sort=accuracy'
     response = requests.get(url)
