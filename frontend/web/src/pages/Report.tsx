@@ -257,10 +257,7 @@ const Report = () => {
       handleEndDateChange(endDate);
     }
   }, [startDate, endDate]);
-  // const datePickerUtils = {
-  //   format: datePickerFormat,
-  //   parse: (value: string) => dayjs(value, datePickerFormat, true).toDate(),
-  // };
+
   console.log('시작시간', formatStartDate);
   console.log('종료시간', formatEndDate);
   return (
