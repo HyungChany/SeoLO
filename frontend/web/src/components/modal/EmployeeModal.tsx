@@ -51,12 +51,13 @@ const EquipmentModal = ({ onClick }: EquipmentModalProps) => {
         <Button
           onClick={handleButtonClick}
           width={5}
-          height={2.5}
+          height={2}
           $backgroundColor={Color.WHITE}
           $borderColor={Color.GRAY100}
           $borderRadius={2.5}
           $hoverBackgroundColor={Color.SAFETY_YELLOW}
           $hoverBorderColor={Color.SAFETY_YELLOW}
+          fontSize={1.25}
         >
           등록
         </Button>
