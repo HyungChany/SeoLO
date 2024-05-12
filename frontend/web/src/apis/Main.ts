@@ -1,10 +1,10 @@
 import { api } from './Base.ts';
 
-export const MainInformation = async () => {
+export const MainInformation = async (facilityId: number) => {
   try {
     const accessToken = sessionStorage.getItem('accessToken');
     const companyCode = sessionStorage.getItem('companyCode');
-    const response = await api.get('/statistics/main', {
+    const response = await api.get(`/statistics/main/${facilityId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,

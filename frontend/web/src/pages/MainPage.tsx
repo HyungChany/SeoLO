@@ -2,11 +2,13 @@ import CheckList from '@/../assets/icons/CheckList.svg?react';
 import ListModify from '@/../assets/icons/ListModify.svg?react';
 import logoutIcon from '@/../assets/icons/Logout.png';
 import Position from '@/../assets/icons/Position.svg?react';
+import { Facilities } from '@/apis/Facilities.ts';
 import { Logout } from '@/apis/Login.ts';
 import { MainInformation } from '@/apis/Main.ts';
 import { Spacer } from '@/components/basic/Spacer.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import Card from '@/components/card/Card.tsx';
+import Dropdown from '@/components/dropdown/DropDown.tsx';
 import { Leaflet } from '@/components/leaflet/Leafet.tsx';
 import { Menu } from '@/components/menu/Menu.tsx';
 import * as Typo from '@/components/typography/Typography.tsx';
@@ -18,8 +20,17 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 interface NumberType {
   color: string;
+  marginTop?: string;
+}
+interface FacilityType {
+  id: string;
+  name: string;
 }
 
+interface OptionType {
+  value: number;
+  label: string;
+}
 interface MainInformationType {
   num_all_machines_in_this_facility: number;
   num_all_lockers_in_this_company: number;
@@ -57,8 +68,8 @@ const LeftContainer = styled.div`
 
 const HeaderContainer = styled.div`
   position: relative;
-  text-align: end;
-  margin: 7% 1% 3%;
+  text-align: center;
+  margin: 7% 1%;
 `;
 
 const Line = styled.div`
@@ -174,7 +185,9 @@ const NumberContainer = styled.div<NumberType>`
   align-items: center;
   justify-content: center;
   font-size: 5.625rem;
+  font-weight: 700;
   color: ${(props) => props.color};
+  margin-top: ${(props) => props.marginTop};
 `;
 
 const Handle = () => {};
@@ -183,6 +196,9 @@ const MainPage = () => {
   const [modifyMode, setModifyMode] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<string | null>(null);
   const [mainInformation, setMainInformation] = useState<MainInformationType>();
+  const [options, setOptions] = useState<OptionType[]>([]);
+  // const [selectedOption, setSelectedOption] = useState<OptionType>(options[0]);
+  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
   const navigate = useNavigate();
 
   // 작업장 편집모드 활성화, 비활성화
@@ -215,20 +231,50 @@ const MainPage = () => {
     };
     fetchLogout();
   };
+
+  const handleOptionChange = (option: OptionType): void => {
+    setSelectedOption(option);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
-      const data = await MainInformation();
-      setMainInformation(data);
+      if (selectedOption) {
+        const data = await MainInformation(selectedOption?.value);
+        setMainInformation(data);
+      }
+    };
+    fetchData();
+  }, [selectedOption]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await Facilities();
+      const newOptions = data.map((facility: FacilityType) => ({
+        value: facility.id,
+        label: facility.name,
+      }));
+      setOptions(newOptions);
     };
     fetchData();
   }, []);
+  useEffect(() => {
+    if (options.length > 0) {
+      setSelectedOption(options[0]);
+    }
+  }, [options]);
+
   return (
     <>
       <Background>
         <MainContainer>
           <LeftContainer>
             <HeaderContainer>
-              <Typo.H4 color={Color.BLACK}>1공장 조립 라인</Typo.H4>
+              <Dropdown
+                options={options}
+                selectedOption={selectedOption}
+                onOptionChange={handleOptionChange}
+                placeholder="공장을 선택하세요"
+              />
+              {/* <Typo.H4 color={Color.BLACK}>1공장 조립 라인</Typo.H4> */}
             </HeaderContainer>
             <Line />
             <BannerContainer>
@@ -347,7 +393,7 @@ const MainPage = () => {
                     <div style={{ marginTop: '0.5rem' }}>등록 장비</div>
                   </Typo.H4>
                 </InnerContainer>
-                <NumberContainer color={Color.GREEN400}>
+                <NumberContainer color={Color.GREEN400} marginTop="1.5rem">
                   {mainInformation?.num_all_machines_in_this_facility}
                 </NumberContainer>
               </Card>
@@ -362,7 +408,7 @@ const MainPage = () => {
                     <div style={{ marginTop: '0.5rem' }}>자물쇠 현황</div>
                   </Typo.H4>
                 </InnerContainer>
-                <NumberContainer color={Color.GREEN400}>
+                <NumberContainer color={Color.GREEN400} marginTop="1.5rem">
                   {mainInformation?.num_all_lockers_in_this_company}
                 </NumberContainer>
               </Card>
