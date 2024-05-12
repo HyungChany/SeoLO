@@ -3,6 +3,7 @@ import ListModify from '@/../assets/icons/ListModify.svg?react';
 import logoutIcon from '@/../assets/icons/Logout.png';
 import Position from '@/../assets/icons/Position.svg?react';
 import { Logout } from '@/apis/Login.ts';
+import { MainInformation } from '@/apis/Main.ts';
 import { Spacer } from '@/components/basic/Spacer.tsx';
 import { Button } from '@/components/button/Button.tsx';
 import Card from '@/components/card/Card.tsx';
@@ -11,11 +12,21 @@ import { Menu } from '@/components/menu/Menu.tsx';
 import * as Typo from '@/components/typography/Typography.tsx';
 import * as Color from '@/config/color/Color.ts';
 import 'leaflet/dist/leaflet.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MapContainer } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+interface NumberType {
+  color: string;
+}
 
+interface MainInformationType {
+  num_all_machines_in_this_facility: number;
+  num_all_lockers_in_this_company: number;
+  num_toody_task_historiese_in_this_facility: number;
+  num_this_week_task_historiese_in_this_facility: number;
+  num_all_accidents_in_this_company: number;
+}
 const Background = styled.div`
   box-sizing: border-box;
   width: 100%;
@@ -156,11 +167,22 @@ const InnerContainer = styled.div`
   flex-direction: column;
 `;
 
+const NumberContainer = styled.div<NumberType>`
+  width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5.625rem;
+  color: ${(props) => props.color};
+`;
+
 const Handle = () => {};
 
 const MainPage = () => {
   const [modifyMode, setModifyMode] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<string | null>(null);
+  const [mainInformation, setMainInformation] = useState<MainInformationType>();
   const navigate = useNavigate();
 
   // 작업장 편집모드 활성화, 비활성화
@@ -193,7 +215,13 @@ const MainPage = () => {
     };
     fetchLogout();
   };
-
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await MainInformation();
+      setMainInformation(data);
+    };
+    fetchData();
+  }, []);
   return (
     <>
       <Background>
@@ -235,7 +263,7 @@ const MainPage = () => {
               <Spacer space={'1rem'} />
               <Menu onClick={changeModifyMode} width={'100%'} $enterSize={1}>
                 <ListModifyIcon />
-                <Typo.Body1B color={Color.ONYX}>작업장 편집</Typo.Body1B>
+                <Typo.Body1B color={Color.ONYX}>마커 위치 편집</Typo.Body1B>
               </Menu>
               <Spacer space={'1rem'} />
               {modifyMode && (
@@ -308,21 +336,42 @@ const MainPage = () => {
               </CardDrawing>
             )}
             <Cards>
-              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
+              <Card
+                width={'11rem'}
+                height={'10rem'}
+                onClick={Handle}
+                flexDirection="column"
+              >
                 <InnerContainer>
                   <Typo.H4>
                     <div style={{ marginTop: '0.5rem' }}>등록 장비</div>
                   </Typo.H4>
                 </InnerContainer>
+                <NumberContainer color={Color.GREEN400}>
+                  {mainInformation?.num_all_machines_in_this_facility}
+                </NumberContainer>
               </Card>
-              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
+              <Card
+                width={'11rem'}
+                height={'10rem'}
+                onClick={Handle}
+                flexDirection="column"
+              >
                 <InnerContainer>
                   <Typo.H4>
-                    <div style={{ marginTop: '0.5rem' }}>등록 LOTO</div>
+                    <div style={{ marginTop: '0.5rem' }}>자물쇠 현황</div>
                   </Typo.H4>
                 </InnerContainer>
+                <NumberContainer color={Color.GREEN400}>
+                  {mainInformation?.num_all_lockers_in_this_company}
+                </NumberContainer>
               </Card>
-              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
+              <Card
+                width={'11rem'}
+                height={'10rem'}
+                onClick={Handle}
+                flexDirection="column"
+              >
                 <InnerContainer>
                   <Typo.H4>
                     <div
@@ -334,11 +383,21 @@ const MainPage = () => {
                       <div style={{ margin: '0.5rem 0.5rem 0 0' }}>오늘의</div>
                       <Typo.H2 color={Color.RED100}>LOTO</Typo.H2>
                     </div>
-                    사용현황
+                    작업내역
                   </Typo.H4>
+                  <NumberContainer color={Color.RED100}>
+                    {
+                      mainInformation?.num_toody_task_historiese_in_this_facility
+                    }
+                  </NumberContainer>
                 </InnerContainer>
               </Card>
-              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
+              <Card
+                width={'11rem'}
+                height={'10rem'}
+                onClick={Handle}
+                flexDirection="column"
+              >
                 <InnerContainer>
                   <Typo.H4>
                     <div
@@ -353,8 +412,18 @@ const MainPage = () => {
                     사용현황
                   </Typo.H4>
                 </InnerContainer>
+                <NumberContainer color={Color.RED100}>
+                  {
+                    mainInformation?.num_this_week_task_historiese_in_this_facility
+                  }
+                </NumberContainer>
               </Card>
-              <Card width={'11rem'} height={'10rem'} onClick={Handle}>
+              <Card
+                width={'11rem'}
+                height={'10rem'}
+                onClick={Handle}
+                flexDirection="column"
+              >
                 <InnerContainer>
                   <Typo.H4>
                     <div
@@ -369,6 +438,9 @@ const MainPage = () => {
                     발생현황
                   </Typo.H4>
                 </InnerContainer>
+                <NumberContainer color={Color.RED100}>
+                  {mainInformation?.num_all_accidents_in_this_company}
+                </NumberContainer>
               </Card>
             </Cards>
           </RightContainer>
