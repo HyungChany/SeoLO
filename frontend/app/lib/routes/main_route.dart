@@ -56,7 +56,7 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
     case '/nfc':
       return MaterialPageRoute(builder: (context) => NfcScreen());
     case '/bluetooth':
-      // return MaterialPageRoute(builder: (context) => BluetoothScreen());
+      return MaterialPageRoute(builder: (context) => BluetoothScreen());
     case '/selectDay':
       return MaterialPageRoute(builder: (context) => DaySelect());
     case '/selectTime':

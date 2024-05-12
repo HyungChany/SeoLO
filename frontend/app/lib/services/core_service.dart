@@ -1,4 +1,7 @@
+import 'package:app/models/core/check_model.dart';
 import 'package:app/models/core/issue_model.dart';
+import 'package:app/models/core/locked_model.dart';
+import 'package:app/models/core/unlock_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -32,9 +35,13 @@ class CoreService {
         data: coreIssueModel.toJson(),
       );
       if (response.statusCode == 200) {
-        // debugPrint(response.data);
-        CoreIssueModel coreIssueModel =
-            CoreIssueModel.fromJson(response.data['employee']);
+        await _storage.write(
+            key: 'Core-Code', value: response.data['next_code']);
+        await _storage.write(
+            key: 'lockerToken',
+            value: response.data['core_token']['tokenValue']);
+        await _storage.write(
+            key: 'machine_id', value: coreIssueModel.machineId.toString());
         return {
           'success': true,
         };
@@ -48,9 +55,10 @@ class CoreService {
   }
 
   ///////////////////////// check //////////////////////////////////
-  Future<Map<String, dynamic>> coreCheck() async {
+  Future<Map<String, dynamic>> coreCheck(CoreCheckModel coreCheckModel) async {
     try {
-      Dio.Response response = await _dio.post('$baseUrl/core/CHECK', data: '');
+      Dio.Response response =
+          await _dio.post('$baseUrl/core/CHECK', data: coreCheckModel.toJson());
       if (response.statusCode == 200) {
         debugPrint(response.data);
         return {
@@ -66,9 +74,11 @@ class CoreService {
   }
 
   ///////////////////////// unlock //////////////////////////////////
-  Future<Map<String, dynamic>> coreUnlock() async {
+  Future<Map<String, dynamic>> coreUnlock(
+      CoreUnlockModel coreUnlockModel) async {
     try {
-      Dio.Response response = await _dio.post('$baseUrl/core/UNLOCK', data: '');
+      Dio.Response response = await _dio.post('$baseUrl/core/UNLOCK',
+          data: coreUnlockModel.toJson());
       if (response.statusCode == 200) {
         debugPrint(response.data);
         return {
@@ -84,9 +94,11 @@ class CoreService {
   }
 
   ///////////////////////// locked //////////////////////////////////
-  Future<Map<String, dynamic>> coreLocked() async {
+  Future<Map<String, dynamic>> coreLocked(
+      CoreLockedModel coreLockedModel) async {
     try {
-      Dio.Response response = await _dio.post('$baseUrl/core/LOCKED', data: '');
+      Dio.Response response = await _dio.post('$baseUrl/core/LOCKED',
+          data: coreLockedModel.toJson());
       if (response.statusCode == 200) {
         debugPrint(response.data);
         return {

@@ -1,9 +1,9 @@
-class CoreLockedModel {
+class CoreCheckModel {
   final String? lockerUid;
   final String? battery;
   final String? machineId;
 
-  CoreLockedModel({
+  CoreCheckModel({
     this.lockerUid,
     this.battery,
     this.machineId,
@@ -15,11 +15,11 @@ class CoreLockedModel {
     'machine_id': machineId
   };
 
-// factory CoreIssueModel.fromJson(Map<String, dynamic> json) {
-//   return CoreIssueModel(
-//     nextCode: json['next_code'],
-//     tokenValue: json['tokenValue'],
-//   );
-// }
+  // factory CoreIssueModel.fromJson(Map<String, dynamic> json) {
+  //   return CoreIssueModel(
+  //     nextCode: json['next_code'],
+  //     tokenValue: json['tokenValue'],
+  //   );
+  // }
 }
 
