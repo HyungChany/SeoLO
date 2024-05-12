@@ -41,6 +41,14 @@ services:
       - TZ=Asia/Seoul
     networks:
       - jenkins-network
+      -
+  redis-news:
+    container_name: redis-news
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    networks:
+      - jenkins-network
 
 networks:
   jenkins-network:
