@@ -31,7 +31,7 @@ const ButtonContainer = styled.button<ButtonProps>`
   justify-content: center;
   display: flex;
   cursor: pointer;
-
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
   &:hover {
     background-color: ${(props) =>
       props.$hoverBackgroundColor || props.$backgroundColor};
