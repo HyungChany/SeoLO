@@ -36,7 +36,7 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
     double screenWidth = MediaQuery.of(context).size.width; // 화면 너비
     double screenHeight = MediaQuery.of(context).size.height; // 화면 높이
     return Scaffold(
-      appBar: const Header(title: '작업 내역', back: true),
+      appBar: const Header(title: '작업 내역 확인', back: true),
       body: Stack(
         children: [
           SingleChildScrollView(

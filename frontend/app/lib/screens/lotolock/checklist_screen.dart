@@ -54,7 +54,7 @@ class _CheckScreenState extends State<CheckScreen> {
                     children: List.generate(
                       viewModel.checklist.length,
                       (index) => CheckboxListTile(
-                        title: Text(viewModel.checklist[index].context),
+                        title: Text(viewModel.checklist[index].context, style: TextStyle(fontFamily: 'font'),),
                         value: viewModel.isCheckedList[index],
                         onChanged: (value) {
                           setState(() {

@@ -1,14 +1,15 @@
 import 'package:app/main.dart';
 import 'package:app/view_models/user/pin_change_view_model.dart';
-import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:app/widgets/login/key_board_key.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChangePinCheckScreen extends StatefulWidget {
+  const ChangePinCheckScreen({super.key});
+
   @override
-  _ChangePinCheckScreenState createState() => _ChangePinCheckScreenState();
+  State<ChangePinCheckScreen> createState() => _ChangePinCheckScreenState();
 }
 
 class _ChangePinCheckScreenState extends State<ChangePinCheckScreen> {
@@ -138,7 +139,13 @@ class _ChangePinCheckScreenState extends State<ChangePinCheckScreen> {
               return Expanded(
                 child: KeyboardKey(
                   label: y,
-                  onTap: y is Widget ? onBackspacePress(y) : onNumberPress(y),
+                  onTap: () {
+                    if (y is Widget) {
+                      onBackspacePress(y);
+                    } else {
+                      onNumberPress(y);
+                    }
+                  },
                   value: y,
                 ),
               );

@@ -7,7 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class NewsService {
   final _dio = Dio.Dio();
   final _storage = FlutterSecureStorage();
-  final baseUrl = dotenv.env['API_URL'] ?? '';
+  final baseUrl = dotenv.env['API_URL2'] ?? '';
 
   NewsService() {
     _dio.interceptors.add(Dio.InterceptorsWrapper(

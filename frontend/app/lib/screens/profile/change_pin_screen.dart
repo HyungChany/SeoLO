@@ -110,7 +110,13 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
               return Expanded(
                 child: KeyboardKey(
                   label: y,
-                  onTap: y is Widget ? onBackspacePress(y) : onNumberPress(y),
+                  onTap: () {
+                    if (y is Widget) {
+                      onBackspacePress(y);
+                    } else {
+                      onNumberPress(y);
+                    }
+                  },
                   value: y,
                 ),
               );
