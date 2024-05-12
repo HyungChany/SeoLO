@@ -1,11 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:app/view_models/core/core_check_view_model.dart';
+import 'package:app/view_models/core/core_issue_view_model.dart';
+import 'package:app/view_models/core/core_locked_view_model.dart';
+import 'package:app/view_models/core/core_unlock_view_model.dart';
 import 'package:app/widgets/bluetooth/scan_result_tile.dart';
 import 'package:app/widgets/bluetooth/system_device_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 
 class BluetoothScreen extends StatefulWidget {
   const BluetoothScreen({super.key});
@@ -78,6 +83,11 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   }
 
   void connectToDevice(BluetoothDevice device) async {
+    final issueVM = Provider.of<CoreIssueViewModel>(context);
+    final checkVM = Provider.of<CoreCheckViewModel>(context);
+    final lockedVM = Provider.of<CoreLockedViewModel>(context);
+    final unlockVM = Provider.of<CoreUnlockViewModel>(context);
+
     String? companyCode = await _storage.read(key: 'Company-Code');
     String? coreCode = await _storage.read(key: 'Core-Code');
     String? lockerToken = await _storage.read(key: 'locker_token');
@@ -121,6 +131,22 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     _storage.write(
                         key: 'locker_battery', value: _receivedValues[4]);
                   });
+                  if (_receivedValues[0] == 'WRITE') {
+                    Navigator.pushReplacementNamed(context, '/checklist');
+                  }
+                  if (_receivedValues[0] == 'CHECK') {
+                    Navigator.pushReplacementNamed(context, '/main');
+                  }
+                  if (_receivedValues[0] == 'UNLOCK') {
+                    unlockVM.coreUnlock().then((_) {
+                      Navigator.pushReplacementNamed(context, '/main');
+                    });
+                  }
+                  if (_receivedValues[0] == 'LOCKED') {
+                    lockedVM.coreLocked().then((_) {
+                      Navigator.pushReplacementNamed(context, '/main');
+                    });
+                  }
                   // if (characteristic.properties.read) {
                   //   await characteristic.read();
                   //   debugPrint('응답값: ${characteristic.read().toString()}');
