@@ -39,6 +39,8 @@ services:
       - "8000:8000"
     environment:
       - TZ=Asia/Seoul
+      - REDIS_HOST=k10c104.p.ssafy.io
+      - REDIS_PORT=6379
     networks:
       - jenkins-network
 
