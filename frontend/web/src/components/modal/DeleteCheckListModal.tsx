@@ -67,13 +67,14 @@ const DeleteCheckListModal = ({
           onClick={handleDelete}
           width={8}
           height={3}
-          $backgroundColor={Color.GRAY100}
-          $borderColor={Color.GRAY100}
+          $backgroundColor={Color.RED}
+          $borderColor={Color.RED}
           $borderRadius={1.25}
-          $hoverBackgroundColor={Color.RED100}
-          $hoverBorderColor={Color.RED100}
+          $hoverBackgroundColor={Color.RED1}
+          $hoverBorderColor={Color.RED1}
           children={'삭제'}
           fontSize={1.2}
+          fontWeight={900}
         ></Button>
       </ButtonContainer>
     </Box>

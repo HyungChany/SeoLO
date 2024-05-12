@@ -249,11 +249,12 @@ const CheckListPage = () => {
                       onClick={() => handleDeleteCheckListClick(list)}
                       width={4}
                       height={2.5}
-                      $backgroundColor={Color.GRAY100}
-                      $borderColor={Color.GRAY100}
-                      $borderRadius={0.3125}
-                      $hoverBackgroundColor={Color.GRAY200}
-                      $hoverBorderColor={Color.GRAY200}
+                      $backgroundColor={Color.GRAY200}
+                      $borderColor={Color.GRAY200}
+                      $borderRadius={1}
+                      $hoverBackgroundColor={Color.RED}
+                      $hoverBorderColor={Color.GRAY300}
+                      fontWeight={900}
                       children={'삭제'}
                       fontSize={1.1}
                     ></Button>

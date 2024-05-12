@@ -70,9 +70,10 @@ const CreateCheckListModal = ({ onClose, onClick }: CheckListModalProps) => {
           $backgroundColor={Color.WHITE}
           $borderColor={Color.GRAY200}
           $borderRadius={2.5}
-          $hoverBackgroundColor={Color.GRAY200}
-          $hoverBorderColor={Color.GRAY200}
+          $hoverBackgroundColor={Color.BLUE100}
+          $hoverBorderColor={Color.BLUE100}
           fontSize={1.2}
+          fontWeight={900}
           onClick={handleSubmit}
         >
           확인
