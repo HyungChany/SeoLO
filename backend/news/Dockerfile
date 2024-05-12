@@ -24,7 +24,7 @@ COPY ./ /app
 RUN pip install gunicorn
 
 # Python 경로 설정 (my_setting.py 파일이 있는 디렉토리를 포함)
-ENV PYTHONPATH=/app/news/news
+ENV PYTHONPATH=/app/news
 
 # Docker 컨테이너 내에서 실행될 명령을 지정합니다.
 CMD ["gunicorn", "--bind", "0.0.0.0:8000", "news.wsgi:application"]
