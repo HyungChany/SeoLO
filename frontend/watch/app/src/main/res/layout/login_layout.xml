@@ -23,7 +23,7 @@
         android:gravity="center"
         android:hint="@string/company_login"
         android:inputType="text"
-        android:textColor="@color/SNOW"
+        android:textColor="@color/GRAY400"
         android:textColorHint="@color/GRAY400"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"

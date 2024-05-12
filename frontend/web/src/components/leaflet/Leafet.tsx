@@ -11,9 +11,13 @@ import * as Typo from '@/components/typography/Typography.tsx';
 
 interface ImageMapProps {
   imageFile: string | null;
+  modifyMode: boolean;
 }
 
-export const Leaflet = ({ imageFile }: ImageMapProps): JSX.Element | null => {
+export const Leaflet = ({
+  imageFile,
+  modifyMode,
+}: ImageMapProps): JSX.Element | null => {
   const [bounds, setBounds] = useState<L.LatLngBounds | null>(null);
   const [markers, setMarkers] = useState<L.LatLng[]>([]);
   const map = useMap();
@@ -22,14 +26,20 @@ export const Leaflet = ({ imageFile }: ImageMapProps): JSX.Element | null => {
     if (imageFile) {
       const img = new Image();
       img.onload = () => {
-        const imgWidth = img.naturalWidth / 2; // 이미지 가로 크기의 반
-        const imgHeight = img.naturalHeight / 2; // 이미지 세로 크기의 반
+        const imgWidth = img.naturalWidth;
+        const imgHeight = img.naturalHeight;
+        const aspectRatio = imgWidth / imgHeight;
+
+        // 이미지 비율 유지하면서 세로 기준 100%로 맞추기
+        const mapHeight = map.getSize().y;
+        const mapWidth = mapHeight * aspectRatio;
         const newBounds = L.latLngBounds(
-          [-imgHeight, -imgWidth],
-          [imgHeight, imgWidth],
+          [-mapHeight / 2, -mapWidth / 2],
+          [mapHeight / 2, mapWidth / 2],
         );
+
         setBounds(newBounds);
-        map.fitBounds(newBounds); // 맵이 새 경계에 맞춰 조정
+        map.fitBounds(newBounds);
       };
       img.src = imageFile;
     }
@@ -37,16 +47,19 @@ export const Leaflet = ({ imageFile }: ImageMapProps): JSX.Element | null => {
 
   useMapEvents({
     click: (e) => {
-      const newMarker = e.latlng;
-      setMarkers((currentMarkers) => [...currentMarkers, newMarker]);
+      if (modifyMode) {
+        // modifyMode가 true일 때만 마커 추가
+        const newMarker = e.latlng;
+        setMarkers((currentMarkers) => [...currentMarkers, newMarker]);
+      }
     },
   });
 
-  // const customIcon = L.icon({
-  //   iconUrl: '@/../assets/icons/Position.png',
-  //   iconSize: [30, 42],
-  //   iconAnchor: [15, 42], // 아이콘의 앵커 포인트를 아이콘의 하단 중앙으로 설정
-  // });
+  const customIcon = L.icon({
+    iconUrl: '@/../assets/icons/Position.png',
+    iconSize: [30, 42],
+    iconAnchor: [15, 42],
+  });
 
   if (!imageFile || !bounds) return null;
 
@@ -54,7 +67,7 @@ export const Leaflet = ({ imageFile }: ImageMapProps): JSX.Element | null => {
     <>
       <ImageOverlay url={imageFile} bounds={bounds} />
       {markers.map((marker, idx) => (
-        <Marker key={idx} position={marker} /* icon={customIcon} */>
+        <Marker key={idx} position={marker} icon={customIcon}>
           <Popup>
             <Typo.Detail0>장비번호:123456</Typo.Detail0>
             <Typo.Detail0>작업자:김철수</Typo.Detail0>

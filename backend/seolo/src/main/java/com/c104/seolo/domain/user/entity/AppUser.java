@@ -70,6 +70,18 @@ public class AppUser extends BaseEntity implements UserDetails {
 
     public void changePin(String newPin) { this.PIN = newPin; }
 
+    public String getUserTitle() {
+        return this.employee.getEmployeeTitle();
+    }
+
+    public String getUserTeam() {
+        return this.employee.getEmployeeTeam();
+    }
+
+    public ROLES getUserRole() {
+        return this.ROLES;
+    }
+
     public Integer upFailCount() {
         if (this.failCount == null) {
             this.failCount = 0;

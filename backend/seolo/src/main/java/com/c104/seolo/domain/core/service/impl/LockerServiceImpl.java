@@ -18,8 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -78,7 +76,6 @@ public class LockerServiceImpl implements LockerService {
                 .encryptionKey(AesEncryption.getBase64EncodedKey(binarySecretKey))
                 .build();
 
-
         lockerRepository.save(newLocker);
     }
 
@@ -86,5 +83,15 @@ public class LockerServiceImpl implements LockerService {
     public Locker getLockerByUid(String lockerUid) {
         return lockerRepository.findByUid(lockerUid).orElseThrow(
                 () -> new CommonException(LockerErrorCode.NOT_EXIST_LOCKER));
+    }
+
+    @Override
+    public void updateBatteryByLockerUid(String lockerUid, Integer battery) {
+        Locker locker = lockerRepository.findByUid(lockerUid).orElseThrow(
+                () -> new CommonException(LockerErrorCode.NOT_EXIST_LOCKER)
+        );
+
+        locker.changeBattery(battery);
+        lockerRepository.save(locker);
     }
 }

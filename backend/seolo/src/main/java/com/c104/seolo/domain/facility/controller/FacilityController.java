@@ -1,9 +1,8 @@
 package com.c104.seolo.domain.facility.controller;
 
 import com.c104.seolo.domain.facility.dto.request.FacilityRequest;
-import com.c104.seolo.domain.facility.dto.response.FacilityResponse;
+import com.c104.seolo.domain.facility.dto.response.FacilityListResponse;
 import com.c104.seolo.domain.facility.service.FacilityService;
-import com.c104.seolo.domain.report.dto.response.ReportsReponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,7 @@ public class FacilityController {
 
     @Secured("ROLE_MANAGER")
     @GetMapping
-    public ResponseEntity<FacilityResponse> getFacilities(
+    public ResponseEntity<FacilityListResponse> getFacilities(
             @RequestHeader("Company-Code") String companyCode
     ) {
         return ResponseEntity.ok(facilityService.findFacilityByCompany(companyCode));
@@ -60,7 +59,7 @@ public class FacilityController {
     }
 
     @GetMapping("/{employeeNum}")
-    public FacilityResponse getFacilitiesOfEmployee(@PathVariable String employeeNum) {
+    public FacilityListResponse getFacilitiesOfEmployee(@PathVariable String employeeNum) {
         return facilityService.findFacilitiesByEmployeeNum(employeeNum);
     }
 }

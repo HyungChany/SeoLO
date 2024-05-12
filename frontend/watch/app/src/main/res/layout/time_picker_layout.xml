@@ -6,7 +6,7 @@
     android:background="@color/WHITE">
 
     <sh.tyy.wheelpicker.WeekdayTimePickerView
-        android:id="@+id/date_picker_view"
+        android:id="@+id/time_picker_view"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/confirm_button"

@@ -2,7 +2,7 @@ package com.c104.seolo.domain.report.service.impl;
 
 import com.c104.seolo.domain.report.dto.NewReport;
 import com.c104.seolo.domain.report.dto.ReportDto;
-import com.c104.seolo.domain.report.dto.response.ReportsReponse;
+import com.c104.seolo.domain.report.dto.response.ReportsResponse;
 import com.c104.seolo.domain.report.entity.Report;
 import com.c104.seolo.domain.report.exception.ReportErrorCode;
 import com.c104.seolo.domain.report.repository.ReportRepository;
@@ -11,6 +11,9 @@ import com.c104.seolo.global.exception.CommonException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,14 +35,14 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ReportsReponse getAllReports() {
+    public ReportsResponse getAllReports() {
         List<Report> allReports = reportRepository.findAll();
 
         Collections.reverse(allReports);
         List<ReportDto> reportDtos = new ArrayList<>();
         allReports.forEach(report -> reportDtos.add(ReportDto.of(report)));
 
-        return ReportsReponse.builder()
+        return ReportsResponse.builder()
                 .reports(reportDtos)
                 .build();
     }
@@ -62,4 +65,20 @@ public class ReportServiceImpl implements ReportService {
         reportRepository.save(report);
         return ReportDto.of(report);
     }
+
+    @Override
+    public ReportsResponse getReportsByDateRange(LocalDate startDate, LocalDate endDate) {
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(LocalTime.MAX);
+        List<Report> targetReports = reportRepository.findAllByTaskStartDateTimeBetween(startDateTime, endDateTime);
+
+        Collections.reverse(targetReports);
+        List<ReportDto> reportDtos = new ArrayList<>();
+        targetReports.forEach(report -> reportDtos.add(ReportDto.of(report)));
+
+        return ReportsResponse.builder()
+                .reports(reportDtos)
+                .build();
+    }
+
 }

@@ -12,11 +12,11 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class ReportsReponse {
+public class ReportsResponse {
     List<ReportDto> reports;
 
     @Builder
-    public ReportsReponse(List<ReportDto> reports) {
+    public ReportsResponse(List<ReportDto> reports) {
         this.reports = reports;
     }
 }

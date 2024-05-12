@@ -11,6 +11,7 @@ import lombok.ToString;
 @Getter
 public class CoreRequest {
     private String lockerUid;
+    private Integer batteryInfo;
     private Long machineId;
     private String tokenValue;
     private Long taskTemplateId;
@@ -18,8 +19,9 @@ public class CoreRequest {
     private String endTime;
 
     @Builder
-    public CoreRequest(String lockerUid, Long machineId, String tokenValue, Long taskTemplateId, String taskPrecaution, String endTime) {
+    public CoreRequest(String lockerUid, Integer batteryInfo, Long machineId, String tokenValue, Long taskTemplateId, String taskPrecaution, String endTime) {
         this.lockerUid = lockerUid;
+        this.batteryInfo = batteryInfo;
         this.machineId = machineId;
         this.tokenValue = tokenValue;
         this.taskTemplateId = taskTemplateId;

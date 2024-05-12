@@ -1,14 +1,11 @@
 package com.c104.seolo.domain.core.entity;
 
-import com.c104.seolo.domain.core.dto.LockerDto;
 import com.c104.seolo.global.common.BaseEntity;
 import com.c104.seolo.headquarter.company.entity.Company;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import javax.crypto.SecretKey;
 
 @ToString
 @Getter
@@ -33,10 +30,14 @@ public class Locker extends BaseEntity {
     private boolean isLocked;
 
     @Column(name = "locker_battery", nullable = false, columnDefinition = "INTEGER DEFAULT 100")
-    private int battery;
+    private Integer battery;
 
     @Column(name = "locker_encryption_key", length = 32,nullable = false)
     private String encryptionKey;
+
+    public void changeBattery(Integer newBattery) {
+        this.battery = newBattery;
+    }
 
     protected Locker () {}
 

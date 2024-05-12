@@ -24,8 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -118,7 +118,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserListResponse getUserList(String companyCode) {
-        List<UserListInfo> userListInfos = userRepository.findAppUserListByCompanyCode(companyCode);
+        List<AppUser> appUsers = userRepository.findAppUserByCompanyCode(companyCode);
+
+        List<UserListInfo> userListInfos = new ArrayList<>();
+        appUsers.forEach(userinfo -> userListInfos.add(UserListInfo.ofButTranslateRoleToKorean(userinfo)));
 
         return UserListResponse.builder()
                 .workers(userListInfos)
