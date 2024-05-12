@@ -4,13 +4,14 @@ import styled from 'styled-components';
 import Check from '/assets/icons/Check.svg';
 import NonCheck from '/assets/icons/NonCheck.svg';
 import ReportCheckModal from '@/components/modal/ReportCheckModal.tsx';
-import { totalReport } from '@/apis/Report.ts';
+import { RangeReport, totalReport } from '@/apis/Report.ts';
 import CsvDownloadButton from 'react-json-to-csv';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/ko';
+import { Button } from '@/components/button/Button.tsx';
 dayjs.locale('ko');
 // interface ButtonProps {
 //   backgroundColor: string;
@@ -257,9 +258,14 @@ const Report = () => {
       handleEndDateChange(endDate);
     }
   }, [startDate, endDate]);
-
+  const handleSearch = async (start: string, end: string) => {
+    const data = await RangeReport(start, end);
+    console.log('데이터', data);
+    // setReportData(data);
+  };
   console.log('시작시간', formatStartDate);
   console.log('종료시간', formatEndDate);
+
   return (
     <MainBox>
       {reportModal && (
@@ -307,23 +313,20 @@ const Report = () => {
               disableFuture
             />
           </LocalizationProvider>
+
+          <Button
+            onClick={() => handleSearch(formatStartDate, formatEndDate)}
+            width={4}
+            height={2.5}
+            $backgroundColor={Color.GRAY100}
+            $borderColor={Color.GRAY100}
+            $borderRadius={0.5}
+            $hoverBackgroundColor={Color.RED100}
+            $hoverBorderColor={Color.GRAY300}
+          >
+            검색
+          </Button>
         </DaySelectBox>
-        {/* <ButtonBox>
-          {selectTitle.map((title, index) => (
-            <SelectButton
-              key={index}
-              backgroundColor={
-                selectedButtonIndex === index
-                  ? Color.SAMSUNG_BLUE
-                  : Color.GRAY200
-              }
-              color={selectedButtonIndex === index ? Color.WHITE : Color.BLACK}
-              onClick={() => handleButtonClick(index)}
-            >
-              {title}
-            </SelectButton>
-          ))}
-        </ButtonBox> */}
         <CsvDownloadButton data={transformedCsvData} delimiter="," />
       </SelectBox>
       <TitleBox>
