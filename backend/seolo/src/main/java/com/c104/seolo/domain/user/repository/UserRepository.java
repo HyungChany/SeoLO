@@ -17,6 +17,9 @@ public interface UserRepository extends JpaRepository<AppUser, Long> {
     @Query("SELECT u FROM AppUser u WHERE u.employee.employeeNum = :employeeNum")
     Optional<AppUser> findAppUserByEmployeeNum(@Param("employeeNum") String employeeNum);
 
+    @Query("SELECT u FROM AppUser u JOIN u.employee e where e.company.companyCode = :companyCode")
+    List<AppUser> findAppUserByCompanyCode(@Param("companyCode") String companyCode);
+
     @Query("SELECT new com.c104.seolo.domain.user.dto.info.UserListInfo ( " +
             "u.id, e.employeeName, e.employeeTitle, e.employeeTeam, e.employeeThum " +
             ") from AppUser u JOIN u.employee e where e.company.companyCode = :companyCode")
