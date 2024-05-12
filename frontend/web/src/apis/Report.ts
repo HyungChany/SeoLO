@@ -51,3 +51,22 @@ export const modifyReport = async (data: PatchData, index: number) => {
     console.log(error);
   }
 };
+
+export const RangeReport = async (start: string, end: string) => {
+  try {
+    const accessToken = sessionStorage.getItem('accessToken');
+    const companyCode = sessionStorage.getItem('companyCode');
+    const response = await api.get(
+      `/reports/term?startDate=${start}&endDate=${end}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Company-Code': companyCode,
+        },
+      },
+    );
+    return response.data.reports;
+  } catch (e) {
+    console.log(e);
+  }
+};
