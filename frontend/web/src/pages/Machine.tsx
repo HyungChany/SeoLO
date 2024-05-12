@@ -245,8 +245,6 @@ const Equipment = () => {
   }, []);
   const handleOptionChange = (option: OptionType): void => {
     setSelectedOption(option); // 선택된 옵션 상태 업데이트
-    // console.log('Selected facility:', option);
-    // 추가로 필요한 동작이 있으면 여기에 작성
   };
   useEffect(() => {
     const fetchEquipment = async () => {
