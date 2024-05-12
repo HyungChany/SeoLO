@@ -71,7 +71,7 @@ pipeline {
                     }
 
                     // 새로운 서브모듈 클론
-                    dir('backend/news/news/setting') {
+                    dir('backend/news/news') {
                         sh 'mkdir -p setting'
                         dir('setting') {
                             git branch: 'master', credentialsId: env.GITHUB_CREDENTIALS_ID, url: env.GITHUB_REPO_URL_DJANGO
