@@ -29,11 +29,11 @@ class BluetoothActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Glide를 사용하여 GIF 이미지 로딩
-        Glide.with(this).asGif().load(R.drawable.main_sample6).into(binding.bluetoothView)
+        Glide.with(this).asGif().load(R.drawable.bluetooth).into(binding.bluetoothView)
 
         // ImageView에 일반 이미지 로딩
         val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.img_nfc)
-        binding.imageViewOverlay.setImageDrawable(drawable)
+        binding.bluetoothView.setImageDrawable(drawable)
 
         //BluetoothAdapter 초기화
         bluetoothAdapter = BluetoothAdapter(this)

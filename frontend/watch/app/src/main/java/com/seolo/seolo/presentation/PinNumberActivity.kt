@@ -72,7 +72,7 @@ class PinNumberActivity : AppCompatActivity() {
             override fun onFailure(call: Call<PINResponse>, t: Throwable) {
                 // 네트워크 연결 실패
                 Toast.makeText(
-                    this@PinNumberActivity, "네트워크에 연결할 수 없습니다. 인터넷 연결을 확인해주세요.", Toast.LENGTH_SHORT
+                    this@PinNumberActivity, "네트워크에 연결할 수 없습니다.", Toast.LENGTH_SHORT
                 ).show()
             }
         })
