@@ -6,10 +6,16 @@ import NonCheck from '/assets/icons/NonCheck.svg';
 import ReportCheckModal from '@/components/modal/ReportCheckModal.tsx';
 import { totalReport } from '@/apis/Report.ts';
 import CsvDownloadButton from 'react-json-to-csv';
-interface ButtonProps {
-  backgroundColor: string;
-  color: string;
-}
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs, { Dayjs } from 'dayjs';
+import 'dayjs/locale/ko';
+dayjs.locale('ko');
+// interface ButtonProps {
+//   backgroundColor: string;
+//   color: string;
+// }
 interface EquipmentData {
   reportId: number;
   machineNumber: string;
@@ -71,13 +77,13 @@ const SelectBox = styled.div`
   padding: 0 1.5rem 0 1.5rem;
   box-sizing: border-box;
 `;
-const ButtonBox = styled.div`
+const DaySelectBox = styled.div`
   width: auto;
   height: auto;
   display: flex;
   gap: 0.4rem;
   flex-direction: row;
-  justify-content: space-between;
+  align-items: center;
 `;
 const MainBox = styled.div`
   width: 100%;
@@ -88,20 +94,20 @@ const MainBox = styled.div`
   flex-direction: column;
   gap: 2rem;
 `;
-const SelectButton = styled.div<ButtonProps>`
-  width: 3.4rem;
-  height: 2rem;
-  background-color: ${(props) => props.backgroundColor};
-  border: 1px solid ${Color.GRAY100};
-  border-radius: 1.25rem;
-  font-size: 1rem;
-  font-weight: bold;
-  color: ${(props) => props.color};
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  cursor: pointer;
-`;
+// const SelectButton = styled.div<ButtonProps>`
+//   width: 3.4rem;
+//   height: 2rem;
+//   background-color: ${(props) => props.backgroundColor};
+//   border: 1px solid ${Color.GRAY100};
+//   border-radius: 1.25rem;
+//   font-size: 1rem;
+//   font-weight: bold;
+//   color: ${(props) => props.color};
+//   justify-content: center;
+//   align-items: center;
+//   display: flex;
+//   cursor: pointer;
+// `;
 const ContentBox = styled.div`
   width: 100%;
   height: 80%;
@@ -123,15 +129,20 @@ const Overlay = styled.div`
   z-index: 10;
 `;
 const Report = () => {
-  const [selectedButtonIndex, setSelectedButtonIndex] = useState<number>(0);
+  // const [selectedButtonIndex, setSelectedButtonIndex] = useState<number>(0);
   const [reportModal, setReportModal] = useState<boolean>(false);
   const [reportData, setReportData] = useState<EquipmentData[]>([]);
   const [detailReport, setDetailReport] = useState<number>(1);
   const [csvData, setCsvData] = useState<EquipmentData[]>([]);
-  const handleButtonClick = (index: number) => {
-    setSelectedButtonIndex(index); // 클릭된 버튼의 인덱스로 상태 업데이트
-    console.log(index);
-  };
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+  const [formatStartDate, setFormatStartDate] = useState<string>('');
+  const [formatEndDate, setFormatEndDate] = useState<string>('');
+  // const handleButtonClick = (index: number) => {
+  //   setSelectedButtonIndex(index); // 클릭된 버튼의 인덱스로 상태 업데이트
+  //   console.log(index);
+  // };
   // const handleSubmit = () => {
   //   console.log('클릭');
   // };
@@ -152,7 +163,7 @@ const Report = () => {
       작업장: item.facilityName,
     }));
   };
-  const selectTitle = ['전체', '일', '주', '월', '년'];
+
   const titleList = [
     '선택',
     '장비 번호',
@@ -187,7 +198,7 @@ const Report = () => {
       );
     }
   };
-  console.log(csvData);
+
   const handleReport = (index: number) => {
     setReportModal(true);
     setDetailReport(index);
@@ -209,8 +220,14 @@ const Report = () => {
         const data = await totalReport();
         const formattedData = data.map((item: EquipmentData) => ({
           ...item,
-          taskStartDateTime: formatDate(item.taskStartDateTime),
-          taskEndDateTime: formatDate(item.taskEndDateTime),
+          taskStartDateTime:
+            item.taskStartDateTime === null
+              ? '-'
+              : formatDate(item.taskStartDateTime),
+          taskEndDateTime:
+            item.taskEndDateTime === null
+              ? '-'
+              : formatDate(item.taskEndDateTime),
           accidentType: item.accidentType === null ? '-' : item.accidentType,
           victimsNum: item.victimsNum === null ? '-' : item.victimsNum,
           accident: item.accident === false ? 'N' : 'T',
@@ -222,7 +239,27 @@ const Report = () => {
     };
     report();
   }, []);
+  const customFormats = {
+    normalDate: 'YYYY년 MM월 DD일',
+  };
+  const handleStartDateChange = (date: Dayjs) => {
+    const formattedDate = dayjs(date).format('YYYY-MM-DD');
+    setFormatStartDate(formattedDate);
+  };
 
+  const handleEndDateChange = (date: Dayjs) => {
+    const formattedDate = dayjs(date).format('YYYY-MM-DD');
+    setFormatEndDate(formattedDate);
+  };
+  useEffect(() => {
+    if (startDate && endDate) {
+      handleStartDateChange(startDate);
+      handleEndDateChange(endDate);
+    }
+  }, [startDate, endDate]);
+
+  console.log('시작시간', formatStartDate);
+  console.log('종료시간', formatEndDate);
   return (
     <MainBox>
       {reportModal && (
@@ -239,7 +276,39 @@ const Report = () => {
         </Overlay>
       )}
       <SelectBox>
-        <ButtonBox>
+        <DaySelectBox>
+          <LocalizationProvider
+            dateAdapter={AdapterDayjs}
+            adapterLocale="ko"
+            dateFormats={customFormats}
+            localeText={{ datePickerToolbarTitle: '선택' }}
+          >
+            <DatePicker
+              onChange={(date: Dayjs | null) => {
+                setStartDate(date);
+              }}
+              format="YYYY-MM-DD"
+              label="시작 일"
+              orientation="portrait"
+              disableFuture
+            />
+            {/* </LocalizationProvider> */}
+
+            <div>~</div>
+            {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
+            <DatePicker
+              // value={endDate}
+              onChange={(date: Dayjs | null) => {
+                setEndDate(date);
+              }}
+              format="YYYY-MM-DD"
+              label="종료 일"
+              orientation="portrait"
+              disableFuture
+            />
+          </LocalizationProvider>
+        </DaySelectBox>
+        {/* <ButtonBox>
           {selectTitle.map((title, index) => (
             <SelectButton
               key={index}
@@ -254,7 +323,7 @@ const Report = () => {
               {title}
             </SelectButton>
           ))}
-        </ButtonBox>
+        </ButtonBox> */}
         <CsvDownloadButton data={transformedCsvData} delimiter="," />
       </SelectBox>
       <TitleBox>
