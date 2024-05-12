@@ -74,6 +74,7 @@ const SelectBox = styled.div`
   height: auto;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   flex-direction: row;
   padding: 0 1.5rem 0 1.5rem;
   box-sizing: border-box;
@@ -128,6 +129,22 @@ const Overlay = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 10;
+`;
+
+const CsvButton = styled(CsvDownloadButton)`
+  background-color: ${Color.BLUE100};
+  height: 2.5rem;
+  color: white;
+  padding: 0 1rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.3);
+  &:hover {
+    background-color: #6b9dcb;
+  }
 `;
 const Report = () => {
   // const [selectedButtonIndex, setSelectedButtonIndex] = useState<number>(0);
@@ -318,16 +335,20 @@ const Report = () => {
             onClick={() => handleSearch(formatStartDate, formatEndDate)}
             width={4}
             height={2.5}
-            $backgroundColor={Color.GRAY100}
-            $borderColor={Color.GRAY100}
+            fontWeight={900}
+            fontSize={1}
+            $backgroundColor={Color.GRAY200}
+            $borderColor={Color.GRAY200}
             $borderRadius={0.5}
-            $hoverBackgroundColor={Color.RED100}
+            $hoverBackgroundColor={Color.GRAY300}
             $hoverBorderColor={Color.GRAY300}
           >
             검색
           </Button>
         </DaySelectBox>
-        <CsvDownloadButton data={transformedCsvData} delimiter="," />
+        <CsvButton data={transformedCsvData} delimiter="," >
+          .CSV 다운로드
+        </CsvButton>
       </SelectBox>
       <TitleBox>
         {titleList.map((data, index) => (
