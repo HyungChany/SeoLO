@@ -129,9 +129,11 @@ const CompanyInformation = () => {
         flexDirection={'column'}
         alignItems="center"
       >
-        <Typo.H3 color={Color.BLACK}>등록 작업장 수</Typo.H3>
+        <Typo.H3>
+          <div style={{ marginTop: '1.3rem' }}>등록 작업장 수</div>
+        </Typo.H3>
         <ImgBox src={WorkPlace} />
-        <Typo.H0 color={Color.BLACK}>{options.length}</Typo.H0>
+        <Typo.H0>{options.length}</Typo.H0>
       </Card>
       <Card
         width={22}
@@ -141,7 +143,9 @@ const CompanyInformation = () => {
         alignItems="center"
         onClick={handleEquipmentClick}
       >
-        <Typo.H3 color={Color.BLACK}>현재 작업장의 장비 현황</Typo.H3>
+        <Typo.H3>
+          <div style={{ marginTop: '1.3rem' }}>현재 작업장의 장비 현황</div>
+        </Typo.H3>
         <Dropdown
           options={options}
           selectedOption={selectedOption}
@@ -149,7 +153,7 @@ const CompanyInformation = () => {
           placeholder="공장을 선택하세요"
         />
         <ImgBox src={Equipment} />
-        <Typo.H0 color={Color.BLACK}>{facilities}</Typo.H0>
+        <Typo.H0>{facilities}</Typo.H0>
       </Card>
       <Card
         width={22}
@@ -159,9 +163,11 @@ const CompanyInformation = () => {
         alignItems="center"
         onClick={handleEmployeeClick}
       >
-        <Typo.H3 color={Color.BLACK}>등록 임직원현황</Typo.H3>
+        <Typo.H3>
+          <div style={{ marginTop: '1.3rem' }}>등록 임직원현황</div>
+        </Typo.H3>
         <ImgBox src={People} />
-        <Typo.H0 color={Color.BLACK}>{employees}</Typo.H0>
+        <Typo.H0>{employees}</Typo.H0>
       </Card>
     </Background>
   );
