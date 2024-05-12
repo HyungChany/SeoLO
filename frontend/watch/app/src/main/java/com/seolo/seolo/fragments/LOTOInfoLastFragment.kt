@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
-import com.seolo.seolo.presentation.NFCActivity
+import com.seolo.seolo.presentation.BluetoothActivity
 
 // LastWorkListFragment 클래스 정의
 class LOTOInfoLastFragment : Fragment() {
@@ -47,20 +47,20 @@ class LOTOInfoLastFragment : Fragment() {
         return view
     }
 
-    // NFC 기능을 시작할지 여부를 묻는 확인 다이얼로그를 표시하는 메서드
+    // Bluetooth 기능을 시작할지 여부를 묻는 확인 다이얼로그를 표시하는 메서드
     private fun showConfirmationDialog() {
         val dialog = AlertDialog.Builder(
             requireActivity(), com.google.android.material.R.style.AlertDialog_AppCompat_Light
-        ).setTitle(" ").setMessage("NFC 기능을 시작하시겠습니까?").setPositiveButton("확인", null)
+        ).setTitle(" ").setMessage("Bluetooth 연결을 시작 하시겠습니까?").setPositiveButton("확인", null)
             .setNegativeButton("취소", DialogInterface.OnClickListener { dialogInterface, _ ->
                 dialogInterface.cancel()
             }).create()
 
         dialog.show()
 
-        // 확인 버튼 클릭 시 NFCActivity로 이동하고 다이얼로그를 닫는 이벤트 처리
+        // 확인 버튼 클릭 시 BluetoothActivity 이동하고 다이얼로그를 닫는 이벤트 처리
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-            val intent = Intent(activity, NFCActivity::class.java)
+            val intent = Intent(activity, BluetoothActivity::class.java)
             startActivity(intent)
             Handler(requireActivity().mainLooper).postDelayed({
                 dialog.dismiss()

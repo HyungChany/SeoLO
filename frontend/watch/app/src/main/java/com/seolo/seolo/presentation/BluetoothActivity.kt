@@ -9,8 +9,7 @@ import com.bumptech.glide.Glide
 import com.seolo.seolo.R
 import com.seolo.seolo.databinding.NfcLayoutBinding
 
-// NFCActivity 클래스 정의
-class NFCActivity : AppCompatActivity() {
+class BluetoothActivity : AppCompatActivity() {
     private lateinit var binding: NfcLayoutBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
