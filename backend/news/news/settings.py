@@ -56,7 +56,7 @@ APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://redis-news:6379/0",
+        "LOCATION": "redis://k10c104.p.ssafy.io:6379/1",
         "TIMEOUT": 10800, # 3H
         "OPTIONS": {
             "CONNECTION_CLASS": "django_redis.connection.DefaultConnection",
