@@ -26,6 +26,7 @@ const Background = styled.div`
   overflow-x: auto;
   position: relative;
 `;
+
 const MainContainer = styled.div`
   box-sizing: content-box;
   min-width: 1280px;
@@ -75,6 +76,7 @@ const SideMenuBox = styled.div`
   flex-grow: 1;
   width: 100%;
 `;
+
 const RowContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -98,18 +100,22 @@ const LogoutBtn = styled.button`
 const LogoutIcon = styled.img`
   width: 50px;
 `;
+
 const PositionIcon = styled(Position)`
   width: 2.5rem;
   margin-right: 5%;
 `;
+
 const CheckListIcon = styled(CheckList)`
   width: 2.5rem;
   margin-right: 5%;
 `;
+
 const ListModifyIcon = styled(ListModify)`
   width: 2.5rem;
   margin-right: 5%;
 `;
+
 const RightContainer = styled.div`
   width: 75%;
   height: 100%;
@@ -117,6 +123,7 @@ const RightContainer = styled.div`
   flex-direction: column;
   justify-content: space-between;
 `;
+
 const Cards = styled.div`
   width: 100%;
   display: flex;
@@ -155,6 +162,7 @@ const MainPage = () => {
   const [modifyMode, setModifyMode] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<string | null>(null);
   const navigate = useNavigate();
+
   // 작업장 편집모드 활성화, 비활성화
   const changeModifyMode = () => {
     setModifyMode((prevMode) => !prevMode);
@@ -172,6 +180,8 @@ const MainPage = () => {
       reader.readAsDataURL(file);
     }
   };
+
+  // 로그아웃
   const handleLogout = () => {
     const fetchLogout = async () => {
       try {
@@ -183,6 +193,7 @@ const MainPage = () => {
     };
     fetchLogout();
   };
+
   return (
     <>
       <Background>
