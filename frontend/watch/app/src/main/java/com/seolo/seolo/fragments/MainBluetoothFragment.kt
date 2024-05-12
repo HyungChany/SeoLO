@@ -10,13 +10,13 @@ import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
 import com.bumptech.glide.Glide
 
-class MainNFCFragment : Fragment() {
+class MainBluetoothFragment : Fragment() {
     private var content: String? = null
 
     companion object {
         // Fragment 인스턴스를 생성하는 메서드
-        fun newInstance(content: String): MainNFCFragment {
-            val fragment = MainNFCFragment()
+        fun newInstance(content: String): MainBluetoothFragment {
+            val fragment = MainBluetoothFragment()
             val args = Bundle()
             args.putString("content_key", content)
             fragment.arguments = args
