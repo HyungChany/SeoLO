@@ -89,7 +89,7 @@ public class UNLOCK implements CodeState {
 
     protected void createReport(TaskHistoryDto updatedLatestTaskHistory) {
         MachineDto workedMachine = machineService.getMachineByMachineId(updatedLatestTaskHistory.getMachineId());
-        AppUser worker = dbUserDetailService.loadUserById(updatedLatestTaskHistory.getId());
+        AppUser worker = dbUserDetailService.loadUserById(updatedLatestTaskHistory.getUserId());
 
         NewReport newReport = NewReport.builder()
                 .facilityName(workedMachine.getFacility().getFacilityName())
