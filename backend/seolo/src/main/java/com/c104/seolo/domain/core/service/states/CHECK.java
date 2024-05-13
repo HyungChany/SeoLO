@@ -56,13 +56,13 @@ public class CHECK implements CodeState {
         return CoreResponse.builder()
                 .nextCode(CODE.INIT)
                 .taskHistory(latestTask)
-                .checkMoreResponse(getMoreInfoForCHECK(cCodePrincipal, coreRequest))
+                .checkMoreResponse(getMoreInfoForCHECK(latestTask, coreRequest))
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
 
-    private CheckMoreResponse getMoreInfoForCHECK(CCodePrincipal cCodePrincipal, CoreRequest coreRequest) {
-        AppUser worker = dbUserDetailService.loadUserById(cCodePrincipal.getId());
+    private CheckMoreResponse getMoreInfoForCHECK(TaskHistoryDto taskHistoryDto, CoreRequest coreRequest) {
+        AppUser worker = dbUserDetailService.loadUserById(taskHistoryDto.getUserId());
         MachineDto machine = machineService.getMachineByMachineId(coreRequest.getMachineId());
 
         return CheckMoreResponse.builder()
