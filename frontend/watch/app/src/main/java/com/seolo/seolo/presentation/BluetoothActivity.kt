@@ -1,5 +1,6 @@
 package com.seolo.seolo.presentation
 
+import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -8,6 +9,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.BluetoothAdapter
@@ -29,14 +31,18 @@ class BluetoothActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.bluetoothDeviceRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        bluetoothAdapter = BluetoothAdapter(this)
-        bluetoothAdapter.startDiscoveryForSpecificDevices("SEOLO LOCK") { newDevices ->
-            deviceAdapter.updateDevices(newDevices)
-            deviceAdapter.notifyDataSetChanged()
-        }
+        val devices = mutableListOf<BluetoothDevice>()
+        deviceAdapter = BluetoothDeviceAdapter(devices)
+        recyclerView.adapter = deviceAdapter
 
-        val devices = bluetoothAdapter.getFilteredDevices()
-        recyclerView.adapter = BluetoothDeviceAdapter(devices)
+        // SnapHelper를 설정합니다.
+        val snapHelper = LinearSnapHelper()
+        snapHelper.attachToRecyclerView(recyclerView)
+
+        bluetoothAdapter = BluetoothAdapter(this)
+        bluetoothAdapter.startDiscoveryForSpecificDevices("") { newDevices ->
+            deviceAdapter.updateDevices(newDevices)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.S)

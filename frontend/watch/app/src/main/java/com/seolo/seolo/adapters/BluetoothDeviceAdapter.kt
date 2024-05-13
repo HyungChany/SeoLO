@@ -7,17 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.seolo.seolo.R
 
 class BluetoothDeviceAdapter(private var devices: MutableList<BluetoothDevice>) :
     RecyclerView.Adapter<BluetoothDeviceAdapter.DeviceViewHolder>() {
 
     class DeviceViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val deviceName: TextView = view.findViewById(android.R.id.text1)
+        val deviceName: TextView = view.findViewById(R.id.deviceName) ?: throw IllegalArgumentException("Device name TextView not found")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(android.R.layout.simple_list_item_1, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_bluetooth_device, parent, false)
         return DeviceViewHolder(view)
     }
 
