@@ -102,7 +102,7 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
                   if (!viewModel.isLoading) {
                     viewModel.coreIssue().then((_) {
                       if (viewModel.errorMessage == null) {
-                        Navigator.pushReplacementNamed(context, '/main');
+                        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
                       } else {
                         showDialog(
                             context: context,

@@ -65,7 +65,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     }
     try {
       await FlutterBluePlus.startScan(
-          timeout: const Duration(seconds: 15), withKeywords: ["SEOLO"]);
+          timeout: const Duration(seconds: 5), withKeywords: ["SEOLO"]);
     } catch (e) {
       debugPrint("Start Scan Error: $e");
     }
@@ -83,16 +83,11 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   }
 
   void connectToDevice(BluetoothDevice device) async {
-    final issueVM = Provider.of<CoreIssueViewModel>(context);
-    final checkVM = Provider.of<CoreCheckViewModel>(context);
-    final lockedVM = Provider.of<CoreLockedViewModel>(context);
-    final unlockVM = Provider.of<CoreUnlockViewModel>(context);
-
     String? companyCode = await _storage.read(key: 'Company-Code');
     String? coreCode = await _storage.read(key: 'Core-Code');
     String? lockerToken = await _storage.read(key: 'locker_token');
     String? machineId = await _storage.read(key: 'machine_id');
-    String? userID = _storage.read(key: 'user_id').toString();
+    String? userID = await _storage.read(key: 'user_id');
 
     await device.connect();
     debugPrint('Connected to ${device.platformName}');
@@ -109,8 +104,9 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
               // debugPrint('character uuids : ${characteristic.uuid.toString()}');
               // characteristic = characteristic;
               debugPrint('쓰기 시도');
+              // String message = "SFY001KOR,LOCK,token,15,3";
               String message =
-                  "${companyCode ?? ''},${coreCode ?? ''},${lockerToken ?? ''},${machineId ?? ''}";
+                  "${companyCode ?? ''},${coreCode ?? 'INIT'},${lockerToken ?? ''},${machineId ?? '4'},${userID ?? ''}";
               List<int> encodedMessage = utf8.encode(message);
               try {
                 await characteristic.write(encodedMessage,
@@ -120,11 +116,14 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     timeout: 30);
                 debugPrint('write success');
                 characteristic.setNotifyValue(true);
-                if (_receivedValues[4] == userID) {
-                  characteristic.lastValueStream.listen((value) {
+                characteristic.read();
+                characteristic.lastValueStream.listen((value) {
+                  String receivedString = utf8.decode(value);
+                  debugPrint('응답: $receivedString');
+                  _receivedValues = receivedString.split(',');
+                  debugPrint(_receivedValues[0]);
+                  if (_receivedValues[4] == userID) {
                     setState(() {
-                      String receivedString = utf8.decode(value);
-                      _receivedValues = receivedString.split(',');
                       _storage.write(
                           key: 'Core-Code', value: _receivedValues[0]);
                       _storage.write(
@@ -135,24 +134,26 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                           key: 'locker_battery', value: _receivedValues[3]);
                     });
                     if (_receivedValues[0] == 'WRITE') {
-                      Navigator.pushReplacementNamed(context, '/checklist');
+                      Navigator.pushNamedAndRemoveUntil(context, '/checklist', (route) => false);
                     }
                     if (_receivedValues[0] == 'CHECK') {
-                      Navigator.pushReplacementNamed(
-                          context, '/otherWorklistCheck');
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/otherWorklistCheck', (route) => false);
                     }
                     if (_receivedValues[0] == 'UNLOCK') {
-                        Navigator.pushNamedAndRemoveUntil(context, '/resultUnlock', (route) => false);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/resultUnlock', (route) => false);
                     }
                     if (_receivedValues[0] == 'LOCKED') {
-                      Navigator.pushNamedAndRemoveUntil(context, '/resultLock', (route) => false);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/resultLock', (route) => false);
                     }
                     // if (characteristic.properties.read) {
                     //   await characteristic.read();
                     //   debugPrint('응답값: ${characteristic.read().toString()}');
                     // }
-                  });
-                } else {}
+                  }
+                });
               } catch (e) {
                 debugPrint('write error: $e');
               }
@@ -166,7 +167,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   Future onRefresh() {
     if (_isScanning == false) {
       FlutterBluePlus.startScan(
-          timeout: const Duration(seconds: 15), withKeywords: ["SEOLO"]);
+          timeout: const Duration(seconds: 5), withKeywords: ["SEOLO"]);
     }
     if (mounted) {
       setState(() {});

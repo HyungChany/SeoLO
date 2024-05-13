@@ -16,7 +16,7 @@ class CoreService {
     _dio.interceptors.add(Dio.InterceptorsWrapper(
       onRequest: (options, handler) async {
         String? token = await _storage.read(key: 'token');
-        String? companyCode = await _storage.read(key: 'companyCode');
+        String? companyCode = await _storage.read(key: 'Company-Code');
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
           options.headers['Company-Code'] = companyCode;
@@ -50,7 +50,11 @@ class CoreService {
       }
     } on Dio.DioException catch (e) {
       debugPrint(e.message);
-      return {'success': false, 'statusCode': e.response?.statusCode};
+      return {
+        'success': false,
+        'statusCode': e.response?.statusCode,
+        'message': e.response?.data['message'],
+      };
     }
   }
 
@@ -60,16 +64,18 @@ class CoreService {
       Dio.Response response =
           await _dio.post('$baseUrl/core/CHECK', data: coreCheckModel.toJson());
       if (response.statusCode == 200) {
-        debugPrint(response.data);
-        return {
-          'success': true,
-        };
+        CoreCheckModel coreCheckModel = CoreCheckModel.fromJson(response.data);
+        return {'success': true, 'coreCheckModel': coreCheckModel};
       } else {
         return {'success': false};
       }
     } on Dio.DioException catch (e) {
       debugPrint(e.message);
-      return {'success': false, 'statusCode': e.response?.statusCode};
+      return {
+        'success': false,
+        'statusCode': e.response?.statusCode,
+        'message': e.response?.data['message'],
+      };
     }
   }
 
@@ -89,7 +95,11 @@ class CoreService {
       }
     } on Dio.DioException catch (e) {
       debugPrint(e.message);
-      return {'success': false, 'statusCode': e.response?.statusCode};
+      return {
+        'success': false,
+        'statusCode': e.response?.statusCode,
+        'message': e.response?.data['message'],
+      };
     }
   }
 
@@ -109,7 +119,11 @@ class CoreService {
       }
     } on Dio.DioException catch (e) {
       debugPrint(e.message);
-      return {'success': false, 'statusCode': e.response?.statusCode};
+      return {
+        'success': false,
+        'statusCode': e.response?.statusCode,
+        'message': e.response?.data['message'],
+      };
     }
   }
 }

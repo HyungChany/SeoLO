@@ -11,10 +11,19 @@ class CoreCheckViewModel extends ChangeNotifier {
   late int? battery;
   late int? machineId;
 
-
   bool _isLoading = false;
   String? _errorMessage;
 
+  String? get taskType => _coreCheckModel.taskType;
+  String? get startTime => _coreCheckModel.startTime;
+  String? get endTime => _coreCheckModel.endTime;
+  String? get precaution => _coreCheckModel.precaution;
+  String? get workerName => _coreCheckModel.workerName;
+  String? get workerTeam => _coreCheckModel.workerTeam;
+  String? get workerTitle => _coreCheckModel.workerTitle;
+  String? get facilityName => _coreCheckModel.facilityName;
+  String? get machineName => _coreCheckModel.machineName;
+  String? get machineCode => _coreCheckModel.machineCode;
   bool get isLoading => _isLoading;
 
   String? get errorMessage => _errorMessage;
@@ -41,6 +50,7 @@ class CoreCheckViewModel extends ChangeNotifier {
       _errorMessage = result['message'];
     } else {
       _errorMessage = null;
+      _coreCheckModel = result['coreCheckModel'];
     }
     notifyListeners();
   }

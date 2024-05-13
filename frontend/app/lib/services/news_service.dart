@@ -13,7 +13,7 @@ class NewsService {
     _dio.interceptors.add(Dio.InterceptorsWrapper(
       onRequest: (options, handler) async {
         String? token = await _storage.read(key: 'token');
-        String? companyCode = await _storage.read(key: 'companyCode');
+        String? companyCode = await _storage.read(key: 'Company-Code');
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
           options.headers['Company-Code'] = companyCode;

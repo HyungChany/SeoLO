@@ -20,7 +20,7 @@ class UserService {
     _dio.interceptors.add(Dio.InterceptorsWrapper(
       onRequest: (options, handler) async {
         String? token = await _storage.read(key: 'token');
-        String? companyCode = await _storage.read(key: 'companyCode');
+        String? companyCode = await _storage.read(key: 'Company-Code');
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
           options.headers['Company-Code'] = companyCode;
@@ -38,12 +38,13 @@ class UserService {
           await _dio.post('$baseUrl/login', data: loginModel.toJson());
       if (response.statusCode == 200) {
         String? token = response.data['issuedToken']['accessToken'];
+        String? userId = response.data['userId'].toString();
         String? companyCode = loginModel.companyCode.toString();
         if (token != null) {
-          await _storage.delete(key: 'token');
-          await _storage.delete(key: 'companyCode');
+          await _storage.deleteAll();
           await _storage.write(key: 'token', value: token);
-          await _storage.write(key: 'companyCode', value: companyCode);
+          await _storage.write(key: 'Company-Code', value: companyCode);
+          await _storage.write(key: 'user_id', value: userId);
           return {'success': true};
         } else {
           return {'success': false, 'message': '로그인에 실패하였습니다.'};
@@ -72,8 +73,7 @@ class UserService {
     );
 
     if (response.statusCode == 200) {
-      await _storage.delete(key: 'token');
-      await _storage.delete(key: 'companyCode');
+      await _storage.deleteAll();
     }
   }
 
@@ -137,7 +137,6 @@ class UserService {
       if (response.statusCode == 200) {
         MyInfoModel myInfoModel =
             MyInfoModel.fromJson(response.data['employee']);
-        await _storage.write(key: 'user_id', value: response.data['id']);
         return {'success': true, 'myInfo': myInfoModel};
       } else {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
