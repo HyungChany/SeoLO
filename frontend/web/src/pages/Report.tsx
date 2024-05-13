@@ -256,7 +256,7 @@ const Report = () => {
       }
     };
     report();
-  }, []);
+  }, [reportData]);
   const customFormats = {
     normalDate: 'YYYY년 MM월 DD일',
   };
