@@ -4,7 +4,8 @@ import * as Color from '@/config/color/Color.ts';
 import { Button } from '../button/Button.tsx';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import InputBox from '../inputbox/InputBox.tsx';
-import { detailReport } from '@/apis/Report.ts';
+import { detailReport, modifyReport } from '@/apis/Report.ts';
+import StyledInputBox from '../inputbox/StyledInputBox.tsx';
 
 interface EquipmentData {
   reportId: number;
@@ -36,7 +37,7 @@ const Box = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 3rem 3rem 0 3rem;
+  padding: 1rem 1rem 0 1rem;
   box-sizing: border-box;
 `;
 const ContentBox = styled.div`
@@ -53,8 +54,36 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
 `;
-const TitleContentBox = styled.div`
+const RightContainer = styled.div`
+  width: 48%;
+  height: auto;
+  display: flex;
+  gap: 1rem;
+  flex-direction: row;
+`;
+const LeftTitleBox = styled.div`
+  width: 45%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
+const LeftContentBox = styled.div`
   width: 50%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
+const RightTitleBox = styled.div`
+  width: auto;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+`;
+const RightContentBox = styled.div`
+  width: auto;
   height: auto;
   display: flex;
   flex-direction: column;
@@ -88,6 +117,7 @@ const ButtonBox = styled.div`
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+  margin-top: 0.5rem;
 `;
 
 const AccidentButton = styled.div<AccidentCheckType>`
@@ -101,6 +131,7 @@ const AccidentButton = styled.div<AccidentCheckType>`
   border-radius: 8px;
   cursor: pointer;
 `;
+
 const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
   onClose,
   contentIndex,
@@ -112,6 +143,15 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
   const [reportData, setReportData] = useState<EquipmentData | null>(null);
   const formatDate = (dateString: string) => {
     return dateString.replace('T', ' ').slice(0, 16); // 'T'를 공백으로 대체하고 초 이후를 잘라냄
+  };
+  const [accidentPeopleCount, setAccidentPeopleCount] = useState<number>(0); // 새로운 숫자 상태
+
+  const handleAccidentPeopleCount = (e: ChangeEvent<HTMLInputElement>) => {
+    setAccidentPeople(e.target.value); // 원래의 문자열 상태 업데이트
+    const number = parseInt(e.target.value, 10); // 문자열을 숫자로 변환
+    if (!isNaN(number)) {
+      setAccidentPeopleCount(number); // 숫자로 변환된 값이 유효한 경우에만 상태 업데이트
+    }
   };
 
   useEffect(() => {
@@ -149,8 +189,8 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
     '시작 시간',
     '종료 시간',
     '사고 여부',
-    '사고 유형',
     '인명 피해',
+    '사고 유형',
   ];
 
   const handleInnerClick = (
@@ -167,26 +207,39 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
   const handleAccidentClick = () => {
     setAccidentBtn(!accidentBtn);
   };
-  const handleAccidentText = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleAccidentText = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setAccidentText(e.target.value);
   };
   const handleAccidentPeopleText = (e: ChangeEvent<HTMLInputElement>) => {
     setAccidentPeople(e.target.value);
+    handleAccidentPeopleCount(e);
   };
   const handleModify = () => {
-    onClose();
+    if (reportData) {
+      const data = {
+        isAccident: accidentBtn,
+        accident_type: accidentText,
+        victims_num: accidentPeopleCount,
+      };
+      console.log(data);
+      const modifyData = async () => {
+        await modifyReport(data, contentIndex);
+      };
+      modifyData();
+      onClose();
+    }
   };
   return (
     <Modal onClick={handleInnerClick}>
       <Box>
         <ContentBox>
           <Container>
-            <TitleContentBox>
+            <LeftTitleBox>
               {leftTitle.map((title) => (
                 <Content>{title}</Content>
               ))}
-            </TitleContentBox>
-            <TitleContentBox>
+            </LeftTitleBox>
+            <LeftContentBox>
               {reportData && (
                 <>
                   <RightContent>{reportData.workerName}</RightContent>
@@ -198,15 +251,15 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
                   <RightContent>{reportData.machineNumber}</RightContent>
                 </>
               )}
-            </TitleContentBox>
+            </LeftContentBox>
           </Container>
-          <Container>
-            <TitleContentBox>
+          <RightContainer>
+            <RightTitleBox>
               {rightTitle.map((title) => (
                 <Content>{title}</Content>
               ))}
-            </TitleContentBox>
-            <TitleContentBox>
+            </RightTitleBox>
+            <RightContentBox>
               {reportData && (
                 <>
                   <RightContent>{reportData.tasktype}</RightContent>
@@ -231,7 +284,7 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
                       </AccidentButton>
                     )}
                   </RightContent>
-                  <RightContent>
+                  {/* <RightContent>
                     {modifyModal ? (
                       <InputBox
                         width={10}
@@ -242,24 +295,48 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
                     ) : (
                       reportData.accidentType
                     )}
-                  </RightContent>
+                  </RightContent> */}
                   <RightContent>
                     {modifyModal ? (
-                      <InputBox
-                        width={4}
-                        height={2.3}
-                        value={accidentPeople}
-                        onChange={handleAccidentPeopleText}
-                      />
+                      <>
+                        <InputBox
+                          width={4}
+                          height={2.3}
+                          value={accidentPeople}
+                          onChange={handleAccidentPeopleText}
+                        />
+                        <span style={{ marginLeft: '1rem' }}>명</span>
+                      </>
                     ) : (
                       reportData.victimsNum
                     )}
                   </RightContent>
+                  {modifyModal ? (
+                    <StyledInputBox
+                      width={12}
+                      height={7}
+                      value={accidentText}
+                      onChange={handleAccidentText}
+                      maxLength={50}
+                    />
+                  ) : (
+                    <RightContent>{reportData.accidentType}</RightContent>
+                  )}
                 </>
               )}
-            </TitleContentBox>
-          </Container>
+            </RightContentBox>
+          </RightContainer>
         </ContentBox>
+        {/* <ModifyBox>
+          {modifyModal ? (
+            <InputBox
+              width={10}
+              height={2.3}
+              value={accidentText}
+              onChange={handleAccidentText}
+            />
+          ) : null}
+        </ModifyBox> */}
         <ButtonBox>
           {modifyModal ? (
             <Button

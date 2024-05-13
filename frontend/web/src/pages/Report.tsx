@@ -317,7 +317,7 @@ const Report = () => {
             />
             {/* </LocalizationProvider> */}
 
-            <div style={{ fontSize: '2rem', marginBottom: '0.6rem' }}>~</div>
+            <div style={{ fontSize: '2rem', marginBottom: '0.6rem' }}>-</div>
             {/* <LocalizationProvider dateAdapter={AdapterDayjs}> */}
             <DatePicker
               // value={endDate}
