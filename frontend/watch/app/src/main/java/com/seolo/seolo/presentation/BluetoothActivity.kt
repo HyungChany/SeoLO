@@ -18,11 +18,14 @@ class BluetoothActivity : AppCompatActivity() {
     private lateinit var binding: BluetoothLayoutBinding
     private lateinit var bluetoothAdapter: BluetoothAdapter
 
+    // 액티비티 생성 시
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         // 테마 설정
         setTheme(android.R.style.Theme_DeviceDefault)
+
         // 액션바 숨기기
         supportActionBar?.hide()
 
@@ -37,11 +40,12 @@ class BluetoothActivity : AppCompatActivity() {
         val drawable: Drawable? = ContextCompat.getDrawable(this, R.drawable.img_nfc)
         binding.bluetoothView.setImageDrawable(drawable)
 
-        //BluetoothAdapter 초기화
         bluetoothAdapter = BluetoothAdapter(this)
 
-        // 블루투스 권한 확인 및 활성화 요청
         checkBluetoothPermissions()
+
+        sendConnectionCheckMessage()
+
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -63,16 +67,27 @@ class BluetoothActivity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+    @RequiresApi(Build.VERSION_CODES.S)
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == bluetoothAdapter.REQUEST_BLUETOOTH_SCAN && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
             bluetoothAdapter.startDiscoveryWithPermissions()
         } else {
-            // 권한 요청 거부 처리
-            Log.e("BluetoothActivity", "Required permissions not granted.")
+            Log.e("BluetoothActivity", "Required permissions not granted.") // 권한 요청 거부 처리
         }
     }
 
+    private fun sendConnectionCheckMessage() {
+        val message = "연결확인".toByteArray()
+        Log.d("BluetoothActivity", "Sending connection check message to the device.")
+    }
+
+
+    // 액티비티 종료 시
     override fun onDestroy() {
         super.onDestroy()
         bluetoothAdapter.cleanup() // 리시버 등록 해제

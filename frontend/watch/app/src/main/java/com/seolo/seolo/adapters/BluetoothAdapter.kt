@@ -1,9 +1,14 @@
 package com.seolo.seolo.adapters
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothGatt
+import android.bluetooth.BluetoothGattCallback
+import android.bluetooth.BluetoothGattCharacteristic
+import android.bluetooth.BluetoothProfile
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -14,6 +19,7 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import java.util.UUID
 
 /**
  * BluetoothAdapter 클래스는 Bluetooth 기능을 관리하는 데 사용됩니다.
@@ -44,39 +50,40 @@ class BluetoothAdapter(private val context: Context) {
         }
     }
 
-    // Bluetooth 기기 검색 시작
     @RequiresApi(Build.VERSION_CODES.S)
     fun startDiscovery() {
         checkBluetoothPermissions()
     }
 
-    //Bluetooth 스캔을 위한 권한을 확인하고 요청
     @RequiresApi(Build.VERSION_CODES.S)
     private fun checkBluetoothPermissions() {
         val requiredPermissions = mutableListOf<String>()
 
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                context, Manifest.permission.BLUETOOTH_SCAN
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             requiredPermissions.add(Manifest.permission.BLUETOOTH_SCAN)
         }
 
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                context, Manifest.permission.BLUETOOTH_CONNECT
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             requiredPermissions.add(Manifest.permission.BLUETOOTH_CONNECT)
         }
 
         if (requiredPermissions.isNotEmpty()) {
             ActivityCompat.requestPermissions(
-                context as Activity,
-                requiredPermissions.toTypedArray(),
-                REQUEST_BLUETOOTH_SCAN
+                context as Activity, requiredPermissions.toTypedArray(), REQUEST_BLUETOOTH_SCAN
             )
         } else {
             startDiscoveryWithPermissions()
         }
     }
 
-    // Bluetooth 스캔을 권한이 부여된 상태에서 시작
+    @RequiresApi(Build.VERSION_CODES.S)
     fun startDiscoveryWithPermissions() {
-        // 블루투스 스캔 권한 확인
         if (ContextCompat.checkSelfPermission(
                 context, Manifest.permission.BLUETOOTH_SCAN
             ) == PackageManager.PERMISSION_GRANTED
@@ -85,9 +92,7 @@ class BluetoothAdapter(private val context: Context) {
             context.registerReceiver(receiver, filter)
             bluetoothAdapter?.startDiscovery()
         } else {
-            // 권한이 없는 경우, 로깅하거나 사용자에게 피드백 제공
             Log.e("BluetoothAdapter", "Missing BLUETOOTH_SCAN permission for startDiscovery()")
-            // 필요하다면 사용자에게 권한 요청
             ActivityCompat.requestPermissions(
                 context as Activity,
                 arrayOf(Manifest.permission.BLUETOOTH_SCAN),
@@ -96,20 +101,19 @@ class BluetoothAdapter(private val context: Context) {
         }
     }
 
-    // 블루투스 디바이스 검색 결과를 처리하는 BroadcastReceiver
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (BluetoothDevice.ACTION_FOUND == intent.action) {
                 val device: BluetoothDevice? =
                     intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                 device?.let {
-                    // 권한 체크 후 장치 이름 접근
                     if (ContextCompat.checkSelfPermission(
                             context, Manifest.permission.BLUETOOTH_CONNECT
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
                         val deviceName = it.name ?: "Unknown Device"
                         val deviceAddress = it.address
+                        Log.d("BluetoothAdapter", "Discovered BLE device: $deviceName - $deviceAddress")
                     } else {
                         Log.e(
                             "BluetoothAdapter",
@@ -121,7 +125,47 @@ class BluetoothAdapter(private val context: Context) {
         }
     }
 
-    // BroadcastReceiver를 등록 해제
+    fun sendData(device: BluetoothDevice, data: ByteArray) {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            Log.e("BluetoothAdapter", "BLUETOOTH_CONNECT permission not granted")
+            return
+        }
+
+        @SuppressLint("MissingPermission")
+        val gatt = device.connectGatt(context, false, object : BluetoothGattCallback() {
+            override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
+                super.onConnectionStateChange(gatt, status, newState)
+                if (newState == BluetoothProfile.STATE_CONNECTED) {
+                    gatt?.discoverServices()
+                }
+            }
+
+            override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
+                super.onServicesDiscovered(gatt, status)
+                val service = gatt?.getService(UUID.fromString("your-service-uuid"))
+                val characteristic =
+                    service?.getCharacteristic(UUID.fromString("your-characteristic-uuid"))
+                characteristic?.value = data
+                characteristic?.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                    gatt?.writeCharacteristic(characteristic)
+                } else {
+                    Log.e("BluetoothAdapter", "BLUETOOTH_CONNECT permission not granted during write")
+                }
+            }
+
+            override fun onCharacteristicWrite(
+                gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int
+            ) {
+                super.onCharacteristicWrite(gatt, characteristic, status)
+                if (status == BluetoothGatt.GATT_SUCCESS) {
+                    Log.d("BluetoothAdapter", "Data sent successfully")
+                }
+            }
+        })
+    }
+
+
     fun cleanup() {
         context.unregisterReceiver(receiver)
     }
