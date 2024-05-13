@@ -63,6 +63,8 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
 
     @Override
     public TaskHistoryDto getLatestTaskHistoryEntityByMachineId(Long machineId) {
+        // 해당 장비에서 진행중인 작업내역을 조회한다.
+        // 진행중인 작업내역이 없는 경우 조회할 수 없다.
         return TaskHistoryDto.of(taskHistoryRepository.getLatestTaskHistoryByMachineId(machineId)
                 .orElseThrow(() -> new CommonException(TaskErrorCode.NOT_EXIST_TASK)));
     }

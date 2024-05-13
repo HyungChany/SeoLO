@@ -3,6 +3,7 @@ package com.c104.seolo.global.exception;
 import com.c104.seolo.domain.core.exception.CoreErrorCode;
 import com.c104.seolo.domain.core.exception.CoreTokenErrorCode;
 import com.c104.seolo.domain.machine.exception.MachineErrorCode;
+import com.c104.seolo.domain.marker.exception.MarkerErrorCode;
 import com.c104.seolo.domain.report.exception.ReportErrorCode;
 import com.c104.seolo.domain.task.exception.TaskErrorCode;
 import com.c104.seolo.domain.task.exception.TaskTemplateErrorCode;
@@ -109,6 +110,12 @@ public class CommonException extends RuntimeException {
     }
 
     public CommonException(ReportErrorCode e) {
+        this.message = e.getMessage();
+        this.errorCode = e.getErrorCode();
+        this.httpStatus = e.getHttpStatus();
+    }
+
+    public CommonException(MarkerErrorCode e) {
         this.message = e.getMessage();
         this.errorCode = e.getErrorCode();
         this.httpStatus = e.getHttpStatus();
