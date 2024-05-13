@@ -7,7 +7,7 @@ class OtherWorkListCheckScreen extends StatefulWidget {
   const OtherWorkListCheckScreen({super.key});
 
   @override
-  _OtherWorkListCheckScreenState createState() => _OtherWorkListCheckScreenState();
+  State<OtherWorkListCheckScreen> createState() => _OtherWorkListCheckScreenState();
 }
 
 class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {

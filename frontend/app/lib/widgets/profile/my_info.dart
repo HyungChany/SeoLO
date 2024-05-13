@@ -7,7 +7,7 @@ class MyInfo extends StatefulWidget {
   const MyInfo({super.key});
 
   @override
-  _MyInfoState createState() => _MyInfoState();
+  State<MyInfo> createState() => _MyInfoState();
 }
 
 class _MyInfoState extends State<MyInfo> {

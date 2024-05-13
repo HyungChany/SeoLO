@@ -1,4 +1,3 @@
-import 'package:app/models/core/check_model.dart';
 import 'package:app/models/core/locked_model.dart';
 import 'package:app/services/core_service.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +18,10 @@ class CoreLockedViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   String? get errorMessage => _errorMessage;
+
+  CoreLockedViewModel() {
+    coreLocked();
+  }
 
   Future<void> initializeData() async {
     lockerUid = await _storage.read(key: 'locker_uid');

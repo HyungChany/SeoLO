@@ -20,6 +20,10 @@ class CoreUnlockViewModel extends ChangeNotifier {
 
   String? get errorMessage => _errorMessage;
 
+  CoreUnlockViewModel() {
+    coreUnlock();
+  }
+
   Future<void> initializeData() async {
     lockerUid = await _storage.read(key: 'locker_uid');
     battery = (await _storage.read(key: 'locker_battery')) as int?;
