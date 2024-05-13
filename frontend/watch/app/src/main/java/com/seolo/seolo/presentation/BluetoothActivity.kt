@@ -32,7 +32,7 @@ class BluetoothActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         deviceAdapter = BluetoothDeviceAdapter(devices) { device ->
-            connectToDevice(device)  // Handle the device click
+            connectToDevice(device)
         }
         recyclerView.adapter = deviceAdapter
 
@@ -40,8 +40,13 @@ class BluetoothActivity : AppCompatActivity() {
         snapHelper.attachToRecyclerView(recyclerView)
 
         bluetoothAdapter = BluetoothAdapter(this)
-        bluetoothAdapter.startDiscoveryForSpecificDevices("") { newDevices ->
-            deviceAdapter.updateDevices(newDevices)
+
+        if (!bluetoothAdapter.checkBluetoothPermissions()) {
+            bluetoothAdapter.requestBluetoothPermissions()  // 권한이 없을 경우 요청
+        } else {
+            bluetoothAdapter.startDiscoveryForSpecificDevices("") { newDevices ->
+                deviceAdapter.updateDevices(newDevices)
+            }
         }
     }
 
