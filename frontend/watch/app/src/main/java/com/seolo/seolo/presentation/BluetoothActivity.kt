@@ -49,7 +49,7 @@ class BluetoothActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         // RecyclerView 어댑터 설정
-        deviceAdapter = BluetoothDeviceAdapter(devices) { device ->
+        deviceAdapter = BluetoothDeviceAdapter(this, devices) { device ->
             connectToDevice(device)
         }
         recyclerView.adapter = deviceAdapter
@@ -115,8 +115,8 @@ class BluetoothActivity : AppCompatActivity() {
                             // 연결 실패 또는 특정 오류 코드에서 재시도
                             Log.d("BluetoothActivity", "Attempting to reconnect...")
                             Handler(Looper.getMainLooper()).postDelayed({
-                                connectToDevice(device)  // 1초 후 재시도
-                            }, 1000)
+                                connectToDevice(device)  // 10초 후 재시도
+                            }, 10000)
                         }
                     }
                 }
@@ -204,5 +204,6 @@ class BluetoothActivity : AppCompatActivity() {
     override fun onDestroy() {
         bluetoothAdapter.cleanup()
         super.onDestroy()
+
     }
 }

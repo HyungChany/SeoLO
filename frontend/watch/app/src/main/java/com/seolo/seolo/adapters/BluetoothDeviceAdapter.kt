@@ -1,18 +1,27 @@
 package com.seolo.seolo.adapters
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothGatt
+import android.content.Context
+import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.seolo.seolo.R
 
 class BluetoothDeviceAdapter(
+    private val context: Context,
     private var devices: MutableList<BluetoothDevice>,
     private val onClick: (BluetoothDevice) -> Unit
 ) : RecyclerView.Adapter<BluetoothDeviceAdapter.DeviceViewHolder>() {
+
+    private val gattMap = mutableMapOf<String, BluetoothGatt?>()
+
 
     // ViewHolder 클래스 정의
     class DeviceViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -54,4 +63,18 @@ class BluetoothDeviceAdapter(
         // 데이터 변경 알림
         notifyDataSetChanged()
     }
+
+    fun cleanupGatt() {
+        gattMap.values.forEach { gatt ->
+            if (ContextCompat.checkSelfPermission(
+                    context, Manifest.permission.BLUETOOTH_CONNECT
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                gatt?.disconnect()
+                gatt?.close()
+            }
+        }
+        gattMap.clear()
+    }
+
 }
