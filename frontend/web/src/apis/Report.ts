@@ -1,6 +1,6 @@
 import { api } from './Base.ts';
 interface PatchData {
-  is_accident: boolean;
+  isAccident: boolean;
   accident_type: string;
   victims_num: number;
 }
