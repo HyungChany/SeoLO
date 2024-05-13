@@ -1,8 +1,10 @@
 package com.c104.seolo.domain.facility.controller;
 
 import com.c104.seolo.domain.facility.dto.request.FacilityRequest;
+import com.c104.seolo.domain.facility.dto.response.FacilityBlueprintResponse;
 import com.c104.seolo.domain.facility.dto.response.FacilityListResponse;
 import com.c104.seolo.domain.facility.service.FacilityService;
+import com.c104.seolo.domain.marker.service.MarkerService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import java.net.URI;
 @Slf4j
 public class FacilityController {
     private final FacilityService facilityService;
+    private final MarkerService markerService;
 
     @Secured("ROLE_MANAGER")
     @GetMapping
@@ -66,7 +69,13 @@ public class FacilityController {
 
     @Secured("ROLE_MANAGER")
     @PutMapping("/{facilityId}/blueprints")
-    public void addBlueprints(@PathVariable Long facilityId, MultipartFile blueprint) {
+    public void addBlueprint(@PathVariable Long facilityId, MultipartFile blueprint) {
         facilityService.addBluePrintAtFacility(blueprint,facilityId);
+    }
+
+    @Secured("ROLE_MANAGER")
+    @GetMapping("/{facilityId}/blueprints")
+    public FacilityBlueprintResponse getBlueprint(@PathVariable Long facilityId) {
+        return markerService.getBlueprintAndMarkerByFacilityId(facilityId);
     }
 }

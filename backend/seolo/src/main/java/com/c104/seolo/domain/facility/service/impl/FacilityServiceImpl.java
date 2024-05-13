@@ -141,4 +141,12 @@ public class FacilityServiceImpl implements FacilityService {
         facility.changeLayout(s3OneFileResponse.getUrl());
         facilityRepository.save(facility);
     }
+
+    @Override
+    public String getLayoutByFacility(Long facilityId) {
+        Facility facility = facilityRepository.findById(facilityId).orElseThrow(
+                () -> new CommonException(FacilityErrorCode.NOT_EXIST_FACILITY));
+
+        return facility.getFacilityLayout();
+    }
 }

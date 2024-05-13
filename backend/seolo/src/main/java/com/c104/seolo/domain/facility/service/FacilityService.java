@@ -12,4 +12,5 @@ public interface FacilityService {
     void deleteFacility(String companyCode, Long facilityId);
     FacilityListResponse findFacilitiesByEmployeeNum(String employeeNum);
     void addBluePrintAtFacility(MultipartFile multipartFile, Long facilityId);
+    String getLayoutByFacility(Long facilityId);
 }
