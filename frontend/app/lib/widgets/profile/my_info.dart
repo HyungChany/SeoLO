@@ -12,6 +12,13 @@ class MyInfo extends StatefulWidget {
 
 class _MyInfoState extends State<MyInfo> {
   @override
+  void initState() {
+    final viewModel = Provider.of<MyInfoViewModel>(context, listen: false);
+    super.initState();
+    viewModel.myInfo();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<MyInfoViewModel>(context);
     return SizedBox(
@@ -30,8 +37,10 @@ class _MyInfoState extends State<MyInfo> {
                         color: gray200,
                         borderRadius: BorderRadius.circular(50)),
                   )
-                : Image.asset('assets/images/loading_icon.png',
-                    width: 60, height: 60, fit: BoxFit.fill),
+                : ClipOval(
+                  child: Image.network(viewModel.myInfoModel!.employeeThum,
+                      width: 80, height: 80, fit: BoxFit.cover),
+                ),
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: Column(

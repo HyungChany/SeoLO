@@ -13,7 +13,6 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      backgroundColor: Colors.white,
       title: Text(title, style: TextStyle(fontWeight: FontWeight.bold),),
       centerTitle: true,
       leading: back ? IconButton(

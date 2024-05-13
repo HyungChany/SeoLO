@@ -101,8 +101,9 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
                 onTap: () {
                   if (!viewModel.isLoading) {
                     viewModel.coreIssue().then((_) {
+                      // 일지 작성 후 lock 하러 가기!
                       if (viewModel.errorMessage == null) {
-                        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
+                        Navigator.pushNamedAndRemoveUntil(context, '/loadingLock', (route) => false);
                       } else {
                         showDialog(
                             context: context,

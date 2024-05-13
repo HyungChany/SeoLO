@@ -1,5 +1,6 @@
 import 'package:app/screens/bluetooth/bluetooth_screen.dart';
-import 'package:app/screens/loading/loading_screen.dart';
+import 'package:app/screens/loading/loading_lock_screen.dart';
+import 'package:app/screens/loading/loading_unlock_screen.dart';
 import 'package:app/screens/login/login_screen.dart';
 import 'package:app/screens/login/pin_login_screen.dart';
 import 'package:app/screens/loto_process/loto_process_screen.dart';
@@ -70,10 +71,12 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
           builder: (context) => OtherWorkListCheckScreen());
     case '/login':
       return MaterialPageRoute(builder: (context) => LoginScreen());
-    case '/loading':
-      return MaterialPageRoute(builder: (context) => LoadingScreen());
     case '/lotoProcess':
       return MaterialPageRoute(builder: (context) => LotoProcessScreen());
+    case '/loadingLock':
+      return MaterialPageRoute(builder: (context) => LoadingLockScreen());
+    case '/loadingUnlock':
+      return MaterialPageRoute(builder: (context) => LoadingUnlockScreen());
     case '/resultLock':
       return MaterialPageRoute(builder: (context) => ResultLockScreen());
     case '/resultUnlock':

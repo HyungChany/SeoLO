@@ -1,63 +1,31 @@
-import 'dart:async';
 import 'dart:convert';
 
-import 'package:app/view_models/core/core_check_view_model.dart';
-import 'package:app/view_models/core/core_issue_view_model.dart';
 import 'package:app/view_models/core/core_locked_view_model.dart';
-import 'package:app/view_models/core/core_unlock_view_model.dart';
-import 'package:app/widgets/bluetooth/scan_result_tile.dart';
-import 'package:app/widgets/bluetooth/system_device_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
-class BluetoothScreen extends StatefulWidget {
-  const BluetoothScreen({super.key});
+class LoadingLockScreen extends StatefulWidget {
+  const LoadingLockScreen({super.key});
 
   @override
-  State<BluetoothScreen> createState() => _BluetoothScreenState();
+  State<LoadingLockScreen> createState() => _LoadingLockScreenState();
 }
 
-class _BluetoothScreenState extends State<BluetoothScreen> {
+class _LoadingLockScreenState extends State<LoadingLockScreen> {
   final _storage = const FlutterSecureStorage();
   List<BluetoothDevice> _systemDevices = [];
-  List<ScanResult> _scanResults = [];
-  bool _isScanning = false;
-  late StreamSubscription<List<ScanResult>> _scanResultsSubscription;
-  late StreamSubscription<bool> _isScanningSubscription;
   List<String> _receivedValues = [];
 
   @override
-  @override
   void initState() {
     super.initState();
-
-    _scanResultsSubscription = FlutterBluePlus.scanResults.listen((results) {
-      _scanResults = results;
-      if (mounted) {
-        setState(() {});
-      }
-    }, onError: (e) {
-      debugPrint("Scan Error: $e");
-    });
-
-    _isScanningSubscription = FlutterBluePlus.isScanning.listen((state) {
-      _isScanning = state;
-      if (mounted) {
-        setState(() {});
-      }
-    });
+    onScan();
+    connectToDevice(_systemDevices.last);
   }
 
-  @override
-  void dispose() {
-    _scanResultsSubscription.cancel();
-    _isScanningSubscription.cancel();
-    super.dispose();
-  }
-
-  Future onScanPressed() async {
+  Future onScan() async {
     try {
       _systemDevices = await FlutterBluePlus.systemDevices;
     } catch (e) {
@@ -71,14 +39,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     }
     if (mounted) {
       setState(() {});
-    }
-  }
-
-  Future onStopPressed() async {
-    try {
-      FlutterBluePlus.stopScan();
-    } catch (e) {
-      debugPrint("Stop Scan Error: $e");
     }
   }
 
@@ -121,7 +81,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                   String receivedString = utf8.decode(value);
                   debugPrint('응답: $receivedString');
                   _receivedValues = receivedString.split(',');
-                  // debugPrint(_receivedValues[0]);
+                  debugPrint(_receivedValues[0]);
                   if (_receivedValues[4] == userID) {
                     setState(() {
                       _storage.write(
@@ -133,23 +93,9 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                       _storage.write(
                           key: 'locker_battery', value: _receivedValues[3]);
                     });
-                    if (_receivedValues[0] == 'WRITE') {
-                      // 일지 먼저 작성하고 잠금을 요청하려면 write 받고 바로 로직 수행 후 lock
-
-                      // 태그 -> 일지 작성 -> 잠금 태그라면 블루투스 연결 2번?
-                      Navigator.pushNamedAndRemoveUntil(context, '/checklist', (route) => false);
-                    }
-                    if (_receivedValues[0] == 'CHECK') {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/otherWorklistCheck', (route) => false);
-                    }
-                    if (_receivedValues[0] == 'UNLOCK') {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/resultUnlock', (route) => false);
-                    }
                     if (_receivedValues[0] == 'LOCKED') {
-                      Navigator.pushReplacementNamed(
-                          context, '/loading');
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/resultLock', (route) => false);
                     }
                     // if (characteristic.properties.read) {
                     //   await characteristic.read();
@@ -167,69 +113,16 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     });
   }
 
-  Future onRefresh() {
-    if (_isScanning == false) {
-      FlutterBluePlus.startScan(
-          timeout: const Duration(seconds: 5), withKeywords: ["SEOLO"]);
-    }
-    if (mounted) {
-      setState(() {});
-    }
-    return Future.delayed(const Duration(milliseconds: 500));
-  }
-
-  Widget buildScanButton(BuildContext context) {
-    if (FlutterBluePlus.isScanningNow) {
-      return FloatingActionButton(
-        onPressed: onStopPressed,
-        backgroundColor: Colors.red,
-        child: const Icon(Icons.stop),
-      );
-    } else {
-      return FloatingActionButton(
-          onPressed: onScanPressed, child: const Text("SCAN"));
-    }
-  }
-
-  List<Widget> _buildSystemDeviceTiles(BuildContext context) {
-    return _systemDevices
-        .map(
-          (d) => SystemDeviceTile(
-            device: d,
-            onOpen: () {},
-            onConnect: () => connectToDevice(d),
-          ),
-        )
-        .toList();
-  }
-
-  List<Widget> _buildScanResultTiles(BuildContext context) {
-    return _scanResults
-        .map(
-          (r) => ScanResultTile(
-            result: r,
-            onTap: () => connectToDevice(r.device),
-          ),
-        )
-        .toList();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<CoreLockedViewModel>(context);
     return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: onRefresh,
-        child: ListView(
-          children: <Widget>[
-            Text('receive: $_receivedValues'),
-            Text('system'),
-            ..._buildSystemDeviceTiles(context),
-            Text('scan'),
-            ..._buildScanResultTiles(context),
-          ],
-        ),
-      ),
-      floatingActionButton: buildScanButton(context),
+      body: Center(
+          child: Image.asset(
+        'assets/images/loading_icon.gif',
+        width: 200,
+        height: 200,
+      )),
     );
   }
 }

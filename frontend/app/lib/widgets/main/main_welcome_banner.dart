@@ -7,10 +7,16 @@ class MainWelcomeBanner extends StatefulWidget {
   const MainWelcomeBanner({super.key});
 
   @override
-  _MainWelcomeBannerState createState() => _MainWelcomeBannerState();
+  State<MainWelcomeBanner> createState() => _MainWelcomeBannerState();
 }
 
 class _MainWelcomeBannerState extends State<MainWelcomeBanner> {
+  @override
+  void initState() {
+    final viewModel = Provider.of<MyInfoViewModel>(context, listen: false);
+    super.initState();
+    viewModel.myInfo();
+  }
   content() {
     final viewModel = Provider.of<MyInfoViewModel>(context);
     return RichText(
@@ -18,7 +24,7 @@ class _MainWelcomeBannerState extends State<MainWelcomeBanner> {
             style: const TextStyle(
                 fontSize: 23, fontWeight: FontWeight.bold, color: Colors.black),
             children: [
-          viewModel.isLoading ? TextSpan(text: '') : TextSpan(text: viewModel.myInfoModel!.employeeName, style: TextStyle(color: blue400)),
+          viewModel.isLoading ? TextSpan(text: '           ') : TextSpan(text: viewModel.myInfoModel!.employeeName, style: TextStyle(color: blue400)),
           const TextSpan(text: '님, 오늘도 '),
           const TextSpan(text: '서로 ', style: TextStyle(color: safetyBlue)),
           const TextSpan(text: '지켰나요?')
