@@ -1,13 +1,16 @@
+import 'package:app/view_models/core/core_check_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/button/common_text_button.dart';
 import 'package:app/main.dart';
+import 'package:provider/provider.dart';
 
 class OtherWorkListCheckScreen extends StatefulWidget {
   const OtherWorkListCheckScreen({super.key});
 
   @override
-  State<OtherWorkListCheckScreen> createState() => _OtherWorkListCheckScreenState();
+  State<OtherWorkListCheckScreen> createState() =>
+      _OtherWorkListCheckScreenState();
 }
 
 class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
@@ -20,22 +23,21 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
     '종료 시간',
     '작업 내용'
   ];
-  List<String> workListContent = [
-    '1공장 검사 라인',
-    'L/W - 2',
-    '3578DA1204',
-    '생산기술팀 오정민 팀장',
-    '2024.05.01 12:00',
-    '2024.05.01 14:00',
-    '수리'
-  ];
-
-  String remark = "작업이 완료되었습니다. 추가 점검이 필요합니다.";
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<CoreCheckViewModel>(context);
+    final List<String> workListContent = [
+      viewModel.facilityName!,
+      viewModel.machineName!,
+      viewModel.machineCode!,
+      '${viewModel.workerTeam} ${viewModel.workerName} ${viewModel.workerTitle}',
+      viewModel.startTime!,
+      viewModel.endTime!,
+      viewModel.taskType!,
+    ];
     return Scaffold(
-      appBar: Header(title: '작업 내역', back: true),
+      appBar: Header(title: '${viewModel.workerName}님의 작업 내역', back: true),
       body: Stack(
         children: [
           SingleChildScrollView(
@@ -53,7 +55,8 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
                         title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(workListTitle[index], style: TextStyle(color: samsungBlue)),
+                            Text(workListTitle[index],
+                                style: TextStyle(color: samsungBlue)),
                             Expanded(
                               child: Text(
                                 workListContent[index],
@@ -66,20 +69,25 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
                     },
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0), // 비고 라벨의 패딩
-                    child: Text('비고', style: TextStyle(fontSize: 16.0, color: samsungBlue)),
+                    padding: EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 16.0), // 비고 라벨의 패딩
+                    child: Text('비고',
+                        style: TextStyle(fontSize: 16.0, color: samsungBlue)),
                   ),
                   Container(
                     height: 260,
                     padding: EdgeInsets.all(16.0),
-                    margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // 비고 컨테이너의 마진
+                    margin:
+                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    // 비고 컨테이너의 마진
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: SingleChildScrollView(
-                      child: Text(remark, style: TextStyle(fontSize: 16.0)),
+                      child: Text(viewModel.precaution!,
+                          style: TextStyle(fontSize: 16.0)),
                     ),
                   ),
                 ],
@@ -93,7 +101,8 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
               child: CommonTextButton(
                 text: '확인',
                 onTap: () {
-                  Navigator.pushNamed(context, '/main');
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/main', (route) => false);
                 },
               ),
             ),
