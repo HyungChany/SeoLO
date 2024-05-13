@@ -52,6 +52,7 @@ public class CHECK implements CodeState {
 
         // 3
         return CoreResponse.builder()
+                .nextCode(CODE.INIT)
                 .taskHistory(latestTask)
                 .httpStatus(HttpStatus.OK)
                 .build();
