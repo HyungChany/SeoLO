@@ -15,12 +15,15 @@ import com.c104.seolo.domain.machine.exception.MachineErrorCode;
 import com.c104.seolo.domain.machine.repository.MachineManagerRepository;
 import com.c104.seolo.domain.machine.repository.MachineRepository;
 import com.c104.seolo.global.exception.CommonException;
+import com.c104.seolo.global.s3.dto.response.S3OneFileResponse;
+import com.c104.seolo.global.s3.service.AmazonS3Service;
 import com.c104.seolo.headquarter.company.repository.CompanyRepository;
 import com.c104.seolo.headquarter.employee.dto.EmployeeDto;
 import com.c104.seolo.headquarter.employee.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +37,7 @@ public class FacilityServiceImpl implements FacilityService {
     private final CompanyRepository companyRepository;
     private final MachineRepository machineRepository;
     private final MachineManagerRepository machineManagerRepository;
+    private final AmazonS3Service amazonS3Service;
 
     @Override
     public FacilityListResponse findFacilityByCompany(String companyCode) {
@@ -126,5 +130,23 @@ public class FacilityServiceImpl implements FacilityService {
 
         EmployeeDto employee = employeeService.getEmployeeByEmployeeNum(employeeNum);
         return findFacilityByCompany(employee.getCompanyCode());
+    }
+
+    @Override
+    public void addBluePrintAtFacility(MultipartFile multipartFile, Long facilityId) {
+        S3OneFileResponse s3OneFileResponse = amazonS3Service.uploadThunmail(multipartFile);
+        Facility facility = facilityRepository.findById(facilityId).orElseThrow(
+                () -> new CommonException(FacilityErrorCode.NOT_EXIST_FACILITY));
+
+        facility.changeLayout(s3OneFileResponse.getUrl());
+        facilityRepository.save(facility);
+    }
+
+    @Override
+    public String getLayoutByFacility(Long facilityId) {
+        Facility facility = facilityRepository.findById(facilityId).orElseThrow(
+                () -> new CommonException(FacilityErrorCode.NOT_EXIST_FACILITY));
+
+        return facility.getFacilityLayout();
     }
 }

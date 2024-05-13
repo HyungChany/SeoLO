@@ -1,10 +1,14 @@
 package com.c104.seolo.domain.marker.service.impl;
 
+import com.c104.seolo.domain.facility.dto.response.FacilityBlueprintResponse;
+import com.c104.seolo.domain.facility.service.FacilityService;
 import com.c104.seolo.domain.machine.dto.MachineDto;
 import com.c104.seolo.domain.machine.service.MachineService;
 import com.c104.seolo.domain.marker.dto.MarkerDto;
+import com.c104.seolo.domain.marker.dto.MarkerLocation;
 import com.c104.seolo.domain.marker.dto.request.AddMarkerRequest;
 import com.c104.seolo.domain.marker.dto.response.MarkerInfoResponse;
+import com.c104.seolo.domain.marker.dto.response.MarkerLocationResponse;
 import com.c104.seolo.domain.marker.entity.Marker;
 import com.c104.seolo.domain.marker.exception.MarkerErrorCode;
 import com.c104.seolo.domain.marker.repository.MarkerRepository;
@@ -19,7 +23,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +34,7 @@ public class MarkerServiceImpl implements MarkerService {
     private final MachineService machineService;
     private final TaskHistoryService taskHistoryService;
     private final DBUserDetailService dbUserDetailService;
+    private final FacilityService facilityService;
 
     @Override
     @Transactional
@@ -74,5 +81,35 @@ public class MarkerServiceImpl implements MarkerService {
         Marker marker = markerRepository.findById(markerId).orElseThrow(
                 () -> new CommonException(MarkerErrorCode.NOT_EXIST_MARKER));
         return MarkerDto.of(marker);
+    }
+
+    @Override
+    public List<MarkerDto> getAllMarkersByFacilityId(Long facilityId) {
+        return markerRepository.findAllByFacilityId(facilityId).stream()
+                .map(MarkerDto::of)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public FacilityBlueprintResponse getBlueprintAndMarkerByFacilityId(Long facilityId) {
+        List<MarkerDto> markers = getAllMarkersByFacilityId(facilityId);
+
+        ArrayList<MarkerLocationResponse> locationResponses = new ArrayList<>();
+        for (MarkerDto marker : markers) {
+            MarkerLocation location = MarkerLocation.builder()
+                    .locationX(marker.getLocationX())
+                    .locationY(marker.getLocationY())
+                    .build();
+
+            locationResponses.add(MarkerLocationResponse.builder()
+                    .markerId(marker.getId())
+                    .markerLocations(location)
+                    .build());
+        }
+
+        return FacilityBlueprintResponse.builder()
+                    .blueprintURL(facilityService.getLayoutByFacility(facilityId))
+                    .markers(locationResponses)
+                    .build();
     }
 }
