@@ -60,7 +60,9 @@ public class AuthServiceImpl implements AuthService {
         // JWT토큰 발급
         IssuedToken issuedToken = jwtTokenService.issueToken(authentication);
 
+        AppUser appUser = (AppUser) authentication.getPrincipal();
         return JwtLoginSuccessResponse.builder()
+                .userId(appUser.getId())
                 .username(userLoginRequest.getUsername())
                 .companyCode(userLoginRequest.getCompanyCode())
                 .issuedToken(issuedToken)
