@@ -17,14 +17,16 @@ public class CoreResponse {
     private CODE nextCode;
     private TokenDto coreToken;
     private TaskHistoryDto taskHistory;
+    private CheckMoreResponse checkMoreResponse;
     private HttpStatus httpStatus;
     private String message;
 
     @Builder
-    public CoreResponse(CODE nextCode, TokenDto coreToken, TaskHistoryDto taskHistory, HttpStatus httpStatus, String message) {
+    public CoreResponse(CODE nextCode, TokenDto coreToken, TaskHistoryDto taskHistory, CheckMoreResponse checkMoreResponse, HttpStatus httpStatus, String message) {
         this.nextCode = nextCode;
         this.coreToken = coreToken;
         this.taskHistory = taskHistory;
+        this.checkMoreResponse = checkMoreResponse;
         this.httpStatus = httpStatus;
         this.message = message;
     }
