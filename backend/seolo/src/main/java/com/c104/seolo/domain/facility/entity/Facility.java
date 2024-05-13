@@ -49,4 +49,8 @@ public class Facility extends BaseEntity {
     }
 
     public Facility() {}
+
+    public void changeLayout(String newLayout) {
+        this.facilityLayout = newLayout;
+    }
 }

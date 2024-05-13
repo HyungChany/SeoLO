@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 
@@ -61,5 +62,11 @@ public class FacilityController {
     @GetMapping("/{employeeNum}")
     public FacilityListResponse getFacilitiesOfEmployee(@PathVariable String employeeNum) {
         return facilityService.findFacilitiesByEmployeeNum(employeeNum);
+    }
+
+    @Secured("ROLE_MANAGER")
+    @PutMapping("/{facilityId}/blueprints")
+    public void addBlueprints(@PathVariable Long facilityId, MultipartFile blueprint) {
+        facilityService.addBluePrintAtFacility(blueprint,facilityId);
     }
 }
