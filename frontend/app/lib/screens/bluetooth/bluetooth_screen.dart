@@ -92,17 +92,20 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     String? coreCode = await _storage.read(key: 'Core-Code');
     String? lockerToken = await _storage.read(key: 'locker_token');
     String? machineId = await _storage.read(key: 'machine_id');
+    String? userID = _storage.read(key: 'user_id').toString();
 
     await device.connect();
     debugPrint('Connected to ${device.platformName}');
     device.discoverServices().then((services) async {
       for (var service in services) {
         // debugPrint('service uuids : ${service.uuid.toString().toUpperCase()}');
-        if (service.uuid.toString().toUpperCase() == '19B1') {
+        if (service.uuid.toString().toUpperCase() ==
+            "20240520-C104-C104-C104-012345678910") {
           List<BluetoothCharacteristic> characteristics =
               service.characteristics;
           for (var characteristic in characteristics) {
-            if (characteristic.uuid.toString().toUpperCase() == '19B2') {
+            if (characteristic.uuid.toString().toUpperCase() ==
+                "20240521-C104-C104-C104-012345678910") {
               // debugPrint('character uuids : ${characteristic.uuid.toString()}');
               // characteristic = characteristic;
               debugPrint('쓰기 시도');
@@ -117,41 +120,43 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     timeout: 30);
                 debugPrint('write success');
                 characteristic.setNotifyValue(true);
-                characteristic.lastValueStream.listen((value) {
-                  setState(() {
-                    String receivedString = utf8.decode(value);
-                    _receivedValues = receivedString.split(',');
-                    _storage.write(key: 'Core-Code', value: _receivedValues[0]);
-                    _storage.write(
-                        key: 'locker_uid', value: _receivedValues[1]);
-                    _storage.write(
-                        key: 'machine_id', value: _receivedValues[2]);
-                    _storage.write(
-                        key: 'locker_token', value: _receivedValues[3]);
-                    _storage.write(
-                        key: 'locker_battery', value: _receivedValues[4]);
+                if (_receivedValues[4] == userID) {
+                  characteristic.lastValueStream.listen((value) {
+                    setState(() {
+                      String receivedString = utf8.decode(value);
+                      _receivedValues = receivedString.split(',');
+                      _storage.write(
+                          key: 'Core-Code', value: _receivedValues[0]);
+                      _storage.write(
+                          key: 'locker_uid', value: _receivedValues[1]);
+                      _storage.write(
+                          key: 'machine_id', value: _receivedValues[2]);
+                      _storage.write(
+                          key: 'locker_battery', value: _receivedValues[3]);
+                    });
+                    if (_receivedValues[0] == 'WRITE') {
+                      Navigator.pushReplacementNamed(context, '/checklist');
+                    }
+                    if (_receivedValues[0] == 'CHECK') {
+                      Navigator.pushReplacementNamed(
+                          context, '/otherWorklistCheck');
+                    }
+                    if (_receivedValues[0] == 'UNLOCK') {
+                      unlockVM.coreUnlock().then((_) {
+                        Navigator.pushReplacementNamed(context, '/successLock');
+                      });
+                    }
+                    if (_receivedValues[0] == 'LOCKED') {
+                      lockedVM.coreLocked().then((_) {
+                        Navigator.pushReplacementNamed(context, '/successLock');
+                      });
+                    }
+                    // if (characteristic.properties.read) {
+                    //   await characteristic.read();
+                    //   debugPrint('응답값: ${characteristic.read().toString()}');
+                    // }
                   });
-                  if (_receivedValues[0] == 'WRITE') {
-                    Navigator.pushReplacementNamed(context, '/checklist');
-                  }
-                  if (_receivedValues[0] == 'CHECK') {
-                    Navigator.pushReplacementNamed(context, '/otherWorklistCheck');
-                  }
-                  if (_receivedValues[0] == 'UNLOCK') {
-                    unlockVM.coreUnlock().then((_) {
-                      Navigator.pushReplacementNamed(context, '/successLock');
-                    });
-                  }
-                  if (_receivedValues[0] == 'LOCKED') {
-                    lockedVM.coreLocked().then((_) {
-                      Navigator.pushReplacementNamed(context, '/successLock');
-                    });
-                  }
-                  // if (characteristic.properties.read) {
-                  //   await characteristic.read();
-                  //   debugPrint('응답값: ${characteristic.read().toString()}');
-                  // }
-                });
+                } else {}
               } catch (e) {
                 debugPrint('write error: $e');
               }

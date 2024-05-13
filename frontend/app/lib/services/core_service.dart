@@ -38,7 +38,7 @@ class CoreService {
         await _storage.write(
             key: 'Core-Code', value: response.data['next_code']);
         await _storage.write(
-            key: 'lockerToken',
+            key: 'locker_token',
             value: response.data['core_token']['tokenValue']);
         await _storage.write(
             key: 'machine_id', value: coreIssueModel.machineId.toString());

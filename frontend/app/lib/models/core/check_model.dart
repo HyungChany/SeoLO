@@ -1,7 +1,7 @@
 class CoreCheckModel {
   final String? lockerUid;
-  final String? battery;
-  final String? machineId;
+  final int? battery;
+  final int? machineId;
 
   CoreCheckModel({
     this.lockerUid,

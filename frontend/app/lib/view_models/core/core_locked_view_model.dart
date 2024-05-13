@@ -9,8 +9,8 @@ class CoreLockedViewModel extends ChangeNotifier {
   final CoreService _coreService = CoreService();
   late CoreLockedModel _coreLockedModel;
   late String? lockerUid;
-  late String? battery;
-  late String? machineId;
+  late int? battery;
+  late int? machineId;
 
 
   bool _isLoading = false;
@@ -22,8 +22,8 @@ class CoreLockedViewModel extends ChangeNotifier {
 
   Future<void> initializeData() async {
     lockerUid = await _storage.read(key: 'locker_uid');
-    battery = await _storage.read(key: 'locker_battery');
-    machineId = await _storage.read(key: 'machine_id');
+    battery = (await _storage.read(key: 'locker_battery')) as int?;
+    machineId = (await _storage.read(key: 'machine_id')) as int?;
     _coreLockedModel = CoreLockedModel(lockerUid: lockerUid, battery: battery, machineId: machineId);
     notifyListeners();
   }

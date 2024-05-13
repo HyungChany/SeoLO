@@ -137,7 +137,7 @@ class UserService {
       if (response.statusCode == 200) {
         MyInfoModel myInfoModel =
             MyInfoModel.fromJson(response.data['employee']);
-
+        await _storage.write(key: 'user_id', value: response.data['id']);
         return {'success': true, 'myInfo': myInfoModel};
       } else {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
