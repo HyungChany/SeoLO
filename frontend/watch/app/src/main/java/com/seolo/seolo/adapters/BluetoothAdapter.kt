@@ -24,7 +24,7 @@ import androidx.core.content.ContextCompat
  */
 class BluetoothAdapter(private val context: Context) {
     private var bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
-    private val REQUEST_BLUETOOTH_SCAN = 100
+    val REQUEST_BLUETOOTH_SCAN = 100
     val REQUEST_ENABLE_BT = 101
 
 
@@ -53,13 +53,20 @@ class BluetoothAdapter(private val context: Context) {
     //Bluetooth 스캔을 위한 권한을 확인하고 요청
     @RequiresApi(Build.VERSION_CODES.S)
     private fun checkBluetoothPermissions() {
-        if (ContextCompat.checkSelfPermission(
-                context, Manifest.permission.BLUETOOTH_SCAN
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
+        val requiredPermissions = mutableListOf<String>()
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED) {
+            requiredPermissions.add(Manifest.permission.BLUETOOTH_SCAN)
+        }
+
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+            requiredPermissions.add(Manifest.permission.BLUETOOTH_CONNECT)
+        }
+
+        if (requiredPermissions.isNotEmpty()) {
             ActivityCompat.requestPermissions(
                 context as Activity,
-                arrayOf(Manifest.permission.BLUETOOTH_SCAN),
+                requiredPermissions.toTypedArray(),
                 REQUEST_BLUETOOTH_SCAN
             )
         } else {
@@ -68,7 +75,7 @@ class BluetoothAdapter(private val context: Context) {
     }
 
     // Bluetooth 스캔을 권한이 부여된 상태에서 시작
-    private fun startDiscoveryWithPermissions() {
+    fun startDiscoveryWithPermissions() {
         // 블루투스 스캔 권한 확인
         if (ContextCompat.checkSelfPermission(
                 context, Manifest.permission.BLUETOOTH_SCAN

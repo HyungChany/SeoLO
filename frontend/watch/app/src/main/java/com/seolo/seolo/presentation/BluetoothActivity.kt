@@ -1,9 +1,11 @@
 package com.seolo.seolo.presentation
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -38,25 +40,36 @@ class BluetoothActivity : AppCompatActivity() {
         //BluetoothAdapter 초기화
         bluetoothAdapter = BluetoothAdapter(this)
 
-        // Bluetooth 활성화 요청 및 검색 시작
+        // 블루투스 권한 확인 및 활성화 요청
+        checkBluetoothPermissions()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun checkBluetoothPermissions() {
         if (bluetoothAdapter.isBluetoothEnabled()) {
-            // Bluetooth가 이미 활성화되어 있으면 바로 검색 시작
             bluetoothAdapter.startDiscovery()
         } else {
-            // Bluetooth가 비활성화되어 있으면 활성화 요청
             bluetoothAdapter.createEnableBluetoothIntent()?.let {
                 startActivityForResult(it, bluetoothAdapter.REQUEST_ENABLE_BT)
             }
         }
     }
 
-    // Activity 결과 처리
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == bluetoothAdapter.REQUEST_ENABLE_BT && resultCode == RESULT_OK) {
-            // Bluetooth가 활성화되면 디바이스 검색을 시작
             bluetoothAdapter.startDiscovery()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == bluetoothAdapter.REQUEST_BLUETOOTH_SCAN && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
+            bluetoothAdapter.startDiscoveryWithPermissions()
+        } else {
+            // 권한 요청 거부 처리
+            Log.e("BluetoothActivity", "Required permissions not granted.")
         }
     }
 
@@ -65,13 +78,3 @@ class BluetoothActivity : AppCompatActivity() {
         bluetoothAdapter.cleanup() // 리시버 등록 해제
     }
 }
-
-
-//        // 화면 터치 리스너 설정
-//        binding.root.setOnClickListener {
-//            // CheckListActivity로 이동하는 Intent 생성
-//            val intent = Intent(this, ChecklistActivity::class.java)
-//            startActivity(intent)
-//        }
-//    }
-//}
