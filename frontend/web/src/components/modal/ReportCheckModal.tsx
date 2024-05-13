@@ -215,20 +215,26 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
     handleAccidentPeopleCount(e);
   };
   const handleModify = () => {
-    if (reportData) {
-      const data = {
-        isAccident: accidentBtn,
-        accident_type: accidentText,
-        victims_num: accidentPeopleCount,
-      };
-      console.log(data);
-      const modifyData = async () => {
-        await modifyReport(data, contentIndex);
-      };
-      modifyData();
-      onClose();
-    }
+    const data = {
+      isAccident: accidentBtn,
+      accident_type: accidentText,
+      victims_num: accidentPeopleCount,
+    };
+
+    const modifyData = async () => {
+      await modifyReport(data, contentIndex);
+    };
+    modifyData();
+    onClose();
   };
+  useEffect(() => {
+    if (modifyModal && reportData) {
+      setAccidentText(reportData.accidentType || '');
+      setAccidentPeople(reportData.victimsNum?.toString() || '');
+      setAccidentPeopleCount(reportData.victimsNum || 0);
+      setAccidentBtn(reportData.accident);
+    }
+  }, [modifyModal, reportData]);
   return (
     <Modal onClick={handleInnerClick}>
       <Box>

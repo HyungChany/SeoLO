@@ -132,7 +132,7 @@ const Overlay = styled.div`
 `;
 
 const CsvButton = styled(CsvDownloadButton)`
-  background-color: ${Color.BLUE100};
+  background-color: ${Color.GREEN900};
   height: 2.5rem;
   color: white;
   padding: 0 1rem;
