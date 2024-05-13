@@ -1,11 +1,13 @@
 package com.seolo.seolo.presentation
 
+import android.Manifest
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +22,9 @@ class BluetoothActivity : AppCompatActivity() {
     private lateinit var bluetoothAdapter: BluetoothAdapter
     private lateinit var deviceAdapter: BluetoothDeviceAdapter
     private var devices = mutableListOf<BluetoothDevice>()
+    companion object {
+        private const val REQUEST_BLUETOOTH_PERMISSION = 101
+    }
 
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -42,7 +47,7 @@ class BluetoothActivity : AppCompatActivity() {
         bluetoothAdapter = BluetoothAdapter(this)
 
         if (!bluetoothAdapter.checkBluetoothPermissions()) {
-            bluetoothAdapter.requestBluetoothPermissions()  // 권한이 없을 경우 요청
+            bluetoothAdapter.requestBluetoothPermissions()
         } else {
             bluetoothAdapter.startDiscoveryForSpecificDevices("") { newDevices ->
                 deviceAdapter.updateDevices(newDevices)
@@ -51,8 +56,12 @@ class BluetoothActivity : AppCompatActivity() {
     }
 
     private fun connectToDevice(device: BluetoothDevice) {
-        deviceAdapter = BluetoothDeviceAdapter(devices) { device ->
-            connectToDevice(device)
+        if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+            val deviceName = device.name ?: "Unknown Device"
+            Toast.makeText(this@BluetoothActivity, "${deviceName} 클릭", Toast.LENGTH_SHORT).show()
+        } else {
+            // 권한이 없으면 사용자에게 권한 요청
+            requestPermissions(arrayOf(Manifest.permission.BLUETOOTH_CONNECT), REQUEST_BLUETOOTH_PERMISSION)
         }
     }
 
