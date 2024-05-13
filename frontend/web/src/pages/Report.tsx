@@ -257,7 +257,19 @@ const Report = () => {
   }, [startDate, endDate]);
   const handleSearch = async (start: string, end: string) => {
     const data = await RangeReport(start, end);
-    setReportData(data);
+    const formattedData = data.map((item: EquipmentData) => ({
+      ...item,
+      taskStartDateTime:
+        item.taskStartDateTime === null
+          ? '-'
+          : formatDate(item.taskStartDateTime),
+      taskEndDateTime:
+        item.taskEndDateTime === null ? '-' : formatDate(item.taskEndDateTime),
+      accidentType: item.accidentType === null ? '-' : item.accidentType,
+      victimsNum: item.victimsNum === null ? '-' : item.victimsNum,
+      accident: item.accident === false ? 'N' : 'T',
+    }));
+    setReportData(formattedData);
   };
 
   return (
