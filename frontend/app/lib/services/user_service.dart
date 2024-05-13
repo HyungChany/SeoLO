@@ -23,7 +23,7 @@ class UserService {
         String? companyCode = await _storage.read(key: 'Company-Code');
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
-          options.headers['Company-Code'] = 'SFY001KOR';
+          options.headers['Company-Code'] = companyCode;
         }
         return handler.next(options);
       },
@@ -73,7 +73,9 @@ class UserService {
     );
 
     if (response.statusCode == 200) {
-      await _storage.deleteAll();
+      await _storage.delete(key: 'token');
+      await _storage.delete(key: 'Company-Code');
+      await _storage.delete(key: 'user_id');
     }
   }
 
@@ -179,6 +181,9 @@ class UserService {
       Dio.Response response = await _dio.patch('$baseUrl/users/pwd',
           data: passwordChangeModel.toJson());
       if (response.statusCode == 200) {
+        await _storage.delete(key: 'token');
+        await _storage.delete(key: 'Company-Code');
+        await _storage.delete(key: 'user_id');
         return {
           'success': true,
         };
