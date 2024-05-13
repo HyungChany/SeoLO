@@ -256,7 +256,7 @@ const Report = () => {
       }
     };
     report();
-  }, [reportData]);
+  }, []);
   const customFormats = {
     normalDate: 'YYYY년 MM월 DD일',
   };
@@ -277,8 +277,7 @@ const Report = () => {
   }, [startDate, endDate]);
   const handleSearch = async (start: string, end: string) => {
     const data = await RangeReport(start, end);
-    console.log('데이터', data);
-    // setReportData(data);
+    setReportData(data);
   };
   console.log('시작시간', formatStartDate);
   console.log('종료시간', formatEndDate);
