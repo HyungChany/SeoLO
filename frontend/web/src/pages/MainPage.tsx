@@ -195,7 +195,7 @@ const NumberContainer = styled.div<NumberType>`
   height: auto;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   font-size: 6rem;
   font-weight: 700;
   color: ${(props) => props.color};
