@@ -20,6 +20,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 
 /**
  * BluetoothAdapter 클래스는 Bluetooth 기능을 관리하는 데 사용됩니다.
@@ -29,7 +30,9 @@ import java.util.UUID
  * @constructor BluetoothAdapter 인스턴스를 생성합니다.
  */
 class BluetoothAdapter(private val context: Context) {
+    private var isReceiverRegistered: Boolean = false
     private var bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+    private val discoveredDevices = ConcurrentHashMap<String, BluetoothDevice>()
     val REQUEST_BLUETOOTH_SCAN = 100
     val REQUEST_ENABLE_BT = 101
 
@@ -100,6 +103,28 @@ class BluetoothAdapter(private val context: Context) {
             )
         }
     }
+    @SuppressLint("MissingPermission")
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun startDiscoveryForSpecificDevices(deviceNameSubstring: String, onUpdate: (List<BluetoothDevice>) -> Unit) {
+        context.registerReceiver(object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                device?.let {
+                    if (it.name?.contains(deviceNameSubstring, ignoreCase = true) == true) {
+                        discoveredDevices[it.address] = it
+                        Log.d("BluetoothAdapter", "Filtered device found: ${it.name}")
+                        onUpdate(ArrayList(discoveredDevices.values))  // 콜백 호출
+                    }
+                }
+            }
+        }, IntentFilter(BluetoothDevice.ACTION_FOUND))
+        bluetoothAdapter?.startDiscovery()
+    }
+
+    fun getFilteredDevices(): List<BluetoothDevice> {
+        return ArrayList(discoveredDevices.values)
+    }
+
 
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -167,6 +192,9 @@ class BluetoothAdapter(private val context: Context) {
 
 
     fun cleanup() {
-        context.unregisterReceiver(receiver)
+        if (isReceiverRegistered) {
+            context.unregisterReceiver(receiver)
+            isReceiverRegistered = false
+        }
     }
 }
