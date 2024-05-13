@@ -4,6 +4,7 @@ import android.Manifest
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
+import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothProfile
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -29,6 +30,7 @@ class BluetoothActivity : AppCompatActivity() {
 
     companion object {
         private const val REQUEST_BLUETOOTH_PERMISSION = 101
+
         // Bluetooth 서비스와 캐릭터리스틱의 UUID 정의
         private val SERVICE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
         private val CHAR_UUID = UUID.fromString("00001102-0000-1000-8000-00805F9B34FB")
@@ -86,18 +88,31 @@ class BluetoothActivity : AppCompatActivity() {
 
             // Bluetooth GATT로 기기 연결 시작
             device.connectGatt(this, false, object : BluetoothGattCallback() {
-                override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
+                override fun onConnectionStateChange(
+                    gatt: BluetoothGatt?, status: Int, newState: Int
+                ) {
                     super.onConnectionStateChange(gatt, status, newState)
                     if (newState == BluetoothProfile.STATE_CONNECTED) {
                         // 기기가 연결될 때
                         Log.d("BluetoothActivity", "Device connected: $deviceName")
-                        gatt?.discoverServices() // 서비스 발견 시작
+                        // 권한 확인
+                        if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                            // 권한이 있을 때 서비스 발견 시작
+                            gatt?.discoverServices()
+                        } else {
+                            // 권한이 없을 때 사용자에게 권한 요청
+                            requestPermissions(
+                                arrayOf(Manifest.permission.BLUETOOTH_CONNECT),
+                                REQUEST_BLUETOOTH_PERMISSION
+                            )
+                        }
                     } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                         // 기기가 연결이 끊겼을 때
                         Log.d("BluetoothActivity", "Device disconnected")
                     }
                 }
 
+                @RequiresApi(Build.VERSION_CODES.S)
                 override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
                     super.onServicesDiscovered(gatt, status)
                     if (status == BluetoothGatt.GATT_SUCCESS) {
@@ -106,23 +121,39 @@ class BluetoothActivity : AppCompatActivity() {
                         val service = gatt?.getService(SERVICE_UUID) // 해당 서비스의 UUID
                         val char = service?.getCharacteristic(CHAR_UUID) // 쓰기 위한 캐릭터리스틱의 UUID
 
-                        // "통신보안" 문자열을 캐릭터리스틱에 쓰기
-                        char?.setValue("통신보안")
-                        gatt?.writeCharacteristic(char)
+                        if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                            // 권한이 있을 때
+                            char?.setValue("통신보안")
+                            gatt?.writeCharacteristic(char)
+                        } else {
+                            // 권한이 없을 때 사용자에게 권한 요청
+                            requestPermissions(
+                                arrayOf(Manifest.permission.BLUETOOTH_CONNECT),
+                                REQUEST_BLUETOOTH_PERMISSION
+                            )
+                        }
                     }
                 }
 
-                override fun onCharacteristicWrite(gatt: BluetoothGatt?, characteristic: android.bluetooth.BluetoothGattCharacteristic?, status: Int) {
+                override fun onCharacteristicWrite(
+                    gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int
+                ) {
                     super.onCharacteristicWrite(gatt, characteristic, status)
                     if (status == BluetoothGatt.GATT_SUCCESS) {
                         // 캐릭터리스틱에 데이터가 성공적으로 쓰였을 때
-                        Log.d("BluetoothActivity", "Data written to ${characteristic?.uuid}: ${characteristic?.value}")
+                        Log.d(
+                            "BluetoothActivity", "Data written to ${characteristic?.uuid}: ${
+                                characteristic?.value?.toString(Charsets.UTF_8)
+                            }"
+                        )
                     }
                 }
             })
         } else {
             // 권한이 없으면 사용자에게 권한 요청
-            requestPermissions(arrayOf(Manifest.permission.BLUETOOTH_CONNECT), REQUEST_BLUETOOTH_PERMISSION)
+            requestPermissions(
+                arrayOf(Manifest.permission.BLUETOOTH_CONNECT), REQUEST_BLUETOOTH_PERMISSION
+            )
         }
     }
 
