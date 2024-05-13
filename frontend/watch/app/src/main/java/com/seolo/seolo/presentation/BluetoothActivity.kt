@@ -32,8 +32,11 @@ class BluetoothActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val devices = mutableListOf<BluetoothDevice>()
-        deviceAdapter = BluetoothDeviceAdapter(devices)
+        deviceAdapter = BluetoothDeviceAdapter(devices) { device ->
+            connectToDevice(device)  // Handle the device click
+        }
         recyclerView.adapter = deviceAdapter
+
 
         // SnapHelper를 설정합니다.
         val snapHelper = LinearSnapHelper()
@@ -44,6 +47,12 @@ class BluetoothActivity : AppCompatActivity() {
             deviceAdapter.updateDevices(newDevices)
         }
     }
+
+    private fun connectToDevice(device: BluetoothDevice) {
+        Log.d("BluetoothActivity", "Connecting to ${device.name}")
+        bluetoothAdapter.connectToDevice(device)
+    }
+
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun checkBluetoothPermissions() {

@@ -9,21 +9,29 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.seolo.seolo.R
 
-class BluetoothDeviceAdapter(private var devices: MutableList<BluetoothDevice>) :
-    RecyclerView.Adapter<BluetoothDeviceAdapter.DeviceViewHolder>() {
+class BluetoothDeviceAdapter(
+    private var devices: MutableList<BluetoothDevice>,
+    private val onClick: (BluetoothDevice) -> Unit
+) : RecyclerView.Adapter<BluetoothDeviceAdapter.DeviceViewHolder>() {
 
     class DeviceViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val deviceName: TextView = view.findViewById(R.id.deviceName) ?: throw IllegalArgumentException("Device name TextView not found")
+        val deviceName: TextView = view.findViewById(R.id.deviceName)
+            ?: throw IllegalArgumentException("Device name TextView not found")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeviceViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_bluetooth_device, parent, false)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_bluetooth_device, parent, false)
         return DeviceViewHolder(view)
     }
 
     @SuppressLint("MissingPermission")
     override fun onBindViewHolder(holder: DeviceViewHolder, position: Int) {
-        holder.deviceName.text = devices[position].name ?: "Unknown Device"
+        val device = devices[position]
+        holder.deviceName.text = device.name ?: "Unknown Device"
+        holder.itemView.setOnClickListener {
+            onClick(device)
+        }
     }
 
     override fun getItemCount(): Int = devices.size

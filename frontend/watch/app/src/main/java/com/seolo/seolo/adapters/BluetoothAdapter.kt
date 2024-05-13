@@ -32,6 +32,7 @@ import java.util.concurrent.ConcurrentHashMap
 class BluetoothAdapter(private val context: Context) {
     private var isReceiverRegistered: Boolean = false
     private var bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+    private var bluetoothGatt: BluetoothGatt? = null
     private val discoveredDevices = ConcurrentHashMap<String, BluetoothDevice>()
     val REQUEST_BLUETOOTH_SCAN = 100
     val REQUEST_ENABLE_BT = 101
@@ -103,12 +104,16 @@ class BluetoothAdapter(private val context: Context) {
             )
         }
     }
+
     @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.S)
-    fun startDiscoveryForSpecificDevices(deviceNameSubstring: String, onUpdate: (List<BluetoothDevice>) -> Unit) {
+    fun startDiscoveryForSpecificDevices(
+        deviceNameSubstring: String, onUpdate: (List<BluetoothDevice>) -> Unit
+    ) {
         context.registerReceiver(object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
-                val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
+                val device: BluetoothDevice? =
+                    intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                 device?.let {
                     if (it.name?.contains(deviceNameSubstring, ignoreCase = true) == true) {
                         discoveredDevices[it.address] = it
@@ -138,7 +143,10 @@ class BluetoothAdapter(private val context: Context) {
                     ) {
                         val deviceName = it.name ?: "Unknown Device"
                         val deviceAddress = it.address
-                        Log.d("BluetoothAdapter", "Discovered BLE device: $deviceName - $deviceAddress")
+                        Log.d(
+                            "BluetoothAdapter",
+                            "Discovered BLE device: $deviceName - $deviceAddress"
+                        )
                     } else {
                         Log.e(
                             "BluetoothAdapter",
@@ -151,43 +159,90 @@ class BluetoothAdapter(private val context: Context) {
     }
 
     fun sendData(device: BluetoothDevice, data: ByteArray) {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                context, Manifest.permission.BLUETOOTH_CONNECT
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             Log.e("BluetoothAdapter", "BLUETOOTH_CONNECT permission not granted")
             return
         }
 
-        @SuppressLint("MissingPermission")
-        val gatt = device.connectGatt(context, false, object : BluetoothGattCallback() {
-            override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
-                super.onConnectionStateChange(gatt, status, newState)
-                if (newState == BluetoothProfile.STATE_CONNECTED) {
-                    gatt?.discoverServices()
+        @SuppressLint("MissingPermission") val gatt =
+            device.connectGatt(context, false, object : BluetoothGattCallback() {
+                override fun onConnectionStateChange(
+                    gatt: BluetoothGatt?,
+                    status: Int,
+                    newState: Int
+                ) {
+                    super.onConnectionStateChange(gatt, status, newState)
+                    if (newState == BluetoothProfile.STATE_CONNECTED) {
+                        gatt?.discoverServices()
+                    }
                 }
-            }
 
-            override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
-                super.onServicesDiscovered(gatt, status)
-                val service = gatt?.getService(UUID.fromString("your-service-uuid"))
-                val characteristic =
-                    service?.getCharacteristic(UUID.fromString("your-characteristic-uuid"))
-                characteristic?.value = data
-                characteristic?.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
-                if (ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
-                    gatt?.writeCharacteristic(characteristic)
-                } else {
-                    Log.e("BluetoothAdapter", "BLUETOOTH_CONNECT permission not granted during write")
+                override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
+                    super.onServicesDiscovered(gatt, status)
+                    val service = gatt?.getService(UUID.fromString("your-service-uuid"))
+                    val characteristic =
+                        service?.getCharacteristic(UUID.fromString("your-characteristic-uuid"))
+                    characteristic?.value = data
+                    characteristic?.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+                    if (ContextCompat.checkSelfPermission(
+                            context, Manifest.permission.BLUETOOTH_CONNECT
+                        ) == PackageManager.PERMISSION_GRANTED
+                    ) {
+                        gatt?.writeCharacteristic(characteristic)
+                    } else {
+                        Log.e(
+                            "BluetoothAdapter",
+                            "BLUETOOTH_CONNECT permission not granted during write"
+                        )
+                    }
                 }
-            }
 
-            override fun onCharacteristicWrite(
-                gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int
-            ) {
-                super.onCharacteristicWrite(gatt, characteristic, status)
-                if (status == BluetoothGatt.GATT_SUCCESS) {
-                    Log.d("BluetoothAdapter", "Data sent successfully")
+                override fun onCharacteristicWrite(
+                    gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int
+                ) {
+                    super.onCharacteristicWrite(gatt, characteristic, status)
+                    if (status == BluetoothGatt.GATT_SUCCESS) {
+                        Log.d("BluetoothAdapter", "Data sent successfully")
+                    }
                 }
-            }
-        })
+            })
+    }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    fun connectToDevice(device: BluetoothDevice) {
+        if (ContextCompat.checkSelfPermission(
+                context, Manifest.permission.BLUETOOTH_CONNECT
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            bluetoothGatt = device.connectGatt(context, false, object : BluetoothGattCallback() {
+                override fun onConnectionStateChange(
+                    gatt: BluetoothGatt, status: Int, newState: Int
+                ) {
+                    super.onConnectionStateChange(gatt, status, newState)
+                    if (newState == BluetoothProfile.STATE_CONNECTED) {
+                        Log.d("BluetoothAdapter", "Connected to GATT server.")
+                        gatt.discoverServices()
+                    } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                        Log.d("BluetoothAdapter", "Disconnected from GATT server.")
+                    }
+                }
+
+                override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
+                    if (status == BluetoothGatt.GATT_SUCCESS) {
+                        // 서비스 발견 처리, 예를 들어 특정 서비스를 찾고 이를 사용
+                    }
+                }
+            })
+        } else {
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(Manifest.permission.BLUETOOTH_CONNECT),
+                REQUEST_ENABLE_BT
+            )
+        }
     }
 
 
