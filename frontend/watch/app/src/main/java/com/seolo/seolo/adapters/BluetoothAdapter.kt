@@ -99,6 +99,7 @@ class BluetoothAdapter(private val context: Context) {
         if (checkBluetoothPermissions()) {
             val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
             context.registerReceiver(receiver, filter)
+            isReceiverRegistered = true // 리시버가 등록되었음을 표시
             bluetoothAdapter?.startDiscovery()
         } else {
             Log.e("BluetoothAdapter", "Missing BLUETOOTH_SCAN permission for startDiscovery()")
@@ -112,6 +113,7 @@ class BluetoothAdapter(private val context: Context) {
     fun startDiscoveryForSpecificDevices(
         deviceNameSubstring: String, onUpdate: (List<BluetoothDevice>) -> Unit
     ) {
+        val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
         context.registerReceiver(object : BroadcastReceiver() {
             override fun onReceive(context: Context, intent: Intent) {
                 val device: BluetoothDevice? =
@@ -124,13 +126,23 @@ class BluetoothAdapter(private val context: Context) {
                     }
                 }
             }
-        }, IntentFilter(BluetoothDevice.ACTION_FOUND))
+        }, filter)
+        isReceiverRegistered = true // 리시버가 등록되었음을 표시
         bluetoothAdapter?.startDiscovery()
     }
 
     // 필터링된 기기 목록 가져오기
     fun getFilteredDevices(): MutableList<BluetoothDevice> {
         return ArrayList(discoveredDevices.values)
+    }
+
+    // Bluetooth 스캔 중지
+    @SuppressLint("MissingPermission")
+    fun stopDiscovery() {
+        if (bluetoothAdapter?.isDiscovering == true) {
+            bluetoothAdapter?.cancelDiscovery()
+        }
+        cleanup()
     }
 
     private val receiver = object : BroadcastReceiver() {
@@ -159,10 +171,15 @@ class BluetoothAdapter(private val context: Context) {
             }
         }
     }
-    //  레지스터 리시버 정리
+
+    // 레지스터 리시버 정리
     fun cleanup() {
         if (isReceiverRegistered) {
-            context.unregisterReceiver(receiver)
+            try {
+                context.unregisterReceiver(receiver)
+            } catch (e: IllegalArgumentException) {
+                Log.e("BluetoothAdapter", "Receiver not registered: ${e.message}")
+            }
             isReceiverRegistered = false
         }
     }
