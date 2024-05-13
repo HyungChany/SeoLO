@@ -32,39 +32,51 @@ class _MyLotoState extends State<MyLoto> {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<MyTasksViewModel>(context);
-    return viewModel.myTasksModel == []
-        ? const Center(child: Text('작성된 LOTO가 없습니다.'))
-        : viewModel.isLoading
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : Column(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    child: viewModel.myTasksModel!.isEmpty
-                        ? const Center(
-                            child: Text('작업 내역이 없습니다.', style: TextStyle(fontSize: 20),),
-                          )
-                        : PageView.builder(
-                            itemCount: viewModel.myTasksModel!.length,
-                            controller: _pageController,
-                            onPageChanged: (int index) {
-                              setState(() {
-                                currentIndex = index;
-                              });
-                            },
-                            itemBuilder: (BuildContext context, int index) {
-                              return _buildListItem(index);
-                            },
-                          ),
-                  ),
-                ],
-              );
+    return (viewModel.isLoading)
+        ? const Center(
+            child: CircularProgressIndicator(),
+          )
+        : Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.4,
+                child: viewModel.myTasksModel!.isEmpty
+                    ? const Center(
+                        child: Text(
+                          '작업 내역이 없습니다.',
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      )
+                    : PageView.builder(
+                        itemCount: viewModel.myTasksModel!.length,
+                        controller: _pageController,
+                        onPageChanged: (int index) {
+                          setState(() {
+                            currentIndex = index;
+                          });
+                        },
+                        itemBuilder: (BuildContext context, int index) {
+                          return _buildListItem(index);
+                        },
+                      ),
+              ),
+            ],
+          );
   }
 
   Widget _buildListItem(int index) {
     final viewModel = Provider.of<MyTasksViewModel>(context);
+
+    String? startTimeString = viewModel.myTasksModel![index].startTime ?? '';
+    List<String> startParts = startTimeString.split('T');
+    String formattedStartTime = (startTimeString == '') ? '' :
+        '${startParts[0]} | ${startParts[1].substring(0, 5)}';
+
+    String? endTimeString = viewModel.myTasksModel![index].endTime ?? '';
+    List<String> endParts = endTimeString.split('T');
+    String formattedEndTime = (endTimeString == '') ? '' :
+        '${endParts[0]} | ${endParts[1].substring(0, 5)}';
+
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -92,8 +104,8 @@ class _MyLotoState extends State<MyLoto> {
               child: CommonCard(
                 facility: viewModel.myTasksModel![index].facilityName,
                 machine: viewModel.myTasksModel![index].machineName,
-                start: viewModel.myTasksModel![index].startTime ?? '시작 전',
-                end: viewModel.myTasksModel![index].endTime ?? '종료 전',
+                start: formattedStartTime,
+                end: formattedEndTime,
                 center: index == currentIndex ? true : false,
               ),
             ),

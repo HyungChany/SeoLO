@@ -23,7 +23,7 @@ class UserService {
         String? companyCode = await _storage.read(key: 'Company-Code');
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
-          options.headers['Company-Code'] = companyCode;
+          options.headers['Company-Code'] = 'SFY001KOR';
         }
         return handler.next(options);
       },

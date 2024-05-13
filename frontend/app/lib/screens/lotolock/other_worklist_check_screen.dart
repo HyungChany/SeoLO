@@ -27,13 +27,23 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<CoreCheckViewModel>(context);
+    String? startTimeString = viewModel.startTime ?? '';
+    List<String> startParts = startTimeString.split('T');
+    String formattedStartTime = (startTimeString == '') ? '' :
+    '${startParts[0]} | ${startParts[1].substring(0, 5)}';
+
+    String? endTimeString = viewModel.endTime ?? '';
+    List<String> endParts = endTimeString.split('T');
+    String formattedEndTime = (endTimeString == '') ? '' :
+    '${endParts[0]} | ${endParts[1].substring(0, 5)}';
+
     final List<String> workListContent = [
       viewModel.facilityName!,
       viewModel.machineName!,
       viewModel.machineCode!,
       '${viewModel.workerTeam} ${viewModel.workerName} ${viewModel.workerTitle}',
-      viewModel.startTime!,
-      viewModel.endTime!,
+      formattedStartTime,
+      formattedEndTime,
       viewModel.taskType!,
     ];
     return Scaffold(
@@ -97,7 +107,7 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: EdgeInsets.only(bottom: 20, left: 50, right: 50),
+              padding: const EdgeInsets.only(bottom: 20, left: 50, right: 50),
               child: CommonTextButton(
                 text: '확인',
                 onTap: () {
