@@ -226,6 +226,7 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
     };
     modifyData();
     onClose();
+    console.log(data);
     window.location.reload();
   };
   useEffect(() => {
