@@ -11,7 +11,7 @@ import Equipment from '@/pages/Machine.tsx';
 import Employee from '@/pages/Employee.tsx';
 import PrivateRoute from '@/components/routesetting/PrivateRoute.tsx';
 import CheckListPage from '@/pages/CheckListPage.tsx';
-import Report from '@/pages/Report.tsx';
+// import Report from '@/pages/Report.tsx';
 
 const Container = styled.div`
   display: flex;
@@ -61,10 +61,10 @@ const informationRoute = [
     path: '/checklist',
     element: With(<CheckListPage />),
   },
-  {
-    path: '/report',
-    element: With(<Report />),
-  },
+  // {
+  //   path: '/report',
+  //   element: With(<Report />),
+  // },
 ];
 const exampleRoute = { path: '/example', element: <Example /> };
 
