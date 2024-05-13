@@ -121,7 +121,7 @@ class BluetoothAdapter(private val context: Context) {
         bluetoothAdapter?.startDiscovery()
     }
 
-    fun getFilteredDevices(): List<BluetoothDevice> {
+    fun getFilteredDevices(): MutableList<BluetoothDevice> {
         return ArrayList(discoveredDevices.values)
     }
 

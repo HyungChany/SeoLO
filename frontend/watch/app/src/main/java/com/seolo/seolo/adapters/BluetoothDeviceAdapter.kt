@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class BluetoothDeviceAdapter(private var devices: List<BluetoothDevice>) :
+class BluetoothDeviceAdapter(private var devices: MutableList<BluetoothDevice>) :
     RecyclerView.Adapter<BluetoothDeviceAdapter.DeviceViewHolder>() {
 
     class DeviceViewHolder(view: View) : RecyclerView.ViewHolder(view) {
