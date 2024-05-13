@@ -10,6 +10,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -109,6 +111,13 @@ class BluetoothActivity : AppCompatActivity() {
                     } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                         // 기기가 연결이 끊겼을 때
                         Log.d("BluetoothActivity", "Device disconnected")
+                        if (status == BluetoothGatt.GATT_FAILURE || status == 133) {
+                            // 연결 실패 또는 특정 오류 코드에서 재시도
+                            Log.d("BluetoothActivity", "Attempting to reconnect...")
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                connectToDevice(device)  // 1초 후 재시도
+                            }, 1000)
+                        }
                     }
                 }
 
