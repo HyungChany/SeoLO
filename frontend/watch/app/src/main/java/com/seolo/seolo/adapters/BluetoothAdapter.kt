@@ -26,10 +26,13 @@ class BluetoothAdapter(private val context: Context) {
     val REQUEST_BLUETOOTH_SCAN = 100
     val REQUEST_ENABLE_BT = 101
 
+    // Bluetooth가 지원되는지 확인
     fun isBluetoothSupported(): Boolean = bluetoothAdapter != null
 
+    // Bluetooth가 활성화되어 있는지 확인
     fun isBluetoothEnabled(): Boolean = bluetoothAdapter?.isEnabled ?: false
 
+    // Bluetooth 활성화를 위한 인텐트 생성
     fun createEnableBluetoothIntent(): Intent? {
         return if (!isBluetoothEnabled()) {
             Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
@@ -38,6 +41,7 @@ class BluetoothAdapter(private val context: Context) {
         }
     }
 
+    // Bluetooth 검색 시작
     @RequiresApi(Build.VERSION_CODES.S)
     fun startDiscovery() {
         if (!checkBluetoothPermissions()) {
@@ -47,6 +51,7 @@ class BluetoothAdapter(private val context: Context) {
         }
     }
 
+    // Bluetooth 권한 확인
     @RequiresApi(Build.VERSION_CODES.S)
     fun checkBluetoothPermissions(): Boolean {
         val hasScanPermission = ContextCompat.checkSelfPermission(
@@ -60,6 +65,7 @@ class BluetoothAdapter(private val context: Context) {
         return hasScanPermission && hasConnectPermission
     }
 
+    // Bluetooth 권한 요청
     @RequiresApi(Build.VERSION_CODES.S)
     fun requestBluetoothPermissions() {
         val permissionsToRequest = mutableListOf<String>()
@@ -86,6 +92,7 @@ class BluetoothAdapter(private val context: Context) {
         }
     }
 
+    // Bluetooth 검색 시작 (권한이 있는 경우)
     @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.S)
     fun startDiscoveryWithPermissions() {
@@ -99,6 +106,7 @@ class BluetoothAdapter(private val context: Context) {
         }
     }
 
+    // 특정 기기 검색 시작
     @SuppressLint("MissingPermission")
     @RequiresApi(Build.VERSION_CODES.S)
     fun startDiscoveryForSpecificDevices(
@@ -120,6 +128,7 @@ class BluetoothAdapter(private val context: Context) {
         bluetoothAdapter?.startDiscovery()
     }
 
+    // 필터링된 기기 목록 가져오기
     fun getFilteredDevices(): MutableList<BluetoothDevice> {
         return ArrayList(discoveredDevices.values)
     }
@@ -150,7 +159,7 @@ class BluetoothAdapter(private val context: Context) {
             }
         }
     }
-
+    //  레지스터 리시버 정리
     fun cleanup() {
         if (isReceiverRegistered) {
             context.unregisterReceiver(receiver)

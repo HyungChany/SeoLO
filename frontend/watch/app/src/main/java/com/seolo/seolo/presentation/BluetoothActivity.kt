@@ -26,11 +26,12 @@ class BluetoothActivity : AppCompatActivity() {
     private lateinit var bluetoothAdapter: BluetoothAdapter
     private lateinit var deviceAdapter: BluetoothDeviceAdapter
     private var devices = mutableListOf<BluetoothDevice>()
+
     companion object {
         private const val REQUEST_BLUETOOTH_PERMISSION = 101
+        // Bluetooth 서비스와 캐릭터리스틱의 UUID 정의
         private val SERVICE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
         private val CHAR_UUID = UUID.fromString("00001102-0000-1000-8000-00805F9B34FB")
-
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -39,19 +40,24 @@ class BluetoothActivity : AppCompatActivity() {
         setContentView(R.layout.bluetooth_layout)
         supportActionBar?.hide()
 
+        // RecyclerView 초기화 및 설정
         recyclerView = findViewById(R.id.bluetoothDeviceRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        // RecyclerView 어댑터 설정
         deviceAdapter = BluetoothDeviceAdapter(devices) { device ->
             connectToDevice(device)
         }
         recyclerView.adapter = deviceAdapter
 
+        // RecyclerView에 스냅 헬퍼 추가
         val snapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(recyclerView)
 
+        // BluetoothAdapter 초기화
         bluetoothAdapter = BluetoothAdapter(this)
 
+        // Bluetooth 권한 확인 후 디바이스 검색 시작
         if (!bluetoothAdapter.checkBluetoothPermissions()) {
             bluetoothAdapter.requestBluetoothPermissions()
         } else {
@@ -60,7 +66,7 @@ class BluetoothActivity : AppCompatActivity() {
             }
         }
     }
-
+//    기기 연결 및 데이터 전송 로직을 포함한 함수
 //    private fun connectToDevice(device: BluetoothDevice) {
 //        if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
 //            val deviceName = device.name ?: "Unknown Device"
@@ -83,9 +89,11 @@ class BluetoothActivity : AppCompatActivity() {
                 override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
                     super.onConnectionStateChange(gatt, status, newState)
                     if (newState == BluetoothProfile.STATE_CONNECTED) {
+                        // 기기가 연결될 때
                         Log.d("BluetoothActivity", "Device connected: $deviceName")
                         gatt?.discoverServices() // 서비스 발견 시작
                     } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+                        // 기기가 연결이 끊겼을 때
                         Log.d("BluetoothActivity", "Device disconnected")
                     }
                 }
@@ -93,6 +101,7 @@ class BluetoothActivity : AppCompatActivity() {
                 override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
                     super.onServicesDiscovered(gatt, status)
                     if (status == BluetoothGatt.GATT_SUCCESS) {
+                        // 서비스가 발견되었을 때
                         // 적절한 서비스와 캐릭터리스틱 찾기
                         val service = gatt?.getService(SERVICE_UUID) // 해당 서비스의 UUID
                         val char = service?.getCharacteristic(CHAR_UUID) // 쓰기 위한 캐릭터리스틱의 UUID
@@ -106,6 +115,7 @@ class BluetoothActivity : AppCompatActivity() {
                 override fun onCharacteristicWrite(gatt: BluetoothGatt?, characteristic: android.bluetooth.BluetoothGattCharacteristic?, status: Int) {
                     super.onCharacteristicWrite(gatt, characteristic, status)
                     if (status == BluetoothGatt.GATT_SUCCESS) {
+                        // 캐릭터리스틱에 데이터가 성공적으로 쓰였을 때
                         Log.d("BluetoothActivity", "Data written to ${characteristic?.uuid}: ${characteristic?.value}")
                     }
                 }
@@ -116,8 +126,7 @@ class BluetoothActivity : AppCompatActivity() {
         }
     }
 
-
-
+    // Bluetooth 권한 확인 및 Bluetooth 활성화 함수
     @RequiresApi(Build.VERSION_CODES.S)
     private fun checkBluetoothPermissions() {
         if (bluetoothAdapter.isBluetoothEnabled()) {
@@ -129,6 +138,7 @@ class BluetoothActivity : AppCompatActivity() {
         }
     }
 
+    // Bluetooth 활성화 결과 처리 함수
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -137,6 +147,7 @@ class BluetoothActivity : AppCompatActivity() {
         }
     }
 
+    // Bluetooth 권한 요청 결과 처리 함수
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onRequestPermissionsResult(
         requestCode: Int, permissions: Array<out String>, grantResults: IntArray
@@ -149,6 +160,7 @@ class BluetoothActivity : AppCompatActivity() {
         }
     }
 
+    // 액티비티 종료 시 BluetoothAdapter 정리
     override fun onDestroy() {
         bluetoothAdapter.cleanup()
         super.onDestroy()
