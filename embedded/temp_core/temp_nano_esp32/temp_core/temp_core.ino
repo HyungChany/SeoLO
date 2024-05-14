@@ -105,10 +105,15 @@ public:
         machine = tokens[3].c_str();
         user = tokens[4].c_str();
 
-        Serial.println(companyCode.c_str());
-        Serial.println(code.c_str());
-        Serial.println(token.c_str());
-        Serial.println(machine.c_str());
+        Serial.print("BLE MESSAGE FROM CLIENT : ");
+        Serial.print(companyCode.c_str());
+        Serial.print(", ");
+        Serial.print(code.c_str());
+        Serial.print(", ");
+        Serial.print(token.c_str());
+        Serial.print(", ");
+        Serial.print(machine.c_str());
+        Serial.print(", ");
         Serial.println(user.c_str());
 
         // 회사 코드가 쓰인 시점에 메세지를 쓴! 클라이언트의 회사 코드를 확인하고, 다른 경우 연결을 해제합니다.
@@ -274,7 +279,12 @@ void checkCodeAvailable(String code, String token, String machine, String user)
     message += user;
 
     // message 전송
+    Serial.print("BLE SENT MESSAGE : ");
     Serial.println(message);
+    Serial.print("savedToken : ");
+    Serial.println(savedToken);
+    Serial.print("savedMachine : ");
+    Serial.println(savedMachine);
     stringCharacteristic->setValue(message.c_str());
 
     isCheckCodeAvailableRunning = false; // 함수가 실행을 마쳤음을 표시합니다.
