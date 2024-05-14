@@ -192,6 +192,7 @@ const Report = () => {
   );
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data: tableData });
+
   const handleCloseModal = () => {
     setReportModal(!reportModal);
   };

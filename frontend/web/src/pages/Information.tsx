@@ -107,6 +107,11 @@ const CompanyInformation = () => {
   const handleOptionChange = (option: OptionType): void => {
     setSelectedOption(option);
   };
+  useEffect(() => {
+    if (options.length > 0) {
+      setSelectedOption(options[0]);
+    }
+  }, [options]);
   return (
     <Background>
       {equipModal && selectedOption && (
