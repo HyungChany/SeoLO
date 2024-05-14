@@ -6,6 +6,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import InputBox from '../inputbox/InputBox.tsx';
 import { detailReport, modifyReport } from '@/apis/Report.ts';
 import StyledInputBox from '../inputbox/StyledInputBox.tsx';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface EquipmentData {
   reportId: number;
@@ -214,20 +215,26 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
     setAccidentPeople(e.target.value);
     handleAccidentPeopleCount(e);
   };
+  // react query로 변환
+  const queryClient = useQueryClient();
+  const { mutate: modifyMutate } = useMutation({
+    mutationFn: modifyReport,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['report'] });
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
   const handleModify = () => {
     const data = {
       isAccident: accidentBtn,
       accident_type: accidentText,
       victims_num: accidentPeopleCount,
+      index: contentIndex,
     };
-
-    const modifyData = async () => {
-      await modifyReport(data, contentIndex);
-    };
-    modifyData();
+    modifyMutate(data);
     onClose();
-    console.log(data);
-    // window.location.reload();
   };
   useEffect(() => {
     if (modifyModal && reportData) {
