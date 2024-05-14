@@ -52,34 +52,43 @@ public class LOCKED implements CodeState {
         */
         CoreRequest coreRequest = context.getCoreRequest();
         CCodePrincipal cCodePrincipal = context.getCCodePrincipal();
+
         AppUser worker = dbUserDetailService.loadUserById(cCodePrincipal.getId());
         MachineDto machine = machineService.getMachineByMachineId(coreRequest.getMachineId());
 
         // 1
         TaskHistoryDto currentTask = taskHistoryService.getCurrentTaskHistoryByMachineIdAndUserId(coreRequest.getMachineId(), cCodePrincipal.getId());
+
         // 2
         if (currentTask.getTaskCode() != CODE.ISSUED) {
             throw new CommonException(CoreErrorCode.IS_RELLY_SAME_LOCKER);
         }
+
         // 3
-        taskHistoryService.updateTaskCode(currentTask.getId(), CODE.LOCKED);
-        taskHistoryService.updateTaskStartTimeNow(currentTask.getId(), LocalDateTime.now());
+        updateTaskState(currentTask);
 
         // 알람
-        notificationService.sendAsync(
-                NotificationSendRequest.builder()
-                .batteryInfo(coreRequest.getBatteryInfo())
-                .workerName(worker.getEmployee().getEmployeeName())
-                .facilityName(machine.getFacility().getFacilityName())
-                .machineNumber(machine.getNumber())
-                .actType("잠금")
-                .build()
-        );
-
+        sendNotification(coreRequest, worker, machine);
 
         return CoreResponse.builder() // 3
                 .httpStatus(HttpStatus.OK)
                 .message("잠금동기화 성공")
                 .build();
+    }
+
+    private void updateTaskState(TaskHistoryDto currentTask) {
+        taskHistoryService.updateTaskCode(currentTask.getId(), CODE.LOCKED);
+        taskHistoryService.updateTaskStartTimeNow(currentTask.getId(), LocalDateTime.now());
+    }
+
+    private void sendNotification(CoreRequest coreRequest, AppUser worker, MachineDto machine) {
+        notificationService.sendAsync(
+                NotificationSendRequest.builder()
+                        .batteryInfo(coreRequest.getBatteryInfo())
+                        .workerName(worker.getEmployee().getEmployeeName())
+                        .facilityName(machine.getFacility().getFacilityName())
+                        .machineNumber(machine.getNumber())
+                        .actType("잠금")
+                        .build());
     }
 }
