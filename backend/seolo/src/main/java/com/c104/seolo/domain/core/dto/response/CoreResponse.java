@@ -14,17 +14,17 @@ import org.springframework.http.HttpStatus;
 @Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CoreResponse {
-    private CODE nextCode;
-    private TokenDto coreToken;
-    private TaskHistoryDto taskHistory;
-    private CheckMoreResponse checkMoreResponse;
-    private HttpStatus httpStatus;
-    private String message;
+    private final CODE nextCode;
+    private final String tokenValue;
+    private final TaskHistoryDto taskHistory;
+    private final CheckMoreResponse checkMoreResponse;
+    private final HttpStatus httpStatus;
+    private final String message;
 
     @Builder
-    public CoreResponse(CODE nextCode, TokenDto coreToken, TaskHistoryDto taskHistory, CheckMoreResponse checkMoreResponse, HttpStatus httpStatus, String message) {
+    public CoreResponse(CODE nextCode, String tokenValue, TaskHistoryDto taskHistory, CheckMoreResponse checkMoreResponse, HttpStatus httpStatus, String message) {
         this.nextCode = nextCode;
-        this.coreToken = coreToken;
+        this.tokenValue = tokenValue;
         this.taskHistory = taskHistory;
         this.checkMoreResponse = checkMoreResponse;
         this.httpStatus = httpStatus;

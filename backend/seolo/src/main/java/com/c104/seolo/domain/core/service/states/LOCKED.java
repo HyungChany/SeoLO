@@ -1,14 +1,23 @@
 package com.c104.seolo.domain.core.service.states;
 
+import com.c104.seolo.domain.alarm.dto.request.NotificationSendRequest;
+import com.c104.seolo.domain.alarm.service.NotificationService;
 import com.c104.seolo.domain.core.dto.request.CoreRequest;
 import com.c104.seolo.domain.core.dto.response.CoreResponse;
 import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.core.exception.CoreErrorCode;
 import com.c104.seolo.domain.core.service.CodeState;
 import com.c104.seolo.domain.core.service.Context;
+import com.c104.seolo.domain.core.service.CoreService;
+import com.c104.seolo.domain.machine.dto.MachineDto;
+import com.c104.seolo.domain.machine.service.MachineService;
+import com.c104.seolo.domain.machine.service.impl.MachineServiceImpl;
 import com.c104.seolo.domain.task.dto.TaskHistoryDto;
 import com.c104.seolo.domain.task.service.TaskHistoryService;
+import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.exception.CommonException;
+import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
+import com.c104.seolo.global.security.service.DBUserDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,7 +31,11 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class LOCKED implements CodeState {
     private final TaskHistoryService taskHistoryService;
-    
+    private final NotificationService notificationService;
+    private final DBUserDetailService dbUserDetailService;
+    private final MachineService machineService;
+    private final MachineServiceImpl machineServiceImpl;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public CoreResponse handle(Context context) {
@@ -37,22 +50,45 @@ public class LOCKED implements CodeState {
             4. 필요한 처리를 한다. (로그 저장 등)
             5. 200OK 응답
         */
-
         CoreRequest coreRequest = context.getCoreRequest();
+        CCodePrincipal cCodePrincipal = context.getCCodePrincipal();
+
+        AppUser worker = dbUserDetailService.loadUserById(cCodePrincipal.getId());
+        MachineDto machine = machineService.getMachineByMachineId(coreRequest.getMachineId());
+
         // 1
-        TaskHistoryDto currentTask = taskHistoryService.getCurrentTaskHistoryByMachineIdAndUserId(coreRequest.getMachineId(), context.getCCodePrincipal().getId());
+        TaskHistoryDto currentTask = taskHistoryService.getCurrentTaskHistoryByMachineIdAndUserId(coreRequest.getMachineId(), cCodePrincipal.getId());
+
         // 2
         if (currentTask.getTaskCode() != CODE.ISSUED) {
             throw new CommonException(CoreErrorCode.IS_RELLY_SAME_LOCKER);
         }
+
         // 3
-        taskHistoryService.updateTaskCode(currentTask.getId(), CODE.LOCKED);
-        taskHistoryService.updateTaskStartTimeNow(currentTask.getId(), LocalDateTime.now());
-        log.info("nowtime: {}", LocalDateTime.now());
+        updateTaskState(currentTask);
+
+        // 알람
+        sendNotification(coreRequest, worker, machine);
 
         return CoreResponse.builder() // 3
                 .httpStatus(HttpStatus.OK)
                 .message("잠금동기화 성공")
                 .build();
+    }
+
+    private void updateTaskState(TaskHistoryDto currentTask) {
+        taskHistoryService.updateTaskCode(currentTask.getId(), CODE.LOCKED);
+        taskHistoryService.updateTaskStartTimeNow(currentTask.getId(), LocalDateTime.now());
+    }
+
+    private void sendNotification(CoreRequest coreRequest, AppUser worker, MachineDto machine) {
+        notificationService.sendAsync(
+                NotificationSendRequest.builder()
+                        .batteryInfo(coreRequest.getBatteryInfo())
+                        .workerName(worker.getEmployee().getEmployeeName())
+                        .facilityName(machine.getFacility().getFacilityName())
+                        .machineNumber(machine.getNumber())
+                        .actType("잠금")
+                        .build());
     }
 }

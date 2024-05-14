@@ -1,5 +1,7 @@
 package com.c104.seolo.domain.core.service.states;
 
+import com.c104.seolo.domain.alarm.dto.request.NotificationSendRequest;
+import com.c104.seolo.domain.alarm.service.NotificationService;
 import com.c104.seolo.domain.core.dto.request.CoreRequest;
 import com.c104.seolo.domain.core.dto.response.CheckMoreResponse;
 import com.c104.seolo.domain.core.dto.response.CoreResponse;
@@ -32,6 +34,7 @@ public class CHECK implements CodeState {
     private final LockerService lockerService;
     private final DBUserDetailService dbUserDetailService;
     private final MachineService machineService;
+    private final NotificationService notificationService;
 
     @Override
     public CoreResponse handle(Context context) {
@@ -45,26 +48,30 @@ public class CHECK implements CodeState {
         */
         CoreRequest coreRequest = context.getCoreRequest();
         CCodePrincipal cCodePrincipal = context.getCCodePrincipal();
+
         // 1
         TaskHistoryDto latestTask = taskHistoryService.getLatestTaskHistoryEntityByMachineId(coreRequest.getMachineId());
+        MachineDto repairingMachine = machineService.getMachineByMachineId(coreRequest.getMachineId());
 
         // 2
         Locker locker = lockerService.getLockerByUid(coreRequest.getLockerUid());
         lockerAccessLogService.recordAccessLog(cCodePrincipal, locker, CODE.CHECK);
 
+        // 알람
+        AppUser checker = dbUserDetailService.loadUserById(cCodePrincipal.getId());
+        AppUser worker = dbUserDetailService.loadUserById(latestTask.getUserId());
+        sendNotification(coreRequest, checker, repairingMachine);
+
         // 3
         return CoreResponse.builder()
                 .nextCode(CODE.INIT)
                 .taskHistory(latestTask)
-                .checkMoreResponse(getMoreInfoForCHECK(latestTask, coreRequest))
+                .checkMoreResponse(getMoreInfoForCHECK(worker, repairingMachine))
                 .httpStatus(HttpStatus.OK)
                 .build();
     }
 
-    private CheckMoreResponse getMoreInfoForCHECK(TaskHistoryDto taskHistoryDto, CoreRequest coreRequest) {
-        AppUser worker = dbUserDetailService.loadUserById(taskHistoryDto.getUserId());
-        MachineDto machine = machineService.getMachineByMachineId(coreRequest.getMachineId());
-
+    private CheckMoreResponse getMoreInfoForCHECK(AppUser worker, MachineDto machine) {
         return CheckMoreResponse.builder()
                 .workerName(worker.getEmployee().getEmployeeName())
                 .workerTeam(worker.getUserTeam())
@@ -73,5 +80,16 @@ public class CHECK implements CodeState {
                 .machineName(machine.getName())
                 .machineNumber(machine.getNumber())
                 .build();
+    }
+
+    private void sendNotification(CoreRequest coreRequest, AppUser worker, MachineDto machine) {
+        notificationService.sendAsync(
+                NotificationSendRequest.builder()
+                        .batteryInfo(coreRequest.getBatteryInfo())
+                        .workerName(worker.getEmployee().getEmployeeName())
+                        .facilityName(machine.getFacility().getFacilityName())
+                        .machineNumber(machine.getNumber())
+                        .actType("작업확인")
+                        .build());
     }
 }

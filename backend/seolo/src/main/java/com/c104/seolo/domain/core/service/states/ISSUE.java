@@ -51,7 +51,7 @@ public class ISSUE implements CodeState {
         // 3
         return CoreResponse.builder()
                 .nextCode(CODE.LOCK)
-                .coreToken(newToken)
+                .tokenValue(newToken.getTokenValue())
                 .httpStatus(HttpStatus.OK)
                 .build();
     }

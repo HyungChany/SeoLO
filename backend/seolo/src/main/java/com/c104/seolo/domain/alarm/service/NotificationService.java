@@ -53,6 +53,7 @@ public class NotificationService {
         });
         log.info("비동기 메서드 종료 (스레드: {})", Thread.currentThread().getName());
     }
+
     // 하트비트 전송을 위한 메소드 추가
     @Scheduled(fixedRate = HEARTBEAT_INTERVAL)
     public void sendHeartbeat() {
