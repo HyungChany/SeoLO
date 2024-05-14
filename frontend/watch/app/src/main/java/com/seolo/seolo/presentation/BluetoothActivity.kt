@@ -66,7 +66,7 @@ class BluetoothActivity : AppCompatActivity() {
         if (!bluetoothAdapter.checkBluetoothPermissions()) {
             bluetoothAdapter.requestBluetoothPermissions()
         } else {
-            bluetoothAdapter.startDiscoveryForSpecificDevices("") { newDevices ->
+            bluetoothAdapter.startDiscoveryForSpecificDevices("S") { newDevices ->
                 deviceAdapter.updateDevices(newDevices)
             }
         }

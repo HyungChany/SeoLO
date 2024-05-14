@@ -97,9 +97,11 @@ class BluetoothAdapter(private val context: Context) {
     @RequiresApi(Build.VERSION_CODES.S)
     fun startDiscoveryWithPermissions() {
         if (checkBluetoothPermissions()) {
-            val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
-            context.registerReceiver(receiver, filter)
-            isReceiverRegistered = true // 리시버가 등록되었음을 표시
+            if (!isReceiverRegistered) {
+                val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+                context.registerReceiver(receiver, filter)
+                isReceiverRegistered = true
+            }
             bluetoothAdapter?.startDiscovery()
         } else {
             Log.e("BluetoothAdapter", "Missing BLUETOOTH_SCAN permission for startDiscovery()")
