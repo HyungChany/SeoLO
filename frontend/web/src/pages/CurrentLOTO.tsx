@@ -54,6 +54,7 @@ const ContentBox = styled.div<ContentBoxProps>`
   box-sizing: border-box;
   background-color: ${(props) => (props.battery < 40 ? Color.RED100 : null)};
   border-bottom: 2px solid ${Color.GRAY200};
+  /* color: ${(props) => (props.battery < 40 ? Color.WHITE : Color.BLACK)}; */
 `;
 const CurrentLOTO = () => {
   const [lockers, setLockers] = useState<LockTypes[]>([]);

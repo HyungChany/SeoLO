@@ -56,7 +56,7 @@ export const Leaflet = ({
   });
 
   const customIcon = L.icon({
-    iconUrl: '@/../assets/icons/Position.png',
+    iconUrl: '@/../assets/images/Position.png',
     iconSize: [30, 42],
     iconAnchor: [15, 42],
   });

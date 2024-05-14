@@ -3,6 +3,7 @@ interface PatchData {
   isAccident: boolean;
   accident_type: string;
   victims_num: number;
+  index: number;
 }
 export const totalReport = async () => {
   try {
@@ -36,11 +37,16 @@ export const detailReport = async (id: number) => {
   }
 };
 
-export const modifyReport = async (data: PatchData, index: number) => {
+export const modifyReport = async (data: PatchData) => {
   try {
     const accessToken = sessionStorage.getItem('accessToken');
     const companyCode = sessionStorage.getItem('companyCode');
-    const response = await api.patch(`/reports/${index}`, data, {
+    const patchData = {
+      isAccident: data.isAccident,
+      accident_type: data.accident_type,
+      victims_num: data.victims_num,
+    };
+    const response = await api.patch(`/reports/${data.index}`, patchData, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,

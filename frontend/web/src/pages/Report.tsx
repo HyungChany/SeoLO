@@ -14,6 +14,7 @@ import 'dayjs/locale/ko';
 import { Button } from '@/components/button/Button.tsx';
 import { Column, Row } from 'react-table';
 import { useTable } from 'react-table';
+import { useQuery } from '@tanstack/react-query';
 
 dayjs.locale('ko');
 // interface ButtonProps {
@@ -79,6 +80,7 @@ const MainBox = styled.div`
   padding: 2rem 1rem 0 1rem;
   flex-direction: column;
   gap: 2rem;
+  overflow-y: auto;
 `;
 
 const Overlay = styled.div`
@@ -192,51 +194,55 @@ const Report = () => {
   );
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data: tableData });
+
+  // react query로 변경
+
+  const formatDate = (dateString: string) => {
+    return dateString.replace('T', ' ').slice(0, 16); // 'T'를 공백으로 대체하고 초 이후를 잘라냄
+  };
+
+  const [transformedCsvData, setTransformedCsvData] = useState<
+    CsvEquipmentData[]
+  >([]);
+
+  const { data: totalData } = useQuery({
+    queryKey: ['report'],
+    queryFn: () => totalReport(),
+  });
+
+  useEffect(() => {
+    if (totalData) {
+      const formattedData = totalData.map((item: EquipmentData) => ({
+        ...item,
+        taskStartDateTime:
+          item.taskStartDateTime === null
+            ? '-'
+            : formatDate(item.taskStartDateTime),
+        taskEndDateTime:
+          item.taskEndDateTime === null
+            ? '-'
+            : formatDate(item.taskEndDateTime),
+        accidentType: item.accidentType === null ? '-' : item.accidentType,
+        victimsNum: item.victimsNum === null ? '-' : item.victimsNum,
+        accident: item.accident === false ? 'N' : 'T',
+      }));
+      setReportData(formattedData);
+    }
+  }, [totalData]);
   const handleCloseModal = () => {
     setReportModal(!reportModal);
   };
 
   const handleReport = (index: number) => {
-    console.log('넘버', index);
     setReportModal(true);
     setDetailReport(index);
   };
-  const formatDate = (dateString: string) => {
-    return dateString.replace('T', ' ').slice(0, 16); // 'T'를 공백으로 대체하고 초 이후를 잘라냄
-  };
-  const [transformedCsvData, setTransformedCsvData] = useState<
-    CsvEquipmentData[]
-  >([]);
 
   // csvData가 변경될 때마다 자동으로 데이터를 변환
   useEffect(() => {
     setTransformedCsvData(transformDataForCsv(csvData));
   }, [csvData]);
-  useEffect(() => {
-    const report = async () => {
-      try {
-        const data = await totalReport();
-        const formattedData = data.map((item: EquipmentData) => ({
-          ...item,
-          taskStartDateTime:
-            item.taskStartDateTime === null
-              ? '-'
-              : formatDate(item.taskStartDateTime),
-          taskEndDateTime:
-            item.taskEndDateTime === null
-              ? '-'
-              : formatDate(item.taskEndDateTime),
-          accidentType: item.accidentType === null ? '-' : item.accidentType,
-          victimsNum: item.victimsNum === null ? '-' : item.victimsNum,
-          accident: item.accident === false ? 'N' : 'T',
-        }));
-        setReportData(formattedData);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    report();
-  }, []);
+
   const customFormats = {
     normalDate: 'YYYY년 MM월 DD일',
   };
@@ -346,10 +352,11 @@ const Report = () => {
       >
         <thead>
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+            <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
               {headerGroup.headers.map((column) => (
                 <th
                   {...column.getHeaderProps()}
+                  key={column.id}
                   style={{
                     borderBottom: '2px solid black',
                     color: Color.BLACK,
@@ -368,11 +375,13 @@ const Report = () => {
             return (
               <tr
                 {...row.getRowProps()}
+                key={row.id}
                 onClick={() => handleReport(row.original.reportId)}
               >
                 {row.cells.map((cell) => (
                   <td
                     {...cell.getCellProps()}
+                    key={cell.column.id}
                     style={{
                       padding: '1rem',
                       textAlign: 'center',

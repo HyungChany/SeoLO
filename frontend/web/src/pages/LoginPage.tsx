@@ -93,6 +93,7 @@ const LoginPage = () => {
   const [loginId, setLoginId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const navigate = useNavigate();
+
   const handleLogin = async () => {
     try {
       const data = {
@@ -111,7 +112,11 @@ const LoginPage = () => {
       alert('로그인 실패');
     }
   };
-
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleLogin();
+    }
+  };
   const handleCompanyNumber = (e: ChangeEvent<HTMLInputElement>) => {
     setCompanyNumber(e.target.value);
   };
@@ -138,6 +143,7 @@ const LoginPage = () => {
                 value={companyNumber}
                 placeholder="회사번호"
                 onChange={handleCompanyNumber}
+                onKeyDown={handleKeyDown}
               />
             </InputContent>
             <InputContent>
@@ -148,6 +154,7 @@ const LoginPage = () => {
                 value={loginId}
                 placeholder="아이디"
                 onChange={handleLoginId}
+                onKeyDown={handleKeyDown}
               />
             </InputContent>
             <InputContent>
@@ -159,6 +166,7 @@ const LoginPage = () => {
                 placeholder="비밀번호"
                 onChange={handlePassword}
                 isPassword
+                onKeyDown={handleKeyDown}
               />
             </InputContent>
           </InputContainer>
