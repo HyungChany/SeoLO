@@ -17,7 +17,7 @@ public class NotificationService {
     // thread-safe 한 컬렉션 객체로 sse emitter 객체를 관리
     private final Map<String, SseEmitter> emitterMap = new ConcurrentHashMap<>();
     private static final long TIMEOUT = 10*60*1000;
-    private static final long HEARTBEAT_INTERVAL = 10 * 1000L; // 30초마다 하트비트 전송
+    private static final long HEARTBEAT_INTERVAL = 20 * 1000L;
 
     public SseEmitter subscribe(Long userId) {
         log.info("SSE 구독 요청 시작: {} (스레드: {})", userId, Thread.currentThread().getName());
