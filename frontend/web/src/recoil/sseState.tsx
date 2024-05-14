@@ -6,7 +6,7 @@ interface NotificationEvent {
     facility_name: string;
     machine_number: string;
     locker_uid: string;
-    act_type: string;
+    act_type: string; 
   }
   
 export const notificationEventsState = atom<NotificationEvent[]>({
