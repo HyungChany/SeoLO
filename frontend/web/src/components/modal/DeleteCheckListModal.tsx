@@ -1,6 +1,7 @@
 import { deleteCheckList } from '@/apis/CheckList.ts';
 import { Button } from '@/components/button/Button.tsx';
 import * as Color from '@/config/color/Color.ts';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from 'styled-components';
 interface DeleteCheckListModalProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -48,17 +49,20 @@ const DeleteCheckListModal = ({
   checklistId,
   onClose,
 }: DeleteCheckListModalProps) => {
+  const queryClient = useQueryClient();
+  const { mutate: deleteMutation } = useMutation({
+    mutationFn: deleteCheckList,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['checkList'] });
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
   const handleDelete = async () => {
-    try {
-      await deleteCheckList(checklistId);
-      onClose();
-      window.location.reload();
-    } catch (error) {
-      console.error('삭제 실패:', error);
-      alert('삭제 실패');
-    }
+    deleteMutation(checklistId);
+    onClose();
   };
-
   return (
     <Box onClick={onClick}>
       <Text>정말로 삭제하시겠습니까?</Text>

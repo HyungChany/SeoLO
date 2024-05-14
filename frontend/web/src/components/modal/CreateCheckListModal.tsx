@@ -4,6 +4,7 @@ import * as Color from '@/config/color/Color.ts';
 import InputBox from '../inputbox/InputBox.tsx';
 import { ChangeEvent, useState } from 'react';
 import { postCheckList } from '@/apis/CheckList.ts';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface CheckListModalProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
@@ -45,20 +46,24 @@ const Input = styled.div`
 `;
 const CreateCheckListModal = ({ onClose, onClick }: CheckListModalProps) => {
   const [checklist, setChecklist] = useState<string>('');
+  const queryClient = useQueryClient();
   const handleChecklist = (e: ChangeEvent<HTMLInputElement>) => {
     setChecklist(e.target.value);
   };
 
+  const { mutate: createMutation } = useMutation({
+    mutationFn: postCheckList,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['checkList'] });
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
   const handleSubmit = () => {
-    if (checklist) {
-      const fetchData = async () => {
-        const checklistData = { context: checklist };
-        await postCheckList(checklistData);
-        onClose();
-        window.location.reload();
-      };
-      fetchData();
-    }
+    const checklistData = { context: checklist };
+    createMutation(checklistData);
+    onClose();
   };
   return (
     <Box onClick={onClick}>

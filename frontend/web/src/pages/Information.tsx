@@ -7,11 +7,11 @@ import Equipment from '/assets/images/equipment.png';
 import People from '/assets/images/people.png';
 import Dropdown from '@/components/dropdown/DropDown.tsx';
 import EquipmentModal from '@/components/modal/MachineModal.tsx';
-import Employee from '@/components/modal/EmployeeModal.tsx';
 import React, { useEffect, useState } from 'react';
 import { Facilities } from '@/apis/Facilities.ts';
 import { MachineList } from '@/apis/Machine.ts';
 import { RegistratedEmployee } from '@/apis/Employee.ts';
+import EmployeeModal from '@/components/modal/EmployeeModal.tsx';
 
 interface OptionType {
   value: number;
@@ -107,6 +107,11 @@ const CompanyInformation = () => {
   const handleOptionChange = (option: OptionType): void => {
     setSelectedOption(option);
   };
+  useEffect(() => {
+    if (options.length > 0) {
+      setSelectedOption(options[0]);
+    }
+  }, [options]);
   return (
     <Background>
       {equipModal && selectedOption && (
@@ -119,7 +124,7 @@ const CompanyInformation = () => {
       )}
       {employeeModal && (
         <Overlay onClick={handleCloseModal}>
-          <Employee onClick={handleModalClick} />
+          <EmployeeModal onClick={handleModalClick} />
         </Overlay>
       )}
       <Card
