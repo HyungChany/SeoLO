@@ -5,6 +5,22 @@ interface ListType {
 }
 
 // 체크리스트 조회
+export const getBasicCheckList = async () => {
+  try {
+    const accessToken = sessionStorage.getItem('accessToken');
+    const companyCode = sessionStorage.getItem('companyCode');
+    const response = await api.get('/checklists', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Company-Code': companyCode,
+      },
+    });
+    return response.data.basic_checklists;
+  } catch (error) {
+    console.error('체크리스트 불러오기 실패: ', error);
+    throw error;
+  }
+};
 export const getCheckList = async () => {
   try {
     const accessToken = sessionStorage.getItem('accessToken');
@@ -15,7 +31,7 @@ export const getCheckList = async () => {
         'Company-Code': companyCode,
       },
     });
-    return response.data;
+    return response.data.checklists;
   } catch (error) {
     console.error('체크리스트 불러오기 실패: ', error);
     throw error;
