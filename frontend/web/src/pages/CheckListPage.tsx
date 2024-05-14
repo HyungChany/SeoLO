@@ -203,7 +203,7 @@ const CheckListPage = () => {
         <Box>
           <>
             {basicCheckListData?.map((list: CheckListType) => (
-              <ListBox onClick={() => handleCheckListClick(list)}>
+              <ListBox key={list.id} onClick={() => handleCheckListClick(list)}>
                 <ContentBox>
                   <ContentWrapper>
                     <Content>{list.context}</Content>

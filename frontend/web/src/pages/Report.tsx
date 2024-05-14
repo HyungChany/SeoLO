@@ -348,10 +348,11 @@ const Report = () => {
       >
         <thead>
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+            <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
               {headerGroup.headers.map((column) => (
                 <th
                   {...column.getHeaderProps()}
+                  key={column.id}
                   style={{
                     borderBottom: '2px solid black',
                     color: Color.BLACK,
@@ -370,11 +371,13 @@ const Report = () => {
             return (
               <tr
                 {...row.getRowProps()}
+                key={row.id}
                 onClick={() => handleReport(row.original.reportId)}
               >
                 {row.cells.map((cell) => (
                   <td
                     {...cell.getCellProps()}
+                    key={cell.column.id}
                     style={{
                       padding: '1rem',
                       textAlign: 'center',
