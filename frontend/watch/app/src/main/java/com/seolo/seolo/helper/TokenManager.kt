@@ -60,6 +60,16 @@ object TokenManager {
         return getPreferences(context).getString(PREF_USERNAME, null)
     }
 
+
+    // 사용자 아이디 설정 메서드
+    fun setUserId(context: Context, username: String) {
+        getPreferences(context).edit().putString(PREF_USERNAME, username).apply()
+    }
+
+    // 사용자 아이디 가져오는 메서드
+    fun getUserId(context: Context): String? {
+        return getPreferences(context).getString(PREF_USERNAME, null)
+    }
     // 저장된 토큰 모두 삭제하는 메서드
     fun clearTokens(context: Context) {
         getPreferences(context).edit().clear().apply()
