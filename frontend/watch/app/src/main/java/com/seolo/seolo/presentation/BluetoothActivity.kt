@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
 import android.bluetooth.BluetoothGattCharacteristic
+import android.bluetooth.BluetoothGattDescriptor
 import android.bluetooth.BluetoothProfile
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -68,7 +69,7 @@ class BluetoothActivity : AppCompatActivity() {
         if (!bluetoothAdapter.checkBluetoothPermissions()) {
             bluetoothAdapter.requestBluetoothPermissions()
         } else {
-            bluetoothAdapter.startDiscoveryForSpecificDevices("") { newDevices ->
+            bluetoothAdapter.startDiscoveryForSpecificDevices("SEOLO LOCK") { newDevices ->
                 deviceAdapter.updateDevices(newDevices)
             }
         }
@@ -131,8 +132,8 @@ class BluetoothActivity : AppCompatActivity() {
                     gatt?.close()
                     bluetoothGatt = null
                     Handler(Looper.getMainLooper()).postDelayed({
-                        gatt?.device?.let { connectToDevice(it) }  // 10초 후 재시도
-                    }, 10000)
+                        gatt?.device?.let { connectToDevice(it) }  // 3초 후 재시도
+                    }, 3000)
                 }
             }
         }
@@ -149,9 +150,23 @@ class BluetoothActivity : AppCompatActivity() {
                 if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     // 권한이 있을 때
                     // 데이터 쓰기 포맷(회사코드,명령어,토큰,머신ID,유저ID)
-                    // 데이터 읽기 포맷(명령어,자물쇠uid.머신id,배터리잔량,유저id)
-                    char?.setValue("SFY001KOR,INIT,통신보안,${TokenManager.getAccessToken(this@BluetoothActivity)},1234,4567".toByteArray(StandardCharsets.UTF_8))
+                    val token = TokenManager.getAccessToken(this@BluetoothActivity) // 실제 토큰 값 가져오기
+                    char?.setValue("SFY001KOR,WHITE,$token,MachineID,UserID".toByteArray(StandardCharsets.UTF_8))
                     gatt?.writeCharacteristic(char)
+
+                    // 특성 변경 알림 등록
+                    gatt?.setCharacteristicNotification(char, true)
+
+                    // CCCD(UUID 0x2902) 설정
+                    val descriptor = char?.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"))
+                    descriptor?.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+                    gatt?.writeDescriptor(descriptor)
+
+                    // 1초 후 onCharacteristicChanged 메서드 호출
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        onCharacteristicChanged(gatt, char)
+                    }, 1000)
+
                 } else {
                     // 권한이 없을 때 사용자에게 권한 요청
                     requestPermissions(
@@ -166,8 +181,16 @@ class BluetoothActivity : AppCompatActivity() {
             super.onCharacteristicWrite(gatt, characteristic, status)
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 // 캐릭터리스틱에 데이터가 성공적으로 쓰였을 때
-                Log.d("BluetoothActivity", "Data written to ${characteristic?.uuid}: ${characteristic?.value?.toString(StandardCharsets.UTF_8)}")
+                Log.d("BluetoothActivity1", "${characteristic?.value?.toString(StandardCharsets.UTF_8)}")
             }
+        }
+
+        override fun onCharacteristicChanged(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?) {
+            super.onCharacteristicChanged(gatt, characteristic)
+            // 아두이노에서 보내온 데이터 수신
+            // 데이터 읽기 포맷(명령어,자물쇠uid.머신id,배터리잔량,유저id)
+            val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
+            Log.d("BluetoothActivity2", "Data received: $receivedData")
         }
     }
 
