@@ -95,7 +95,7 @@ class BluetoothPickActivity : AppCompatActivity() {
         // Bluetooth 연결 권한 확인
         if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
             val deviceName = device.name ?: "Unknown Device"
-            Toast.makeText(this@BluetoothPickActivity, "$deviceName 와 연결중입니다.", Toast.LENGTH_SHORT)
+            Toast.makeText(this@BluetoothPickActivity, "$deviceName 와 연결중입니다.", Toast.LENGTH_LONG)
                 .show()
 
             // Bluetooth GATT로 기기 연결 시작 (BluetoothDevice.TRANSPORT_LE 사용)
@@ -237,7 +237,18 @@ class BluetoothPickActivity : AppCompatActivity() {
                         "수신 데이터 가공",
                         "Session updated with received data. [statusCode: $statusCode, lotoUid: $lotoUid, machineId: $machineId, batteryInfo: $batteryInfo, userId: $userId]"
                     )
-
+                    // 자물쇠 상태 확인 명령어가 CHECK일 때(자물쇠가 잠겨있는데 그냥 일단 찍어본 경우)
+                    if (statusCode == "CHECK") {
+                        Toast.makeText(
+                            this@BluetoothPickActivity,
+                            "내가 잠근 자물쇠가 아닙니다. 잠금을 해제할 수 없습니다. \n 배터리 잔량: $batteryInfo",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else if (statusCode == "WHITE") {
+                        val intent =
+                            Intent(this@BluetoothPickActivity, ChecklistActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
             }
         }
