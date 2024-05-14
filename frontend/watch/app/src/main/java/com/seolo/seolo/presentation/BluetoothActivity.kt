@@ -147,7 +147,8 @@ class BluetoothActivity : AppCompatActivity() {
                 val char = service?.getCharacteristic(CHAR_UUID) // 쓰기 위한 캐릭터리스틱의 UUID
 
                 if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
-                    // 권한이 있을 때`
+                    // 권한이 있을 때
+                    // 데이터 쓰기 포맷(회사코드,명령어,토큰,머신ID,유저ID)
                     char?.setValue("SFY001KOR,INIT,통신보안,${TokenManager.getAccessToken(this@BluetoothActivity)},1234,4567".toByteArray(StandardCharsets.UTF_8))
                     gatt?.writeCharacteristic(char)
                 } else {
