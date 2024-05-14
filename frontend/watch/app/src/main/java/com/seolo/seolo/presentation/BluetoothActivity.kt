@@ -50,7 +50,7 @@ class BluetoothActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         // RecyclerView 초기화 및 설정
-        recyclerView = findViewById(R.id.bluetoothListTitle)
+        recyclerView = findViewById(R.id.bluetoothListItem)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         // RecyclerView 어댑터 설정
