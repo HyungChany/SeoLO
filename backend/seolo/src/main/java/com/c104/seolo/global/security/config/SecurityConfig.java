@@ -1,9 +1,5 @@
 package com.c104.seolo.global.security.config;
 
-import com.c104.seolo.global.security.filter.DaoCompanyCodeAuthenticationFilter;
-import com.c104.seolo.global.security.handler.SeoloLoginFailureHandler;
-import com.c104.seolo.global.security.handler.SeoloLoginSuccessHandler;
-import com.c104.seolo.global.security.handler.SeoloLogoutSuccessHandler;
 import com.c104.seolo.global.security.jwt.filter.JwtValidationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -138,10 +134,10 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfig() {
         return request -> {
             CorsConfiguration config = new CorsConfiguration();
+            config.setAllowedOrigins(Arrays.asList("http://localhost:5173","https://k10c104.p.ssafy.io","http://192.168.100.111:5173"));
+            config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
             config.setAllowedHeaders(Collections.singletonList("*"));
-            config.setAllowedMethods(Collections.singletonList("*"));
-            config.setAllowedOrigins(Collections.singletonList("*")); // 모든 Origin 허용
-            config.setAllowCredentials(false); // 모든 도메인을 허용할 때는 false로 설정해야 함
+            config.setAllowCredentials(true);
             return config;
         };
     }
