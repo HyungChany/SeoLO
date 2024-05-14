@@ -5,7 +5,6 @@ import 'package:app/widgets/button/common_text_button.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:app/widgets/inputbox/common_smallinputbox.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -15,8 +14,7 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final _storage = const FlutterSecureStorage();
+class _LoginScreenState extends State<LoginScreen> with WidgetsBindingObserver {
   final shadow1 = const BoxShadow(
       color: Color.fromRGBO(255, 255, 255, 0.25),
       blurRadius: 5.29,
@@ -93,22 +91,6 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  _asyncMethod() async {
-    String? token = await _storage.read(key: 'token');
-    if (token != null) {
-      if (!mounted) return;
-      Navigator.pushReplacementNamed(context, '/pinLogin');
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _asyncMethod();
-    });
   }
 
   @override
