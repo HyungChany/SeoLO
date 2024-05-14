@@ -134,6 +134,7 @@ const EquipmentModal = ({ onClick, option }: EquipmentModalProps) => {
                     style={{
                       padding: '1rem',
                       textAlign: 'center',
+                      fontWeight: 'bold',
                     }}
                   >
                     {cell.render('Cell')}
