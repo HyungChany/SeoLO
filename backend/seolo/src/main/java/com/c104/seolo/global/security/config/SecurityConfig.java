@@ -1,9 +1,5 @@
 package com.c104.seolo.global.security.config;
 
-import com.c104.seolo.global.security.filter.DaoCompanyCodeAuthenticationFilter;
-import com.c104.seolo.global.security.handler.SeoloLoginFailureHandler;
-import com.c104.seolo.global.security.handler.SeoloLoginSuccessHandler;
-import com.c104.seolo.global.security.handler.SeoloLogoutSuccessHandler;
 import com.c104.seolo.global.security.jwt.filter.JwtValidationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -138,7 +134,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfig() {
         return request -> {
             CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedOrigins(Arrays.asList("http://localhost:5173","https://k10c104.p.ssafy.io"));
+            config.setAllowedOrigins(Arrays.asList("http://localhost:5173","https://k10c104.p.ssafy.io","http://192.168.100.111:5173"));
             config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
             config.setAllowedHeaders(Collections.singletonList("*"));
             config.setAllowCredentials(true);
