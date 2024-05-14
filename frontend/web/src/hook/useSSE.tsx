@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { EventSourcePolyfill } from 'event-source-polyfill';
-import { notificationEventsState } from '../recoil/sseState';
+import { notificationEventsState } from '@/recoil/sseState.tsx';
 
 interface NotificationEvent {
   battery_info: number;
