@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.BluetoothAdapter
 import com.seolo.seolo.adapters.BluetoothDeviceAdapter
+import com.seolo.seolo.helper.TokenManager
 import java.nio.charset.StandardCharsets
 import java.util.UUID
 
@@ -36,8 +37,8 @@ class BluetoothActivity : AppCompatActivity() {
         private const val REQUEST_BLUETOOTH_PERMISSION = 101
 
         // Bluetooth 서비스와 캐릭터리스틱의 UUID 정의
-        private val SERVICE_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
-        private val CHAR_UUID = UUID.fromString("00001102-0000-1000-8000-00805F9B34FB")
+        private val SERVICE_UUID = UUID.fromString("20240520-C104-C104-C104-012345678910")
+        private val CHAR_UUID = UUID.fromString("20240521-C104-C104-C104-012345678910")
     }
 
     @RequiresApi(Build.VERSION_CODES.S)
@@ -146,8 +147,8 @@ class BluetoothActivity : AppCompatActivity() {
                 val char = service?.getCharacteristic(CHAR_UUID) // 쓰기 위한 캐릭터리스틱의 UUID
 
                 if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
-                    // 권한이 있을 때
-                    char?.setValue("통신보안".toByteArray(StandardCharsets.UTF_8))
+                    // 권한이 있을 때`
+                    char?.setValue("SFY001KOR,INIT,통신보안,${TokenManager.getAccessToken(this@BluetoothActivity)},1234,4567".toByteArray(StandardCharsets.UTF_8))
                     gatt?.writeCharacteristic(char)
                 } else {
                     // 권한이 없을 때 사용자에게 권한 요청
