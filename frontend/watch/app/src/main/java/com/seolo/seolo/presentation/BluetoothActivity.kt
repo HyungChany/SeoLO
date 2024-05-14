@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.BluetoothAdapter
 import com.seolo.seolo.adapters.BluetoothDeviceAdapter
+import java.nio.charset.StandardCharsets
 import java.util.UUID
 
 class BluetoothActivity : AppCompatActivity() {
@@ -66,7 +67,7 @@ class BluetoothActivity : AppCompatActivity() {
         if (!bluetoothAdapter.checkBluetoothPermissions()) {
             bluetoothAdapter.requestBluetoothPermissions()
         } else {
-            bluetoothAdapter.startDiscoveryForSpecificDevices("S") { newDevices ->
+            bluetoothAdapter.startDiscoveryForSpecificDevices("") { newDevices ->
                 deviceAdapter.updateDevices(newDevices)
             }
         }
@@ -146,7 +147,7 @@ class BluetoothActivity : AppCompatActivity() {
 
                 if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     // 권한이 있을 때
-                    char?.setValue("통신보안")
+                    char?.setValue("통신보안".toByteArray(StandardCharsets.UTF_8))
                     gatt?.writeCharacteristic(char)
                 } else {
                     // 권한이 없을 때 사용자에게 권한 요청
@@ -162,7 +163,7 @@ class BluetoothActivity : AppCompatActivity() {
             super.onCharacteristicWrite(gatt, characteristic, status)
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 // 캐릭터리스틱에 데이터가 성공적으로 쓰였을 때
-                Log.d("BluetoothActivity", "Data written to ${characteristic?.uuid}: ${characteristic?.value?.toString(Charsets.UTF_8)}")
+                Log.d("BluetoothActivity", "Data written to ${characteristic?.uuid}: ${characteristic?.value?.toString(StandardCharsets.UTF_8)}")
             }
         }
     }
