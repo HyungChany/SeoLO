@@ -55,7 +55,6 @@ const useSSE = () => {
       };
 
       return () => {
-        isMounted = false;
         eventSource.close();
       };
     };
@@ -63,6 +62,7 @@ const useSSE = () => {
     const disconnectSSE = connectSSE();
 
     return () => {
+      isMounted = false;
       disconnectSSE();
     };
   }, [url, setEvents]);
