@@ -25,11 +25,4 @@ public class TokenDto {
                 .locker(LockerDto.of(token.getLocker()))
                 .build();
     }
-
-    public Token toEntity() {
-        return Token.builder()
-                .tokenValue(tokenValue)
-                .locker(locker.toEntity())
-                .build();
-    }
 }

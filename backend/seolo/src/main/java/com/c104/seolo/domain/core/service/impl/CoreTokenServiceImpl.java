@@ -76,7 +76,10 @@ public class CoreTokenServiceImpl implements CoreTokenService {
                 .appUser(appUser)
                 .build();
         tokenRepository.save(newToken);
-        return TokenDto.of(newToken);
+
+        return TokenDto.builder()
+                .tokenValue(newToken.getTokenValue())
+                .build();
     }
 
     @Override
@@ -86,7 +89,8 @@ public class CoreTokenServiceImpl implements CoreTokenService {
                 () -> {
                     throw new CommonException(CoreTokenErrorCode.NOT_EXIST_TOKEN);
                 }
-        );    }
+        );
+    }
 
     @Override
     public boolean isTokenExistedForUserId(Long userId) {

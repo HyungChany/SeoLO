@@ -28,7 +28,7 @@ public class ReportController {
 
     @ResponseStatus(HttpStatus.OK)
     @Secured("ROLE_MANAGER")
-    @GetMapping("term")
+    @GetMapping("/term")
     public ReportsResponse getReportsByDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
