@@ -138,10 +138,10 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfig() {
         return request -> {
             CorsConfiguration config = new CorsConfiguration();
+            config.setAllowedOrigins(Arrays.asList("http://localhost:5173","https://k10c104.p.ssafy.io"));
+            config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
             config.setAllowedHeaders(Collections.singletonList("*"));
-            config.setAllowedMethods(Collections.singletonList("*"));
-            config.setAllowedOrigins(Collections.singletonList("*")); // 모든 Origin 허용
-            config.setAllowCredentials(false); // 모든 도메인을 허용할 때는 false로 설정해야 함
+            config.setAllowCredentials(true);
             return config;
         };
     }
