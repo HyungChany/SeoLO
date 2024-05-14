@@ -11,6 +11,7 @@ interface InputBoxProps {
   isPassword?: boolean;
   children?: React.ReactNode;
   onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const InputBoxContainer = styled.input<InputBoxProps>`

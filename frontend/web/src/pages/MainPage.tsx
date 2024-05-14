@@ -1,6 +1,6 @@
 import CheckList from '@/../assets/icons/CheckList.svg?react';
 import ListModify from '@/../assets/icons/ListModify.svg?react';
-import logoutIcon from '@/../assets/icons/Logout.png';
+import logoutIcon from '@/../assets/images/Logout.png';
 import Position from '@/../assets/icons/Position.svg?react';
 import { Facilities } from '@/apis/Facilities.ts';
 import { Logout } from '@/apis/Login.ts';
