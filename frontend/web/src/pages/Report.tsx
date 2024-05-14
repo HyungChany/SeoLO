@@ -79,6 +79,7 @@ const MainBox = styled.div`
   padding: 2rem 1rem 0 1rem;
   flex-direction: column;
   gap: 2rem;
+  overflow-y: auto;
 `;
 
 const Overlay = styled.div`
