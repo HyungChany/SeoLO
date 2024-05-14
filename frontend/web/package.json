@@ -19,6 +19,7 @@
     "@types/react-table": "^7.7.20",
     "axios": "^1.6.8",
     "dayjs": "^1.11.11",
+    "event-source-polyfill": "^1.0.31",
     "leaflet": "^1.9.4",
     "react": "^18.2.0",
     "react-datepicker": "^6.9.0",
