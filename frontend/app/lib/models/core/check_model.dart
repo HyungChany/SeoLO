@@ -2,31 +2,31 @@ class CoreCheckModel {
   final String? lockerUid;
   final int? battery;
   final int? machineId;
-  final String? taskType;
+  final String taskType;
   final String? startTime;
   final String? endTime;
-  final String? precaution;
-  final String? workerName;
-  final String? workerTeam;
-  final String? workerTitle;
-  final String? facilityName;
-  final String? machineName;
-  final String? machineCode;
+  final String precaution;
+  final String workerName;
+  final String workerTeam;
+  final String workerTitle;
+  final String facilityName;
+  final String machineName;
+  final String machineCode;
 
   CoreCheckModel(
-      {this.lockerUid,
+      {this.lockerUid ,
       this.battery,
       this.machineId,
-      this.taskType,
+      required this.taskType,
       this.startTime,
-      this.endTime,
-      this.precaution,
-      this.workerName,
-      this.workerTeam,
-      this.workerTitle,
-      this.facilityName,
-      this.machineName,
-      this.machineCode});
+      required this.endTime,
+      required this.precaution,
+      required this.workerName,
+      required this.workerTeam,
+      required this.workerTitle,
+      required this.facilityName,
+      required this.machineName,
+      required this.machineCode});
 
   Map<String, dynamic> toJson() => {
         'locker_uid': lockerUid,
@@ -35,7 +35,6 @@ class CoreCheckModel {
       };
 
   factory CoreCheckModel.fromJson(Map<String, dynamic> json) {
-
     return CoreCheckModel(
         taskType: json['task_type'],
         startTime: json['taskStartDateTime'],

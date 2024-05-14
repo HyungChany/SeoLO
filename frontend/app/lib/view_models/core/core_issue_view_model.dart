@@ -3,10 +3,12 @@ import 'package:app/models/user/my_info_model.dart';
 import 'package:app/services/core_service.dart';
 import 'package:app/view_models/user/my_info_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class CoreIssueViewModel extends ChangeNotifier {
   final CoreService _coreService = CoreService();
   final MyInfoViewModel _myInfoViewModel = MyInfoViewModel();
+  final _storage = const FlutterSecureStorage();
 
   CoreIssueViewModel() {
     _fetchMyInfo();
@@ -14,16 +16,19 @@ class CoreIssueViewModel extends ChangeNotifier {
 
   late MyInfoModel myInfo;
   late CoreIssueModel _coreIssueModel;
-
+  String? battery;
+  String? lockerUid;
 
   Future<void> _fetchMyInfo() async {
     await _myInfoViewModel.myInfo();
     myInfo = _myInfoViewModel.myInfoModel!;
 
     final manager = '${myInfo.employeeTeam} ${myInfo.employeeName} ${myInfo.employeeTitle}';
-
+    battery = await _storage.read(key: 'locker_battery');
+    int? batteryInfo = int.parse(battery!);
+    lockerUid = await _storage.read(key: 'locker_uid');
     _coreIssueModel = CoreIssueModel(
-      lockerUid: '',
+      lockerUid: lockerUid,
       machineId: 0,
       taskTemplateId: 0,
       taskPrecaution: '',
@@ -33,6 +38,7 @@ class CoreIssueViewModel extends ChangeNotifier {
       manager: manager,
       taskTemplateName: '',
       endDay: '',
+      battery: batteryInfo,
     );
 
     notifyListeners();
@@ -60,21 +66,6 @@ class CoreIssueViewModel extends ChangeNotifier {
 
   String? get errorMessage => _errorMessage;
 
-  void setLockerUid(String value) {
-    _coreIssueModel = CoreIssueModel(
-        lockerUid: value,
-        machineId: _coreIssueModel.machineId,
-        taskTemplateId: _coreIssueModel.taskTemplateId,
-        taskPrecaution: _coreIssueModel.taskPrecaution,
-        endTime: _coreIssueModel.endTime,
-        facilityName: _coreIssueModel.facilityName,
-        machineName: _coreIssueModel.machineName,
-        manager: _coreIssueModel.manager,
-        taskTemplateName: _coreIssueModel.taskTemplateName,
-    endDay: _coreIssueModel.endDay);
-    notifyListeners();
-  }
-
   void setMachineId(int value) {
     _coreIssueModel = CoreIssueModel(
         lockerUid: _coreIssueModel.lockerUid,
@@ -86,7 +77,8 @@ class CoreIssueViewModel extends ChangeNotifier {
         machineName: _coreIssueModel.machineName,
         manager: _coreIssueModel.manager,
         taskTemplateName: _coreIssueModel.taskTemplateName,
-        endDay: _coreIssueModel.endDay);
+        endDay: _coreIssueModel.endDay,
+        battery: _coreIssueModel.battery);
     notifyListeners();
   }
 
@@ -101,7 +93,8 @@ class CoreIssueViewModel extends ChangeNotifier {
         machineName: _coreIssueModel.machineName,
         manager: _coreIssueModel.manager,
         taskTemplateName: _coreIssueModel.taskTemplateName,
-        endDay: _coreIssueModel.endDay);
+        endDay: _coreIssueModel.endDay,
+        battery: _coreIssueModel.battery);
     notifyListeners();
   }
 
@@ -116,7 +109,8 @@ class CoreIssueViewModel extends ChangeNotifier {
         machineName: _coreIssueModel.machineName,
         manager: _coreIssueModel.manager,
         taskTemplateName: _coreIssueModel.taskTemplateName,
-        endDay: _coreIssueModel.endDay);
+        endDay: _coreIssueModel.endDay,
+        battery: _coreIssueModel.battery);
     notifyListeners();
   }
 
@@ -131,7 +125,8 @@ class CoreIssueViewModel extends ChangeNotifier {
         machineName: _coreIssueModel.machineName,
         manager: _coreIssueModel.manager,
         taskTemplateName: _coreIssueModel.taskTemplateName,
-        endDay: _coreIssueModel.endDay);
+        endDay: _coreIssueModel.endDay,
+        battery: _coreIssueModel.battery);
     notifyListeners();
   }
 
@@ -146,7 +141,8 @@ class CoreIssueViewModel extends ChangeNotifier {
         machineName: _coreIssueModel.machineName,
         manager: _coreIssueModel.manager,
         taskTemplateName: _coreIssueModel.taskTemplateName,
-        endDay: _coreIssueModel.endDay);
+        endDay: _coreIssueModel.endDay,
+        battery: _coreIssueModel.battery);
     notifyListeners();
   }
 
@@ -161,7 +157,8 @@ class CoreIssueViewModel extends ChangeNotifier {
         machineName: value,
         manager: _coreIssueModel.manager,
         taskTemplateName: _coreIssueModel.taskTemplateName,
-        endDay: _coreIssueModel.endDay);
+        endDay: _coreIssueModel.endDay,
+        battery: _coreIssueModel.battery);
     notifyListeners();
   }
 
@@ -176,7 +173,8 @@ class CoreIssueViewModel extends ChangeNotifier {
         machineName: _coreIssueModel.machineName,
         manager: _coreIssueModel.manager,
         taskTemplateName: value,
-        endDay: _coreIssueModel.endDay);
+        endDay: _coreIssueModel.endDay,
+        battery: _coreIssueModel.battery);
     notifyListeners();
   }
 
@@ -191,7 +189,8 @@ class CoreIssueViewModel extends ChangeNotifier {
         machineName: _coreIssueModel.machineName,
         manager: _coreIssueModel.manager,
         taskTemplateName: _coreIssueModel.taskTemplateName,
-        endDay: value);
+        endDay: value,
+        battery: _coreIssueModel.battery);
     notifyListeners();
   }
 

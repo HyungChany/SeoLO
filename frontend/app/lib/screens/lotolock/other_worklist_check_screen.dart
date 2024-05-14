@@ -25,6 +25,13 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
   ];
 
   @override
+  void initState() {
+    final viewModel = Provider.of<CoreCheckViewModel>(context, listen: false);
+    super.initState();
+    viewModel.coreCheck();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<CoreCheckViewModel>(context);
     String? startTimeString = viewModel.startTime ?? '';
@@ -85,19 +92,18 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
                         style: TextStyle(fontSize: 16.0, color: samsungBlue)),
                   ),
                   Container(
-                    height: 260,
-                    padding: EdgeInsets.all(16.0),
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: MediaQuery.of(context).size.height * 0.3,
+                    padding: const EdgeInsets.all(16.0),
                     margin:
-                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                    // 비고 컨테이너의 마진
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: SingleChildScrollView(
-                      child: Text(viewModel.precaution!,
-                          style: TextStyle(fontSize: 16.0)),
+                      child: Text(viewModel.precaution!, style: TextStyle(fontSize: 16.0)),
                     ),
                   ),
                 ],

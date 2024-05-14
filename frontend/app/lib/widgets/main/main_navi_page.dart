@@ -6,7 +6,7 @@ class MainNaviPage extends StatefulWidget {
   const MainNaviPage({super.key});
 
   @override
-  _MainNaviPageState createState() => _MainNaviPageState();
+  State<MainNaviPage> createState() => _MainNaviPageState();
 }
 
 class _MainNaviPageState extends State<MainNaviPage> {
@@ -17,7 +17,7 @@ class _MainNaviPageState extends State<MainNaviPage> {
     'assets/images/loto_process_icon.png'
   ];
 
-  final List<String> pageText = ['NFC 태그', '내 작업 일지', 'LOTO 잠금', 'LOTO 절차'];
+  final List<String> pageText = ['BLUETOOTH', '내 작업 일지', 'LOTO 잠금', 'LOTO 절차'];
 
   final List<String> pageTap = ['/bluetooth', '/profile', '/checklist', '/lotoProcess'];
 

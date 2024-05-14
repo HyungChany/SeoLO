@@ -103,7 +103,7 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
                     viewModel.coreIssue().then((_) {
                       // 일지 작성 후 lock 하러 가기!
                       if (viewModel.errorMessage == null) {
-                        Navigator.pushNamedAndRemoveUntil(context, '/loadingLock', (route) => false);
+                        Navigator.pushNamedAndRemoveUntil(context, '/bluetooth', (route) => false);
                       } else {
                         showDialog(
                             context: context,

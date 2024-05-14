@@ -11,6 +11,7 @@ class CoreIssueModel {
   final String? endDay;
   final String? nextCode;
   final String? tokenValue;
+  final int? battery;
 
   CoreIssueModel({
     this.lockerUid,
@@ -25,10 +26,12 @@ class CoreIssueModel {
     this.endDay,
     this.nextCode,
     this.tokenValue,
+    this.battery,
   });
 
   Map<String, dynamic> toJson() => {
     'locker_uid': lockerUid,
+    'battery_info': battery,
     'machine_id': machineId,
     'task_template_id': taskTemplateId,
     'task_precaution': taskPrecaution,

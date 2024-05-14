@@ -11,6 +11,7 @@ class MyInfo extends StatefulWidget {
 }
 
 class _MyInfoState extends State<MyInfo> {
+
   @override
   void initState() {
     final viewModel = Provider.of<MyInfoViewModel>(context, listen: false);
@@ -31,8 +32,8 @@ class _MyInfoState extends State<MyInfo> {
           children: [
             (viewModel.isLoading)
                 ? Container(
-                    width: 60,
-                    height: 60,
+                    width: 80,
+                    height: 80,
                     decoration: BoxDecoration(
                         color: gray200,
                         borderRadius: BorderRadius.circular(50)),
@@ -49,7 +50,7 @@ class _MyInfoState extends State<MyInfo> {
                 children: [
                   (viewModel.isLoading)
                       ? Container(
-                          width: 180,
+                          width: 150,
                           height: 20,
                           decoration: BoxDecoration(
                               color: gray200,
@@ -57,11 +58,11 @@ class _MyInfoState extends State<MyInfo> {
                         )
                       : Text(
                           viewModel.myInfoModel!.employeeTeam,
-                          style: TextStyle(fontSize: 20),
+                          style: const TextStyle(fontSize: 20),
                         ),
                   (viewModel.isLoading)
                       ? Container(
-                          width: 180,
+                          width: 150,
                           height: 20,
                           decoration: BoxDecoration(
                               color: gray200,
@@ -70,7 +71,7 @@ class _MyInfoState extends State<MyInfo> {
                       : Row(
                           children: [
                             Text(viewModel.myInfoModel!.employeeName,
-                                style: TextStyle(fontSize: 20)),
+                                style: const TextStyle(fontSize: 20)),
                             const SizedBox(
                               width: 5,
                             ),

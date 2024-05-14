@@ -34,7 +34,7 @@ class _CommonCardState extends State<CommonCard> {
       alignment: Alignment.center,
       children: [
         Container(
-          width: MediaQuery.of(context).size.width * 0.35,
+          width: MediaQuery.of(context).size.width * 0.34,
           height: MediaQuery.of(context).size.height * 0.25,
           decoration: BoxDecoration(
             color: const Color.fromRGBO(237, 244, 251, 1),

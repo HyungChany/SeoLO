@@ -11,6 +11,7 @@ class MainWelcomeBanner extends StatefulWidget {
 }
 
 class _MainWelcomeBannerState extends State<MainWelcomeBanner> {
+
   @override
   void initState() {
     final viewModel = Provider.of<MyInfoViewModel>(context, listen: false);
@@ -30,16 +31,6 @@ class _MainWelcomeBannerState extends State<MainWelcomeBanner> {
           const TextSpan(text: '지켰나요?')
         ]));
   }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   final viewModel = Provider.of<MyInfoViewModel>(context, listen: false);
-  //   viewModel.myInfo();
-  //   setState(() {
-  //     userName = viewModel.myInfoModel!.employeeName;
-  //   });
-  // }
 
 
   @override

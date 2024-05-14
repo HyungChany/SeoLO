@@ -1,3 +1,4 @@
+import 'package:app/main.dart';
 import 'package:app/view_models/user/my_tasks_view_model.dart';
 import 'package:app/widgets/card/common_card.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,8 @@ class _MyLotoState extends State<MyLoto> {
       initialPage: currentIndex,
       viewportFraction: 0.38,
     );
+    final viewModel = Provider.of<MyTasksViewModel>(context, listen: false);
+    viewModel.myTasks();
   }
 
   @override
@@ -33,9 +36,18 @@ class _MyLotoState extends State<MyLoto> {
   Widget build(BuildContext context) {
     final viewModel = Provider.of<MyTasksViewModel>(context);
     return (viewModel.isLoading)
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
+        ? SizedBox(
+            height: MediaQuery.of(context).size.height * 0.4,
+            child: Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.35,
+                height: MediaQuery.of(context).size.height * 0.05,
+                decoration: BoxDecoration(
+                  color: gray200,
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+              ),
+            ))
         : Column(
             children: [
               SizedBox(
@@ -69,13 +81,15 @@ class _MyLotoState extends State<MyLoto> {
 
     String? startTimeString = viewModel.myTasksModel![index].startTime ?? '';
     List<String> startParts = startTimeString.split('T');
-    String formattedStartTime = (startTimeString == '') ? '' :
-        '${startParts[0]} | ${startParts[1].substring(0, 5)}';
+    String formattedStartTime = (startTimeString == '')
+        ? ''
+        : '${startParts[0]} | ${startParts[1].substring(0, 5)}';
 
     String? endTimeString = viewModel.myTasksModel![index].endTime ?? '';
     List<String> endParts = endTimeString.split('T');
-    String formattedEndTime = (endTimeString == '') ? '' :
-        '${endParts[0]} | ${endParts[1].substring(0, 5)}';
+    String formattedEndTime = (endTimeString == '')
+        ? ''
+        : '${endParts[0]} | ${endParts[1].substring(0, 5)}';
 
     return GestureDetector(
       onTap: () {

@@ -5,11 +5,6 @@ import 'package:flutter/material.dart';
 class MyTasksViewModel extends ChangeNotifier {
   final UserService _userService = UserService();
 
-  MyTasksViewModel() {
-    myTasks();
-    notifyListeners();
-  }
-
   List<MyTasksModel>? _myTasksModel;
   bool _isLoading = false;
   String? _errorMessage;

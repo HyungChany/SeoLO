@@ -73,7 +73,7 @@ class _TimeSelectState extends State<TimeSelect> {
                         });
                   } else {
                     coreViewModel.setEndTime(endTime);
-                    Navigator.pushNamed(context, '/worklistcheck');
+                    Navigator.pushNamed(context, '/worklistCheck');
                   }
                 }),
           ),

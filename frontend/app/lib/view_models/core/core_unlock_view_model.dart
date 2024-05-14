@@ -8,10 +8,10 @@ class CoreUnlockViewModel extends ChangeNotifier {
   final _storage = const FlutterSecureStorage();
   final CoreService _coreService = CoreService();
   late CoreUnlockModel _coreUnlockModel;
-  late String? lockerUid;
-  late int? battery;
-  late int? machineId;
-  late String? tokenValue;
+  String? lockerUid;
+  String? battery;
+  String? machineId;
+  String? tokenValue;
 
   bool _isLoading = false;
   String? _errorMessage;
@@ -26,13 +26,15 @@ class CoreUnlockViewModel extends ChangeNotifier {
 
   Future<void> initializeData() async {
     lockerUid = await _storage.read(key: 'locker_uid');
-    battery = (await _storage.read(key: 'locker_battery')) as int?;
-    machineId = (await _storage.read(key: 'machine_id')) as int?;
+    battery = await _storage.read(key: 'locker_battery');
+    int? batteryInfo = int.parse(battery!);
+    machineId = await _storage.read(key: 'machine_id');
+    int? machineIdInfo = int.parse(machineId!);
     tokenValue = await _storage.read(key: 'locker_token');
     _coreUnlockModel = CoreUnlockModel(
         lockerUid: lockerUid,
-        battery: battery,
-        machineId: machineId,
+        battery: batteryInfo,
+        machineId: machineIdInfo,
         tokenValue: tokenValue);
     notifyListeners();
   }

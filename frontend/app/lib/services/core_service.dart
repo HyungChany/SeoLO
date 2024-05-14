@@ -60,11 +60,14 @@ class CoreService {
 
   ///////////////////////// check //////////////////////////////////
   Future<Map<String, dynamic>> coreCheck(CoreCheckModel coreCheckModel) async {
+    debugPrint(coreCheckModel.toJson().toString());
     try {
       Dio.Response response =
           await _dio.post('$baseUrl/core/CHECK', data: coreCheckModel.toJson());
       if (response.statusCode == 200) {
         CoreCheckModel coreCheckModel = CoreCheckModel.fromJson(response.data);
+        await _storage.write(
+            key: 'Core-Code', value: response.data['next_code']);
         return {'success': true, 'coreCheckModel': coreCheckModel};
       } else {
         return {'success': false};

@@ -95,7 +95,7 @@ class _LoadingLockScreenState extends State<LoadingLockScreen> {
                     });
                     if (_receivedValues[0] == 'LOCKED') {
                       Navigator.pushNamedAndRemoveUntil(
-                          context, '/resultLock', (route) => false);
+                          context, '/worklistCheck', (route) => false);
                     }
                     // if (characteristic.properties.read) {
                     //   await characteristic.read();

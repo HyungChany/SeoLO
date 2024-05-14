@@ -64,7 +64,7 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => DaySelect());
     case '/selectTime':
       return MaterialPageRoute(builder: (context) => TimeSelect());
-    case '/worklistcheck':
+    case '/worklistCheck':
       return MaterialPageRoute(builder: (context) => WorkListCheckScreen());
     case '/otherWorklistCheck':
       return MaterialPageRoute(

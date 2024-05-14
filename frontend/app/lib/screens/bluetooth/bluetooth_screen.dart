@@ -27,6 +27,11 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   late StreamSubscription<List<ScanResult>> _scanResultsSubscription;
   late StreamSubscription<bool> _isScanningSubscription;
   List<String> _receivedValues = [];
+  String? companyCode;
+  String? coreCode;
+  String? lockerToken;
+  String? machineId;
+  String? userId;
 
   @override
   @override
@@ -83,11 +88,11 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   }
 
   void connectToDevice(BluetoothDevice device) async {
-    String? companyCode = await _storage.read(key: 'Company-Code');
-    String? coreCode = await _storage.read(key: 'Core-Code');
-    String? lockerToken = await _storage.read(key: 'locker_token');
-    String? machineId = await _storage.read(key: 'machine_id');
-    String? userID = await _storage.read(key: 'user_id');
+    companyCode = await _storage.read(key: 'Company-Code');
+    coreCode = await _storage.read(key: 'Core-Code');
+    lockerToken = await _storage.read(key: 'locker_token');
+    machineId = await _storage.read(key: 'machine_id');
+    userId = await _storage.read(key: 'user_id');
 
     await device.connect();
     debugPrint('Connected to ${device.platformName}');
@@ -104,9 +109,10 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
               // debugPrint('character uuids : ${characteristic.uuid.toString()}');
               // characteristic = characteristic;
               debugPrint('쓰기 시도');
+              // _storage.write(key: 'Core-Code', value: 'INIT');
               // String message = "SFY001KOR,LOCK,token,15,3";
               String message =
-                  "${companyCode ?? ''},${coreCode ?? 'INIT'},${lockerToken ?? ''},${machineId ?? '4'},${userID ?? ''}";
+                  "${companyCode ?? ''},${'INIT'},${lockerToken ?? ''},${machineId ?? '4'},${userId ?? ''}";
               List<int> encodedMessage = utf8.encode(message);
               try {
                 await characteristic.write(encodedMessage,
@@ -121,35 +127,32 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                   String receivedString = utf8.decode(value);
                   debugPrint('응답: $receivedString');
                   _receivedValues = receivedString.split(',');
-                  // debugPrint(_receivedValues[0]);
-                  if (_receivedValues[4] == userID) {
-                    setState(() {
-                      _storage.write(
-                          key: 'Core-Code', value: _receivedValues[0]);
-                      _storage.write(
-                          key: 'locker_uid', value: _receivedValues[1]);
-                      _storage.write(
-                          key: 'machine_id', value: _receivedValues[2]);
-                      _storage.write(
-                          key: 'locker_battery', value: _receivedValues[3]);
-                    });
+                  if (_receivedValues[4] == userId) {
+                    _storage.write(key: 'Core-Code', value: _receivedValues[0]);
+                    _storage.write(
+                        key: 'locker_uid', value: _receivedValues[1]);
+                    _storage.write(
+                        key: 'machine_id', value: _receivedValues[2]);
+                    _storage.write(
+                        key: 'locker_battery', value: _receivedValues[3]);
+
                     if (_receivedValues[0] == 'WRITE') {
                       // 일지 먼저 작성하고 잠금을 요청하려면 write 받고 바로 로직 수행 후 lock
 
                       // 태그 -> 일지 작성 -> 잠금 태그라면 블루투스 연결 2번?
-                      Navigator.pushNamedAndRemoveUntil(context, '/checklist', (route) => false);
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/checklist', ModalRoute.withName('/main'));
                     }
                     if (_receivedValues[0] == 'CHECK') {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/otherWorklistCheck', (route) => false);
+                      Navigator.pushReplacementNamed(
+                          context, '/otherWorklistCheck');
                     }
                     if (_receivedValues[0] == 'UNLOCK') {
                       Navigator.pushNamedAndRemoveUntil(
                           context, '/resultUnlock', (route) => false);
                     }
                     if (_receivedValues[0] == 'LOCKED') {
-                      Navigator.pushReplacementNamed(
-                          context, '/loading');
+                      Navigator.pushReplacementNamed(context, '/loadingLock');
                     }
                     // if (characteristic.properties.read) {
                     //   await characteristic.read();
