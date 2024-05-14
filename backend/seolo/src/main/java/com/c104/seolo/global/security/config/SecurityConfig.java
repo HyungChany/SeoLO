@@ -134,7 +134,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfig() {
         return request -> {
             CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedOrigins(Arrays.asList("http://localhost:5173","https://k10c104.p.ssafy.io","http://192.168.100.111:5173"));
+            config.setAllowedOrigins(Arrays.asList("http://localhost:5173","https://k10c104.p.ssafy.io", "http://192.168.100.111:5173"));
             config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
             config.setAllowedHeaders(Collections.singletonList("*"));
             config.setAllowCredentials(true);
