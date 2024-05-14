@@ -9,8 +9,8 @@ import lombok.Getter;
 @Getter
 public class Context {
     private CCodePrincipal cCodePrincipal;
-    private CodeState codeState;
-    private String companyCode;
+    private final CodeState codeState;
+    private final String companyCode;
     private CoreRequest coreRequest;
 
     @Builder

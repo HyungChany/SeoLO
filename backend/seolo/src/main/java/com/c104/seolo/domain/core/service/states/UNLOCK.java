@@ -1,5 +1,7 @@
 package com.c104.seolo.domain.core.service.states;
 
+import com.c104.seolo.domain.alarm.dto.request.NotificationSendRequest;
+import com.c104.seolo.domain.alarm.service.NotificationService;
 import com.c104.seolo.domain.core.dto.request.CoreRequest;
 import com.c104.seolo.domain.core.dto.response.CoreResponse;
 import com.c104.seolo.domain.core.exception.CoreTokenErrorCode;
@@ -33,6 +35,7 @@ public class UNLOCK implements CodeState {
     private final ReportService reportService;
     private final DBUserDetailService dbUserDetailService;
     private final MachineService machineService;
+    private final NotificationService notificationService;
 
     @Override
     @Transactional
@@ -53,9 +56,9 @@ public class UNLOCK implements CodeState {
         3. 해당 작업내역을 보고서 DB에 저장한다.
         4. 204 No Content를 응답한다.
         */
-
         CoreRequest coreRequest = context.getCoreRequest();
         String tokenValue = coreRequest.getTokenValue();
+
         // 1
         // 토큰 검증
         if (!coreTokenService.validateTokenWithUser(tokenValue, context.getCCodePrincipal().getId())) {
@@ -72,8 +75,15 @@ public class UNLOCK implements CodeState {
 
         // 2
         TaskHistoryDto updatedTaskhistory = syncTaskhistory(coreRequest);
+        MachineDto workedMachine = machineService.getMachineByMachineId(updatedTaskhistory.getMachineId());
+        AppUser worker = dbUserDetailService.loadUserById(updatedTaskhistory.getUserId());
+
         // 3
-        createReport(updatedTaskhistory);
+        createReport(updatedTaskhistory, worker, workedMachine);
+
+        // 알람
+        sendNotification(coreRequest, worker,workedMachine );
+//
         return CoreResponse.builder() // 3
                 .httpStatus(HttpStatus.NO_CONTENT)
                 .message("자물쇠가 열림처리 되었습니다. 토큰이 삭제되었습니다. 진행했던 작업내역이 보고서로 저장됩니다. ")
@@ -83,14 +93,10 @@ public class UNLOCK implements CodeState {
     protected TaskHistoryDto syncTaskhistory(CoreRequest coreRequest) {
         TaskHistoryDto latestTaskHistory = taskHistoryService.getLatestTaskHistoryEntityByMachineId(coreRequest.getMachineId());
         taskHistoryService.updateTaskCodeNull(latestTaskHistory.getId());
-        TaskHistoryDto updatedTaskHistory = taskHistoryService.updateTaskEndTimeNow(latestTaskHistory.getId(), LocalDateTime.now());
-        return updatedTaskHistory;
+        return taskHistoryService.updateTaskEndTimeNow(latestTaskHistory.getId(), LocalDateTime.now());
     }
 
-    protected void createReport(TaskHistoryDto updatedLatestTaskHistory) {
-        MachineDto workedMachine = machineService.getMachineByMachineId(updatedLatestTaskHistory.getMachineId());
-        AppUser worker = dbUserDetailService.loadUserById(updatedLatestTaskHistory.getUserId());
-
+    protected void createReport(TaskHistoryDto updatedLatestTaskHistory, AppUser worker, MachineDto workedMachine) {
         NewReport newReport = NewReport.builder()
                 .facilityName(workedMachine.getFacility().getFacilityName())
                 .machineNumber(workedMachine.getNumber())
@@ -105,5 +111,16 @@ public class UNLOCK implements CodeState {
                 .build();
 
         reportService.enrollReport(newReport);
+    }
+
+    private void sendNotification(CoreRequest coreRequest, AppUser worker, MachineDto machine) {
+        notificationService.sendAsync(
+                NotificationSendRequest.builder()
+                        .batteryInfo(coreRequest.getBatteryInfo())
+                        .workerName(worker.getEmployee().getEmployeeName())
+                        .facilityName(machine.getFacility().getFacilityName())
+                        .machineNumber(machine.getNumber())
+                        .actType("열기")
+                        .build());
     }
 }
