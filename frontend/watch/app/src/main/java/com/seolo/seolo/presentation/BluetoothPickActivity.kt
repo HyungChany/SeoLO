@@ -163,6 +163,7 @@ class BluetoothPickActivity : AppCompatActivity() {
                         TokenManager.getCompanyCode(this@BluetoothPickActivity) // 회사 코드 가져오기
                     val userName =
                         TokenManager.getUserName(this@BluetoothPickActivity) // 사용자 이름 가져오기
+                    Log.d("송신데이터", "companyCode: $companyCode, token: $token, userName: $userName")
                     char?.setValue(
                         "$companyCode,INIT,$token,,$userName".toByteArray(
                             StandardCharsets.UTF_8
@@ -215,7 +216,7 @@ class BluetoothPickActivity : AppCompatActivity() {
             // 데이터 읽기 포맷(명령어,자물쇠Uid,머신Id,배터리잔량,유저Id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
             // Data received: CHECK,1DA24G10,3,0,2
-            Log.d("BluetoothActivity2", "Data received: $receivedData")
+            Log.d("수신데이터 원본", "Data received: $receivedData")
             receivedData?.let {
                 val dataParts = it.split(",")
                 if (dataParts.size == 5) {
@@ -232,7 +233,10 @@ class BluetoothPickActivity : AppCompatActivity() {
                     SessionManager.lotoBatteryInfo = batteryInfo
                     SessionManager.lotoUserId = userId
 
-                    Log.d("BluetoothActivity2", "Session updated with received data.")
+                    Log.d(
+                        "수신 데이터 가공",
+                        "Session updated with received data. [statusCode: $statusCode, lotoUid: $lotoUid, machineId: $machineId, batteryInfo: $batteryInfo, userId: $userId]"
+                    )
 
                 }
             }
