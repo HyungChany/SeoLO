@@ -60,7 +60,7 @@ public class SecurityConfig {
         // 인증,인가 커버리지 설정
         http
                 .authorizeHttpRequests(au -> au
-                        .requestMatchers("/error","/join", "/login", "/test/login","/test","/test/**").permitAll()
+                        .requestMatchers("/error","/join", "/login", "/test/**").permitAll()
                         .anyRequest().hasRole("WORKER")
                 );
 

@@ -156,10 +156,16 @@ VALUES
     ('202200011', 'SFY001KOR', '정재명', '대리', '생산기술팀', '1972-09-11', 'default', '2022-10-21', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 ;
 
-INSERT INTO app_user (USER_IS_LOCKED, USER_PIN, CREATED_AT, UPDATED_AT, USER_ID, EMPLOYEE_NUM, USER_STAT, USER_ROLE, USER_PWD) VALUES
-                                                                                                                                   (false, '$2a$10$l1FAI5aM0A9ocigVa7L34eU6IvWO/nu0Vln5/ZawHkCdDtcVXBZvm', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 1, '202100001', 'INIT', 'ROLE_MANAGER', '$2a$10$pT.Qqif0f1VbpAT2OSCvCe88qQqYWX2//YXi.T722zEKj/N9gr3Ue'),
-                                                                                                                                   (false, '$2a$10$FXTUrU8805Vnxtzv3cH2aO82F4h3nyAQe/C/NWTRBdxD2beWkusLS', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 2, '199500001', 'INIT', 'ROLE_WORKER', '$2a$10$8lOqas3sQFbrpesrOM80oO14xs4finryPmroZMnbu/mKdh7VZhZ9q'),
-                                                                                                                                   (false, '$2a$10$FXTUrU8805Vnxtzv3cH2aO82F4h3nyAQe/C/NWTRBdxD2beWkusLS', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 3, '200500001', 'INIT', 'ROLE_MANAGER', '$2a$10$8lOqas3sQFbrpesrOM80oO14xs4finryPmroZMnbu/mKdh7VZhZ9q');;
+
+INSERT INTO app_user (USER_FAIL_COUNT, USER_IS_LOCKED, CREATED_AT, UPDATED_AT, EMPLOYEE_NUM, USER_STAT, USER_ROLE, USER_PIN, USER_PWD)
+VALUES
+    (null, false, '2024-05-14 17:23:17.705743', '2024-05-14 17:23:17.705743', '202100001', 'INIT', 'ROLE_MANAGER', '$2a$10$l1FAI5aM0A9ocigVa7L34eU6IvWO/nu0Vln5/ZawHkCdDtcVXBZvm', '$2a$10$pT.Qqif0f1VbpAT2OSCvCe88qQqYWX2//YXi.T722zEKj/N9gr3Ue'),
+    (null, false, '2024-05-14 17:23:17.705743', '2024-05-14 17:23:17.705743', '199500001', 'INIT', 'ROLE_WORKER', '$2a$10$FXTUrU8805Vnxtzv3cH2aO82F4h3nyAQe/C/NWTRBdxD2beWkusLS', '$2a$10$8lOqas3sQFbrpesrOM80oO14xs4finryPmroZMnbu/mKdh7VZhZ9q'),
+    (null, false, '2024-05-14 17:43:23.196786', '2024-05-14 17:43:23.196786', '202000001', 'INIT', 'ROLE_MANAGER', '$2a$10$MNAwZ2r1YJjNRtyZNYWZtOpZdrT3u8bKzLhrjIBZ8KnQur/N1mj/m', '$2a$10$gSQevAgYqHI7E32cuAfUXeM1R9GbkvMZXNMifC/Omco7oXX3hoa5.'),
+    (null, false, '2024-05-14 17:43:30.533849', '2024-05-14 17:43:30.533849', '200500001', 'INIT', 'ROLE_MANAGER', '$2a$10$FKhoA0OyAuoSsrkjT3nc1uVOo4I66wGxSs8ASV1EE9Xvmwgv7vofO', '$2a$10$plBslLobBujPiUwm/WU0cOR8bk.OeQpAi1djd0gNVfK0bcfQ6EHMm'),
+    (null, false, '2024-05-14 17:43:35.933758', '2024-05-14 17:43:35.933758', '201500001', 'INIT', 'ROLE_WORKER', '$2a$10$K3hNoURRiiVd.JjHrToxKuQcesb8xIWTAXG.jm6w9GfCXWrPnsFHe', '$2a$10$teqG6XkKUIEug6yw6ImNXOX3HDraVX6LNCYJGz2j5d/x557YF92le'),
+    (null, false, '2024-05-14 17:43:41.614339', '2024-05-14 17:43:41.614339', '200500002', 'INIT', 'ROLE_MANAGER', '$2a$10$3z.bpobP4Jsifr0pUDu9bOhP.o1NqchfX.v4Kw7QWMIW4JfilLO1G', '$2a$10$tX9XAJNIDIl2V6frLLNhD.s4QFpTlxDx4j6M4T1OqaA/GRkKnhbCG');
+
 
 INSERT INTO check_list_template(check_list_template_context)
 values ('LOTO에 대해 작업자 교육이 이루어졌는가?'),
@@ -178,17 +184,6 @@ values ('정비', '정비 중입니다.'),
        ('수리', '수리 중입니다.'),
        ('기타', '');
 
--- INSERT INTO locker(locker_battery, locker_is_locked, locker_uid, company_code, created_at, updated_at, locker_encryption_key)
--- values (100, false, 'MURBMjRHMzE=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Y3R5pIjVCzW1uz0XJFs123=='),
---        (10, true, 'MURBMjRHMzI=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'abXQxLvYzK2QwFDyrux345=='),
---        (80, false, 'MURBMjRHMzM=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'CdT54ZOmKJGH5Gd1Mkp678=='),
---        (98, false, 'MURBMjRHMzQ=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP,'ZvcM41Zr5Nj2FBSaQlm901=='),
---        (29, false, 'MURBMjRHMzU=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'XjR55ZmnmPQ2Jb3Vg4t234=='),
---        (80, false, 'MURBMjRHMzY=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Hng2Q3XPY7aV0FzQwRp567=='),
---        (88, true, 'MURBMjRHMzc=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'BvcM91Zr3Dj7FBSqPno890=='),
---        (91, false, 'MURBMjRHMzg=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Ope34ZmnmC5TUb9Vh6t123=='),
---        (37, false, 'MURBMjRHMzk=', 'SFY001KOR', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Mjn8D5XmZTg6Rb0Ph3q456==');
-
 INSERT INTO locker (locker_battery, locker_is_locked, created_at, locker_id, updated_at, company_code, locker_encryption_key, locker_uid)
     VALUES
     (100, false, '2024-05-10 16:12:53.296591', 1, '2024-05-10 16:12:53.296591', 'SFY001KOR', 'EsF0JwMZcTL2EcXAjUae0Q==', '1DA24G01'),
@@ -206,8 +201,6 @@ INSERT INTO locker (locker_battery, locker_is_locked, created_at, locker_id, upd
     (4, false, '2024-05-14 11:05:03.302093', 13, '2024-05-14 11:05:03.302093', 'SFY001KOR', 'DayHMWSiuU4KKuZTd0iUbA==', '1DA24G13'),
     (92, false, '2024-05-14 11:05:06.012501', 14, '2024-05-14 11:05:06.012501', 'SFY001KOR', '8Djr/RvU+GuEwWjzDf2sWA==', '1DA24G14');
 
-
-
 insert into facility(created_at, updated_at, facility_company_code, facility_name, facility_address, facility_layout, facility_thum)
 values (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '1공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
        (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '2공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
@@ -215,7 +208,6 @@ values (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '1공장', '광주광
        (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '4공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
        (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '5공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
        (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '6공장', '광주광역시 광산구 하남산단6번로 107', '', '');
-
 
 INSERT INTO machine_subcategory (machine_subcategory)
 VALUES
@@ -270,16 +262,3 @@ VALUES
     ('2024-05-07 14:37:42.935150', 1, 2, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', 'CNC조각기', 'KL-5709', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL5709.jpg'),
     ('2024-05-07 14:37:42.935150', 1, 3, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '자동라벨기/스티커부착기', 'KL-0515', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL0515.jpg'),
     ('2024-05-07 14:37:42.935150', 1, 4, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '레이저각인기', 'KL-8818', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL8818.jpeg');
-
-
--- INSERT INTO loto_report
---     (IS_ACCIDENT, VICTIMS_NUM, CREATED_AT, END_DATETIME, LOTO_REPORT_ID, START_DATETIME, UPDATED_AT, TASK_TYPE, MACHINE_NAME, MACHINE_NUMBER, WORKER_NAME, WORKER_NUMBER ,ACCIDENT_TYPE)
--- VALUES
---     (false, null, '2024-05-09 16:14:49.180938', '2024-05-09 16:14:49.177935', 1, '2024-05-09 16:14:46.202558', '2024-05-09 16:14:49.180938', '수리', '수평형 컨베이어 삼면포장기', 'KL-7217', '김진명' ,'202100001', null),
---     (false, null, '2024-05-09 16:17:50.974998', '2024-05-09 16:17:50.972219', 2, '2024-05-09 16:17:46.388145', '2024-05-09 16:17:50.974998', '정비', '수평형 컨베이어 삼면포장기', 'KL-7217', '오민상' ,'199500001', null);
-
--- INSERT INTO loto_report
---     (IS_ACCIDENT, VICTIMS_NUM, CREATED_AT, END_DATETIME, LOTO_REPORT_ID, START_DATETIME, UPDATED_AT, TASK_TYPE, FACILITY_NAME, MACHINE_NAME, MACHINE_NUMBER, WORKER_NAME, WORKER_NUMBER, WORKER_TEAM, WORKER_TITLE, ACCIDENT_TYPE)
--- VALUES
---     (false, null, '2024-05-10 11:08:30.263365', '2024-04-01 11:08:30.258374','2024-05-05 11:08:27.666255', '2024-05-10 11:08:30.263365', '기타', '1공장', '수평형 컨베이어 삼면포장기', 'KL-7217', '김진명', '202100001', '개발팀', '대리', null),
---     (false, null, '2024-05-10 11:11:23.698411', '2024-04-07 11:11:23.694410', '2024-05-07 11:08:51.889775', '2024-05-10 11:11:23.698411', '청소', '1공장', '수평형 컨베이어 삼면포장기', 'KL-7217', '오민상', '199500001', '생산기술팀', '과장', null);
