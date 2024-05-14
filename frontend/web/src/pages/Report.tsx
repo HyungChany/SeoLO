@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Check from '/assets/icons/Check.svg';
 import NonCheck from '/assets/icons/NonCheck.svg';
+import Excel from '/assets/icons/Excel.svg';
 import ReportCheckModal from '@/components/modal/ReportCheckModal.tsx';
 import { RangeReport, totalReport } from '@/apis/Report.ts';
 import CsvDownloadButton from 'react-json-to-csv';
@@ -107,8 +108,10 @@ const CsvButton = styled(CsvDownloadButton)`
   font-size: 1rem;
   font-weight: bold;
   box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
   &:hover {
-    background-color: #6b9dcb;
+    background-color: #19633a;
   }
 `;
 const Report = () => {
@@ -343,6 +346,7 @@ const Report = () => {
           </div>
         </DaySelectBox>
         <CsvButton data={transformedCsvData} delimiter=",">
+          <img src={Excel} style={{ marginRight: '0.5rem', width: '1.5rem'}} />
           .CSV 다운로드
         </CsvButton>
       </SelectBox>
@@ -361,6 +365,7 @@ const Report = () => {
                     borderBottom: '2px solid black',
                     color: Color.BLACK,
                     fontWeight: 'bold',
+                    paddingBottom: '1rem',
                   }}
                 >
                   {column.render('Header')}
