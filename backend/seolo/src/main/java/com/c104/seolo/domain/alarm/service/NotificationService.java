@@ -20,20 +20,19 @@ public class NotificationService {
     private static final long HEARTBEAT_INTERVAL = 10 * 1000L; // 30초마다 하트비트 전송
 
     public SseEmitter subscribe(Long userId) {
-//        log.info("SSE 구독 요청 시작: {} (스레드: {})", userId, Thread.currentThread().getName());
+        log.info("SSE 구독 요청 시작: {} (스레드: {})", userId, Thread.currentThread().getName());
         SseEmitter emitter = new SseEmitter(TIMEOUT);
         emitterMap.put(userId.toString(), emitter);
 
         emitter.onCompletion(() -> {
-//            log.info("onCompletion callback");
+            log.info("onCompletion callback");
             this.emitterMap.remove(userId);
         });
         emitter.onTimeout(() -> {
-//            log.info("onTimeout callback");
+            log.info("onTimeout callback");
             emitter.complete();
         });
-//                emitterMap.remove(userId));
-//        emitter.onError((e) -> emitterMap.remove(userId));
+
 
         log.info("SSE 구독 요청 완료: {} (스레드: {})", userId, Thread.currentThread().getName());
         return emitter;

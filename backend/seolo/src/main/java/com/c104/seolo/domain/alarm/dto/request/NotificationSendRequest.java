@@ -7,8 +7,10 @@ import lombok.Getter;
 @Getter
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class NotificationSendRequest {
-    private Long receiveUserId;
-    private String alarmType;
-    private String alarmContent;
-    private String alarmRedirect;
+    private Long batteryInfo;
+    private String workerName;
+    private String facilityName;
+    private String machineNumber;
+    private String lockerUid;
+    private String actType;
 }
