@@ -38,7 +38,7 @@ class WheelPickerAdapter(private val selects: List<String>) :
         )
         // 자동 줄바꿈 및 최대 줄 수 설정
         textView.setSingleLine(false)
-        textView.maxLines = 2
+        textView.maxLines = 4
         textView.gravity = Gravity.CENTER_HORIZONTAL
         textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
         textView.typeface = Typeface.create("sans-serif", Typeface.NORMAL)
