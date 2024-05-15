@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
-@EnableWebSecurity(debug = false)
+@EnableWebSecurity(debug = true)
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 

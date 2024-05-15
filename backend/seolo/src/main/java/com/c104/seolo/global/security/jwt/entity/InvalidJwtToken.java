@@ -7,13 +7,13 @@ import org.springframework.data.redis.core.RedisHash;
 
 
 @Getter
-@RedisHash(value = "blackList", timeToLive = 360_000_000)
-public class InvalidToken {
+@RedisHash(value = "blackList", timeToLive = 900)
+public class InvalidJwtToken {
     @Id
     private String accessToken;
 
     @Builder
-    public InvalidToken(String accessToken) {
+    public InvalidJwtToken(String accessToken) {
         this.accessToken = accessToken;
     }
 }
