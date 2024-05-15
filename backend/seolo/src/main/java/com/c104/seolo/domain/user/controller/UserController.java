@@ -88,7 +88,6 @@ public class UserController {
         return "PIN 변경 성공 로그아웃 시켜주세요";
     }
 
-
     @GetMapping("/users")
     public ResponseEntity<UserListResponse> getAllUsers(
             @RequestHeader("Company-Code") String companyCode

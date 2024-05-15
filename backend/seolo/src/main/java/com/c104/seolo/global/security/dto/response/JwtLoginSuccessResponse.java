@@ -9,13 +9,15 @@ public class JwtLoginSuccessResponse {
     private Long userId;
     private String username;
     private String companyCode;
+    private String codeStatus;
     private final IssuedToken issuedToken;
 
     @Builder
-    public JwtLoginSuccessResponse(IssuedToken issuedToken, String companyCode, String username, Long userId) {
+    public JwtLoginSuccessResponse(IssuedToken issuedToken, String companyCode, String username, Long userId, String codeStatus) {
         this.issuedToken = issuedToken;
         this.companyCode = companyCode;
         this.username = username;
         this.userId = userId;
+        this.codeStatus = codeStatus;
     }
 }

@@ -64,7 +64,6 @@ public class CHECK implements CodeState {
 
         // 3
         return CoreResponse.builder()
-                .nextCode(CODE.INIT)
                 .taskHistory(latestTask)
                 .checkMoreResponse(getMoreInfoForCHECK(worker, repairingMachine))
                 .httpStatus(HttpStatus.OK)
