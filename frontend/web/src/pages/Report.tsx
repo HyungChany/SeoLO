@@ -346,7 +346,7 @@ const Report = () => {
           </div>
         </DaySelectBox>
         <CsvButton data={transformedCsvData} delimiter=",">
-          <img src={Excel} style={{ marginRight: '0.5rem', width: '1.5rem'}} />
+          <img src={Excel} style={{ marginRight: '0.5rem', width: '1.5rem' }} />
           .CSV 다운로드
         </CsvButton>
       </SelectBox>
