@@ -64,9 +64,12 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
     @Override
     public void removeAccessToken(String accessToken) {
-        // 로그아웃시 유효한 access 토큰을
-        // redis에 blacklist로 보내야함
-        jwtUtils.validateAccessToken(accessToken);
-        invalidTokenRepository.save(new InvalidJwtToken(accessToken));
+        if (jwtTokenRepository.existsByAccessToken(accessToken)) {
+            JwtToken jwtToken = jwtTokenRepository.findByAccessToken(accessToken);
+            jwtTokenRepository.delete(jwtToken);
+            log.info("로그아웃 Access token 삭제 : {}", accessToken);
+        } else {
+            log.warn("Access token 저장소에 없음 : {}", accessToken);
+        }
     }
 }

@@ -1,10 +1,12 @@
 package com.c104.seolo.global.security.jwt.filter;
 
 
-import com.c104.seolo.global.exception.CommonException;
+import com.c104.seolo.global.exception.AuthException;
+import com.c104.seolo.global.exception.SeoloErrorResponse;
 import com.c104.seolo.global.security.jwt.JwtUtils;
 import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
 import com.c104.seolo.global.security.jwt.entity.JWTAuthenticationToken;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import jakarta.servlet.FilterChain;
@@ -18,11 +20,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,17 +61,27 @@ public class JwtValidationFilter extends OncePerRequestFilter {
 
         //엑세스 토큰 검증
         try {
-            Authentication authentication = getAuthentication(jwtUtils.validateAccessToken(accessToken), deviceType);
+            Authentication authentication = getAuthentication(jwtUtils.validateAccessToken(accessToken, deviceType));
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        } catch (CommonException e) {
+            filterChain.doFilter(request, response);
+        } catch (AuthException e) {
             log.error("Token validation failed", e);
+            SecurityContextHolder.clearContext();
+            response.setStatus(e.getHttpStatus().value());
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write(new ObjectMapper().writeValueAsString(
+                    SeoloErrorResponse.builder()
+                            .httpStatus(e.getHttpStatus())
+                            .errorCode(e.getErrorCode())
+                            .message(e.getMessage())
+                            .build()));
+            return;
         }
 
-        filterChain.doFilter(request, response);
     }
 
 
-    private Authentication getAuthentication(Jws<Claims> claims, String deviceType) {
+    private Authentication getAuthentication(Jws<Claims> claims) {
         String username = claims.getBody().getSubject();
         Long userId = claims.getBody().get("userId", Long.class);
         String companyCode = claims.getBody().get("companyCode", String.class);

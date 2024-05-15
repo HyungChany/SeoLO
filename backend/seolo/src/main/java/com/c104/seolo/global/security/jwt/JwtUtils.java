@@ -2,7 +2,7 @@ package com.c104.seolo.global.security.jwt;
 
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.config.JwtProperties;
-import com.c104.seolo.global.exception.CommonException;
+import com.c104.seolo.global.exception.AuthException;
 import com.c104.seolo.global.security.exception.JwtErrorCode;
 import com.c104.seolo.global.security.jwt.repository.InvalidTokenRepository;
 import com.c104.seolo.global.security.jwt.repository.JwtTokenRepository;
@@ -88,45 +88,51 @@ public class JwtUtils {
                 .compact();
     }
 
-    public Jws<Claims> validateAccessToken(final String token) {
+    public Jws<Claims> validateAccessToken(final String token, String deviceType) {
         try {
-            log.info("Validating token: {}", token);
+            log.info("토큰 검증 시작 : {}", token);
             if (token == null || token.isEmpty()) {
                 log.error("Token is null or empty");
-                throw new CommonException(JwtErrorCode.INVALID_TOKEN);
+                throw new AuthException(JwtErrorCode.INVALID_TOKEN);
             }
 
             // Redis에 저장된 무효 토큰 검증
             invalidTokenRepository.findById(token).ifPresent(value -> {
-                log.info("Token found in invalidTokenRepository: {}", token);
-                throw new CommonException(JwtErrorCode.TOKEN_SIGNATURE_ERROR);
+                log.info("무효화 된 토큰 : {}", token);
+                throw new AuthException(JwtErrorCode.TOKEN_SIGNATURE_ERROR);
             });
 
-            log.info("Checking if token exists in jwtTokenRepository: {}", token);
             // Redis에 저장된 유효 토큰 검증
             if (!jwtTokenRepository.existsByAccessToken(token)) {
-                log.info("Token not found in jwtTokenRepository: {}", token);
-                throw new CommonException(JwtErrorCode.INVALID_TOKEN);
+                log.info("해당 accessToken 저장소에 없음 : {}", token);
+                throw new AuthException(JwtErrorCode.INVALID_TOKEN);
             }
 
             // 토큰의 서명을 검증하고 클레임 추출
-            log.info("Validating token signature: {}", token);
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(accessSecretKey).parseClaimsJws(token);
             log.info("Token validated successfully: {}", token);
+
+            // Device-Type 검증
+            String tokenDeviceType = claimsJws.getBody().get("deviceType", String.class);
+            if (!deviceType.equals(tokenDeviceType)) {
+                log.error("Device-Type 미스매칭 : Token deviceType = {}, Header deviceType = {}", tokenDeviceType, deviceType);
+                throw new AuthException(JwtErrorCode.INVALID_DEVICE_TYPE);
+            }
+
             return claimsJws;
 
         } catch (MalformedJwtException e) {
             log.error("Invalid JWT token: {}", e.getMessage());
-            throw new CommonException(JwtErrorCode.TOKEN_SIGNATURE_ERROR);
+            throw new AuthException(JwtErrorCode.TOKEN_SIGNATURE_ERROR);
         } catch (IllegalArgumentException e) {
             log.error("Invalid JWT token: {}", e.getMessage());
-            throw new CommonException(JwtErrorCode.INVALID_TOKEN);
+            throw new AuthException(JwtErrorCode.INVALID_TOKEN);
         } catch (ExpiredJwtException e) {
             log.error("Expired JWT token: {}", e.getMessage());
-            throw new CommonException(JwtErrorCode.EXPIRED_TOKEN);
+            throw new AuthException(JwtErrorCode.EXPIRED_TOKEN);
         } catch (UnsupportedJwtException e) {
             log.error("Unsupported JWT token: {}", e.getMessage());
-            throw new CommonException(JwtErrorCode.NOT_SUPPORT_TOKEN);
+            throw new AuthException(JwtErrorCode.NOT_SUPPORT_TOKEN);
         }
     }
 }
