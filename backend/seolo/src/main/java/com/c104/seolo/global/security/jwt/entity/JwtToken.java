@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
 
 @Getter
-@RedisHash(value = "jwtToken", timeToLive = 7 * 24 * 60 * 60 * 1000)
+@RedisHash(value = "jwtToken", timeToLive = 360_000_000)
 public class JwtToken {
     @Id
     private Long id;
