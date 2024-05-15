@@ -8,20 +8,38 @@ import {
   useMapEvents,
 } from 'react-leaflet';
 import * as Typo from '@/components/typography/Typography.tsx';
+import { useQuery } from '@tanstack/react-query';
+import { blueprintList } from '@/apis/Main.ts';
 
 interface ImageMapProps {
   imageFile: string | null;
   modifyMode: boolean;
+  selectedOption: number;
 }
 
+interface MarkerLocationType {
+  locationX: number;
+  locationY: number;
+}
+
+interface MarkerType {
+  marker_id: number;
+  marker_locations: MarkerLocationType;
+}
 export const Leaflet = ({
   imageFile,
   modifyMode,
+  selectedOption,
 }: ImageMapProps): JSX.Element | null => {
   const [bounds, setBounds] = useState<L.LatLngBounds | null>(null);
   const [markers, setMarkers] = useState<L.LatLng[]>([]);
   const map = useMap();
 
+  // 기존에 있는 마커 불러오기
+  const { data: markerData } = useQuery({
+    queryKey: ['markers', selectedOption],
+    queryFn: () => blueprintList(selectedOption),
+  });
   useEffect(() => {
     if (imageFile) {
       const img = new Image();
@@ -54,7 +72,18 @@ export const Leaflet = ({
       }
     },
   });
-
+  useEffect(() => {
+    if (markerData) {
+      const propsMarkers = markerData.markers;
+      propsMarkers.map((data: MarkerType) => {
+        const newMarker = L.latLng(
+          data.marker_locations.locationX,
+          data.marker_locations.locationY,
+        );
+        setMarkers((currentMarkers) => [...currentMarkers, newMarker]);
+      });
+    }
+  }, [markerData]);
   const customIcon = L.icon({
     iconUrl: '@/../assets/images/Position.png',
     iconSize: [30, 42],

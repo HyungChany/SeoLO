@@ -394,8 +394,12 @@ const MainPage = () => {
                   style={{ height: '100%', width: '100%', overflow: 'hidden' }}
                   attributionControl={false}
                 >
-                  {imageFile && (
-                    <Leaflet imageFile={imageFile} modifyMode={modifyMode} />
+                  {imageFile && selectedOption && (
+                    <Leaflet
+                      imageFile={imageFile}
+                      modifyMode={modifyMode}
+                      selectedOption={selectedOption.value}
+                    />
                   )}
                 </MapContainer>
               </CardDrawing>
