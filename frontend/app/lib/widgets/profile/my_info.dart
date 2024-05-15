@@ -1,6 +1,7 @@
 import 'package:app/main.dart';
 import 'package:app/view_models/user/my_info_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
 class MyInfo extends StatefulWidget {

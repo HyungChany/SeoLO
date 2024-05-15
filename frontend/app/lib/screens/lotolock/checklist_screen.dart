@@ -25,6 +25,7 @@ class _CheckScreenState extends State<CheckScreen> {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<ChecklistViewModel>(context);
+    debugPrint(viewModel.isCheckedList.toString());
 
     return Scaffold(
       appBar: const Header(
@@ -54,7 +55,7 @@ class _CheckScreenState extends State<CheckScreen> {
                     children: List.generate(
                       viewModel.checklist.length,
                       (index) => CheckboxListTile(
-                        title: Text(viewModel.checklist[index].context, style: TextStyle(fontFamily: 'font'),),
+                        title: Text(viewModel.checklist[index].context, style: const TextStyle(fontFamily: 'font'),),
                         value: viewModel.isCheckedList[index],
                         onChanged: (value) {
                           setState(() {

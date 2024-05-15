@@ -62,69 +62,81 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.8,
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      child: GridView.count(
-                        crossAxisCount: 2,
-                        children: List.generate(
-                            taskIcon.length,
-                            (index) => CommonIconButton(
-                                text:
-                                    viewModel.templates[index].taskTemplateName,
-                                iconImage: taskIcon[index],
-                                shape: BoxShape.circle,
-                                isSelected: taskOption ==
-                                    viewModel.templates[index].taskTemplateName,
-                                onTap: () {
-                                  selectId =
-                                      viewModel.templates[index].taskTemplateId;
-                                  selectName = viewModel
-                                      .templates[index].taskTemplateName;
-                                  selectPrecaution =
-                                      viewModel.templates[index].taskPrecaution;
-                                  updateTaskTemplate(viewModel
-                                      .templates[index].taskTemplateName);
-                                })),
-                      ),
+          : Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Center(
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 10,
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.8,
+                          height: MediaQuery.of(context).size.height * 0.4,
+                          child: GridView.count(
+                            crossAxisCount: 2,
+                            children: List.generate(
+                                taskIcon.length,
+                                (index) => CommonIconButton(
+                                    text: viewModel
+                                        .templates[index].taskTemplateName,
+                                    iconImage: taskIcon[index],
+                                    shape: BoxShape.circle,
+                                    isSelected: taskOption ==
+                                        viewModel
+                                            .templates[index].taskTemplateName,
+                                    onTap: () {
+                                      selectId = viewModel
+                                          .templates[index].taskTemplateId;
+                                      selectName = viewModel
+                                          .templates[index].taskTemplateName;
+                                      selectPrecaution = viewModel
+                                          .templates[index].taskPrecaution;
+                                      updateTaskTemplate(viewModel
+                                          .templates[index].taskTemplateName);
+                                    })),
+                          ),
+                        ),
+                        LargeInputBox(
+                          hintText: '내용을 입력해 주세요',
+                          precaution: selectPrecaution,
+                          onTextSaved: (text) {
+                            selectPrecaution = text;
+                          },
+                        ),
+                      ],
                     ),
-                    LargeInputBox(
-                      hintText: '내용을 입력해 주세요',
-                      precaution: selectPrecaution,
-                      onTextSaved: (text) {
-                        selectPrecaution = text;
-                      },
-                    ),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    CommonTextButton(
-                        text: '확인',
-                        onTap: () {
-                          if (selectId != 0) {
-                            coreViewModel.setTaskPrecaution(selectPrecaution!);
-                            coreViewModel.setTaskTemplateId(selectId);
-                            coreViewModel.setTaskTemplateName(selectName);
-                            Navigator.pushNamed(context, '/selectDay');
-                          } else {
-                            showDialog(
-                                context: context,
-                                barrierDismissible: true,
-                                builder: (BuildContext context) {
-                                  return const CommonDialog(
-                                    content: '항목을 선택해 주세요.',
-                                    buttonText: '확인',
-                                  );
-                                });
-                          }
-                        })
-                  ],
+                  ),
                 ),
-              ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 20, left: 50, right: 50),
+                      child: CommonTextButton(
+                          text: '확인',
+                          onTap: () {
+                            if (selectId != 0) {
+                              coreViewModel
+                                  .setTaskPrecaution(selectPrecaution!);
+                              coreViewModel.setTaskTemplateId(selectId);
+                              coreViewModel.setTaskTemplateName(selectName);
+                              Navigator.pushNamed(context, '/selectDay');
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (BuildContext context) {
+                                    return const CommonDialog(
+                                      content: '항목을 선택해 주세요.',
+                                      buttonText: '확인',
+                                    );
+                                  });
+                            }
+                          })),
+                ),
+              ],
             ),
     );
   }

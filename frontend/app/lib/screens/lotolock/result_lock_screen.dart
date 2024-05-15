@@ -21,12 +21,15 @@ class _ResultLockScreenState extends State<ResultLockScreen> {
                 child: CircularProgressIndicator(),
               )
             : (lockVM.errorMessage == null)
-                ? Column(
-                    children: [
-                      Image.asset('assets/images/success_loto.png'),
-                      const Text('잠금되었습니다.'),
-                    ],
-                  )
+                ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/images/success_loto.png'),
+                        const Text('잠금되었습니다.'),
+                      ],
+                    ),
+                )
                 : Column(
                     children: [Image.asset('assets/images/fail_loto.png'),
                     Text(lockVM.errorMessage ?? '잠금에 실패하였습니다.')],

@@ -20,12 +20,16 @@ class _ResultUnlockScreenState extends State<ResultUnlockScreen> {
                 child: CircularProgressIndicator(),
               )
             : (unlockVM.errorMessage == null)
-                ? Column(
-                    children: [
-                      Image.asset('assets/images/success_loto.png'),
-                      const Text('잠금 해제 되었습니다.'),
-                    ],
-                  )
+                ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset('assets/images/success_loto.png'),
+                        SizedBox(height: 20,),
+                        const Text('잠금 해제 되었습니다.', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                      ],
+                    ),
+                )
                 : Column(
                     children: [
                       Image.asset('assets/images/fail_loto.png'),

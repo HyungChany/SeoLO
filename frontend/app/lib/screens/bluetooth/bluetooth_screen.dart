@@ -32,6 +32,8 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   String? lockerToken;
   String? machineId;
   String? userId;
+  BluetoothService? bluetoothService;
+  BluetoothCharacteristic? bluetoothCharacteristic;
 
   @override
   @override
@@ -63,6 +65,11 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   }
 
   Future onScanPressed() async {
+    await _storage.delete(key: 'Core-Code');
+    await _storage.delete(key: 'machine_id');
+    await _storage.delete(key: 'locker_uid');
+    await _storage.delete(key: 'locker_token');
+    await _storage.delete(key: 'locker_battery');
     try {
       _systemDevices = await FlutterBluePlus.systemDevices;
     } catch (e) {
@@ -88,31 +95,36 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   }
 
   void connectToDevice(BluetoothDevice device) async {
-    companyCode = await _storage.read(key: 'Company-Code');
-    coreCode = await _storage.read(key: 'Core-Code');
-    lockerToken = await _storage.read(key: 'locker_token');
-    machineId = await _storage.read(key: 'machine_id');
-    userId = await _storage.read(key: 'user_id');
-
     await device.connect();
-    debugPrint('Connected to ${device.platformName}');
+    FlutterBluePlus.stopScan();
+    writeToDevice(device);
+  }
+
+
+  void writeToDevice(BluetoothDevice device) async {
+    final issueVM = Provider.of<CoreIssueViewModel>(context, listen: false);
+    final lockedVM = Provider.of<CoreLockedViewModel>(context, listen: false);
+    // debugPrint('Connected to ${device.platformName}');
     device.discoverServices().then((services) async {
+      companyCode = await _storage.read(key: 'Company-Code');
+      coreCode = await _storage.read(key: 'Core-Code');
+      lockerToken = await _storage.read(key: 'locker_token');
+      machineId = await _storage.read(key: 'machine_id');
+      userId = await _storage.read(key: 'user_id');
       for (var service in services) {
-        // debugPrint('service uuids : ${service.uuid.toString().toUpperCase()}');
         if (service.uuid.toString().toUpperCase() ==
             "20240520-C104-C104-C104-012345678910") {
+          bluetoothService = service;
           List<BluetoothCharacteristic> characteristics =
               service.characteristics;
           for (var characteristic in characteristics) {
             if (characteristic.uuid.toString().toUpperCase() ==
                 "20240521-C104-C104-C104-012345678910") {
-              // debugPrint('character uuids : ${characteristic.uuid.toString()}');
-              // characteristic = characteristic;
+              bluetoothCharacteristic = characteristic;
               debugPrint('쓰기 시도');
-              // _storage.write(key: 'Core-Code', value: 'INIT');
-              // String message = "SFY001KOR,LOCK,token,15,3";
               String message =
-                  "${companyCode ?? ''},${'INIT'},${lockerToken ?? ''},${machineId ?? '4'},${userId ?? ''}";
+                  "${companyCode ?? ''},${coreCode ?? 'INIT'},${lockerToken ?? ''},${machineId ?? ''},${userId ?? ''}";
+              debugPrint('보내는 값: $message');
               List<int> encodedMessage = utf8.encode(message);
               try {
                 await characteristic.write(encodedMessage,
@@ -120,44 +132,42 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     // characteristic.properties.writeWithoutResponse,
                     allowLongWrite: true,
                     timeout: 30);
-                debugPrint('write success');
                 characteristic.setNotifyValue(true);
                 characteristic.read();
                 characteristic.lastValueStream.listen((value) {
                   String receivedString = utf8.decode(value);
-                  debugPrint('응답: $receivedString');
                   _receivedValues = receivedString.split(',');
                   if (_receivedValues[4] == userId) {
                     _storage.write(key: 'Core-Code', value: _receivedValues[0]);
-                    _storage.write(
-                        key: 'locker_uid', value: _receivedValues[1]);
-                    _storage.write(
-                        key: 'machine_id', value: _receivedValues[2]);
-                    _storage.write(
-                        key: 'locker_battery', value: _receivedValues[3]);
+                    _storage.write(key: 'locker_uid', value: _receivedValues[1]);
+                    _storage.write(key: 'machine_id', value: _receivedValues[2]);
+                    _storage.write(key: 'locker_battery', value: _receivedValues[3]);
+                  }
+                  // 작업 내역 먼저 작성하면 machine id 저장되어있는 상태
+                  // 작업 내역 작성하고 확인 누르면 블투 연결부터 잠금까지 한번에
+                  if (_receivedValues[0] == 'WRITED') {
+                    issueVM.coreIssue().then((_) {
+                      // ISSUE API 성공하면 바로 LOCK
+                      writeToDevice(device);
+                    });
+                  }
+                  if (_receivedValues[0] == 'WRITE') {
+                    Navigator.pushReplacementNamed(context, '/checklist');
+                  }
+                  if (_receivedValues[0] == 'CHECK') {
+                    Navigator.pushReplacementNamed(
+                        context, '/otherWorklistCheck');
+                  }
+                  if (_receivedValues[0] == 'UNLOCK') {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/resultUnlock', (route) => false);
+                  }
+                  if (_receivedValues[0] == 'LOCKED') {
 
-                    if (_receivedValues[0] == 'WRITE') {
-                      // 일지 먼저 작성하고 잠금을 요청하려면 write 받고 바로 로직 수행 후 lock
-
-                      // 태그 -> 일지 작성 -> 잠금 태그라면 블루투스 연결 2번?
+                    lockedVM.coreLocked().then((_) {
                       Navigator.pushNamedAndRemoveUntil(
-                          context, '/checklist', ModalRoute.withName('/main'));
-                    }
-                    if (_receivedValues[0] == 'CHECK') {
-                      Navigator.pushReplacementNamed(
-                          context, '/otherWorklistCheck');
-                    }
-                    if (_receivedValues[0] == 'UNLOCK') {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/resultUnlock', (route) => false);
-                    }
-                    if (_receivedValues[0] == 'LOCKED') {
-                      Navigator.pushReplacementNamed(context, '/loadingLock');
-                    }
-                    // if (characteristic.properties.read) {
-                    //   await characteristic.read();
-                    //   debugPrint('응답값: ${characteristic.read().toString()}');
-                    // }
+                          context, '/main', (route) => false);
+                    });
                   }
                 });
               } catch (e) {

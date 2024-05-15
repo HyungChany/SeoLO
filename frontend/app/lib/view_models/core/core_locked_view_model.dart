@@ -6,7 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class CoreLockedViewModel extends ChangeNotifier {
   final _storage = const FlutterSecureStorage();
   final CoreService _coreService = CoreService();
-  late CoreLockedModel _coreLockedModel;
+  CoreLockedModel? _coreLockedModel;
   String? lockerUid;
   String? battery;
   String? machineId;
@@ -40,7 +40,7 @@ class CoreLockedViewModel extends ChangeNotifier {
 
     await initializeData();
 
-    final result = await _coreService.coreLocked(_coreLockedModel);
+    final result = await _coreService.coreLocked(_coreLockedModel!);
     _isLoading = false;
 
     if (!result['success']) {

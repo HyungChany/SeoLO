@@ -10,25 +10,22 @@ class CoreIssueViewModel extends ChangeNotifier {
   final MyInfoViewModel _myInfoViewModel = MyInfoViewModel();
   final _storage = const FlutterSecureStorage();
 
-  CoreIssueViewModel() {
-    _fetchMyInfo();
-  }
-
   late MyInfoModel myInfo;
-  late CoreIssueModel _coreIssueModel;
+  CoreIssueModel? _coreIssueModel;
   String? battery;
   String? lockerUid;
 
-  Future<void> _fetchMyInfo() async {
+  void fetchMyInfo() async {
     await _myInfoViewModel.myInfo();
     myInfo = _myInfoViewModel.myInfoModel!;
 
-    final manager = '${myInfo.employeeTeam} ${myInfo.employeeName} ${myInfo.employeeTitle}';
+    final manager =
+        '${myInfo.employeeTeam} ${myInfo.employeeName} ${myInfo.employeeTitle}';
     battery = await _storage.read(key: 'locker_battery');
-    int? batteryInfo = int.parse(battery!);
+    int? batteryInfo = (battery != null) ? int.parse(battery!) : 0;
     lockerUid = await _storage.read(key: 'locker_uid');
     _coreIssueModel = CoreIssueModel(
-      lockerUid: lockerUid,
+      lockerUid: lockerUid ?? '',
       machineId: 0,
       taskTemplateId: 0,
       taskPrecaution: '',
@@ -39,28 +36,31 @@ class CoreIssueViewModel extends ChangeNotifier {
       taskTemplateName: '',
       endDay: '',
       battery: batteryInfo,
+      nextCode: '',
+      tokenValue: '',
     );
 
     notifyListeners();
   }
 
-
   bool _isLoading = false;
   String? _errorMessage;
 
-  String? get facilityName => _coreIssueModel.facilityName;
+  String? get facilityName => _coreIssueModel!.facilityName;
 
-  String? get machineName => _coreIssueModel.machineName;
+  String? get machineName => _coreIssueModel!.machineName;
 
-  String? get manager => _coreIssueModel.manager;
+  int? get machineId => _coreIssueModel!.machineId;
 
-  String? get endTime => _coreIssueModel.endTime;
+  String? get manager => _coreIssueModel!.manager;
 
-  String? get taskTemplateName => _coreIssueModel.taskTemplateName;
+  String? get endTime => _coreIssueModel!.endTime;
 
-  String? get taskPrecaution => _coreIssueModel.taskPrecaution;
+  String? get taskTemplateName => _coreIssueModel!.taskTemplateName;
 
-  String? get endDay => _coreIssueModel.endDay;
+  String? get taskPrecaution => _coreIssueModel!.taskPrecaution;
+
+  String? get endDay => _coreIssueModel!.endDay;
 
   bool get isLoading => _isLoading;
 
@@ -68,129 +68,129 @@ class CoreIssueViewModel extends ChangeNotifier {
 
   void setMachineId(int value) {
     _coreIssueModel = CoreIssueModel(
-        lockerUid: _coreIssueModel.lockerUid,
+        lockerUid: _coreIssueModel!.lockerUid,
         machineId: value,
-        taskTemplateId: _coreIssueModel.taskTemplateId,
-        taskPrecaution: _coreIssueModel.taskPrecaution,
-        endTime: _coreIssueModel.endTime,
-        facilityName: _coreIssueModel.facilityName,
-        machineName: _coreIssueModel.machineName,
-        manager: _coreIssueModel.manager,
-        taskTemplateName: _coreIssueModel.taskTemplateName,
-        endDay: _coreIssueModel.endDay,
-        battery: _coreIssueModel.battery);
+        taskTemplateId: _coreIssueModel!.taskTemplateId,
+        taskPrecaution: _coreIssueModel!.taskPrecaution,
+        endTime: _coreIssueModel!.endTime,
+        facilityName: _coreIssueModel!.facilityName,
+        machineName: _coreIssueModel!.machineName,
+        manager: _coreIssueModel!.manager,
+        taskTemplateName: _coreIssueModel!.taskTemplateName,
+        endDay: _coreIssueModel!.endDay,
+        battery: _coreIssueModel!.battery);
     notifyListeners();
   }
 
   void setTaskTemplateId(int value) {
     _coreIssueModel = CoreIssueModel(
-        lockerUid: _coreIssueModel.lockerUid,
-        machineId: _coreIssueModel.machineId,
+        lockerUid: _coreIssueModel!.lockerUid,
+        machineId: _coreIssueModel!.machineId,
         taskTemplateId: value,
-        taskPrecaution: _coreIssueModel.taskPrecaution,
-        endTime: _coreIssueModel.endTime,
-        facilityName: _coreIssueModel.facilityName,
-        machineName: _coreIssueModel.machineName,
-        manager: _coreIssueModel.manager,
-        taskTemplateName: _coreIssueModel.taskTemplateName,
-        endDay: _coreIssueModel.endDay,
-        battery: _coreIssueModel.battery);
+        taskPrecaution: _coreIssueModel!.taskPrecaution,
+        endTime: _coreIssueModel!.endTime,
+        facilityName: _coreIssueModel!.facilityName,
+        machineName: _coreIssueModel!.machineName,
+        manager: _coreIssueModel!.manager,
+        taskTemplateName: _coreIssueModel!.taskTemplateName,
+        endDay: _coreIssueModel!.endDay,
+        battery: _coreIssueModel!.battery);
     notifyListeners();
   }
 
   void setTaskPrecaution(String value) {
     _coreIssueModel = CoreIssueModel(
-        lockerUid: _coreIssueModel.lockerUid,
-        machineId: _coreIssueModel.machineId,
-        taskTemplateId: _coreIssueModel.taskTemplateId,
+        lockerUid: _coreIssueModel!.lockerUid,
+        machineId: _coreIssueModel!.machineId,
+        taskTemplateId: _coreIssueModel!.taskTemplateId,
         taskPrecaution: value,
-        endTime: _coreIssueModel.endTime,
-        facilityName: _coreIssueModel.facilityName,
-        machineName: _coreIssueModel.machineName,
-        manager: _coreIssueModel.manager,
-        taskTemplateName: _coreIssueModel.taskTemplateName,
-        endDay: _coreIssueModel.endDay,
-        battery: _coreIssueModel.battery);
+        endTime: _coreIssueModel!.endTime,
+        facilityName: _coreIssueModel!.facilityName,
+        machineName: _coreIssueModel!.machineName,
+        manager: _coreIssueModel!.manager,
+        taskTemplateName: _coreIssueModel!.taskTemplateName,
+        endDay: _coreIssueModel!.endDay,
+        battery: _coreIssueModel!.battery);
     notifyListeners();
   }
 
   void setEndTime(String value) {
     _coreIssueModel = CoreIssueModel(
-        lockerUid: _coreIssueModel.lockerUid,
-        machineId: _coreIssueModel.machineId,
-        taskTemplateId: _coreIssueModel.taskTemplateId,
-        taskPrecaution: _coreIssueModel.taskPrecaution,
-        endTime: '${_coreIssueModel.endDay}T$value:00',
-        facilityName: _coreIssueModel.facilityName,
-        machineName: _coreIssueModel.machineName,
-        manager: _coreIssueModel.manager,
-        taskTemplateName: _coreIssueModel.taskTemplateName,
-        endDay: _coreIssueModel.endDay,
-        battery: _coreIssueModel.battery);
+        lockerUid: _coreIssueModel!.lockerUid,
+        machineId: _coreIssueModel!.machineId,
+        taskTemplateId: _coreIssueModel!.taskTemplateId,
+        taskPrecaution: _coreIssueModel!.taskPrecaution,
+        endTime: '${_coreIssueModel!.endDay}T$value:00',
+        facilityName: _coreIssueModel!.facilityName,
+        machineName: _coreIssueModel!.machineName,
+        manager: _coreIssueModel!.manager,
+        taskTemplateName: _coreIssueModel!.taskTemplateName,
+        endDay: _coreIssueModel!.endDay,
+        battery: _coreIssueModel!.battery);
     notifyListeners();
   }
 
   void setFacilityName(String value) {
     _coreIssueModel = CoreIssueModel(
-        lockerUid: _coreIssueModel.lockerUid,
-        machineId: _coreIssueModel.machineId,
-        taskTemplateId: _coreIssueModel.taskTemplateId,
-        taskPrecaution: _coreIssueModel.taskPrecaution,
-        endTime: _coreIssueModel.endTime,
+        lockerUid: _coreIssueModel!.lockerUid,
+        machineId: _coreIssueModel!.machineId,
+        taskTemplateId: _coreIssueModel!.taskTemplateId,
+        taskPrecaution: _coreIssueModel!.taskPrecaution,
+        endTime: _coreIssueModel!.endTime,
         facilityName: value,
-        machineName: _coreIssueModel.machineName,
-        manager: _coreIssueModel.manager,
-        taskTemplateName: _coreIssueModel.taskTemplateName,
-        endDay: _coreIssueModel.endDay,
-        battery: _coreIssueModel.battery);
+        machineName: _coreIssueModel!.machineName,
+        manager: _coreIssueModel!.manager,
+        taskTemplateName: _coreIssueModel!.taskTemplateName,
+        endDay: _coreIssueModel!.endDay,
+        battery: _coreIssueModel!.battery, );
     notifyListeners();
   }
 
   void setMachineName(String value) {
     _coreIssueModel = CoreIssueModel(
-        lockerUid: _coreIssueModel.lockerUid,
-        machineId: _coreIssueModel.machineId,
-        taskTemplateId: _coreIssueModel.taskTemplateId,
-        taskPrecaution: _coreIssueModel.taskPrecaution,
-        endTime: _coreIssueModel.endTime,
-        facilityName: _coreIssueModel.facilityName,
+        lockerUid: _coreIssueModel!.lockerUid,
+        machineId: _coreIssueModel!.machineId,
+        taskTemplateId: _coreIssueModel!.taskTemplateId,
+        taskPrecaution: _coreIssueModel!.taskPrecaution,
+        endTime: _coreIssueModel!.endTime,
+        facilityName: _coreIssueModel!.facilityName,
         machineName: value,
-        manager: _coreIssueModel.manager,
-        taskTemplateName: _coreIssueModel.taskTemplateName,
-        endDay: _coreIssueModel.endDay,
-        battery: _coreIssueModel.battery);
+        manager: _coreIssueModel!.manager,
+        taskTemplateName: _coreIssueModel!.taskTemplateName,
+        endDay: _coreIssueModel!.endDay,
+        battery: _coreIssueModel!.battery);
     notifyListeners();
   }
 
   void setTaskTemplateName(String value) {
     _coreIssueModel = CoreIssueModel(
-        lockerUid: _coreIssueModel.lockerUid,
-        machineId: _coreIssueModel.machineId,
-        taskTemplateId: _coreIssueModel.taskTemplateId,
-        taskPrecaution: _coreIssueModel.taskPrecaution,
-        endTime: _coreIssueModel.endTime,
-        facilityName: _coreIssueModel.facilityName,
-        machineName: _coreIssueModel.machineName,
-        manager: _coreIssueModel.manager,
+        lockerUid: _coreIssueModel!.lockerUid,
+        machineId: _coreIssueModel!.machineId,
+        taskTemplateId: _coreIssueModel!.taskTemplateId,
+        taskPrecaution: _coreIssueModel!.taskPrecaution,
+        endTime: _coreIssueModel!.endTime,
+        facilityName: _coreIssueModel!.facilityName,
+        machineName: _coreIssueModel!.machineName,
+        manager: _coreIssueModel!.manager,
         taskTemplateName: value,
-        endDay: _coreIssueModel.endDay,
-        battery: _coreIssueModel.battery);
+        endDay: _coreIssueModel!.endDay,
+        battery: _coreIssueModel!.battery);
     notifyListeners();
   }
 
   void setEndDay(String value) {
     _coreIssueModel = CoreIssueModel(
-        lockerUid: _coreIssueModel.lockerUid,
-        machineId: _coreIssueModel.machineId,
-        taskTemplateId: _coreIssueModel.taskTemplateId,
-        taskPrecaution: _coreIssueModel.taskPrecaution,
-        endTime: _coreIssueModel.endTime,
-        facilityName: _coreIssueModel.facilityName,
-        machineName: _coreIssueModel.machineName,
-        manager: _coreIssueModel.manager,
-        taskTemplateName: _coreIssueModel.taskTemplateName,
+        lockerUid: _coreIssueModel!.lockerUid,
+        machineId: _coreIssueModel!.machineId,
+        taskTemplateId: _coreIssueModel!.taskTemplateId,
+        taskPrecaution: _coreIssueModel!.taskPrecaution,
+        endTime: _coreIssueModel!.endTime,
+        facilityName: _coreIssueModel!.facilityName,
+        machineName: _coreIssueModel!.machineName,
+        manager: _coreIssueModel!.manager,
+        taskTemplateName: _coreIssueModel!.taskTemplateName,
         endDay: value,
-        battery: _coreIssueModel.battery);
+        battery: _coreIssueModel!.battery);
     notifyListeners();
   }
 
@@ -199,7 +199,7 @@ class CoreIssueViewModel extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-    final result = await _coreService.coreIssue(_coreIssueModel);
+    final result = await _coreService.coreIssue(_coreIssueModel!);
     _isLoading = false;
 
     if (!result['success']) {

@@ -140,6 +140,7 @@ class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
+    debugPrint('state = $state');
     switch(state) {
       case AppLifecycleState.resumed:
         _resumed();
@@ -189,12 +190,12 @@ class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver
 
     if(shouldShowPIN) {
       // show PIN screen
-      Navigator.pushReplacementNamed(context, '/pinLogin');
+      Navigator.pushNamed(context, '/pinLogin');
     }
-
     sp.remove(backgroundedTimeKey);
     sp.setInt(lastKnownStateKey, AppLifecycleState.resumed.index);
   }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(

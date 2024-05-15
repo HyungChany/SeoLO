@@ -19,6 +19,7 @@ class _FacilitySelectScreenState extends State<FacilitySelectScreen> {
   void initState() {
     super.initState();
     Provider.of<FacilityViewModel>(context, listen: false).loadInitialData();
+    Provider.of<CoreIssueViewModel>(context, listen: false).fetchMyInfo();
   }
 
   @override

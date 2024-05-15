@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/button/common_text_button.dart';
 import 'package:app/main.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
 class WorkListCheckScreen extends StatefulWidget {
@@ -14,6 +15,8 @@ class WorkListCheckScreen extends StatefulWidget {
 }
 
 class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
+  final _storage = const FlutterSecureStorage();
+  String? lockerUid;
   List<String> workListTitle = [
     '작업장',
     '장비 명',
@@ -22,6 +25,17 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
     '작업 내용'
   ];
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    isConnect();
+  }
+
+  void isConnect() async {
+    lockerUid = await _storage.read(key: 'locker_uid');
+    debugPrint(lockerUid);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,25 +111,34 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
             child: Padding(
               padding: const EdgeInsets.only(bottom: 20, left: 50, right: 50),
               child: CommonTextButton(
-                text: '확인',
+                text: '작업 내역 저장 및 자물쇠 잠금',
                 onTap: () {
-                  if (!viewModel.isLoading) {
-                    viewModel.coreIssue().then((_) {
-                      // 일지 작성 후 lock 하러 가기!
-                      if (viewModel.errorMessage == null) {
-                        Navigator.pushNamedAndRemoveUntil(context, '/bluetooth', (route) => false);
-                      } else {
-                        showDialog(
-                            context: context,
-                            barrierDismissible: true,
-                            builder: (BuildContext context) {
-                              return CommonDialog(
-                                content: viewModel.errorMessage!,
-                                buttonText: '확인',
-                              );
-                            });
-                      }
-                    });
+                  // machine id 저장
+                  _storage.write(key: 'machine_id', value: viewModel.machineId.toString());
+                  // storage에 locker uid가 있다면 연결 먼저 한 것
+                  // 그럼 issue api 요청 후 bluetooth 이동
+                  if (lockerUid != null) {
+                    if (!viewModel.isLoading) {
+                      viewModel.coreIssue().then((_) {
+                        // 일지 작성 후 lock 하러 가기!
+                        if (viewModel.errorMessage == null) {
+                          Navigator.pushNamedAndRemoveUntil(context, '/bluetooth', (route) => false);
+                        } else {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (BuildContext context) {
+                                return CommonDialog(
+                                  content: viewModel.errorMessage!,
+                                  buttonText: '확인',
+                                );
+                              });
+                        }
+                      });
+                    }
+                  } else {
+                    // locker uid가 null이라면 일지 먼저 작성한 것
+                    Navigator.pushNamedAndRemoveUntil(context, '/bluetooth', (route) => false);
                   }
                 },
               ),
