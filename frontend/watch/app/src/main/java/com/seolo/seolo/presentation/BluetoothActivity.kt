@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.BluetoothAdapter
 import com.seolo.seolo.adapters.BluetoothDeviceAdapter
+import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.helper.TokenManager
 import java.nio.charset.StandardCharsets
 import java.util.UUID
@@ -97,7 +98,8 @@ class BluetoothActivity : AppCompatActivity() {
             Toast.makeText(this@BluetoothActivity, "$deviceName 클릭", Toast.LENGTH_SHORT).show()
 
             // Bluetooth GATT로 기기 연결 시작 (BluetoothDevice.TRANSPORT_LE 사용)
-            bluetoothGatt = device.connectGatt(this, false, gattClientCallback, BluetoothDevice.TRANSPORT_LE)
+            bluetoothGatt =
+                device.connectGatt(this, false, gattClientCallback, BluetoothDevice.TRANSPORT_LE)
         } else {
             // 권한이 없으면 사용자에게 권한 요청
             requestPermissions(
@@ -124,8 +126,7 @@ class BluetoothActivity : AppCompatActivity() {
                 } else {
                     // 권한이 없을 때 사용자에게 권한 요청
                     requestPermissions(
-                        arrayOf(Manifest.permission.BLUETOOTH_CONNECT),
-                        REQUEST_BLUETOOTH_PERMISSION
+                        arrayOf(Manifest.permission.BLUETOOTH_CONNECT), REQUEST_BLUETOOTH_PERMISSION
                     )
                 }
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
@@ -155,15 +156,19 @@ class BluetoothActivity : AppCompatActivity() {
                 if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     // 권한이 있을 때
                     // 데이터 쓰기 포맷(회사코드,명령어,토큰,머신ID,유저ID)
-                    val token = TokenManager.getAccessToken(this@BluetoothActivity) // 실제 토큰 값 가져오기
-                    char?.setValue("SFY001KOR,WHITE,$token,MachineID,UserID".toByteArray(StandardCharsets.UTF_8))
+                    val companyCode = TokenManager.getCompanyCode(this@BluetoothActivity)
+                    val token = TokenManager.getAccessToken(this@BluetoothActivity)
+                    val machineId = SessionManager.selectedMachineId
+                    val userId = TokenManager.getUserId(this@BluetoothActivity)
+                    char?.setValue("$companyCode,LOCKED,$token,$machineId,$userId".toByteArray(StandardCharsets.UTF_8))
                     gatt?.writeCharacteristic(char)
 
                     // 특성 변경 알림 등록
                     gatt?.setCharacteristicNotification(char, true)
 
                     // CCCD(UUID 0x2902) 설정
-                    val descriptor = char?.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"))
+                    val descriptor =
+                        char?.getDescriptor(UUID.fromString("00002902-0000-1000-8000-00805f9b34fb"))
                     descriptor?.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
                     gatt?.writeDescriptor(descriptor)
 
@@ -175,23 +180,29 @@ class BluetoothActivity : AppCompatActivity() {
                 } else {
                     // 권한이 없을 때 사용자에게 권한 요청
                     requestPermissions(
-                        arrayOf(Manifest.permission.BLUETOOTH_CONNECT),
-                        REQUEST_BLUETOOTH_PERMISSION
+                        arrayOf(Manifest.permission.BLUETOOTH_CONNECT), REQUEST_BLUETOOTH_PERMISSION
                     )
                 }
             }
         }
 
         // 캐릭터리스틱에 데이터가 성공적으로 쓰였을 때 호출되는 콜백
-        override fun onCharacteristicWrite(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int) {
+        override fun onCharacteristicWrite(
+            gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int
+        ) {
             super.onCharacteristicWrite(gatt, characteristic, status)
             if (status == BluetoothGatt.GATT_SUCCESS) {
-                Log.d("BluetoothActivity1", "${characteristic?.value?.toString(StandardCharsets.UTF_8)}")
+                Log.d(
+                    "BluetoothActivity1",
+                    "${characteristic?.value?.toString(StandardCharsets.UTF_8)}"
+                )
             }
         }
 
         // 캐릭터리스틱 값이 변경되었을 때 호출되는 콜백
-        override fun onCharacteristicChanged(gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?) {
+        override fun onCharacteristicChanged(
+            gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?
+        ) {
             super.onCharacteristicChanged(gatt, characteristic)
             // 아두이노에서 보내온 데이터 수신
             // 데이터 읽기 포맷(명령어,자물쇠uid.머신id,배터리잔량,유저id)

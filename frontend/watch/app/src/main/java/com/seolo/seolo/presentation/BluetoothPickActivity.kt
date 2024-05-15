@@ -157,15 +157,15 @@ class BluetoothPickActivity : AppCompatActivity() {
                 if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     // 권한이 있을 때
                     // 데이터 쓰기 포맷(회사코드,명령어,토큰,머신ID,유저ID)
-                    val token =
-                        TokenManager.getAccessToken(this@BluetoothPickActivity) // 실제 토큰 값 가져오기
                     val companyCode =
                         TokenManager.getCompanyCode(this@BluetoothPickActivity) // 회사 코드 가져오기
-                    val userName =
-                        TokenManager.getUserName(this@BluetoothPickActivity) // 사용자 이름 가져오기
-                    Log.d("송신데이터", "companyCode: $companyCode, token: $token, userName: $userName")
+                    val token =
+                        TokenManager.getAccessToken(this@BluetoothPickActivity) // 실제 토큰 값 가져오기
+                    val userId =
+                        TokenManager.getUserId(this@BluetoothPickActivity) // 사용자 Id 가져오기
+                    Log.d("송신데이터", "companyCode: $companyCode, token: $token, userId: $userId")
                     char?.setValue(
-                        "$companyCode,INIT,$token,,$userName".toByteArray(
+                        "$companyCode,INIT,$token,,$userId".toByteArray(
                             StandardCharsets.UTF_8
                         )
                     )
