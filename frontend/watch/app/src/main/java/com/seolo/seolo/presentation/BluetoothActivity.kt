@@ -160,7 +160,7 @@ class BluetoothActivity : AppCompatActivity() {
                     val token = TokenManager.getAccessToken(this@BluetoothActivity)
                     val machineId = SessionManager.selectedMachineId
                     val userId = TokenManager.getUserId(this@BluetoothActivity)
-                    char?.setValue("$companyCode,LOCKED,$token,$machineId,$userId".toByteArray(StandardCharsets.UTF_8))
+                    char?.setValue("$companyCode,LOCK,$token,$machineId,$userId".toByteArray(StandardCharsets.UTF_8))
                     gatt?.writeCharacteristic(char)
 
                     // 특성 변경 알림 등록
