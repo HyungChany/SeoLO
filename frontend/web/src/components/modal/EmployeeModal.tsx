@@ -2,40 +2,23 @@ import styled from 'styled-components';
 import { Modal } from './Modal.tsx';
 import { Button } from '../button/Button.tsx';
 import * as Color from '@/config/color/Color.ts';
-interface EquipmentModalProps {
+import React, { useEffect, useState } from 'react';
+import { RegistratedEmployee } from '@/apis/Employee.ts';
+import { Column } from 'react-table';
+import { useTable } from 'react-table';
+import { useNavigate } from 'react-router-dom';
+interface EmployeeModalProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
 }
 
-const Chapter = styled.div`
-  border-bottom: 1px solid black;
-`;
-
-const ContentBox = styled.div`
-  height: 100%;
-  width: auto;
-  display: flex;
-  gap: 1.5rem;
-  justify-content: flex-start;
-  flex-direction: column;
-  box-sizing: border-box;
-  align-items: center;
-`;
-const MainBox = styled.div`
-  justify-content: space-between;
-  display: flex;
-  width: 100%;
-  height: 100%;
-  padding: 1.5rem;
-  box-sizing: border-box;
-  overflow-y: auto;
-`;
-
-const Content = styled.div`
-  width: auto;
-  height: auto;
-  font-size: 1.5rem;
-  font-weight: 700;
-`;
+interface EmployeeType {
+  id: number;
+  name: string;
+  empolyee_num: string;
+  title: string;
+  team: string;
+  role: string;
+}
 
 const ButtonBox = styled.div`
   width: 100%;
@@ -43,49 +26,107 @@ const ButtonBox = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
-const EquipmentModal = ({ onClick }: EquipmentModalProps) => {
-  const handleButtonClick = () => {};
+const EmployeeModal = ({ onClick }: EmployeeModalProps) => {
+  const [employeeData, setEmployeeData] = useState<EmployeeType[]>([]);
+  const navigate = useNavigate();
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await RegistratedEmployee();
+      setEmployeeData(data);
+    };
+    fetchData();
+  });
+
+  const columns: Column<EmployeeType>[] = React.useMemo<Column<EmployeeType>[]>(
+    () => [
+      { Header: '이름', accessor: 'name' },
+      { Header: '사번', accessor: 'empolyee_num' },
+      { Header: '소속 부서', accessor: 'team' },
+      { Header: '직급', accessor: 'title' },
+      { Header: '역할', accessor: 'role' },
+    ],
+    [],
+  );
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({ columns, data: employeeData });
+
+  const handleButtonClick = () => {
+    navigate('/employee');
+  };
   return (
     <Modal onClick={onClick}>
       <ButtonBox>
         <Button
           onClick={handleButtonClick}
           width={5}
-          height={2}
-          $backgroundColor={Color.WHITE}
-          $borderColor={Color.GRAY100}
-          $borderRadius={2.5}
-          $hoverBackgroundColor={Color.SAFETY_YELLOW}
-          $hoverBorderColor={Color.SAFETY_YELLOW}
-          fontSize={1.25}
+          height={2.5}
+          $backgroundColor={Color.GRAY200}
+          $borderColor={Color.GRAY200}
+          $borderRadius={0.75}
+          $hoverBackgroundColor={Color.GRAY300}
+          $hoverBorderColor={Color.GRAY300}
+          fontSize={'1.2'}
+          fontWeight={'bold'}
         >
           등록
         </Button>
       </ButtonBox>
-      <MainBox>
-        <ContentBox>
-          <Chapter>이름</Chapter>
-          <Content>오정민</Content>
-        </ContentBox>
-        <ContentBox>
-          <Chapter>사번</Chapter>
-          <Content>1014826</Content>
-        </ContentBox>
-        <ContentBox>
-          <Chapter>소속부서</Chapter>
-          <Content>해외사업부</Content>
-        </ContentBox>
-        <ContentBox>
-          <Chapter>직급</Chapter>
-          <Content>대리</Content>
-        </ContentBox>
-        <ContentBox>
-          <Chapter>권한</Chapter>
-          <Content>4</Content>
-        </ContentBox>
-      </MainBox>
+
+      <table
+        {...getTableProps}
+        style={{
+          width: '100%',
+          borderCollapse: 'collapse',
+          marginTop: '1rem',
+        }}
+      >
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th
+                  {...column.getHeaderProps()}
+                  style={{
+                    borderBottom: '2px solid black',
+                    paddingBottom: '1rem',
+                    boxSizing: 'border-box',
+                    color: Color.BLACK,
+                    fontWeight: 'bold',
+                    fontFamily: 'NYJGothicB',
+                    fontSize: '1.5rem',
+                  }}
+                >
+                  {column.render('Header')}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell) => (
+                  <td
+                    {...cell.getCellProps()}
+                    style={{
+                      padding: '1rem',
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {cell.render('Cell')}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </Modal>
   );
 };
 
-export default EquipmentModal;
+export default EmployeeModal;

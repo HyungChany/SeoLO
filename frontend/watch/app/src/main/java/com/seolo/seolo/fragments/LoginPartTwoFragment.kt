@@ -71,6 +71,7 @@ class LoginPartTwoFragment : Fragment() {
                         )
                         TokenManager.setCompanyCode(requireContext(), companyCode)
                         TokenManager.setUserName(requireContext(), username)
+                        TokenManager.setUserId(requireContext(), tokenResponse.userId)
 
                         // 로그인 성공 시 MainActivity로 이동 및 현재 액티비티 종료
                         val intent = Intent(activity, MainActivity::class.java)

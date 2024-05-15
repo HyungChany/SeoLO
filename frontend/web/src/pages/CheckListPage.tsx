@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 import { Button } from '@/components/button/Button.tsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CheckListModal from '@/components/modal/CheckListModal.tsx';
 import DeleteCheckListModal from '@/components/modal/DeleteCheckListModal.tsx';
-import { getCheckList } from '@/apis/CheckList.ts';
+import { getBasicCheckList, getCheckList } from '@/apis/CheckList.ts';
 import CreateCheckListModal from '@/components/modal/CreateCheckListModal.tsx';
+import { useQuery } from '@tanstack/react-query';
 interface CheckListType {
   id: number;
   context: string;
@@ -71,7 +72,7 @@ const ContentBox = styled.div`
   margin-right: 1rem;
   display: flex;
   align-items: center;
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: 900;
   font-family: NYJGothicEB;
 `;
@@ -127,8 +128,6 @@ const CheckListPage = () => {
   const [checkListModal, setCheckListModal] = useState<boolean>(false);
   const [deleteCheckListModal, setDeleteCheckListModal] =
     useState<boolean>(false);
-  const [lists, setLists] = useState<CheckListType[] | null>(null);
-  const [plusLists, setPlusLists] = useState<CheckListType[] | null>(null);
   const [createCheckListModal, setCreateCheckListModal] =
     useState<boolean>(false);
   const [currentChecklist, setCurrentChecklist] =
@@ -164,16 +163,15 @@ const CheckListPage = () => {
   const handleCloseDeleteModal = () => {
     setDeleteCheckListModal(false);
   };
-  useEffect(() => {
-    const fetchLists = async () => {
-      const data = await getCheckList();
-      setLists(data.basic_checklists);
-      setPlusLists(data.checklists);
-      console.log(data);
-    };
-    fetchLists();
-  }, []);
-
+  // react query 이용해서 수정
+  const { data: basicCheckListData } = useQuery({
+    queryKey: ['basicCheckList'],
+    queryFn: () => getBasicCheckList(),
+  });
+  const { data: checkListData } = useQuery({
+    queryKey: ['checkList'],
+    queryFn: () => getCheckList(),
+  });
   return (
     <>
       <BackGround>
@@ -204,63 +202,39 @@ const CheckListPage = () => {
         )}
         <Box>
           <>
-            {lists &&
-              lists.map((list) => (
-                <ListBox onClick={() => handleCheckListClick(list)}>
-                  <ContentBox>
-                    <ContentWrapper>
-                      <Content>{list.context}</Content>
-                    </ContentWrapper>
-                  </ContentBox>
-                  {/* <Button
-                    onClick={() => handleCheckListClick(list)}
-                    width={5}
-                    height={1.5625}
-                    $backgroundColor={Color.GRAY100}
-                    $borderColor={Color.GRAY100}
-                    $borderRadius={0.3125}
-                    $hoverBackgroundColor={'white'}
-                    $hoverBorderColor={Color.GRAY100}
-                    children={'상세보기'}
-                  ></Button> */}
-                </ListBox>
-              ))}
-            {plusLists &&
-              plusLists.map((list) => (
-                <PlusListBox>
-                  <ContentBox onClick={() => handleCheckListClick(list)}>
-                    <ContentWrapper>
-                      <Content>{list.context}</Content>
-                    </ContentWrapper>
-                  </ContentBox>
-                  <ButtonBox>
-                    {/* <Button
-                      onClick={() => handleCheckListClick(list)}
-                      width={5}
-                      height={1.5625}
-                      $backgroundColor={Color.GRAY100}
-                      $borderColor={Color.GRAY100}
-                      $borderRadius={0.3125}
-                      $hoverBackgroundColor={'white'}
-                      $hoverBorderColor={Color.GRAY100}
-                      children={'상세보기'}
-                    ></Button> */}
-                    <Button
-                      onClick={() => handleDeleteCheckListClick(list)}
-                      width={4}
-                      height={2.5}
-                      $backgroundColor={Color.GRAY200}
-                      $borderColor={Color.GRAY200}
-                      $borderRadius={1}
-                      $hoverBackgroundColor={Color.RED}
-                      $hoverBorderColor={Color.GRAY300}
-                      fontWeight={900}
-                      children={'삭제'}
-                      fontSize={1.1}
-                    ></Button>
-                  </ButtonBox>
-                </PlusListBox>
-              ))}
+            {basicCheckListData?.map((list: CheckListType) => (
+              <ListBox key={list.id} onClick={() => handleCheckListClick(list)}>
+                <ContentBox>
+                  <ContentWrapper>
+                    <Content>{list.context}</Content>
+                  </ContentWrapper>
+                </ContentBox>
+              </ListBox>
+            ))}
+            {checkListData?.map((list: CheckListType) => (
+              <PlusListBox>
+                <ContentBox onClick={() => handleCheckListClick(list)}>
+                  <ContentWrapper>
+                    <Content>{list.context}</Content>
+                  </ContentWrapper>
+                </ContentBox>
+                <ButtonBox>
+                  <Button
+                    onClick={() => handleDeleteCheckListClick(list)}
+                    width={4}
+                    height={2.5}
+                    $backgroundColor={Color.GRAY200}
+                    $borderColor={Color.GRAY200}
+                    $borderRadius={1}
+                    $hoverBackgroundColor={Color.RED}
+                    $hoverBorderColor={Color.GRAY300}
+                    fontWeight={900}
+                    children={'삭제'}
+                    fontSize={1.1}
+                  ></Button>
+                </ButtonBox>
+              </PlusListBox>
+            ))}
           </>
           <ListBox>
             <PlusContent onClick={handlePlusCheckListClick}>+</PlusContent>

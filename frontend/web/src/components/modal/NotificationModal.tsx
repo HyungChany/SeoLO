@@ -1,6 +1,84 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import { notificationEventsState } from '../../recoil/sseState';
+import styled from 'styled-components';
+import { notificationEventsState } from '@/recoil/sseState.tsx';
+import batteryIcon from '@/../assets/images/battery60.png';
+import lockerIcon from '@/../assets/images/locker1.png';
+
+const OuterContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+`;
+
+const ModalContainer = styled.div`
+  width: 238px;
+  height: 193px;
+  position: absolute;
+  right: 40px;
+  bottom: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const AdditionalImage = styled.img`
+  width: 50px;
+  height: 70.65px;
+  position: absolute;
+  right: 10px;
+  bottom: 5px;
+`;
+
+const Modal = styled.div`
+  width: 238px;
+  height: 193px;
+  position: relative;
+  background-color: #fffafa;
+  box-shadow: 6px 10px 4px 1px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 0.5px solid #c0b6b6;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+`;
+
+const BatteryIcon = styled.img`
+  width: 18px;
+  height: 50px;
+`;
+
+const TextContainer = styled.div`
+  width: 208px;
+  height: 146px;
+  padding: 10px;
+`;
+
+const WorkerName = styled.span`
+  color: #135b9e;
+  font-size: 24px;
+  font-family: Arial;
+  font-weight: 400;
+  word-wrap: break-word;
+`;
+
+const Text = styled.span`
+  color: black;
+  font-size: 24px;
+  font-family: Arial;
+  font-weight: 400;
+  word-wrap: break-word;
+`;
+
+const ActionType = styled.span`
+  color: #fd4154;
+  font-size: 24px;
+  font-family: Arial;
+  font-weight: 400;
+  word-wrap: break-word;
+`;
 
 const NotificationModal: React.FC = () => {
   const events = useRecoilValue(notificationEventsState);
@@ -24,102 +102,27 @@ const NotificationModal: React.FC = () => {
   const event = events[events.length - 1]; // 가장 최근 이벤트를 표시
 
   return (
-    <div style={outerContainerStyle}>
-    <img style={imageStyle} src="@/../assets/images/battery60.png" alt="Icon" />
-      <div style={modalContainerStyle}>
-        <div style={modalStyle}>   
-          <div style={textContainerStyle}>
-            <span style={workerNameStyle}>{event.worker_name}</span>
-            <span style={textStyle}>
-              님이<br />
+    <OuterContainer>
+      <BatteryIcon src={batteryIcon} />
+      <ModalContainer>
+        <Modal>
+          <TextContainer>
+            <WorkerName>{event.worker_name}</WorkerName>
+            <Text>
+              님이
+              <br />
               {event.facility_name} <br />
-              {event.machine_number} 장비<br />
-            </span>
-            <span style={actionTypeStyle}>{event.act_type}</span>
-            <span style={textStyle}> 하셨습니다.</span>
-          </div>
-        </div>
-      </div>
-      <img style={additionalImageStyle} src="@/../assets/images/locker1.png" alt="Decoration" />
-    </div>
+              {event.machine_number} 장비
+              <br />
+            </Text>
+            <ActionType>{event.act_type}</ActionType>
+            <Text> 하셨습니다.</Text>
+          </TextContainer>
+        </Modal>
+      </ModalContainer>
+      <AdditionalImage src={lockerIcon} />
+    </OuterContainer>
   );
 };
-
-const outerContainerStyle: React.CSSProperties = {
-  width: '100%',
-  height: '100%',
-  position: 'relative',
-};
-
-const modalContainerStyle: React.CSSProperties = {
-  width: 238,
-  height: 193,
-  position: 'absolute',
-  right: '40px',
-  bottom: '45px',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-};
-
-const additionalImageStyle: React.CSSProperties = {
-  width: 50,
-  height: 70.65,
-  position: 'absolute',
-  right: '10px',
-  bottom: '5px',
-};
-
-
-const modalStyle: React.CSSProperties = {
-  width: 238,
-  height: 193,
-  position: 'relative',
-  backgroundColor: '#FFFAFA',
-  boxShadow: '6px 10px 4px 1px rgba(0, 0, 0, 0.25)',
-  borderRadius: 10,
-  overflow: 'hidden',
-  border: '0.50px solid #C0B6B6',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'flex-start',
-  alignItems: 'flex-start',
-};
-
-const imageStyle: React.CSSProperties = {
-    width: 18,
-    height: 50,
-};
-
-const textContainerStyle: React.CSSProperties = {
-  width: 208,
-  height: 146,
-  padding: '10px',
-};
-
-const workerNameStyle: React.CSSProperties = {
-  color: '#135B9E',
-  fontSize: 24,
-  fontFamily: 'Arial', // 실제 폰트 패밀리로 교체
-  fontWeight: '400',
-  wordWrap: 'break-word',
-};
-
-const textStyle: React.CSSProperties = {
-  color: 'black',
-  fontSize: 24,
-  fontFamily: 'Arial', // 실제 폰트 패밀리로 교체
-  fontWeight: '400',
-  wordWrap: 'break-word',
-};
-
-const actionTypeStyle: React.CSSProperties = {
-  color: '#FD4154',
-  fontSize: 24,
-  fontFamily: 'Arial', // 실제 폰트 패밀리로 교체
-  fontWeight: '400',
-  wordWrap: 'break-word',
-};
-
 
 export default NotificationModal;

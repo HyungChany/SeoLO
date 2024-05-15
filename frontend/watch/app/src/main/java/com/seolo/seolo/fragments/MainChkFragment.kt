@@ -14,7 +14,6 @@ import com.seolo.seolo.R
 import com.seolo.seolo.helper.ChecklistManager
 import com.seolo.seolo.helper.TokenManager
 import com.seolo.seolo.model.ChecklistResponse
-import com.seolo.seolo.presentation.BluetoothActivity
 import com.seolo.seolo.presentation.ChecklistActivity
 import com.seolo.seolo.services.RetrofitClient
 import retrofit2.Call
@@ -105,8 +104,7 @@ class MainChkFragment : Fragment() {
 
     private fun navigateToChecklistActivity() {
         // 체크리스트 액티비티로 이동하는 메서드
-//        val intent = Intent(activity, ChecklistActivity::class.java)
-        val intent = Intent(activity, BluetoothActivity::class.java)
+        val intent = Intent(activity, ChecklistActivity::class.java)
         startActivity(intent)
     }
 

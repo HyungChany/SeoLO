@@ -3,8 +3,10 @@ import { Modal } from './Modal.tsx';
 import { Button } from '../button/Button.tsx';
 import * as Color from '@/config/color/Color.ts';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MachineList } from '@/apis/Machine.ts';
+import { Column } from 'react-table';
+import { useTable } from 'react-table';
 interface EquipmentModalProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   option: number;
@@ -21,49 +23,7 @@ interface EquipmentType {
   sub_manager_id: string;
   sub_manager_name: string;
 }
-const Chapter = styled.div`
-  border-bottom: 1px solid black;
-`;
 
-const ContentBox = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  overflow-y: auto;
-  box-sizing: border-box;
-  margin-top: 1.5rem;
-`;
-const Line = styled.div`
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: row;
-`;
-const Content = styled.div`
-  width: 20%;
-  height: auto;
-  display: flex;
-  text-overflow: ellipsis;
-  justify-content: center;
-  align-items: center;
-`;
-const ChanpterBox = styled.div`
-  justify-content: center;
-  display: flex;
-  width: 100%;
-  height: auto;
-  align-items: center;
-  margin-top: 1rem;
-`;
-const TitleBox = styled.div`
-  width: 20%;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 const ButtonBox = styled.div`
   width: 100%;
   height: auto;
@@ -75,11 +35,11 @@ const EquipmentModal = ({ onClick, option }: EquipmentModalProps) => {
   const handleButtonClick = () => {
     navigate('/equipment');
   };
-  const [data, setData] = useState<EquipmentType[]>([]);
+  const [machineData, setMachineData] = useState<EquipmentType[]>([]);
   useEffect(() => {
     const fetchEquipment = async () => {
       const equipmentData = await MachineList(option);
-      setData(
+      setMachineData(
         equipmentData.map((item: EquipmentType) => ({
           ...item,
           introduction_date: item.introduction_date.split('T')[0], // 'T' 전까지만 파싱
@@ -88,43 +48,106 @@ const EquipmentModal = ({ onClick, option }: EquipmentModalProps) => {
     };
     fetchEquipment();
   }, []);
+  // 표 만들기
 
+  const columns: Column<EquipmentType>[] = React.useMemo<
+    Column<EquipmentType>[]
+  >(
+    () => [
+      {
+        Header: '작업장',
+        accessor: 'facility_name',
+      },
+      {
+        Header: '장비 명',
+        accessor: 'machine_name',
+      },
+      {
+        Header: '장비번호',
+        accessor: 'machine_code',
+      },
+      {
+        Header: '도입 일자',
+        accessor: 'introduction_date',
+      },
+      {
+        Header: '담당자',
+        accessor: 'main_manager_name',
+      },
+    ],
+    [],
+  );
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+    useTable({ columns, data: machineData });
   return (
     <Modal onClick={onClick}>
       <ButtonBox>
         <Button
           onClick={handleButtonClick}
           width={5}
-          height={2}
-          $backgroundColor={Color.WHITE}
-          $borderColor={Color.GRAY100}
-          $borderRadius={2.5}
-          $hoverBackgroundColor={Color.SAFETY_YELLOW}
-          $hoverBorderColor={Color.SAFETY_YELLOW}
-          fontSize={1.25}
+          height={2.5}
+          $backgroundColor={Color.GRAY200}
+          $borderColor={Color.GRAY200}
+          $borderRadius={0.75}
+          $hoverBackgroundColor={Color.GRAY300}
+          $hoverBorderColor={Color.GRAY300}
+          fontSize={'1.2'}
+          fontWeight={'bold'}
         >
           등록
         </Button>
       </ButtonBox>
-      <ChanpterBox>
-        <TitleBox>
-          <Chapter>작업장</Chapter>
-        </TitleBox>
-        <TitleBox>
-          <Chapter>장비 명</Chapter>
-        </TitleBox>
-        <TitleBox>
-          <Chapter>장비번호</Chapter>
-        </TitleBox>
-        <TitleBox>
-          <Chapter>도입 일자</Chapter>
-        </TitleBox>
-        <TitleBox>
-          <Chapter>담당자</Chapter>
-        </TitleBox>
-      </ChanpterBox>
-      <ContentBox>
-        {data.map((item) => (
+
+      <table
+        {...getTableProps}
+        style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}
+      >
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th
+                  {...column.getHeaderProps()}
+                  style={{
+                    borderBottom: '2px solid black',
+                    paddingBottom: '1rem',
+                    boxSizing: 'border-box',
+                    color: Color.BLACK,
+                    fontWeight: 'bold',
+                    fontFamily: 'NYJGothicB',
+                    fontSize: '1.5rem',
+                  }}
+                >
+                  {column.render('Header')}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row) => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map((cell) => (
+                  <td
+                    {...cell.getCellProps()}
+                    style={{
+                      padding: '1rem',
+                      textAlign: 'center',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {cell.render('Cell')}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      {/* <ContentBox>
+        {machineData.map((item) => (
           <Line>
             <Content>{item.facility_name}</Content>
             <Content>{item.machine_name}</Content>
@@ -133,7 +156,7 @@ const EquipmentModal = ({ onClick, option }: EquipmentModalProps) => {
             <Content>{item.main_manager_name}</Content>
           </Line>
         ))}
-      </ContentBox>
+      </ContentBox> */}
     </Modal>
   );
 };

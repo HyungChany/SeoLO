@@ -62,17 +62,11 @@ public class Marker extends BaseEntity {
         }
 
         public Builder locationX(double newLocationX) {
-            if (newLocationX < 0) {
-                throw new IllegalArgumentException("LocationX cannot be negative");
-            }
             this.locationX = newLocationX;
             return this;
         }
 
         public Builder locationY(double newLocationY) {
-            if (newLocationY < 0) {
-                throw new IllegalArgumentException("LocationY cannot be negative");
-            }
             this.locationY = newLocationY;
             return this;
         }

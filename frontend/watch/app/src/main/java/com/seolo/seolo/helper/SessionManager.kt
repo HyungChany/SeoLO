@@ -10,6 +10,13 @@ object SessionManager {
     var selectedTime: String? = null
     var selectedSimpleDate: String? = null
     var selectedSimpleTime: String? = null
+    var lotoStatusCode: String? = null
+    var lotoUid: String? = null
+    var lotoMachineId: String? = null
+    var lotoBatteryInfo: String? = null
+    var lotoUserId: String? = null
+
+
 
     // 세션 데이터를 초기화하는 메서드
     fun clear() {
@@ -22,5 +29,10 @@ object SessionManager {
         selectedTime = null
         selectedSimpleDate = null
         selectedSimpleTime = null
+        lotoStatusCode = null
+        lotoUid = null
+        lotoMachineId = null
+        lotoBatteryInfo = null
+        lotoUserId = null
     }
 }

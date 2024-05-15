@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Check from '/assets/icons/Check.svg';
 import NonCheck from '/assets/icons/NonCheck.svg';
+import Excel from '/assets/icons/Excel.svg';
 import ReportCheckModal from '@/components/modal/ReportCheckModal.tsx';
 import { RangeReport, totalReport } from '@/apis/Report.ts';
 import CsvDownloadButton from 'react-json-to-csv';
@@ -14,6 +15,7 @@ import 'dayjs/locale/ko';
 import { Button } from '@/components/button/Button.tsx';
 import { Column, Row } from 'react-table';
 import { useTable } from 'react-table';
+import { useQuery } from '@tanstack/react-query';
 
 dayjs.locale('ko');
 // interface ButtonProps {
@@ -79,6 +81,7 @@ const MainBox = styled.div`
   padding: 2rem 1rem 0 1rem;
   flex-direction: column;
   gap: 2rem;
+  overflow-y: auto;
 `;
 
 const Overlay = styled.div`
@@ -105,10 +108,19 @@ const CsvButton = styled(CsvDownloadButton)`
   font-size: 1rem;
   font-weight: bold;
   box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
   &:hover {
-    background-color: #6b9dcb;
+    background-color: #19633a;
   }
 `;
+
+const TableRow = styled.tr`
+  &:hover {
+    background-color: ${Color.GRAY100}; // 원하는 호버 배경 색
+  }
+`;
+
 const Report = () => {
   const [reportModal, setReportModal] = useState<boolean>(false);
   const [reportData, setReportData] = useState<EquipmentData[]>([]);
@@ -192,51 +204,55 @@ const Report = () => {
   );
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data: tableData });
+
+  // react query로 변경
+
+  const formatDate = (dateString: string) => {
+    return dateString.replace('T', ' ').slice(0, 16); // 'T'를 공백으로 대체하고 초 이후를 잘라냄
+  };
+
+  const [transformedCsvData, setTransformedCsvData] = useState<
+    CsvEquipmentData[]
+  >([]);
+
+  const { data: totalData } = useQuery({
+    queryKey: ['report'],
+    queryFn: () => totalReport(),
+  });
+
+  useEffect(() => {
+    if (totalData) {
+      const formattedData = totalData.map((item: EquipmentData) => ({
+        ...item,
+        taskStartDateTime:
+          item.taskStartDateTime === null
+            ? '-'
+            : formatDate(item.taskStartDateTime),
+        taskEndDateTime:
+          item.taskEndDateTime === null
+            ? '-'
+            : formatDate(item.taskEndDateTime),
+        accidentType: item.accidentType === null ? '-' : item.accidentType,
+        victimsNum: item.victimsNum === null ? '-' : item.victimsNum,
+        accident: item.accident === false ? 'N' : 'T',
+      }));
+      setReportData(formattedData);
+    }
+  }, [totalData]);
   const handleCloseModal = () => {
     setReportModal(!reportModal);
   };
 
   const handleReport = (index: number) => {
-    console.log('넘버', index);
     setReportModal(true);
     setDetailReport(index);
   };
-  const formatDate = (dateString: string) => {
-    return dateString.replace('T', ' ').slice(0, 16); // 'T'를 공백으로 대체하고 초 이후를 잘라냄
-  };
-  const [transformedCsvData, setTransformedCsvData] = useState<
-    CsvEquipmentData[]
-  >([]);
 
   // csvData가 변경될 때마다 자동으로 데이터를 변환
   useEffect(() => {
     setTransformedCsvData(transformDataForCsv(csvData));
   }, [csvData]);
-  useEffect(() => {
-    const report = async () => {
-      try {
-        const data = await totalReport();
-        const formattedData = data.map((item: EquipmentData) => ({
-          ...item,
-          taskStartDateTime:
-            item.taskStartDateTime === null
-              ? '-'
-              : formatDate(item.taskStartDateTime),
-          taskEndDateTime:
-            item.taskEndDateTime === null
-              ? '-'
-              : formatDate(item.taskEndDateTime),
-          accidentType: item.accidentType === null ? '-' : item.accidentType,
-          victimsNum: item.victimsNum === null ? '-' : item.victimsNum,
-          accident: item.accident === false ? 'N' : 'T',
-        }));
-        setReportData(formattedData);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    report();
-  }, []);
+
   const customFormats = {
     normalDate: 'YYYY년 MM월 DD일',
   };
@@ -337,6 +353,7 @@ const Report = () => {
           </div>
         </DaySelectBox>
         <CsvButton data={transformedCsvData} delimiter=",">
+          <img src={Excel} style={{ marginRight: '0.5rem', width: '1.5rem' }} />
           .CSV 다운로드
         </CsvButton>
       </SelectBox>
@@ -346,14 +363,16 @@ const Report = () => {
       >
         <thead>
           {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+            <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
               {headerGroup.headers.map((column) => (
                 <th
                   {...column.getHeaderProps()}
+                  key={column.id}
                   style={{
                     borderBottom: '2px solid black',
                     color: Color.BLACK,
                     fontWeight: 'bold',
+                    paddingBottom: '1rem',
                   }}
                 >
                   {column.render('Header')}
@@ -366,13 +385,15 @@ const Report = () => {
           {rows.map((row) => {
             prepareRow(row);
             return (
-              <tr
+              <TableRow
                 {...row.getRowProps()}
+                key={row.id}
                 onClick={() => handleReport(row.original.reportId)}
               >
                 {row.cells.map((cell) => (
                   <td
                     {...cell.getCellProps()}
+                    key={cell.column.id}
                     style={{
                       padding: '1rem',
                       textAlign: 'center',
@@ -382,7 +403,7 @@ const Report = () => {
                     {cell.render('Cell')}
                   </td>
                 ))}
-              </tr>
+              </TableRow>
             );
           })}
         </tbody>

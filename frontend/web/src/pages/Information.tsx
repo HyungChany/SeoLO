@@ -7,11 +7,11 @@ import Equipment from '/assets/images/equipment.png';
 import People from '/assets/images/people.png';
 import Dropdown from '@/components/dropdown/DropDown.tsx';
 import EquipmentModal from '@/components/modal/MachineModal.tsx';
-import Employee from '@/components/modal/EmployeeModal.tsx';
 import React, { useEffect, useState } from 'react';
 import { Facilities } from '@/apis/Facilities.ts';
 import { MachineList } from '@/apis/Machine.ts';
 import { RegistratedEmployee } from '@/apis/Employee.ts';
+import EmployeeModal from '@/components/modal/EmployeeModal.tsx';
 
 interface OptionType {
   value: number;
@@ -21,17 +21,26 @@ interface FacilityType {
   id: string;
   name: string;
 }
+
 const Background = styled.div`
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
   background-color: ${Color.GRAY200};
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding-left: 6rem;
-  padding-right: 6rem;
-  box-sizing: border-box;
+  overflow-x: auto;
+  position: relative;
 `;
+
+const Box = styled.div`
+  min-width: 1280px;
+  height: 34rem;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto;
+`;
+
 const ImgBox = styled.img`
   width: 13.5rem;
 `;
@@ -47,6 +56,7 @@ const Overlay = styled.div`
   align-items: center;
   z-index: 10;
 `;
+
 const CompanyInformation = () => {
   const [equipModal, setEquipModal] = useState<boolean>(false);
   const [employeeModal, setEmployeeModal] = useState<boolean>(false);
@@ -107,68 +117,75 @@ const CompanyInformation = () => {
   const handleOptionChange = (option: OptionType): void => {
     setSelectedOption(option);
   };
+  useEffect(() => {
+    if (options.length > 0) {
+      setSelectedOption(options[0]);
+    }
+  }, [options]);
   return (
     <Background>
-      {equipModal && selectedOption && (
-        <Overlay onClick={handleCloseModal}>
-          <EquipmentModal
-            onClick={handleModalClick}
-            option={selectedOption.value}
+      <Box>
+        {equipModal && selectedOption && (
+          <Overlay onClick={handleCloseModal}>
+            <EquipmentModal
+              onClick={handleModalClick}
+              option={selectedOption.value}
+            />
+          </Overlay>
+        )}
+        {employeeModal && (
+          <Overlay onClick={handleCloseModal}>
+            <EmployeeModal onClick={handleModalClick} />
+          </Overlay>
+        )}
+        <Card
+          width={22}
+          height={'100%'}
+          justifyContent={'space-between'}
+          flexDirection={'column'}
+          alignItems="center"
+        >
+          <Typo.H3>
+            <div style={{ marginTop: '1.3rem' }}>등록 작업장 수</div>
+          </Typo.H3>
+          <ImgBox src={WorkPlace} />
+          <Typo.H0>{options.length}</Typo.H0>
+        </Card>
+        <Card
+          width={22}
+          height={'100%'}
+          justifyContent={'space-between'}
+          flexDirection={'column'}
+          alignItems="center"
+          onClick={handleEquipmentClick}
+        >
+          <Typo.H3>
+            <div style={{ marginTop: '1.3rem' }}>현재 작업장의 장비 현황</div>
+          </Typo.H3>
+          <Dropdown
+            options={options}
+            selectedOption={selectedOption}
+            onOptionChange={handleOptionChange}
+            placeholder="공장을 선택하세요"
           />
-        </Overlay>
-      )}
-      {employeeModal && (
-        <Overlay onClick={handleCloseModal}>
-          <Employee onClick={handleModalClick} />
-        </Overlay>
-      )}
-      <Card
-        width={22}
-        height={30}
-        justifyContent={'space-between'}
-        flexDirection={'column'}
-        alignItems="center"
-      >
-        <Typo.H3>
-          <div style={{ marginTop: '1.3rem' }}>등록 작업장 수</div>
-        </Typo.H3>
-        <ImgBox src={WorkPlace} />
-        <Typo.H0>{options.length}</Typo.H0>
-      </Card>
-      <Card
-        width={22}
-        height={30}
-        justifyContent={'space-between'}
-        flexDirection={'column'}
-        alignItems="center"
-        onClick={handleEquipmentClick}
-      >
-        <Typo.H3>
-          <div style={{ marginTop: '1.3rem' }}>현재 작업장의 장비 현황</div>
-        </Typo.H3>
-        <Dropdown
-          options={options}
-          selectedOption={selectedOption}
-          onOptionChange={handleOptionChange}
-          placeholder="공장을 선택하세요"
-        />
-        <ImgBox src={Equipment} />
-        <Typo.H0>{facilities}</Typo.H0>
-      </Card>
-      <Card
-        width={22}
-        height={30}
-        justifyContent={'space-between'}
-        flexDirection={'column'}
-        alignItems="center"
-        onClick={handleEmployeeClick}
-      >
-        <Typo.H3>
-          <div style={{ marginTop: '1.3rem' }}>등록 임직원현황</div>
-        </Typo.H3>
-        <ImgBox src={People} />
-        <Typo.H0>{employees}</Typo.H0>
-      </Card>
+          <ImgBox src={Equipment} />
+          <Typo.H0>{facilities}</Typo.H0>
+        </Card>
+        <Card
+          width={22}
+          height={'100%'}
+          justifyContent={'space-between'}
+          flexDirection={'column'}
+          alignItems="center"
+          onClick={handleEmployeeClick}
+        >
+          <Typo.H3>
+            <div style={{ marginTop: '1.3rem' }}>등록 임직원현황</div>
+          </Typo.H3>
+          <ImgBox src={People} />
+          <Typo.H0>{employees}</Typo.H0>
+        </Card>
+      </Box>
     </Background>
   );
 };

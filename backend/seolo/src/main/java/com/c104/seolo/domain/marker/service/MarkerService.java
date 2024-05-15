@@ -9,7 +9,10 @@ import java.util.List;
 
 public interface MarkerService {
 
-    void enrollMarker(List<AddMarkerRequest> markerRequests);
+    void enrollMarker(AddMarkerRequest markerRequests);
+
+    void enrollMarkers(List<AddMarkerRequest> markerRequests);
+
     MarkerInfoResponse getMarkerInfoById(Long markerId);
     MarkerDto getMarker(Long markerId);
     List<MarkerDto> getAllMarkersByFacilityId(Long facilityId);
