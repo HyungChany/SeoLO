@@ -32,6 +32,11 @@ const TitleBox = styled.div`
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
+  background-color: white;
+  position: sticky;
+  top: 0rem;
+  border-bottom: 2px solid ${Color.GRAY200};
+
 `;
 const Content = styled.div`
   width: 8.75rem;
