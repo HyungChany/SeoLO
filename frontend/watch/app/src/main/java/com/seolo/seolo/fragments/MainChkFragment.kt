@@ -14,7 +14,6 @@ import com.seolo.seolo.R
 import com.seolo.seolo.helper.ChecklistManager
 import com.seolo.seolo.helper.TokenManager
 import com.seolo.seolo.model.ChecklistResponse
-import com.seolo.seolo.presentation.BluetoothActivity
 import com.seolo.seolo.presentation.ChecklistActivity
 import com.seolo.seolo.services.RetrofitClient
 import retrofit2.Call

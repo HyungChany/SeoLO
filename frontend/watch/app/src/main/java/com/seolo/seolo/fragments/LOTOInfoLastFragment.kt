@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
-import com.seolo.seolo.presentation.BluetoothActivity
+import com.seolo.seolo.presentation.BluetoothLOTOActivity
 
 // LastWorkListFragment 클래스 정의
 class LOTOInfoLastFragment : Fragment() {
@@ -60,7 +60,7 @@ class LOTOInfoLastFragment : Fragment() {
 
         // 확인 버튼 클릭 시 BluetoothActivity 이동하고 다이얼로그를 닫는 이벤트 처리
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-            val intent = Intent(activity, BluetoothActivity::class.java)
+            val intent = Intent(activity, BluetoothLOTOActivity::class.java)
             startActivity(intent)
             Handler(requireActivity().mainLooper).postDelayed({
                 dialog.dismiss()
