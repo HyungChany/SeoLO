@@ -35,6 +35,7 @@ class BluetoothMainActivity : AppCompatActivity() {
     private lateinit var deviceAdapter: BluetoothDeviceAdapter
     private var devices = mutableListOf<BluetoothDevice>()
     private var bluetoothGatt: BluetoothGatt? = null
+    private var lastSentData: String? = null
 
     companion object {
         private const val REQUEST_BLUETOOTH_PERMISSION = 101
@@ -166,22 +167,16 @@ class BluetoothMainActivity : AppCompatActivity() {
                     val Uid = LotoManager.getLotoUid(this@BluetoothMainActivity) // 자물쇠 Uid 가져오기
                     val machineId = LotoManager.getLotoMachineId(this@BluetoothMainActivity) // 머신 Id 가져오기
 
-                    Log.d("송신데이터", "companyCode: $companyCode, token: $token, userId: $userId")
-
-                    if (Uid == null) {
-                        char?.setValue(
-                            "$companyCode,INIT,$token,,$userId".toByteArray(
-                                StandardCharsets.UTF_8
-                            )
-                        )
+                    val sendData = if (Uid == null) {
+                        "$companyCode,INIT,$token,,$userId"
                     } else {
-                        char?.setValue(
-                            "$companyCode,LOCKED,$token,$machineId,$userId".toByteArray(
-                                StandardCharsets.UTF_8
-                            )
-                        )
+                        "$companyCode,LOCKED,$token,$machineId,$userId"
                     }
+                    lastSentData = sendData
+                    char?.setValue(sendData.toByteArray(StandardCharsets.UTF_8))
                     gatt?.writeCharacteristic(char)
+
+                    Log.d("송신데이터", sendData)
 
                     // 특성 변경 알림 등록
                     gatt?.setCharacteristicNotification(char, true)
@@ -213,7 +208,7 @@ class BluetoothMainActivity : AppCompatActivity() {
             super.onCharacteristicWrite(gatt, characteristic, status)
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.d(
-                    "BluetoothActivity1",
+                    "데이터 쓰기 성공",
                     "${characteristic?.value?.toString(StandardCharsets.UTF_8)}"
                 )
             }
@@ -227,8 +222,13 @@ class BluetoothMainActivity : AppCompatActivity() {
             // 아두이노에서 보내온 데이터 수신
             // 데이터 읽기 포맷(명령어,자물쇠Uid,머신Id,배터리잔량,유저Id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
-            // Data received: CHECK,1DA24G10,3,0,2
-            Log.d("수신데이터 원본", "Data received: $receivedData")
+            Log.d("수신데이터 원본0", "Data received: $receivedData")
+
+            // 송신 데이터와 수신 데이터가 같으면 리턴
+            if (receivedData == lastSentData) {
+                return
+            }
+
             receivedData?.let {
                 val dataParts = it.split(",")
                 if (dataParts.size == 5) {
@@ -238,40 +238,46 @@ class BluetoothMainActivity : AppCompatActivity() {
                     val batteryInfo = dataParts[3]
                     val lotoUserId = dataParts[4]
 
-//                    // SessionManager에 데이터 설정
-//                    LotoManager.setLotoStatusCode(this@BluetoothMainActivity, statusCode)
-//                    LotoManager.setLotoUid(this@BluetoothMainActivity, lotoUid)
-//                    LotoManager.setLotoMachineId(this@BluetoothMainActivity, machineId)
-//                    LotoManager.setLotoBatteryInfo(this@BluetoothMainActivity, batteryInfo)
-//                    LotoManager.setLotoUserId(this@BluetoothMainActivity, lotoUserId)
-
                     Log.d(
                         "수신 데이터 가공",
                         "Session updated with received data. [statusCode: $statusCode, lotoUid: $lotoUid, machineId: $machineId, batteryInfo: $batteryInfo, lotoUserId: $lotoUserId]"
                     )
                     // 자물쇠 상태 확인 명령어가 CHECK일 때(자물쇠가 잠겨있는데 그냥 일단 찍어본 경우)
                     if (statusCode == "CHECK") {
-                        Toast.makeText(
-                            this@BluetoothMainActivity,
-                            "내가 잠근 자물쇠가 아닙니다. 잠금을 해제할 수 없습니다. \n 배터리 잔량: $batteryInfo",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else if (statusCode == "WHITE") {
-                        val intent =
-                            Intent(this@BluetoothMainActivity, ChecklistActivity::class.java)
-                        startActivity(intent)
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(
+                                this@BluetoothMainActivity,
+                                "내가 잠근 자물쇠가 아닙니다. 잠금을 해제할 수 없습니다. \n 배터리 잔량: $batteryInfo",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } else if (statusCode == "WRITE") {
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(
+                                this@BluetoothMainActivity,
+                                "LOTO 절차를 시작하겠습니다. \n 배터리 잔량: $batteryInfo",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val intent =
+                                Intent(this@BluetoothMainActivity, ChecklistActivity::class.java)
+                            startActivity(intent)
+                        }
                     } else if (statusCode == "ALERT") {
-                        Toast.makeText(
-                            this@BluetoothMainActivity,
-                            "이미 열려있는 자물쇠입니다. \n 배터리 잔량: $batteryInfo",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else if ( statusCode == "UNLOCK") {
-                        Toast.makeText(
-                            this@BluetoothMainActivity,
-                            "자물쇠 잠금을 해제 합니다. \n 배터리 잔량: $batteryInfo",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(
+                                this@BluetoothMainActivity,
+                                "이미 열려있는 자물쇠입니다. \n 배터리 잔량: $batteryInfo",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } else if (statusCode == "UNLOCK") {
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(
+                                this@BluetoothMainActivity,
+                                "자물쇠 잠금을 해제 합니다. \n 배터리 잔량: $batteryInfo",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                         LotoManager.clearLoto(this@BluetoothMainActivity)
                         Handler(Looper.getMainLooper()).postDelayed({
                             val intent =
@@ -279,7 +285,6 @@ class BluetoothMainActivity : AppCompatActivity() {
                             startActivity(intent)
                             finish()
                         }, 2500)
-
                     }
                 }
             }
@@ -334,3 +339,5 @@ class BluetoothMainActivity : AppCompatActivity() {
         }
     }
 }
+
+

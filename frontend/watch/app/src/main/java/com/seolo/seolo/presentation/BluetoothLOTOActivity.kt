@@ -36,6 +36,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
     private lateinit var deviceAdapter: BluetoothDeviceAdapter
     private var devices = mutableListOf<BluetoothDevice>()
     private var bluetoothGatt: BluetoothGatt? = null
+    private var lastSentData: String? = null // 송신 데이터를 저장할 전역 변수
 
     companion object {
         private const val REQUEST_BLUETOOTH_PERMISSION = 101
@@ -161,11 +162,9 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     val token = TokenManager.getAccessToken(this@BluetoothLOTOActivity)
                     val machineId = SessionManager.selectedMachineId
                     val userId = TokenManager.getUserId(this@BluetoothLOTOActivity)
-                    char?.setValue(
-                        "$companyCode,LOCK,$token,$machineId,$userId".toByteArray(
-                            StandardCharsets.UTF_8
-                        )
-                    )
+                    val sendData = "$companyCode,LOCK,$token,$machineId,$userId"
+                    lastSentData = sendData
+                    char?.setValue(sendData.toByteArray(StandardCharsets.UTF_8))
                     gatt?.writeCharacteristic(char)
 
                     // 특성 변경 알림 등록
@@ -213,6 +212,12 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             // 데이터 읽기 포맷(명령어,자물쇠uid.머신id,배터리잔량,유저id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
             Log.d("수신데이터 원본", "Data received: $receivedData")
+
+            // 송신 데이터와 수신 데이터가 같으면 리턴
+            if (receivedData == lastSentData) {
+                return
+            }
+
             receivedData?.let {
                 val dataParts = it.split(",")
                 if (dataParts.size == 5) {
@@ -230,19 +235,23 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     LotoManager.setLotoUserId(this@BluetoothLOTOActivity, lotoUserId)
 
                     if (statusCode != "LOCKED") {
-                        Toast.makeText(
-                            this@BluetoothLOTOActivity, "이미 잠겨져있는 LOTO입니다. \n 배터리 잔량: $batteryInfo", Toast.LENGTH_LONG
-                        ).show()
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(
+                                this@BluetoothLOTOActivity, "$statusCode ,이미 잠겨져있는 LOTO입니다. \n 배터리 잔량: $batteryInfo", Toast.LENGTH_LONG
+                            ).show()
+                        }
                     } else {
                         // BE API 연결 필요
-                        
+
                         // 잠금 완료 시 메시지를 띄운 뒤 MainActivity로 이동
-                        Toast.makeText(this@BluetoothLOTOActivity, "잠금완료", Toast.LENGTH_SHORT).show()
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            val intent = Intent(this@BluetoothLOTOActivity, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }, 1000)
+                        Handler(Looper.getMainLooper()).post {
+                            Toast.makeText(this@BluetoothLOTOActivity, "$statusCode, 잠금완료", Toast.LENGTH_SHORT).show()
+                            Handler(Looper.getMainLooper()).postDelayed({
+                                val intent = Intent(this@BluetoothLOTOActivity, MainActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }, 1000)
+                        }
                     }
                 }
             }
