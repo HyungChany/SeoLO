@@ -66,6 +66,7 @@ public class AuthServiceImpl implements AuthService {
                 .username(userLoginRequest.getUsername())
                 .companyCode(userLoginRequest.getCompanyCode())
                 .issuedToken(issuedToken)
+                .codeStatus(appUser.getStatusCODE().name())
                 .build();
     }
 
