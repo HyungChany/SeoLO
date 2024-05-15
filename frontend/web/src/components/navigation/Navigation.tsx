@@ -57,7 +57,7 @@ const Navigation = () => {
             <Typo.H3>LOTO 일지</Typo.H3>
           </MenuLink>
           <MenuLink to="/currentloto">
-            <Typo.H3>LOTO 현황</Typo.H3>
+            <Typo.H3>자물쇠 현황</Typo.H3>
           </MenuLink>
           <MenuLink to="/checklist">
             <Typo.H3>체크리스트 관리</Typo.H3>
@@ -65,9 +65,9 @@ const Navigation = () => {
           <MenuLink to="/information">
             <Typo.H3>작업장 정보</Typo.H3>
           </MenuLink>
-          <MenuLink to="/1">
+          {/* <MenuLink to="/1">
             <Typo.H3>임직원 정보</Typo.H3>
-          </MenuLink>
+          </MenuLink> */}
         </Menu>
       </NavigatorContent>
     </NavigatorBox>

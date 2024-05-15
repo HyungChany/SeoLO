@@ -4,6 +4,7 @@ import com.c104.seolo.domain.core.dto.request.LockerEnrollRequest;
 import com.c104.seolo.domain.core.dto.request.LockerRequest;
 import com.c104.seolo.domain.core.dto.response.LockerResponse;
 import com.c104.seolo.domain.core.entity.Locker;
+import com.c104.seolo.domain.core.enums.CODE;
 
 public interface LockerService {
     LockerResponse getCompanyLockers(String company_code);
@@ -11,4 +12,5 @@ public interface LockerService {
     void enrollLocker(String company_code ,LockerEnrollRequest lockerEnrollRequest);
     Locker getLockerByUid(String lockerUid);
     void updateBatteryByLockerUid(String lockerUid, Integer battery);
+    void updateLockedStatus(String lockerUid, CODE code);
 }

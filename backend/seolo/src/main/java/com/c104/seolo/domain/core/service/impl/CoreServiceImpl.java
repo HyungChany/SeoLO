@@ -8,6 +8,7 @@ import com.c104.seolo.domain.core.service.CodeState;
 import com.c104.seolo.domain.core.service.Context;
 import com.c104.seolo.domain.core.service.CoreService;
 import com.c104.seolo.domain.core.service.LockerService;
+import com.c104.seolo.domain.user.service.UserService;
 import com.c104.seolo.global.exception.CommonException;
 import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class CoreServiceImpl implements CoreService {
-
     private static final String BASE_PACKAGE = "com.c104.seolo.domain.core.service.states.";
     private final ApplicationContext applicationContext;
     private final LockerService lockerService;
+    private final UserService userService;
 
 
     @Override
@@ -40,6 +41,11 @@ public class CoreServiceImpl implements CoreService {
         }
 
         CoreResponse coreResponse = context.doLogic();
+        CODE nextCode = coreResponse.getNextCode();
+        if (nextCode != null) {
+            userService.changeUserStatusCode(cCodePrincipal.getId(), nextCode);
+        }
+
         return coreResponse;
     }
 

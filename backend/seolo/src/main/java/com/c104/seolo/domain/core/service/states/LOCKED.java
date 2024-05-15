@@ -8,10 +8,9 @@ import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.core.exception.CoreErrorCode;
 import com.c104.seolo.domain.core.service.CodeState;
 import com.c104.seolo.domain.core.service.Context;
-import com.c104.seolo.domain.core.service.CoreService;
+import com.c104.seolo.domain.core.service.LockerService;
 import com.c104.seolo.domain.machine.dto.MachineDto;
 import com.c104.seolo.domain.machine.service.MachineService;
-import com.c104.seolo.domain.machine.service.impl.MachineServiceImpl;
 import com.c104.seolo.domain.task.dto.TaskHistoryDto;
 import com.c104.seolo.domain.task.service.TaskHistoryService;
 import com.c104.seolo.domain.user.entity.AppUser;
@@ -34,7 +33,7 @@ public class LOCKED implements CodeState {
     private final NotificationService notificationService;
     private final DBUserDetailService dbUserDetailService;
     private final MachineService machineService;
-    private final MachineServiceImpl machineServiceImpl;
+    private final LockerService lockerService;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -66,11 +65,14 @@ public class LOCKED implements CodeState {
 
         // 3
         updateTaskState(currentTask);
+        // 자물쇠 잠금상태 업데이트
+        lockerService.updateLockedStatus(coreRequest.getLockerUid(), CODE.LOCKED);
 
         // 알람
         sendNotification(coreRequest, worker, machine);
 
         return CoreResponse.builder() // 3
+                .nextCode(CODE.LOCKED)
                 .httpStatus(HttpStatus.OK)
                 .message("잠금동기화 성공")
                 .build();

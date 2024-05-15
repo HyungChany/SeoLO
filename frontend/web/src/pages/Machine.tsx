@@ -23,68 +23,74 @@ interface FacilityType {
   name: string;
 }
 const Background = styled.div`
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
   background-color: ${Color.GRAY200};
-  justify-content: center;
-  align-items: center;
   display: flex;
+  align-items: center;
+  overflow-x: auto;
+  position: relative;
 `;
 const Box = styled.div`
-  width: 92%;
-  height: 90%;
+  min-width: 1280px;
+  height: 34rem;
   display: flex;
-  gap: 2rem;
+  justify-content: space-between;
+  margin: 0 auto;
 `;
 const ImgBox = styled.img`
-  width: 13rem;
-  height: 13rem;
+  width: 13.5rem;
 `;
 const InformationBox = styled.div`
-  width: 80rem;
+  width: calc(100% - 26rem);
   height: 100%;
   display: flex;
-  padding-top: 1rem;
-  padding-left: 2.5rem;
-  padding-right: 2.5rem;
+  justify-content: space-between;
+  padding: 1.8rem;
   box-sizing: border-box;
   background-color: ${Color.WHITE};
-  border-radius: 3.125rem;
+  border-radius: 1.25rem;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
-  gap: 10rem;
-  overflow: hidden;
+  /* overflow: hidden; */
 `;
 const LeftBox = styled.div`
-  width: 25.0625rem;
-  height: 35rem;
+  width: 47.5%;
+  height: 100%;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  gap: 1.5rem;
 `;
 const DropdownBox = styled.div`
-  width: 19.375rem;
-  height: 10rem;
+  width: 100%;
   display: flex;
-  justify-content: space-between;
   flex-direction: column;
+  gap: 1rem;
 `;
 const PhotoBox = styled.div`
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 `;
 const Photo = styled.div`
-  width: 25rem;
-  height: 16rem;
+  width: 100%;
+  height: 15rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${Color.GRAY400};
-  border: 1px solid ${Color.GRAY300};
+  color: ${Color.GRAY500};
+  border: 1px solid ${Color.GRAY200};
   border-radius: 1.25rem;
+  cursor: pointer;
+  transition:
+    background-color 0.5s,
+    border-color 0.3s;
+
+  &:hover {
+    background-color: ${Color.GRAY200};
+    border-color: ${Color.GRAY300};
+  }
 `;
 const Preview = styled.img`
   width: 100%;
@@ -99,41 +105,47 @@ const PhotoInputBox = styled.input.attrs({
   display: none;
 `;
 const RightBox = styled.div`
-  width: 100%;
+  width: 47.5%;
   height: 100%;
   display: flex;
+  justify-content: space-between;
   flex-direction: column;
-  gap: 1rem;
   box-sizing: border-box;
 `;
 const CommonBox = styled.div`
-  width: 20rem;
+  width: 100%;
   height: auto;
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 `;
 const IntroBox = styled.div`
-  width: 20rem;
-  height: auto;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
 `;
 const TypoBox = styled.div`
-  width: 20rem;
-  height: 1.75rem;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
 `;
+const BoxTwo = styled.div`
+  display: flex;
+  gap: 1rem;
+  flex-direction: column;
+`;
+
 const ButtonBox = styled.div`
-  width: 20rem;
-  height: 3rem;
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
+`;
+
+const WidthInputBox = styled(InputBox)<{ width?: string }>`
+  width: ${(props) => props.width || '100%'};
 `;
 
 const Equipment = () => {
@@ -281,7 +293,9 @@ const Equipment = () => {
           flexDirection={'column'}
           alignItems="center"
         >
-          <Typo.H3 color={Color.BLACK}>현재 작업장의 장비 현황</Typo.H3>
+          <Typo.H3>
+            <div style={{ marginTop: '1.3rem' }}>현재 작업장의 장비 현황</div>
+          </Typo.H3>
           <Dropdown
             options={options}
             selectedOption={selectedOption}
@@ -302,9 +316,9 @@ const Equipment = () => {
                 placeholder="공장을 선택하세요"
               />
             </DropdownBox>
-            <PhotoBox onClick={handleFileUpload}>
+            <PhotoBox>
               <Typo.H3>작업장 사진</Typo.H3>
-              <Photo>
+              <Photo onClick={handleFileUpload}>
                 {imagePreviewUrl ? (
                   <Preview src={imagePreviewUrl} alt="Uploaded Image Preview" />
                 ) : (
@@ -317,33 +331,30 @@ const Equipment = () => {
           <RightBox>
             <CommonBox>
               <Typo.H3>장비 명</Typo.H3>
-              <InputBox
-                width={20}
-                height={4}
+              <WidthInputBox
+                height={3}
                 value={equipmentName}
                 onChange={handleEquipmentName}
-                placeholder="장비명을 입력하세요"
+                placeholder="ex) 레이저 웰더"
               />
             </CommonBox>
             <CommonBox>
               <Typo.H3>장비 번호</Typo.H3>
-              <InputBox
-                width={20}
-                height={4}
+              <WidthInputBox
+                height={3}
                 value={equipmentNumber}
                 onChange={handleEquipmentNumber}
-                placeholder="장비번호를 입력하세요"
+                placeholder="ex)  L / W - 2"
               />
             </CommonBox>
             <CommonBox>
               <Typo.H3>도입 일자</Typo.H3>
               <IntroBox>
-                <InputBox
-                  width={12}
+                <WidthInputBox
                   height={3}
                   value={date}
                   onChange={handleDate}
-                  placeholder="2024-05-20"
+                  placeholder="ex) 2024-05-20"
                   onBlur={() => {
                     if (!validateDate(date)) {
                       console.log('Invalid date');
@@ -356,51 +367,53 @@ const Equipment = () => {
             </CommonBox>
             <CommonBox>
               <TypoBox>
-                <Typo.H3>담당자(정)</Typo.H3>
-                <Typo.H3>담당자(부)</Typo.H3>
+                <BoxTwo>
+                  <Typo.H3>담당자(정)</Typo.H3>
+                  <InputBox
+                    width={11}
+                    height={3}
+                    value={mainManager}
+                    onChange={handleMainManager}
+                    placeholder="ex) 김대한"
+                  />
+                </BoxTwo>
+                <BoxTwo>
+                  <Typo.H3>담당자(부)</Typo.H3>
+                  <InputBox
+                    width={11}
+                    height={3}
+                    value={subManager}
+                    onChange={handleSubManager}
+                    placeholder="ex) 박민국"
+                  />
+                </BoxTwo>
               </TypoBox>
-              <IntroBox>
-                <InputBox
-                  width={8}
-                  height={4}
-                  value={mainManager}
-                  onChange={handleMainManager}
-                  placeholder="정"
-                />
-                <InputBox
-                  width={8}
-                  height={4}
-                  value={subManager}
-                  onChange={handleSubManager}
-                  placeholder="부"
-                />
-              </IntroBox>
             </CommonBox>
             <ButtonBox>
               <Button
-                width={5.25}
-                height={3}
+                width={5}
+                height={2.5}
                 $backgroundColor={Color.GRAY200}
                 $borderColor={Color.GRAY200}
-                $borderRadius={1.25}
-                $hoverBackgroundColor={Color.GRAY200}
-                $hoverBorderColor={Color.GRAY200}
+                $borderRadius={0.75}
+                $hoverBackgroundColor={Color.GRAY300}
+                $hoverBorderColor={Color.GRAY300}
                 onClick={handleSubmit}
-                fontSize={'1.25rem'}
+                fontSize={'1.2'}
                 fontWeight={'bold'}
               >
                 취소
               </Button>
               <Button
-                width={5.25}
-                height={3}
+                width={5}
+                height={2.5}
                 $backgroundColor={Color.GRAY200}
                 $borderColor={Color.GRAY200}
-                $borderRadius={1.25}
-                $hoverBackgroundColor={Color.GRAY200}
-                $hoverBorderColor={Color.GRAY200}
+                $borderRadius={0.75}
+                $hoverBackgroundColor={Color.GRAY300}
+                $hoverBorderColor={Color.GRAY300}
                 onClick={handleSubmit}
-                fontSize={'1.25rem'}
+                fontSize={'1.2'}
                 fontWeight={'bold'}
               >
                 완료

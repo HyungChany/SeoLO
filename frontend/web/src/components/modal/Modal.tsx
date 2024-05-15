@@ -13,10 +13,10 @@ interface ModalProps {
 const ModalContainer = styled.div<ModalProps>`
   width: 50%;
   height: 30rem;
-  border-radius: 3.125rem;
+  border-radius: 2rem;
   border: 1px solid ${Color.GRAY100};
   background-color: ${Color.GRAY50};
-  padding: 0.7rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -24,7 +24,7 @@ const ModalContainer = styled.div<ModalProps>`
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 10;
-  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.3);
 `;
 
 /**

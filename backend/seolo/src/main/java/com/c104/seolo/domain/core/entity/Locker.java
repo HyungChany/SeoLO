@@ -39,6 +39,14 @@ public class Locker extends BaseEntity {
         this.battery = newBattery;
     }
 
+    public void lock() {
+        this.isLocked = true;
+    }
+
+    public void unlock() {
+        this.isLocked = false;
+    }
+
     protected Locker () {}
 
     public Locker(Builder builder) {

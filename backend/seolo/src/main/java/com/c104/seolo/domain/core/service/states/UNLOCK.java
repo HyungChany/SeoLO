@@ -4,10 +4,12 @@ import com.c104.seolo.domain.alarm.dto.request.NotificationSendRequest;
 import com.c104.seolo.domain.alarm.service.NotificationService;
 import com.c104.seolo.domain.core.dto.request.CoreRequest;
 import com.c104.seolo.domain.core.dto.response.CoreResponse;
+import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.core.exception.CoreTokenErrorCode;
 import com.c104.seolo.domain.core.service.CodeState;
 import com.c104.seolo.domain.core.service.Context;
 import com.c104.seolo.domain.core.service.CoreTokenService;
+import com.c104.seolo.domain.core.service.LockerService;
 import com.c104.seolo.domain.machine.dto.MachineDto;
 import com.c104.seolo.domain.machine.service.MachineService;
 import com.c104.seolo.domain.report.dto.NewReport;
@@ -36,6 +38,7 @@ public class UNLOCK implements CodeState {
     private final DBUserDetailService dbUserDetailService;
     private final MachineService machineService;
     private final NotificationService notificationService;
+    private final LockerService lockerService;
 
     @Override
     @Transactional
@@ -80,11 +83,14 @@ public class UNLOCK implements CodeState {
 
         // 3
         createReport(updatedTaskhistory, worker, workedMachine);
+        // 자물쇠 잠금 상태 변경
+        lockerService.updateLockedStatus(coreRequest.getLockerUid(), CODE.UNLOCK);
 
         // 알람
-        sendNotification(coreRequest, worker,workedMachine );
-//
+        sendNotification(coreRequest, worker,workedMachine);
+
         return CoreResponse.builder() // 3
+                .nextCode(CODE.INIT)
                 .httpStatus(HttpStatus.NO_CONTENT)
                 .message("자물쇠가 열림처리 되었습니다. 토큰이 삭제되었습니다. 진행했던 작업내역이 보고서로 저장됩니다. ")
                 .build();

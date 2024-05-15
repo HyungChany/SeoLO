@@ -15,14 +15,16 @@ import java.util.Map;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class UserListInfo {
     private Long id;
+    private String employeeNum;
     private String name;
     private String title;
     private String team;
     private String role;
 
     @Builder
-    public UserListInfo(Long id, String name, String titles, String teams, String role) {
+    public UserListInfo(Long id, String employeeNum ,String name, String titles, String teams, String role) {
         this.id = id;
+        this.employeeNum = employeeNum;
         this.name = name;
         this.title = titles;
         this.team = teams;
@@ -32,7 +34,8 @@ public class UserListInfo {
     public static UserListInfo of(AppUser appUser) {
         return UserListInfo.builder()
                 .id(appUser.getId())
-                .name(appUser.getUsername())
+                .name(appUser.getEmployee().getEmployeeName())
+                .employeeNum(appUser.getUsername())
                 .titles(appUser.getUserTitle())
                 .teams(appUser.getUserTeam())
                 .role(appUser.getROLES().name())
@@ -51,7 +54,8 @@ public class UserListInfo {
         }
         return UserListInfo.builder()
                 .id(appUser.getId())
-                .name(appUser.getUsername())
+                .name(appUser.getEmployee().getEmployeeName())
+                .employeeNum(appUser.getUsername())
                 .titles(appUser.getUserTitle())
                 .teams(appUser.getUserTeam())
                 .role(translatedRole)
