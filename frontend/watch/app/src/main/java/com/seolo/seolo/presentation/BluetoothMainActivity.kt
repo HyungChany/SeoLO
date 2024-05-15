@@ -24,12 +24,11 @@ import com.seolo.seolo.R
 import com.seolo.seolo.adapters.BluetoothAdapter
 import com.seolo.seolo.adapters.BluetoothDeviceAdapter
 import com.seolo.seolo.helper.LotoManager
-import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.helper.TokenManager
 import java.nio.charset.StandardCharsets
 import java.util.UUID
 
-class BluetoothActivity : AppCompatActivity() {
+class BluetoothMainActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var bluetoothAdapter: BluetoothAdapter
@@ -96,7 +95,8 @@ class BluetoothActivity : AppCompatActivity() {
         // Bluetooth 연결 권한 확인
         if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
             val deviceName = device.name ?: "Unknown Device"
-            Toast.makeText(this@BluetoothActivity, "$deviceName 클릭", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@BluetoothMainActivity, "$deviceName 와 연결중입니다.", Toast.LENGTH_LONG)
+                .show()
 
             // Bluetooth GATT로 기기 연결 시작 (BluetoothDevice.TRANSPORT_LE 사용)
             bluetoothGatt =
@@ -139,7 +139,7 @@ class BluetoothActivity : AppCompatActivity() {
                     gatt?.close()
                     bluetoothGatt = null
                     Handler(Looper.getMainLooper()).postDelayed({
-                        gatt?.device?.let { connectToDevice(it) }
+                        gatt?.device?.let { connectToDevice(it) }  // 3초 후 재시도
                     }, 3000)
                 }
             }
@@ -157,12 +157,15 @@ class BluetoothActivity : AppCompatActivity() {
                 if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     // 권한이 있을 때
                     // 데이터 쓰기 포맷(회사코드,명령어,토큰,머신ID,유저ID)
-                    val companyCode = TokenManager.getCompanyCode(this@BluetoothActivity)
-                    val token = TokenManager.getAccessToken(this@BluetoothActivity)
-                    val machineId = SessionManager.selectedMachineId
-                    val userId = TokenManager.getUserId(this@BluetoothActivity)
+                    val companyCode =
+                        TokenManager.getCompanyCode(this@BluetoothMainActivity) // 회사 코드 가져오기
+                    val token =
+                        TokenManager.getAccessToken(this@BluetoothMainActivity) // 실제 토큰 값 가져오기
+                    val userId =
+                        TokenManager.getUserId(this@BluetoothMainActivity) // 사용자 Id 가져오기
+                    Log.d("송신데이터", "companyCode: $companyCode, token: $token, userId: $userId")
                     char?.setValue(
-                        "$companyCode,LOCK,$token,$machineId,$userId".toByteArray(
+                        "$companyCode,INIT,$token,,$userId".toByteArray(
                             StandardCharsets.UTF_8
                         )
                     )
@@ -210,8 +213,9 @@ class BluetoothActivity : AppCompatActivity() {
         ) {
             super.onCharacteristicChanged(gatt, characteristic)
             // 아두이노에서 보내온 데이터 수신
-            // 데이터 읽기 포맷(명령어,자물쇠uid.머신id,배터리잔량,유저id)
+            // 데이터 읽기 포맷(명령어,자물쇠Uid,머신Id,배터리잔량,유저Id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
+            // Data received: CHECK,1DA24G10,3,0,2
             Log.d("수신데이터 원본", "Data received: $receivedData")
             receivedData?.let {
                 val dataParts = it.split(",")
@@ -222,27 +226,28 @@ class BluetoothActivity : AppCompatActivity() {
                     val batteryInfo = dataParts[3]
                     val lotoUserId = dataParts[4]
 
-                    // LotoManager에 데이터 설정
-                    LotoManager.setLotoStatusCode(this@BluetoothActivity, statusCode)
-                    LotoManager.setLotoUid(this@BluetoothActivity, lotoUid)
-                    LotoManager.setLotoMachineId(this@BluetoothActivity, machineId)
-                    LotoManager.setLotoBatteryInfo(this@BluetoothActivity, batteryInfo)
-                    LotoManager.setLotoUserId(this@BluetoothActivity, lotoUserId)
+                    // SessionManager에 데이터 설정
+                    LotoManager.setLotoStatusCode(this@BluetoothMainActivity, statusCode)
+                    LotoManager.setLotoUid(this@BluetoothMainActivity, lotoUid)
+                    LotoManager.setLotoMachineId(this@BluetoothMainActivity, machineId)
+                    LotoManager.setLotoBatteryInfo(this@BluetoothMainActivity, batteryInfo)
+                    LotoManager.setLotoUserId(this@BluetoothMainActivity, lotoUserId)
 
-                    if (statusCode != "LOCKED") {
+                    Log.d(
+                        "수신 데이터 가공",
+                        "Session updated with received data. [statusCode: $statusCode, lotoUid: $lotoUid, machineId: $machineId, batteryInfo: $batteryInfo, lotoUserId: $lotoUserId]"
+                    )
+                    // 자물쇠 상태 확인 명령어가 CHECK일 때(자물쇠가 잠겨있는데 그냥 일단 찍어본 경우)
+                    if (statusCode == "CHECK") {
                         Toast.makeText(
-                            this@BluetoothActivity, "이미 잠겨져있는 LOTO입니다. \n 배터리 잔량: $batteryInfo", Toast.LENGTH_LONG
+                            this@BluetoothMainActivity,
+                            "내가 잠근 자물쇠가 아닙니다. 잠금을 해제할 수 없습니다. \n 배터리 잔량: $batteryInfo",
+                            Toast.LENGTH_SHORT
                         ).show()
-                    } else {
-                        // BE API 연결 필요
-                        
-                        // 잠금 완료 시 메시지를 띄운 뒤 MainActivity로 이동
-                        Toast.makeText(this@BluetoothActivity, "잠금완료", Toast.LENGTH_SHORT).show()
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            val intent = Intent(this@BluetoothActivity, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }, 1000)
+                    } else if (statusCode == "WHITE") {
+                        val intent =
+                            Intent(this@BluetoothMainActivity, ChecklistActivity::class.java)
+                        startActivity(intent)
                     }
                 }
             }

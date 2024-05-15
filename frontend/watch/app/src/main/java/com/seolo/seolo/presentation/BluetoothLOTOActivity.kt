@@ -29,7 +29,7 @@ import com.seolo.seolo.helper.TokenManager
 import java.nio.charset.StandardCharsets
 import java.util.UUID
 
-class BluetoothPickActivity : AppCompatActivity() {
+class BluetoothLOTOActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var bluetoothAdapter: BluetoothAdapter
@@ -96,8 +96,7 @@ class BluetoothPickActivity : AppCompatActivity() {
         // Bluetooth 연결 권한 확인
         if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
             val deviceName = device.name ?: "Unknown Device"
-            Toast.makeText(this@BluetoothPickActivity, "$deviceName 와 연결중입니다.", Toast.LENGTH_LONG)
-                .show()
+            Toast.makeText(this@BluetoothLOTOActivity, "$deviceName 클릭", Toast.LENGTH_SHORT).show()
 
             // Bluetooth GATT로 기기 연결 시작 (BluetoothDevice.TRANSPORT_LE 사용)
             bluetoothGatt =
@@ -140,7 +139,7 @@ class BluetoothPickActivity : AppCompatActivity() {
                     gatt?.close()
                     bluetoothGatt = null
                     Handler(Looper.getMainLooper()).postDelayed({
-                        gatt?.device?.let { connectToDevice(it) }  // 3초 후 재시도
+                        gatt?.device?.let { connectToDevice(it) }
                     }, 3000)
                 }
             }
@@ -158,15 +157,12 @@ class BluetoothPickActivity : AppCompatActivity() {
                 if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     // 권한이 있을 때
                     // 데이터 쓰기 포맷(회사코드,명령어,토큰,머신ID,유저ID)
-                    val companyCode =
-                        TokenManager.getCompanyCode(this@BluetoothPickActivity) // 회사 코드 가져오기
-                    val token =
-                        TokenManager.getAccessToken(this@BluetoothPickActivity) // 실제 토큰 값 가져오기
-                    val userId =
-                        TokenManager.getUserId(this@BluetoothPickActivity) // 사용자 Id 가져오기
-                    Log.d("송신데이터", "companyCode: $companyCode, token: $token, userId: $userId")
+                    val companyCode = TokenManager.getCompanyCode(this@BluetoothLOTOActivity)
+                    val token = TokenManager.getAccessToken(this@BluetoothLOTOActivity)
+                    val machineId = SessionManager.selectedMachineId
+                    val userId = TokenManager.getUserId(this@BluetoothLOTOActivity)
                     char?.setValue(
-                        "$companyCode,INIT,$token,,$userId".toByteArray(
+                        "$companyCode,LOCK,$token,$machineId,$userId".toByteArray(
                             StandardCharsets.UTF_8
                         )
                     )
@@ -214,9 +210,8 @@ class BluetoothPickActivity : AppCompatActivity() {
         ) {
             super.onCharacteristicChanged(gatt, characteristic)
             // 아두이노에서 보내온 데이터 수신
-            // 데이터 읽기 포맷(명령어,자물쇠Uid,머신Id,배터리잔량,유저Id)
+            // 데이터 읽기 포맷(명령어,자물쇠uid.머신id,배터리잔량,유저id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
-            // Data received: CHECK,1DA24G10,3,0,2
             Log.d("수신데이터 원본", "Data received: $receivedData")
             receivedData?.let {
                 val dataParts = it.split(",")
@@ -227,28 +222,27 @@ class BluetoothPickActivity : AppCompatActivity() {
                     val batteryInfo = dataParts[3]
                     val lotoUserId = dataParts[4]
 
-                    // SessionManager에 데이터 설정
-                    LotoManager.setLotoStatusCode(this@BluetoothPickActivity, statusCode)
-                    LotoManager.setLotoUid(this@BluetoothPickActivity, lotoUid)
-                    LotoManager.setLotoMachineId(this@BluetoothPickActivity, machineId)
-                    LotoManager.setLotoBatteryInfo(this@BluetoothPickActivity, batteryInfo)
-                    LotoManager.setLotoUserId(this@BluetoothPickActivity, lotoUserId)
+                    // LotoManager에 데이터 설정
+                    LotoManager.setLotoStatusCode(this@BluetoothLOTOActivity, statusCode)
+                    LotoManager.setLotoUid(this@BluetoothLOTOActivity, lotoUid)
+                    LotoManager.setLotoMachineId(this@BluetoothLOTOActivity, machineId)
+                    LotoManager.setLotoBatteryInfo(this@BluetoothLOTOActivity, batteryInfo)
+                    LotoManager.setLotoUserId(this@BluetoothLOTOActivity, lotoUserId)
 
-                    Log.d(
-                        "수신 데이터 가공",
-                        "Session updated with received data. [statusCode: $statusCode, lotoUid: $lotoUid, machineId: $machineId, batteryInfo: $batteryInfo, lotoUserId: $lotoUserId]"
-                    )
-                    // 자물쇠 상태 확인 명령어가 CHECK일 때(자물쇠가 잠겨있는데 그냥 일단 찍어본 경우)
-                    if (statusCode == "CHECK") {
+                    if (statusCode != "LOCKED") {
                         Toast.makeText(
-                            this@BluetoothPickActivity,
-                            "내가 잠근 자물쇠가 아닙니다. 잠금을 해제할 수 없습니다. \n 배터리 잔량: $batteryInfo",
-                            Toast.LENGTH_SHORT
+                            this@BluetoothLOTOActivity, "이미 잠겨져있는 LOTO입니다. \n 배터리 잔량: $batteryInfo", Toast.LENGTH_LONG
                         ).show()
-                    } else if (statusCode == "WHITE") {
-                        val intent =
-                            Intent(this@BluetoothPickActivity, ChecklistActivity::class.java)
-                        startActivity(intent)
+                    } else {
+                        // BE API 연결 필요
+                        
+                        // 잠금 완료 시 메시지를 띄운 뒤 MainActivity로 이동
+                        Toast.makeText(this@BluetoothLOTOActivity, "잠금완료", Toast.LENGTH_SHORT).show()
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            val intent = Intent(this@BluetoothLOTOActivity, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }, 1000)
                     }
                 }
             }

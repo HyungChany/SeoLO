@@ -119,13 +119,13 @@
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
         <activity
-            android:name=".presentation.BluetoothActivity"
+            android:name=".presentation.BluetoothLOTOActivity"
             android:exported="false"
             android:taskAffinity=""
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
 
         <activity
-            android:name=".presentation.BluetoothPickActivity"
+            android:name=".presentation.BluetoothMainActivity"
             android:exported="false"
             android:taskAffinity=""
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
