@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:app/models/core/issue_model.dart';
 import 'package:app/models/user/my_info_model.dart';
 import 'package:app/services/core_service.dart';
@@ -39,7 +41,6 @@ class CoreIssueViewModel extends ChangeNotifier {
       nextCode: '',
       tokenValue: '',
     );
-
     notifyListeners();
   }
 
@@ -65,6 +66,38 @@ class CoreIssueViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
   String? get errorMessage => _errorMessage;
+
+  void setLockerUid(String value) {
+    _coreIssueModel = CoreIssueModel(
+        lockerUid: value,
+        machineId: _coreIssueModel!.machineId,
+        taskTemplateId: _coreIssueModel!.taskTemplateId,
+        taskPrecaution: _coreIssueModel!.taskPrecaution,
+        endTime: _coreIssueModel!.endTime,
+        facilityName: _coreIssueModel!.facilityName,
+        machineName: _coreIssueModel!.machineName,
+        manager: _coreIssueModel!.manager,
+        taskTemplateName: _coreIssueModel!.taskTemplateName,
+        endDay: _coreIssueModel!.endDay,
+        battery: _coreIssueModel!.battery);
+    notifyListeners();
+  }
+
+  void setBattery(int value) {
+    _coreIssueModel = CoreIssueModel(
+        lockerUid: _coreIssueModel!.lockerUid,
+        machineId: _coreIssueModel!.machineId,
+        taskTemplateId: _coreIssueModel!.taskTemplateId,
+        taskPrecaution: _coreIssueModel!.taskPrecaution,
+        endTime: _coreIssueModel!.endTime,
+        facilityName: _coreIssueModel!.facilityName,
+        machineName: _coreIssueModel!.machineName,
+        manager: _coreIssueModel!.manager,
+        taskTemplateName: _coreIssueModel!.taskTemplateName,
+        endDay: _coreIssueModel!.endDay,
+        battery: value);
+    notifyListeners();
+  }
 
   void setMachineId(int value) {
     _coreIssueModel = CoreIssueModel(
@@ -132,17 +165,18 @@ class CoreIssueViewModel extends ChangeNotifier {
 
   void setFacilityName(String value) {
     _coreIssueModel = CoreIssueModel(
-        lockerUid: _coreIssueModel!.lockerUid,
-        machineId: _coreIssueModel!.machineId,
-        taskTemplateId: _coreIssueModel!.taskTemplateId,
-        taskPrecaution: _coreIssueModel!.taskPrecaution,
-        endTime: _coreIssueModel!.endTime,
-        facilityName: value,
-        machineName: _coreIssueModel!.machineName,
-        manager: _coreIssueModel!.manager,
-        taskTemplateName: _coreIssueModel!.taskTemplateName,
-        endDay: _coreIssueModel!.endDay,
-        battery: _coreIssueModel!.battery, );
+      lockerUid: _coreIssueModel!.lockerUid,
+      machineId: _coreIssueModel!.machineId,
+      taskTemplateId: _coreIssueModel!.taskTemplateId,
+      taskPrecaution: _coreIssueModel!.taskPrecaution,
+      endTime: _coreIssueModel!.endTime,
+      facilityName: value,
+      machineName: _coreIssueModel!.machineName,
+      manager: _coreIssueModel!.manager,
+      taskTemplateName: _coreIssueModel!.taskTemplateName,
+      endDay: _coreIssueModel!.endDay,
+      battery: _coreIssueModel!.battery,
+    );
     notifyListeners();
   }
 

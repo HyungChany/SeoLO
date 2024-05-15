@@ -65,6 +65,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   }
 
   Future onScanPressed() async {
+    // _storage.delete(key: 'Core-Code');
     try {
       _systemDevices = await FlutterBluePlus.systemDevices;
     } catch (e) {
@@ -95,7 +96,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     writeToDevice(device);
   }
 
-
   void writeToDevice(BluetoothDevice device) async {
     final issueVM = Provider.of<CoreIssueViewModel>(context, listen: false);
     final lockedVM = Provider.of<CoreLockedViewModel>(context, listen: false);
@@ -106,6 +106,10 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
       lockerToken = await _storage.read(key: 'locker_token');
       machineId = await _storage.read(key: 'machine_id');
       userId = await _storage.read(key: 'user_id');
+      // code가 write라면 init을 보냈는데 그 뒤에 꺼졌을 때
+      if (coreCode == 'WRITE') {
+        await _storage.write(key: 'Core-Code', value: 'INIT');
+      }
       for (var service in services) {
         if (service.uuid.toString().toUpperCase() ==
             "20240520-C104-C104-C104-012345678910") {
@@ -129,18 +133,31 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     timeout: 30);
                 characteristic.setNotifyValue(true);
                 characteristic.read();
-                characteristic.lastValueStream.listen((value) {
+                characteristic.lastValueStream.listen((value) async {
                   String receivedString = utf8.decode(value);
                   _receivedValues = receivedString.split(',');
                   if (_receivedValues[4] == userId) {
-                    _storage.write(key: 'Core-Code', value: _receivedValues[0]);
-                    _storage.write(key: 'locker_uid', value: _receivedValues[1]);
-                    _storage.write(key: 'machine_id', value: _receivedValues[2]);
-                    _storage.write(key: 'locker_battery', value: _receivedValues[3]);
+                    if (_receivedValues[0] != 'CHECK') {
+                      _storage.write(
+                          key: 'Core-Code', value: _receivedValues[0]);
+                    }
+                    _storage.write(
+                        key: 'locker_uid', value: _receivedValues[1]);
+                    _storage.write(
+                        key: 'machine_id', value: _receivedValues[2]);
+                    _storage.write(
+                        key: 'locker_battery', value: _receivedValues[3]);
                   }
                   // 작업 내역 먼저 작성하면 machine id 저장되어있는 상태
                   // 작업 내역 작성하고 확인 누르면 블투 연결부터 잠금까지 한번에
                   if (_receivedValues[0] == 'WRITED') {
+                    String? battery =
+                        await _storage.read(key: 'locker_battery');
+                    int? batteryInfo =
+                        (battery != null) ? int.parse(battery) : 0;
+                    String? lockerUid = await _storage.read(key: 'locker_uid');
+                    issueVM.setLockerUid(lockerUid ?? '');
+                    issueVM.setBattery(batteryInfo);
                     issueVM.coreIssue().then((_) {
                       // ISSUE API 성공하면 바로 LOCK
                       writeToDevice(device);

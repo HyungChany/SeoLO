@@ -45,10 +45,10 @@ class CoreCheckViewModel extends ChangeNotifier {
   Future<void> initializeData() async {
     lockerUid = await _storage.read(key: 'locker_uid');
     battery = await _storage.read(key: 'locker_battery');
-    int? batteryInfo = int.parse(battery!);
+    int? batteryInfo = (battery != null) ? int.parse(battery!) : 0;
     machineId = await _storage.read(key: 'machine_id');
-    int? machineIdInfo = int.parse(machineId!);
-    _coreCheckModel = CoreCheckModel(lockerUid: lockerUid,
+    int? machineIdInfo = (machineId != null) ? int.parse(machineId!) : 0;
+    _coreCheckModel = CoreCheckModel(lockerUid: lockerUid ?? '',
         battery: batteryInfo,
         machineId: machineIdInfo,
         taskType: '',
@@ -69,6 +69,8 @@ class CoreCheckViewModel extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
+    await initializeData();
+    
     final result = await _coreService.coreCheck(_coreCheckModel!);
     _isLoading = false;
 
