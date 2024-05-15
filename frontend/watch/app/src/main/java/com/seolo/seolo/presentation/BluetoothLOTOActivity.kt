@@ -222,7 +222,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     val batteryInfo = dataParts[3]
                     val lotoUserId = dataParts[4]
 
-                    // LotoManager에 데이터 설정
+                    // LotoManager에 데이터 설정machineId
                     LotoManager.setLotoStatusCode(this@BluetoothLOTOActivity, statusCode)
                     LotoManager.setLotoUid(this@BluetoothLOTOActivity, lotoUid)
                     LotoManager.setLotoMachineId(this@BluetoothLOTOActivity, machineId)

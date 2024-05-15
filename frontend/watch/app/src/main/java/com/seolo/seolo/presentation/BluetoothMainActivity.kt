@@ -163,12 +163,24 @@ class BluetoothMainActivity : AppCompatActivity() {
                         TokenManager.getAccessToken(this@BluetoothMainActivity) // 실제 토큰 값 가져오기
                     val userId =
                         TokenManager.getUserId(this@BluetoothMainActivity) // 사용자 Id 가져오기
+                    val Uid = LotoManager.getLotoUid(this@BluetoothMainActivity) // 자물쇠 Uid 가져오기
+                    val machineId = LotoManager.getLotoMachineId(this@BluetoothMainActivity) // 머신 Id 가져오기
+
                     Log.d("송신데이터", "companyCode: $companyCode, token: $token, userId: $userId")
-                    char?.setValue(
-                        "$companyCode,INIT,$token,,$userId".toByteArray(
-                            StandardCharsets.UTF_8
+
+                    if (Uid == null) {
+                        char?.setValue(
+                            "$companyCode,INIT,$token,,$userId".toByteArray(
+                                StandardCharsets.UTF_8
+                            )
                         )
-                    )
+                    } else {
+                        char?.setValue(
+                            "$companyCode,LOCKED,$token,$machineId,$userId".toByteArray(
+                                StandardCharsets.UTF_8
+                            )
+                        )
+                    }
                     gatt?.writeCharacteristic(char)
 
                     // 특성 변경 알림 등록
@@ -226,12 +238,12 @@ class BluetoothMainActivity : AppCompatActivity() {
                     val batteryInfo = dataParts[3]
                     val lotoUserId = dataParts[4]
 
-                    // SessionManager에 데이터 설정
-                    LotoManager.setLotoStatusCode(this@BluetoothMainActivity, statusCode)
-                    LotoManager.setLotoUid(this@BluetoothMainActivity, lotoUid)
-                    LotoManager.setLotoMachineId(this@BluetoothMainActivity, machineId)
-                    LotoManager.setLotoBatteryInfo(this@BluetoothMainActivity, batteryInfo)
-                    LotoManager.setLotoUserId(this@BluetoothMainActivity, lotoUserId)
+//                    // SessionManager에 데이터 설정
+//                    LotoManager.setLotoStatusCode(this@BluetoothMainActivity, statusCode)
+//                    LotoManager.setLotoUid(this@BluetoothMainActivity, lotoUid)
+//                    LotoManager.setLotoMachineId(this@BluetoothMainActivity, machineId)
+//                    LotoManager.setLotoBatteryInfo(this@BluetoothMainActivity, batteryInfo)
+//                    LotoManager.setLotoUserId(this@BluetoothMainActivity, lotoUserId)
 
                     Log.d(
                         "수신 데이터 가공",
@@ -248,6 +260,26 @@ class BluetoothMainActivity : AppCompatActivity() {
                         val intent =
                             Intent(this@BluetoothMainActivity, ChecklistActivity::class.java)
                         startActivity(intent)
+                    } else if (statusCode == "ALERT") {
+                        Toast.makeText(
+                            this@BluetoothMainActivity,
+                            "이미 열려있는 자물쇠입니다. \n 배터리 잔량: $batteryInfo",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else if ( statusCode == "UNLOCK") {
+                        Toast.makeText(
+                            this@BluetoothMainActivity,
+                            "자물쇠 잠금을 해제 합니다. \n 배터리 잔량: $batteryInfo",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        LotoManager.clearLoto(this@BluetoothMainActivity)
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            val intent =
+                                Intent(this@BluetoothMainActivity, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }, 2500)
+
                     }
                 }
             }
