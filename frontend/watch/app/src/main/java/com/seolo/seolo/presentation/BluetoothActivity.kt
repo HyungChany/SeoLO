@@ -160,7 +160,11 @@ class BluetoothActivity : AppCompatActivity() {
                     val token = TokenManager.getAccessToken(this@BluetoothActivity)
                     val machineId = SessionManager.selectedMachineId
                     val userId = TokenManager.getUserId(this@BluetoothActivity)
-                    char?.setValue("$companyCode,LOCK,$token,$machineId,$userId".toByteArray(StandardCharsets.UTF_8))
+                    char?.setValue(
+                        "$companyCode,LOCK,$token,$machineId,$userId".toByteArray(
+                            StandardCharsets.UTF_8
+                        )
+                    )
                     gatt?.writeCharacteristic(char)
 
                     // 특성 변경 알림 등록
@@ -207,7 +211,38 @@ class BluetoothActivity : AppCompatActivity() {
             // 아두이노에서 보내온 데이터 수신
             // 데이터 읽기 포맷(명령어,자물쇠uid.머신id,배터리잔량,유저id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
-            Log.d("BluetoothActivity2", "Data received: $receivedData")
+            Log.d("수신데이터 원본", "Data received: $receivedData")
+            receivedData?.let {
+                val dataParts = it.split(",")
+                if (dataParts.size == 5) {
+                    val statusCode = dataParts[0]
+                    val lotoUid = dataParts[1]
+                    val machineId = dataParts[2]
+                    val batteryInfo = dataParts[3]
+                    val userId = dataParts[4]
+
+                    // SessionManager에 데이터 설정
+                    SessionManager.lotoStatusCode = statusCode
+                    SessionManager.lotoUid = lotoUid
+                    SessionManager.lotoMachineId = machineId
+                    SessionManager.lotoBatteryInfo = batteryInfo
+                    SessionManager.lotoUserId = userId
+
+
+                    if (statusCode != "LOCKED") {
+                        Toast.makeText(
+                            this@BluetoothActivity, "이미 잠겨져있는 LOTO입니다.", Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        // BE로 데이터 전송
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            val intent = Intent(this@BluetoothActivity, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }, Toast.LENGTH_LONG.toLong())
+                    }
+                }
+            }
         }
     }
 
