@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.user.service.impl;
 
+import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.user.dto.info.UserListInfo;
 import com.c104.seolo.domain.user.dto.request.UserJoinRequest;
 import com.c104.seolo.domain.user.dto.request.UserPwdCheckRequest;
@@ -126,5 +127,13 @@ public class UserServiceImpl implements UserService {
         return UserListResponse.builder()
                 .workers(userListInfos)
                 .build();
+    }
+
+    @Override
+    public void changeUserStatusCode(Long userId, CODE code) {
+        AppUser appUser = dbUserDetailService.loadUserById(userId);
+        appUser.changeStatusCode(code);
+
+        userRepository.save(appUser);
     }
 }

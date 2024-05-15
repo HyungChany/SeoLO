@@ -68,7 +68,12 @@ public class AppUser extends BaseEntity implements UserDetails {
         this.password = newPassword;
     }
 
+    public void changeStatusCode(CODE newCode) {
+        this.statusCODE = newCode;
+    }
+
     public void changePin(String newPin) { this.PIN = newPin; }
+
 
     public String getUserTitle() {
         return this.employee.getEmployeeTitle();

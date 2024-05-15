@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.user.service;
 
+import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.user.dto.request.UserJoinRequest;
 import com.c104.seolo.domain.user.dto.request.UserPwdCheckRequest;
 import com.c104.seolo.domain.user.dto.request.UserPwdResetRequest;
@@ -18,4 +19,5 @@ public interface UserService {
     void resetUserPassword(CCodePrincipal cCodePrincipal, UserPwdResetRequest userPwdResetRequest);
     void checkSamePassword(CCodePrincipal cCodePrincipal, UserPwdCheckRequest userPwdCheckRequest);
     UserListResponse getUserList(String companyCode);
+    void changeUserStatusCode(Long userId, CODE code);
 }
