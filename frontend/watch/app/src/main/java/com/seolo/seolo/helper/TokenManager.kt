@@ -11,6 +11,7 @@ object TokenManager {
     private const val PREF_REFRESH_TOKEN = "refresh_token"
     private const val PREF_COMPANY_CODE = "company_code"
     private const val PREF_USERNAME = "username"
+    private const val PREF_USER_ID = "user_id"
 
     // SharedPreferences를 안전하게 가져오는 메서드
     private fun getPreferences(context: Context): SharedPreferences {
@@ -40,6 +41,11 @@ object TokenManager {
         getPreferences(context).edit().putString(PREF_REFRESH_TOKEN, token).apply()
     }
 
+    // 리프레시 토큰 가져오는 메서드
+    fun getRefreshToken(context: Context): String? {
+        return getPreferences(context).getString(PREF_REFRESH_TOKEN, null)
+    }
+
     // 회사 코드 설정 메서드
     fun setCompanyCode(context: Context, companyCode: String) {
         getPreferences(context).edit().putString(PREF_COMPANY_CODE, companyCode).apply()
@@ -60,16 +66,16 @@ object TokenManager {
         return getPreferences(context).getString(PREF_USERNAME, null)
     }
 
-
     // 사용자 아이디 설정 메서드
-    fun setUserId(context: Context, username: String) {
-        getPreferences(context).edit().putString(PREF_USERNAME, username).apply()
+    fun setUserId(context: Context, userId: String) {
+        getPreferences(context).edit().putString(PREF_USER_ID, userId).apply()
     }
 
     // 사용자 아이디 가져오는 메서드
     fun getUserId(context: Context): String? {
-        return getPreferences(context).getString(PREF_USERNAME, null)
+        return getPreferences(context).getString(PREF_USER_ID, null)
     }
+
     // 저장된 토큰 모두 삭제하는 메서드
     fun clearTokens(context: Context) {
         getPreferences(context).edit().clear().apply()
