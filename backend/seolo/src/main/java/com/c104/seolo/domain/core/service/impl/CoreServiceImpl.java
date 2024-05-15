@@ -22,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class CoreServiceImpl implements CoreService {
-
     private static final String BASE_PACKAGE = "com.c104.seolo.domain.core.service.states.";
     private final ApplicationContext applicationContext;
     private final LockerService lockerService;
