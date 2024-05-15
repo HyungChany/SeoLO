@@ -45,6 +45,7 @@ class UserService {
           await _storage.write(key: 'token', value: token);
           await _storage.write(key: 'Company-Code', value: companyCode);
           await _storage.write(key: 'user_id', value: userId);
+          await _storage.write(key: 'Core-Code', value: response.data['codeStatus']);
           return {'success': true};
         } else {
           return {'success': false, 'message': '로그인에 실패하였습니다.'};

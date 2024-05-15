@@ -65,11 +65,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   }
 
   Future onScanPressed() async {
-    await _storage.delete(key: 'Core-Code');
-    await _storage.delete(key: 'machine_id');
-    await _storage.delete(key: 'locker_uid');
-    await _storage.delete(key: 'locker_token');
-    await _storage.delete(key: 'locker_battery');
     try {
       _systemDevices = await FlutterBluePlus.systemDevices;
     } catch (e) {
@@ -160,13 +155,12 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                   }
                   if (_receivedValues[0] == 'UNLOCK') {
                     Navigator.pushNamedAndRemoveUntil(
-                        context, '/resultUnlock', (route) => false);
+                        context, '/resultUnlock', ModalRoute.withName('/main'));
                   }
                   if (_receivedValues[0] == 'LOCKED') {
-
                     lockedVM.coreLocked().then((_) {
                       Navigator.pushNamedAndRemoveUntil(
-                          context, '/main', (route) => false);
+                          context, '/resultLock', ModalRoute.withName('/main'));
                     });
                   }
                 });
