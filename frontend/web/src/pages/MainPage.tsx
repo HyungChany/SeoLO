@@ -4,9 +4,14 @@ import logoutIcon from '@/../assets/images/Logout.png';
 import Position from '@/../assets/icons/Position.svg?react';
 import { Facilities } from '@/apis/Facilities.ts';
 import { Logout } from '@/apis/Login.ts';
-import { MainInformation } from '@/apis/Main.ts';
+import {
+  MainInformation,
+  blueprintList,
+  blueprintRegitration,
+  simpleMachineCheck,
+} from '@/apis/Main.ts';
 import { Spacer } from '@/components/basic/Spacer.tsx';
-import { Button } from '@/components/button/Button.tsx';
+// import { Button } from '@/components/button/Button.tsx';
 import Card from '@/components/card/Card.tsx';
 import Dropdown from '@/components/dropdown/DropDown.tsx';
 import { Leaflet } from '@/components/leaflet/Leafet.tsx';
@@ -18,27 +23,27 @@ import { useEffect, useState } from 'react';
 import { MapContainer } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 interface NumberType {
   color: string;
   marginTop?: string;
   marginBottom?: string;
 }
-interface FacilityType {
-  id: string;
+interface OptionType {
+  id: number;
   name: string;
 }
 
-interface OptionType {
+interface MachineType {
+  machine_id: number;
+  machine_name: string;
+}
+
+interface DropDownType {
   value: number;
   label: string;
 }
-interface MainInformationType {
-  num_all_machines_in_this_facility: number;
-  num_all_lockers_in_this_company: number;
-  num_toody_task_historiese_in_this_facility: number;
-  num_this_week_task_historiese_in_this_facility: number;
-  num_all_accidents_in_this_company: number;
-}
+
 const Background = styled.div`
   box-sizing: border-box;
   width: 100%;
@@ -68,9 +73,12 @@ const LeftContainer = styled.div`
 `;
 
 const HeaderContainer = styled.div`
-  position: relative;
+  /* position: relative; */
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  gap: 1rem;
   text-align: center;
   margin: 4% 0 12%;
 `;
@@ -105,6 +113,9 @@ const SideMenuBox = styled.div`
 const RowContainer = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `;
 
 const LogoutBtn = styled.button`
@@ -208,10 +219,12 @@ const NumberContainer = styled.div<NumberType>`
 const MainPage = () => {
   const [modifyMode, setModifyMode] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<string | null>(null);
-  const [mainInformation, setMainInformation] = useState<MainInformationType>();
-  const [options, setOptions] = useState<OptionType[]>([]);
-  // const [selectedOption, setSelectedOption] = useState<OptionType>(options[0]);
-  const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
+  const [selectedOption, setSelectedOption] = useState<DropDownType | null>(
+    null,
+  );
+  const [machineSelected, setMachineSelected] = useState<DropDownType | null>(
+    null,
+  );
   const navigate = useNavigate();
 
   // 작업장 편집모드 활성화, 비활성화
@@ -220,15 +233,39 @@ const MainPage = () => {
     console.log(modifyMode);
   };
 
+  // 도면 등록
+  const queryClient = useQueryClient();
+  const { mutate: blueprintMutate } = useMutation({
+    mutationFn: blueprintRegitration,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['blueprint'] }),
+  });
+
+  // 도면 조회
+  const { data: blueprintData } = useQuery({
+    queryKey: ['blueprint', selectedOption?.value],
+    queryFn: () => {
+      if (selectedOption) {
+        return blueprintList(selectedOption.value);
+      }
+      return null;
+    },
+    enabled: selectedOption?.value !== undefined,
+  });
+
   // 작업장 추가
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null;
-    if (file) {
+    if (file && selectedOption) {
       const reader = new FileReader();
       reader.onload = (e) => {
         setImageFile(e.target?.result as string);
       };
       reader.readAsDataURL(file);
+
+      //폼데이터와 공장 id를 put요청에 보내기
+      const formData = new FormData();
+      formData.append('blueprint', file);
+      blueprintMutate({ data: formData, facilityId: selectedOption.value });
     }
   };
 
@@ -244,37 +281,56 @@ const MainPage = () => {
     };
     fetchLogout();
   };
-
-  const handleOptionChange = (option: OptionType): void => {
+  // 드롭다운 옵션 가져오기
+  const { data: dropdownData } = useQuery({
+    queryKey: ['dropdown'],
+    queryFn: () => Facilities(),
+  });
+  const dropdownOptions = dropdownData?.map((facility: OptionType) => ({
+    value: facility.id,
+    label: facility.name,
+  }));
+  const handleOptionChange = (option: DropDownType): void => {
     setSelectedOption(option);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
+  // 메인페이지 통합 옵션 가져오기
+  const { data: mainData } = useQuery({
+    queryKey: ['main', selectedOption],
+    queryFn: () => {
       if (selectedOption) {
-        const data = await MainInformation(selectedOption?.value);
-        setMainInformation(data);
+        return MainInformation(selectedOption.value);
       }
-    };
-    fetchData();
-  }, [selectedOption]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await Facilities();
-      const newOptions = data.map((facility: FacilityType) => ({
-        value: facility.id,
-        label: facility.name,
-      }));
-      setOptions(newOptions);
-    };
-    fetchData();
-  }, []);
-  useEffect(() => {
-    if (options.length > 0) {
-      setSelectedOption(options[0]);
-    }
-  }, [options]);
+      return null;
+    },
+    enabled: selectedOption?.value !== undefined,
+  });
+  // 마커 편집할 때 공장에 따른 기계 종류 불러오기
+  const { data: machineData } = useQuery({
+    queryKey: ['machine', selectedOption],
+    queryFn: () => {
+      if (selectedOption) {
+        return simpleMachineCheck(selectedOption.value);
+      }
+      return null;
+    },
+  });
+  // 기기 드롭다운 옵션
+  const machineDropdown = machineData?.map((machine: MachineType) => ({
+    value: machine.machine_id,
+    label: machine.machine_name,
+  }));
 
+  const handleMachineChange = (option: DropDownType): void => {
+    setMachineSelected(option);
+  };
+  // 드롭다운 옵션 초기값 설정
+  useEffect(() => {
+    if (dropdownOptions && !selectedOption) {
+      setSelectedOption(dropdownOptions[0]);
+    }
+    setImageFile(blueprintData?.blueprint_url);
+  }, [dropdownOptions]);
   return (
     <>
       <Background>
@@ -282,11 +338,12 @@ const MainPage = () => {
           <LeftContainer>
             <HeaderContainer>
               <Dropdown
-                options={options}
+                options={dropdownOptions}
                 selectedOption={selectedOption}
                 onOptionChange={handleOptionChange}
                 placeholder="공장을 선택하세요"
               />
+
               {/* <Typo.H4 color={Color.BLACK}>1공장 조립 라인</Typo.H4> */}
             </HeaderContainer>
             <Line />
@@ -327,7 +384,13 @@ const MainPage = () => {
               <Spacer space={'1rem'} />
               {modifyMode && (
                 <RowContainer>
-                  <Button
+                  <Dropdown
+                    options={machineDropdown}
+                    selectedOption={machineSelected}
+                    onOptionChange={handleMachineChange}
+                    placeholder="기계를 선택하세요"
+                  />
+                  {/* <Button
                     onClick={changeModifyMode}
                     width={3.5}
                     height={2}
@@ -351,7 +414,7 @@ const MainPage = () => {
                     $hoverBorderColor={Color.GRAY300}
                   >
                     <Typo.Detail0>완료</Typo.Detail0>
-                  </Button>
+                  </Button> */}
                 </RowContainer>
               )}
             </SideMenuBox>
@@ -370,8 +433,13 @@ const MainPage = () => {
                   style={{ height: '100%', width: '100%', overflow: 'hidden' }}
                   attributionControl={false}
                 >
-                  {imageFile && (
-                    <Leaflet imageFile={imageFile} modifyMode={modifyMode} />
+                  {imageFile && selectedOption && (
+                    <Leaflet
+                      imageFile={imageFile}
+                      modifyMode={modifyMode}
+                      selectedOption={selectedOption.value}
+                      selectedMachine={machineSelected?.value}
+                    />
                   )}
                 </MapContainer>
               </CardDrawing>
@@ -407,7 +475,7 @@ const MainPage = () => {
                   </Typo.H4>
                 </InnerContainer>
                 <NumberContainer color={Color.GREEN400} marginTop="1rem">
-                  {mainInformation?.num_all_machines_in_this_facility}
+                  {mainData?.num_all_machines_in_this_facility}
                 </NumberContainer>
               </Card>
               <Card
@@ -422,7 +490,7 @@ const MainPage = () => {
                   </Typo.H4>
                 </InnerContainer>
                 <NumberContainer color={Color.GREEN400} marginTop="1rem">
-                  {mainInformation?.num_all_lockers_in_this_company}
+                  {mainData?.num_all_lockers_in_this_company}
                 </NumberContainer>
               </Card>
               <Card
@@ -445,9 +513,7 @@ const MainPage = () => {
                     작업내역
                   </Typo.H4>
                   <NumberContainer color={Color.RED100} marginTop="-0.7rem">
-                    {
-                      mainInformation?.num_toody_task_historiese_in_this_facility
-                    }
+                    {mainData?.num_toody_task_historiese_in_this_facility}
                   </NumberContainer>
                 </InnerContainer>
               </Card>
@@ -472,9 +538,7 @@ const MainPage = () => {
                   </Typo.H4>
                 </InnerContainer>
                 <NumberContainer color={Color.RED100} marginTop="-0.7rem">
-                  {
-                    mainInformation?.num_this_week_task_historiese_in_this_facility
-                  }
+                  {mainData?.num_this_week_task_historiese_in_this_facility}
                 </NumberContainer>
               </Card>
               <Card
@@ -498,7 +562,7 @@ const MainPage = () => {
                   </Typo.H4>
                 </InnerContainer>
                 <NumberContainer color={Color.RED100} marginTop="-0.7rem">
-                  {mainInformation?.num_all_accidents_in_this_company}
+                  {mainData?.num_all_accidents_in_this_company}
                 </NumberContainer>
               </Card>
             </Cards>
