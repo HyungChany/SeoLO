@@ -105,8 +105,7 @@ class MainChkFragment : Fragment() {
 
     private fun navigateToChecklistActivity() {
         // 체크리스트 액티비티로 이동하는 메서드
-//        val intent = Intent(activity, ChecklistActivity::class.java)
-        val intent = Intent(activity, BluetoothActivity::class.java)
+        val intent = Intent(activity, ChecklistActivity::class.java)
         startActivity(intent)
     }
 
