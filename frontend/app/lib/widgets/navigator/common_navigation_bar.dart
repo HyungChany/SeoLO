@@ -20,8 +20,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.bluetooth),
-          // icon: Image.asset('assets/images/nfc_icon.png',width: 34,height: 34),
+          icon: Image.asset('assets/images/bluetooth_icon.png',width: 34,height: 34),
           label: 'BLUETOOTH',
         ),
         BottomNavigationBarItem(

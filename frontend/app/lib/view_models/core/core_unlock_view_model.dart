@@ -12,16 +12,21 @@ class CoreUnlockViewModel extends ChangeNotifier {
   String? battery;
   String? machineId;
   String? tokenValue;
-
+  bool _isUnlocking = false;
   bool _isLoading = false;
   String? _errorMessage;
 
   bool get isLoading => _isLoading;
-
+  bool get isUnlocking => _isUnlocking;
   String? get errorMessage => _errorMessage;
 
   CoreUnlockViewModel() {
     coreUnlock();
+  }
+
+  void setIsUnlocking() async {
+    _isUnlocking != _isUnlocking;
+    notifyListeners();
   }
 
   Future<void> initializeData() async {

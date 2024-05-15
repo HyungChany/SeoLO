@@ -25,7 +25,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
       Navigator.pushReplacementNamed(context, '/main');
     }
     if (index == 1) {
-      Navigator.pushNamed(context, '/nfc');
+      Navigator.pushNamed(context, '/bluetooth');
+      _selectedIndex = 2;
     }
     if (index == 2) {
       Navigator.pushReplacementNamed(context, '/profile');

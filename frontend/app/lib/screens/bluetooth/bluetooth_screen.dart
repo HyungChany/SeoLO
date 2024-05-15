@@ -97,9 +97,9 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   }
 
   void writeToDevice(BluetoothDevice device) async {
-    final issueVM = Provider.of<CoreIssueViewModel>(context, listen: false);
-    final lockedVM = Provider.of<CoreLockedViewModel>(context, listen: false);
-    // debugPrint('Connected to ${device.platformName}');
+    final issueVM = Provider.of<CoreIssueViewModel>(context);
+    final lockedVM = Provider.of<CoreLockedViewModel>(context);
+    final unlockVM = Provider.of<CoreUnlockViewModel>(context);
     device.discoverServices().then((services) async {
       companyCode = await _storage.read(key: 'Company-Code');
       coreCode = await _storage.read(key: 'Core-Code');
@@ -131,6 +131,17 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     // characteristic.properties.writeWithoutResponse,
                     allowLongWrite: true,
                     timeout: 30);
+                // 잠금 요청을 보냈을 시 응답값이 올 동안 loading screen
+                if (coreCode == "LOCK") {
+                  lockedVM.setIsLocking();
+                  Navigator.pushReplacementNamed(context, '/loadingLock');
+                }
+                // 잠금 해제도 마찬가지로 loading screen
+                // LOCKED의 경우 받을 수 있는 행동코드 2가지 (UNLOCK, CHECK)
+                if (coreCode == "LOCKED") {
+                  unlockVM.setIsUnlocking();
+                  Navigator.pushReplacementNamed(context, '/loadingUnlock');
+                }
                 characteristic.setNotifyValue(true);
                 characteristic.read();
                 characteristic.lastValueStream.listen((value) async {
@@ -148,8 +159,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     _storage.write(
                         key: 'locker_battery', value: _receivedValues[3]);
                   }
-                  // 작업 내역 먼저 작성하면 machine id 저장되어있는 상태
-                  // 작업 내역 작성하고 확인 누르면 블투 연결부터 잠금까지 한번에
+                  // 작업 내역을 미리 작성했다면
                   if (_receivedValues[0] == 'WRITED') {
                     String? battery =
                         await _storage.read(key: 'locker_battery');
@@ -167,18 +177,20 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     Navigator.pushReplacementNamed(context, '/checklist');
                   }
                   if (_receivedValues[0] == 'CHECK') {
+                    // locked에서 check로 왔다면 상태 되돌리기
+                    if (coreCode == "LOCKED") {
+                      unlockVM.setIsUnlocking();
+                    }
                     Navigator.pushReplacementNamed(
                         context, '/otherWorklistCheck');
                   }
                   if (_receivedValues[0] == 'UNLOCK') {
+                    unlockVM.setIsUnlocking();
                     Navigator.pushNamedAndRemoveUntil(
                         context, '/resultUnlock', ModalRoute.withName('/main'));
                   }
                   if (_receivedValues[0] == 'LOCKED') {
-                    lockedVM.coreLocked().then((_) {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/resultLock', ModalRoute.withName('/main'));
-                    });
+                    lockedVM.setIsLocking();
                   }
                 });
               } catch (e) {

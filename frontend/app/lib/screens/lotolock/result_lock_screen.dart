@@ -30,9 +30,12 @@ class _ResultLockScreenState extends State<ResultLockScreen> {
                       ],
                     ),
                 )
-                : Column(
-                    children: [Image.asset('assets/images/fail_loto.png'),
-                    Text(lockVM.errorMessage ?? '잠금에 실패하였습니다.')],
-                  ));
+                : Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                      children: [Image.asset('assets/images/fail_loto.png'),
+                      Text(lockVM.errorMessage ?? '잠금에 실패하였습니다.')],
+                    ),
+                ));
   }
 }
