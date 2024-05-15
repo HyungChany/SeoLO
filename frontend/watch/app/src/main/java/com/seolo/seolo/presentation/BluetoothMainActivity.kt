@@ -24,12 +24,11 @@ import com.seolo.seolo.R
 import com.seolo.seolo.adapters.BluetoothAdapter
 import com.seolo.seolo.adapters.BluetoothDeviceAdapter
 import com.seolo.seolo.helper.LotoManager
-import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.helper.TokenManager
 import java.nio.charset.StandardCharsets
 import java.util.UUID
 
-class BluetoothPickActivity : AppCompatActivity() {
+class BluetoothMainActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var bluetoothAdapter: BluetoothAdapter
@@ -96,7 +95,7 @@ class BluetoothPickActivity : AppCompatActivity() {
         // Bluetooth 연결 권한 확인
         if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
             val deviceName = device.name ?: "Unknown Device"
-            Toast.makeText(this@BluetoothPickActivity, "$deviceName 와 연결중입니다.", Toast.LENGTH_LONG)
+            Toast.makeText(this@BluetoothMainActivity, "$deviceName 와 연결중입니다.", Toast.LENGTH_LONG)
                 .show()
 
             // Bluetooth GATT로 기기 연결 시작 (BluetoothDevice.TRANSPORT_LE 사용)
@@ -159,17 +158,29 @@ class BluetoothPickActivity : AppCompatActivity() {
                     // 권한이 있을 때
                     // 데이터 쓰기 포맷(회사코드,명령어,토큰,머신ID,유저ID)
                     val companyCode =
-                        TokenManager.getCompanyCode(this@BluetoothPickActivity) // 회사 코드 가져오기
+                        TokenManager.getCompanyCode(this@BluetoothMainActivity) // 회사 코드 가져오기
                     val token =
-                        TokenManager.getAccessToken(this@BluetoothPickActivity) // 실제 토큰 값 가져오기
+                        TokenManager.getAccessToken(this@BluetoothMainActivity) // 실제 토큰 값 가져오기
                     val userId =
-                        TokenManager.getUserId(this@BluetoothPickActivity) // 사용자 Id 가져오기
+                        TokenManager.getUserId(this@BluetoothMainActivity) // 사용자 Id 가져오기
+                    val Uid = LotoManager.getLotoUid(this@BluetoothMainActivity) // 자물쇠 Uid 가져오기
+                    val machineId = LotoManager.getLotoMachineId(this@BluetoothMainActivity) // 머신 Id 가져오기
+
                     Log.d("송신데이터", "companyCode: $companyCode, token: $token, userId: $userId")
-                    char?.setValue(
-                        "$companyCode,INIT,$token,,$userId".toByteArray(
-                            StandardCharsets.UTF_8
+
+                    if (Uid == null) {
+                        char?.setValue(
+                            "$companyCode,INIT,$token,,$userId".toByteArray(
+                                StandardCharsets.UTF_8
+                            )
                         )
-                    )
+                    } else {
+                        char?.setValue(
+                            "$companyCode,LOCKED,$token,$machineId,$userId".toByteArray(
+                                StandardCharsets.UTF_8
+                            )
+                        )
+                    }
                     gatt?.writeCharacteristic(char)
 
                     // 특성 변경 알림 등록
@@ -227,12 +238,12 @@ class BluetoothPickActivity : AppCompatActivity() {
                     val batteryInfo = dataParts[3]
                     val lotoUserId = dataParts[4]
 
-                    // SessionManager에 데이터 설정
-                    LotoManager.setLotoStatusCode(this@BluetoothPickActivity, statusCode)
-                    LotoManager.setLotoUid(this@BluetoothPickActivity, lotoUid)
-                    LotoManager.setLotoMachineId(this@BluetoothPickActivity, machineId)
-                    LotoManager.setLotoBatteryInfo(this@BluetoothPickActivity, batteryInfo)
-                    LotoManager.setLotoUserId(this@BluetoothPickActivity, lotoUserId)
+//                    // SessionManager에 데이터 설정
+//                    LotoManager.setLotoStatusCode(this@BluetoothMainActivity, statusCode)
+//                    LotoManager.setLotoUid(this@BluetoothMainActivity, lotoUid)
+//                    LotoManager.setLotoMachineId(this@BluetoothMainActivity, machineId)
+//                    LotoManager.setLotoBatteryInfo(this@BluetoothMainActivity, batteryInfo)
+//                    LotoManager.setLotoUserId(this@BluetoothMainActivity, lotoUserId)
 
                     Log.d(
                         "수신 데이터 가공",
@@ -241,14 +252,34 @@ class BluetoothPickActivity : AppCompatActivity() {
                     // 자물쇠 상태 확인 명령어가 CHECK일 때(자물쇠가 잠겨있는데 그냥 일단 찍어본 경우)
                     if (statusCode == "CHECK") {
                         Toast.makeText(
-                            this@BluetoothPickActivity,
+                            this@BluetoothMainActivity,
                             "내가 잠근 자물쇠가 아닙니다. 잠금을 해제할 수 없습니다. \n 배터리 잔량: $batteryInfo",
                             Toast.LENGTH_SHORT
                         ).show()
                     } else if (statusCode == "WHITE") {
                         val intent =
-                            Intent(this@BluetoothPickActivity, ChecklistActivity::class.java)
+                            Intent(this@BluetoothMainActivity, ChecklistActivity::class.java)
                         startActivity(intent)
+                    } else if (statusCode == "ALERT") {
+                        Toast.makeText(
+                            this@BluetoothMainActivity,
+                            "이미 열려있는 자물쇠입니다. \n 배터리 잔량: $batteryInfo",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else if ( statusCode == "UNLOCK") {
+                        Toast.makeText(
+                            this@BluetoothMainActivity,
+                            "자물쇠 잠금을 해제 합니다. \n 배터리 잔량: $batteryInfo",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        LotoManager.clearLoto(this@BluetoothMainActivity)
+                        Handler(Looper.getMainLooper()).postDelayed({
+                            val intent =
+                                Intent(this@BluetoothMainActivity, MainActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }, 2500)
+
                     }
                 }
             }

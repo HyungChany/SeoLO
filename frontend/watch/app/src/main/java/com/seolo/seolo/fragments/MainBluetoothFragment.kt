@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.seolo.seolo.R
-import com.seolo.seolo.presentation.BluetoothPickActivity
+import com.seolo.seolo.presentation.BluetoothMainActivity
 
 class MainBluetoothFragment : Fragment() {
     private var content: String? = null
@@ -48,7 +48,7 @@ class MainBluetoothFragment : Fragment() {
 
         // 터치 이벤트를 감지하여 BluetoothActivity로 이동
         view.setOnClickListener {
-            val intent = Intent(activity, BluetoothPickActivity::class.java)
+            val intent = Intent(activity, BluetoothMainActivity::class.java)
             startActivity(intent)
         }
         return view
