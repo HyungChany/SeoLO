@@ -6,6 +6,7 @@ import com.c104.seolo.domain.core.dto.request.LockerEnrollRequest;
 import com.c104.seolo.domain.core.dto.request.LockerRequest;
 import com.c104.seolo.domain.core.dto.response.LockerResponse;
 import com.c104.seolo.domain.core.entity.Locker;
+import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.core.exception.LockerErrorCode;
 import com.c104.seolo.domain.core.repository.LockerRepository;
 import com.c104.seolo.domain.core.service.LockerService;
@@ -93,5 +94,21 @@ public class LockerServiceImpl implements LockerService {
 
         locker.changeBattery(battery);
         lockerRepository.save(locker);
+    }
+
+
+    @Override
+    public void updateLockedStatus(String lockerUid, CODE code) {
+        Locker locker = lockerRepository.findByUid(lockerUid).orElseThrow(
+                () -> new CommonException(LockerErrorCode.NOT_EXIST_LOCKER)
+        );
+
+        if (code == CODE.LOCKED) {
+            locker.lock();
+        } else if (code == CODE.UNLOCK) {
+            locker.unlock();
+        } else {
+            throw new CommonException(LockerErrorCode.NOT_ALLOWED_CODE_WHEN_UPDATE_LOKCED);
+        }
     }
 }
