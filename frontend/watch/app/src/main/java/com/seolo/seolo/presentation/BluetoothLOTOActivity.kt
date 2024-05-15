@@ -36,7 +36,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
     private lateinit var deviceAdapter: BluetoothDeviceAdapter
     private var devices = mutableListOf<BluetoothDevice>()
     private var bluetoothGatt: BluetoothGatt? = null
-    private var lastSentData: String? = null // 송신 데이터를 저장할 전역 변수
+    private var lastSentData: String? = null
 
     companion object {
         private const val REQUEST_BLUETOOTH_PERMISSION = 101
@@ -117,10 +117,10 @@ class BluetoothLOTOActivity : AppCompatActivity() {
         @RequiresApi(Build.VERSION_CODES.S)
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
             super.onConnectionStateChange(gatt, status, newState)
-            Log.d("BluetoothGattCallback", "Status: $status, New State: $newState")
+            Log.d("블루투스 연결 상태 변경_LOTO", "Status: $status, New State: $newState")
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 // 기기가 연결될 때
-                Log.d("BluetoothActivity", "Device connected: ${gatt?.device?.name}")
+                Log.d("블루투스 연결_LOTO", "${gatt?.device?.name}")
                 // 권한 확인
                 if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     // 권한이 있을 때 서비스 발견 시작
@@ -133,10 +133,10 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                 }
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 // 기기가 연결이 끊겼을 때
-                Log.d("BluetoothActivity", "Device disconnected")
+                Log.d("블루투스 연결 해제_LOTO", "블루투스 연결 해제")
                 if (status == BluetoothGatt.GATT_FAILURE || status == 133) {
                     // 연결 실패 또는 특정 오류 코드에서 재시도
-                    Log.d("BluetoothActivity", "Attempting to reconnect...")
+                    Log.d("블루투스 연결 재시도_LOTO", "블루투스 연결 재 시도")
                     gatt?.close()
                     bluetoothGatt = null
                     Handler(Looper.getMainLooper()).postDelayed({
@@ -197,7 +197,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             super.onCharacteristicWrite(gatt, characteristic, status)
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.d(
-                    "BluetoothActivity1",
+                    "데이터 쓰기 성공_LOTO",
                     "${characteristic?.value?.toString(StandardCharsets.UTF_8)}"
                 )
             }
@@ -211,7 +211,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             // 아두이노에서 보내온 데이터 수신
             // 데이터 읽기 포맷(명령어,자물쇠uid.머신id,배터리잔량,유저id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
-            Log.d("수신데이터 원본", "Data received: $receivedData")
+            Log.d("수신데이터_LOTO", "$receivedData")
 
             // 송신 데이터와 수신 데이터가 같으면 리턴
             if (receivedData == lastSentData) {
@@ -237,7 +237,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     if (statusCode != "LOCKED") {
                         Handler(Looper.getMainLooper()).post {
                             Toast.makeText(
-                                this@BluetoothLOTOActivity, "$statusCode ,이미 잠겨져있는 LOTO입니다. \n 배터리 잔량: $batteryInfo", Toast.LENGTH_LONG
+                                this@BluetoothLOTOActivity, "$statusCode ,이미 잠겨져있는 자물쇠입니다. 다른 자물쇠를 선택하세요. \n 배터리 잔량: $batteryInfo", Toast.LENGTH_LONG
                             ).show()
                         }
                     } else {
@@ -288,7 +288,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
         if (requestCode == bluetoothAdapter.REQUEST_BLUETOOTH_SCAN && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
             bluetoothAdapter.startDiscoveryWithPermissions()
         } else {
-            Log.e("BluetoothActivity", "Required permissions not granted.") // 권한 요청 거부 처리
+            Log.e("BluetoothLOTOActivity", "권한 요청 거부") // 권한 요청 거부 처리
         }
     }
 
@@ -299,7 +299,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                 bluetoothGatt?.close() // 권한이 있을 때 GATT 연결 해제
             }
         } catch (e: SecurityException) {
-            Log.e("BluetoothActivity", "Permission error: ${e.message}")
+            Log.e("BluetoothLOTOActivity", "권한 에러: ${e.message}")
         } finally {
             bluetoothAdapter.cleanup()
             super.onDestroy()

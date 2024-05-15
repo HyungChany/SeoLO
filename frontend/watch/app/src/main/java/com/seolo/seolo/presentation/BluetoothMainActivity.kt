@@ -117,10 +117,10 @@ class BluetoothMainActivity : AppCompatActivity() {
         @RequiresApi(Build.VERSION_CODES.S)
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
             super.onConnectionStateChange(gatt, status, newState)
-            Log.d("BluetoothGattCallback", "Status: $status, New State: $newState")
+            Log.d("블루투스 연결 상태 변경_Main", "Status: $status, New State: $newState")
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 // 기기가 연결될 때
-                Log.d("BluetoothActivity", "Device connected: ${gatt?.device?.name}")
+                Log.d("블루투스 연결_Main", "${gatt?.device?.name}")
                 // 권한 확인
                 if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     // 권한이 있을 때 서비스 발견 시작
@@ -133,10 +133,10 @@ class BluetoothMainActivity : AppCompatActivity() {
                 }
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 // 기기가 연결이 끊겼을 때
-                Log.d("BluetoothActivity", "Device disconnected")
+                Log.d("블루투스 연결 해제_Main", "블루투스 연결 해제")
                 if (status == BluetoothGatt.GATT_FAILURE || status == 133) {
                     // 연결 실패 또는 특정 오류 코드에서 재시도
-                    Log.d("BluetoothActivity", "Attempting to reconnect...")
+                    Log.d("블루투스 연결 재 시도_Main", "블루투스 연결 재 시도")
                     gatt?.close()
                     bluetoothGatt = null
                     Handler(Looper.getMainLooper()).postDelayed({
@@ -176,7 +176,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                     char?.setValue(sendData.toByteArray(StandardCharsets.UTF_8))
                     gatt?.writeCharacteristic(char)
 
-                    Log.d("송신데이터", sendData)
+                    Log.d("송신데이터_Main", sendData)
 
                     // 특성 변경 알림 등록
                     gatt?.setCharacteristicNotification(char, true)
@@ -208,7 +208,7 @@ class BluetoothMainActivity : AppCompatActivity() {
             super.onCharacteristicWrite(gatt, characteristic, status)
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.d(
-                    "데이터 쓰기 성공",
+                    "데이터 쓰기 성공_Main",
                     "${characteristic?.value?.toString(StandardCharsets.UTF_8)}"
                 )
             }
@@ -222,7 +222,7 @@ class BluetoothMainActivity : AppCompatActivity() {
             // 아두이노에서 보내온 데이터 수신
             // 데이터 읽기 포맷(명령어,자물쇠Uid,머신Id,배터리잔량,유저Id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
-            Log.d("수신데이터 원본0", "Data received: $receivedData")
+            Log.d("수신데이터_Main", "Data received: $receivedData")
 
             // 송신 데이터와 수신 데이터가 같으면 리턴
             if (receivedData == lastSentData) {
@@ -237,11 +237,6 @@ class BluetoothMainActivity : AppCompatActivity() {
                     val machineId = dataParts[2]
                     val batteryInfo = dataParts[3]
                     val lotoUserId = dataParts[4]
-
-                    Log.d(
-                        "수신 데이터 가공",
-                        "Session updated with received data. [statusCode: $statusCode, lotoUid: $lotoUid, machineId: $machineId, batteryInfo: $batteryInfo, lotoUserId: $lotoUserId]"
-                    )
                     // 자물쇠 상태 확인 명령어가 CHECK일 때(자물쇠가 잠겨있는데 그냥 일단 찍어본 경우)
                     if (statusCode == "CHECK") {
                         Handler(Looper.getMainLooper()).post {
@@ -321,7 +316,7 @@ class BluetoothMainActivity : AppCompatActivity() {
         if (requestCode == bluetoothAdapter.REQUEST_BLUETOOTH_SCAN && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
             bluetoothAdapter.startDiscoveryWithPermissions()
         } else {
-            Log.e("BluetoothActivity", "Required permissions not granted.") // 권한 요청 거부 처리
+            Log.e("BluetoothMainActivity", "권한 요청 거부 처리")
         }
     }
 
@@ -332,7 +327,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                 bluetoothGatt?.close() // 권한이 있을 때 GATT 연결 해제
             }
         } catch (e: SecurityException) {
-            Log.e("BluetoothActivity", "Permission error: ${e.message}")
+            Log.e("BluetoothMainActivity", "권한 에러: ${e.message}")
         } finally {
             bluetoothAdapter.cleanup()
             super.onDestroy()
