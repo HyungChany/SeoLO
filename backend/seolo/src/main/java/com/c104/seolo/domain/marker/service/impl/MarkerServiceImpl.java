@@ -38,7 +38,23 @@ public class MarkerServiceImpl implements MarkerService {
 
     @Override
     @Transactional
-    public void enrollMarker(List<AddMarkerRequest> markerRequests) {
+    public void enrollMarker(AddMarkerRequest request) {
+        MachineDto machine = machineService.getMachineByMachineId(request.getMachineId());
+
+        Marker newMarker = Marker.builder()
+                .facility(machine.getFacility())
+                .machine(machine.toEntity())
+                .locationX(request.getMarkerX())
+                .locationY(request.getMarkerY())
+                .build();
+
+        markerRepository.save(newMarker);
+
+    }
+
+    @Override
+    @Transactional
+    public void enrollMarkers(List<AddMarkerRequest> markerRequests) {
         for (AddMarkerRequest request : markerRequests) {
             MachineDto machine = machineService.getMachineByMachineId(request.getMachineId());
 
