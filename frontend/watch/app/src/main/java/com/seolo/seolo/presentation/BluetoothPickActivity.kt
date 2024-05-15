@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.BluetoothAdapter
 import com.seolo.seolo.adapters.BluetoothDeviceAdapter
+import com.seolo.seolo.helper.LotoManager
 import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.helper.TokenManager
 import java.nio.charset.StandardCharsets
@@ -224,18 +225,18 @@ class BluetoothPickActivity : AppCompatActivity() {
                     val lotoUid = dataParts[1]
                     val machineId = dataParts[2]
                     val batteryInfo = dataParts[3]
-                    val userId = dataParts[4]
+                    val lotoUserId = dataParts[4]
 
                     // SessionManager에 데이터 설정
-                    SessionManager.lotoStatusCode = statusCode
-                    SessionManager.lotoUid = lotoUid
-                    SessionManager.lotoMachineId = machineId
-                    SessionManager.lotoBatteryInfo = batteryInfo
-                    SessionManager.lotoUserId = userId
+                    LotoManager.setLotoStatusCode(this@BluetoothPickActivity, statusCode)
+                    LotoManager.setLotoUid(this@BluetoothPickActivity, lotoUid)
+                    LotoManager.setLotoMachineId(this@BluetoothPickActivity, machineId)
+                    LotoManager.setLotoBatteryInfo(this@BluetoothPickActivity, batteryInfo)
+                    LotoManager.setLotoUserId(this@BluetoothPickActivity, lotoUserId)
 
                     Log.d(
                         "수신 데이터 가공",
-                        "Session updated with received data. [statusCode: $statusCode, lotoUid: $lotoUid, machineId: $machineId, batteryInfo: $batteryInfo, userId: $userId]"
+                        "Session updated with received data. [statusCode: $statusCode, lotoUid: $lotoUid, machineId: $machineId, batteryInfo: $batteryInfo, lotoUserId: $lotoUserId]"
                     )
                     // 자물쇠 상태 확인 명령어가 CHECK일 때(자물쇠가 잠겨있는데 그냥 일단 찍어본 경우)
                     if (statusCode == "CHECK") {
