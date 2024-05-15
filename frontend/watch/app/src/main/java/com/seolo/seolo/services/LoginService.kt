@@ -21,6 +21,7 @@ interface PINService {
     fun sendPinNumber(
         @Header("Authorization") authorization: String,
         @Header("Company-Code") companyCode: String,
+//        @Header("Device-Type") deviceType: String,
         @Body pinRequest: PINRequest
     ): Call<PINResponse>
 }
@@ -30,6 +31,7 @@ interface NewPINService {
     fun sendPinNumber(
         @Header("Authorization") authorization: String,
         @Header("Company-Code") companyCode: String,
+//        @Header("Device-Type") deviceType: String,
         @Body newPinRequest: NewPINRequest
     ): Call<String>
 
