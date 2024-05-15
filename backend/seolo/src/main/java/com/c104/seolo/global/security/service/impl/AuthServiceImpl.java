@@ -73,9 +73,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void userLogout(CCodePrincipal cCodePrincipal) {
-        // 인증 정보삭제
-//        AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
-
         // 유효한 access 토큰 블랙리스트에 저장
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = attr.getRequest();

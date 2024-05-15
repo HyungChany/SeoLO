@@ -91,12 +91,14 @@ public class JwtUtils {
 
     public Jws<Claims> validateAccessToken(final String token) {
         try {
-            // 토큰의 서명을 검증하고 클레임 추출
-            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(accessSecretKey).parseClaimsJws(token);
             invalidTokenRepository.findById(token).ifPresent(value -> {
                 throw new CommonException(JwtErrorCode.TOKEN_SIGNATURE_ERROR);
             });
+
+            // 토큰의 서명을 검증하고 클레임 추출
+            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(accessSecretKey).parseClaimsJws(token);
             return claimsJws;
+
         } catch (MalformedJwtException e) {
             log.info("exception : 잘못된 엑세스 토큰 시그니처");
             throw new CommonException(JwtErrorCode.TOKEN_SIGNATURE_ERROR);
