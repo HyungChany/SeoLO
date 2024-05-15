@@ -52,7 +52,9 @@ const ContentBox = styled.div<ContentBoxProps>`
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  background-color: ${(props) => (props.battery < 40 ? Color.RED100 : null)};
+  background-color: ${(props) => 
+    props.battery < 25 ? Color.RED1 : 
+    props.battery <= 50 ? Color.YELLOW100 : null};
   border-bottom: 2px solid ${Color.GRAY200};
   /* color: ${(props) => (props.battery < 40 ? Color.WHITE : Color.BLACK)}; */
 `;

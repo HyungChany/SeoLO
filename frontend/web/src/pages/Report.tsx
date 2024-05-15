@@ -114,6 +114,13 @@ const CsvButton = styled(CsvDownloadButton)`
     background-color: #19633a;
   }
 `;
+
+const TableRow = styled.tr`
+  &:hover {
+    background-color: ${Color.GRAY100}; // 원하는 호버 배경 색
+  }
+`;
+
 const Report = () => {
   const [reportModal, setReportModal] = useState<boolean>(false);
   const [reportData, setReportData] = useState<EquipmentData[]>([]);
@@ -346,7 +353,7 @@ const Report = () => {
           </div>
         </DaySelectBox>
         <CsvButton data={transformedCsvData} delimiter=",">
-          <img src={Excel} style={{ marginRight: '0.5rem', width: '1.5rem'}} />
+          <img src={Excel} style={{ marginRight: '0.5rem', width: '1.5rem' }} />
           .CSV 다운로드
         </CsvButton>
       </SelectBox>
@@ -378,7 +385,7 @@ const Report = () => {
           {rows.map((row) => {
             prepareRow(row);
             return (
-              <tr
+              <TableRow
                 {...row.getRowProps()}
                 key={row.id}
                 onClick={() => handleReport(row.original.reportId)}
@@ -396,7 +403,7 @@ const Report = () => {
                     {cell.render('Cell')}
                   </td>
                 ))}
-              </tr>
+              </TableRow>
             );
           })}
         </tbody>
