@@ -35,7 +35,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         } else {
             status = HttpStatus.UNAUTHORIZED;
             errorCode = "UNAUTHORIZED";
-            message = "Full authentication is required to access this resource";
+            message = "인가권한이 없습니다 JWT 토큰을 잘 보냈는지 확인해주세요";
         }
 
         SeoloErrorResponse errorResponse = SeoloErrorResponse.builder()
@@ -45,7 +45,7 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                 .build();
 
         response.setStatus(status.value());
-        response.setContentType("application/json");
+        response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
     }
 }

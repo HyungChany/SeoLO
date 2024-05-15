@@ -3,6 +3,7 @@ package com.c104.seolo.global.security.jwt;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.config.JwtProperties;
 import com.c104.seolo.global.exception.AuthException;
+import com.c104.seolo.global.security.enums.DEVICETYPE;
 import com.c104.seolo.global.security.exception.JwtErrorCode;
 import com.c104.seolo.global.security.jwt.repository.InvalidTokenRepository;
 import com.c104.seolo.global.security.jwt.repository.JwtTokenRepository;
@@ -50,7 +51,18 @@ public class JwtUtils {
         return Date.from(ZonedDateTime.now(zoneId).plus(Duration.ofMillis(period)).toInstant());
     }
 
+    public void validateDeviceType(String deviceType) {
+        try {
+            DEVICETYPE.valueOf(deviceType);
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid Device-Type: {}", deviceType);
+            throw new AuthException(JwtErrorCode.WRONG_DEVICE_TYPE);
+        }
+    }
+
     public String issueAccessToken(AppUser appUser, String deviceType) {
+        validateDeviceType(deviceType);
+
         // JWT에는 유저 기본키, 사번, 회사코드, 권한을 저장한다.
         List<String> authorityList = appUser.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

@@ -13,7 +13,8 @@ public enum JwtErrorCode {
     TOKEN_SIGNATURE_ERROR("JT04","잘못된 토큰", HttpStatus.FORBIDDEN),
     NOT_SUPPORT_TOKEN("JT05","지원되지 않는 토큰", HttpStatus.FORBIDDEN),
     NO_TOKEN("JT06","토큰이 없습니다.", HttpStatus.FORBIDDEN),
-    INVALID_DEVICE_TYPE("JT07", "인증받았던 디바이스에서의 요청이 아닙니다.", HttpStatus.FORBIDDEN);
+    INVALID_DEVICE_TYPE("JT07", "인증받았던 디바이스에서의 요청이 아닙니다.", HttpStatus.FORBIDDEN),
+    WRONG_DEVICE_TYPE("JT08", "유효한 Device-Type 헤더값이 아닙니다",HttpStatus.BAD_REQUEST);
 
     private final String errorCode;
     private final String message;
