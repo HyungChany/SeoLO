@@ -36,7 +36,7 @@ const Box = styled.div`
   width: 17.5rem;
   height: 2.7rem;
   padding: 1.125rem 0.9375rem;
-  margin: 0 1.5rem;
+  /* margin: 0 1.5rem; */
   justify-content: center;
   align-items: center;
   border-radius: 0.625rem;

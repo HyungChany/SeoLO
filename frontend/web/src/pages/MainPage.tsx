@@ -8,9 +8,10 @@ import {
   MainInformation,
   blueprintList,
   blueprintRegitration,
+  simpleMachineCheck,
 } from '@/apis/Main.ts';
 import { Spacer } from '@/components/basic/Spacer.tsx';
-import { Button } from '@/components/button/Button.tsx';
+// import { Button } from '@/components/button/Button.tsx';
 import Card from '@/components/card/Card.tsx';
 import Dropdown from '@/components/dropdown/DropDown.tsx';
 import { Leaflet } from '@/components/leaflet/Leafet.tsx';
@@ -31,6 +32,11 @@ interface NumberType {
 interface OptionType {
   id: number;
   name: string;
+}
+
+interface MachineType {
+  machine_id: number;
+  machine_name: string;
 }
 
 interface DropDownType {
@@ -67,9 +73,12 @@ const LeftContainer = styled.div`
 `;
 
 const HeaderContainer = styled.div`
-  position: relative;
+  /* position: relative; */
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  gap: 1rem;
   text-align: center;
   margin: 4% 0 12%;
 `;
@@ -104,6 +113,9 @@ const SideMenuBox = styled.div`
 const RowContainer = styled.div`
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `;
 
 const LogoutBtn = styled.button`
@@ -210,6 +222,9 @@ const MainPage = () => {
   const [selectedOption, setSelectedOption] = useState<DropDownType | null>(
     null,
   );
+  const [machineSelected, setMachineSelected] = useState<DropDownType | null>(
+    null,
+  );
   const navigate = useNavigate();
 
   // 작업장 편집모드 활성화, 비활성화
@@ -290,7 +305,25 @@ const MainPage = () => {
     },
     enabled: selectedOption?.value !== undefined,
   });
+  // 마커 편집할 때 공장에 따른 기계 종류 불러오기
+  const { data: machineData } = useQuery({
+    queryKey: ['machine', selectedOption],
+    queryFn: () => {
+      if (selectedOption) {
+        return simpleMachineCheck(selectedOption.value);
+      }
+      return null;
+    },
+  });
+  // 기기 드롭다운 옵션
+  const machineDropdown = machineData?.map((machine: MachineType) => ({
+    value: machine.machine_id,
+    label: machine.machine_name,
+  }));
 
+  const handleMachineChange = (option: DropDownType): void => {
+    setMachineSelected(option);
+  };
   // 드롭다운 옵션 초기값 설정
   useEffect(() => {
     if (dropdownOptions && !selectedOption) {
@@ -351,7 +384,13 @@ const MainPage = () => {
               <Spacer space={'1rem'} />
               {modifyMode && (
                 <RowContainer>
-                  <Button
+                  <Dropdown
+                    options={machineDropdown}
+                    selectedOption={machineSelected}
+                    onOptionChange={handleMachineChange}
+                    placeholder="기계를 선택하세요"
+                  />
+                  {/* <Button
                     onClick={changeModifyMode}
                     width={3.5}
                     height={2}
@@ -375,7 +414,7 @@ const MainPage = () => {
                     $hoverBorderColor={Color.GRAY300}
                   >
                     <Typo.Detail0>완료</Typo.Detail0>
-                  </Button>
+                  </Button> */}
                 </RowContainer>
               )}
             </SideMenuBox>
@@ -399,6 +438,7 @@ const MainPage = () => {
                       imageFile={imageFile}
                       modifyMode={modifyMode}
                       selectedOption={selectedOption.value}
+                      selectedMachine={machineSelected?.value}
                     />
                   )}
                 </MapContainer>
