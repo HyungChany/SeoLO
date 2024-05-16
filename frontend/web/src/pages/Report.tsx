@@ -121,6 +121,17 @@ const TableRow = styled.tr`
   }
 `;
 
+const StickyTh = styled.th`
+  height: 3rem;
+  position: sticky;
+  top: -2rem;
+  background-color: white;
+  z-index: 10;
+  font-weight: bold;
+  padding: 0.5rem 0;
+  border-bottom: 2px solid black;
+`;
+
 const Report = () => {
   const [reportModal, setReportModal] = useState<boolean>(false);
   const [reportData, setReportData] = useState<EquipmentData[]>([]);
@@ -155,6 +166,20 @@ const Report = () => {
     setTableData(reportData);
   }, [reportData]);
 
+  const handleSelectAllToggle = () => {
+    const allSelected = reportData.every((item) => item.selected);
+    const updatedEquipment = reportData.map((item) => ({
+      ...item,
+      selected: !allSelected,
+    }));
+    setReportData(updatedEquipment);
+    if (allSelected) {
+      setCsvData([]);
+    } else {
+      setCsvData(updatedEquipment);
+    }
+  };
+
   const handleSelectToggle = (
     index: number,
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -177,7 +202,11 @@ const Report = () => {
   const columns: Column<EquipmentData>[] = React.useMemo(
     () => [
       {
-        Header: '선택',
+        Header: (
+          <div onClick={handleSelectAllToggle} style={{ cursor: 'pointer' }}>
+            선택
+          </div>
+        ),
         accessor: 'selected',
         Cell: ({ row }: { row: Row<EquipmentData> }) => (
           <img
@@ -365,18 +394,12 @@ const Report = () => {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
               {headerGroup.headers.map((column) => (
-                <th
+                <StickyTh
                   {...column.getHeaderProps()}
                   key={column.id}
-                  style={{
-                    borderBottom: '2px solid black',
-                    color: Color.BLACK,
-                    fontWeight: 'bold',
-                    paddingBottom: '1rem',
-                  }}
                 >
                   {column.render('Header')}
-                </th>
+                </StickyTh>
               ))}
             </tr>
           ))}
