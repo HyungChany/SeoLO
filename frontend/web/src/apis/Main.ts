@@ -148,3 +148,56 @@ export const simpleMachineCheck = async (facilityId: number) => {
     }
   }
 };
+
+export const deleteMarker = async (index: number) => {
+  try {
+    const accessToken = sessionStorage.getItem('accessToken');
+    const companyCode = sessionStorage.getItem('companyCode');
+    const response = await api.delete(`/markers/${index}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Company-Code': companyCode,
+        'Device-Type': 'web',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('공장:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
+  }
+};
+
+export const detailMarker = async (markerId: number) => {
+  try {
+    const accessToken = sessionStorage.getItem('accessToken');
+    const companyCode = sessionStorage.getItem('companyCode');
+    const response = await api.get(`/markers/${markerId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Company-Code': companyCode,
+        'Device-Type': 'web',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
+  }
+};

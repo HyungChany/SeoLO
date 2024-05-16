@@ -229,7 +229,10 @@ const MainPage = () => {
   const queryClient = useQueryClient();
   const { mutate: blueprintMutate } = useMutation({
     mutationFn: blueprintRegitration,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['blueprint'] }),
+    onSuccess: async () => {
+      queryClient.invalidateQueries({ queryKey: ['blueprint'] });
+      queryClient.invalidateQueries({ queryKey: ['markers'] });
+    },
   });
 
   // 도면 조회
@@ -349,7 +352,7 @@ const MainPage = () => {
                   onClick={() => console.log()}
                 >
                   <CheckListIcon />
-                  <Typo.Body1B color={Color.ONYX}>새 작업장 추가</Typo.Body1B>
+                  <Typo.Body1B color={Color.ONYX}>도면 추가/수정</Typo.Body1B>
                 </Menu>
               </label>
               <Spacer space={'1rem'} />
