@@ -21,10 +21,10 @@ class UserService {
       onRequest: (options, handler) async {
         String? token = await _storage.read(key: 'token');
         String? companyCode = await _storage.read(key: 'Company-Code');
+        options.headers['Device-Type'] = 'app';
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
           options.headers['Company-Code'] = companyCode;
-          options.headers['Device-Type'] = 'app';
         }
         return handler.next(options);
       },
@@ -42,14 +42,13 @@ class UserService {
         String? userId = response.data['userId'].toString();
         String? companyCode = loginModel.companyCode.toString();
         if (token != null) {
-          await _storage.deleteAll();
           await _storage.write(key: 'token', value: token);
           await _storage.write(key: 'Company-Code', value: companyCode);
           await _storage.write(key: 'user_id', value: userId);
           await _storage.write(key: 'Core-Code', value: response.data['codeStatus']);
           return {'success': true};
         } else {
-          return {'success': false, 'message': '로그인에 실패하였습니다.'};
+          return {'success': false, 'message': '로그인에 실패하였습니다.', 'statusCode': response.statusCode};
         }
       } else {
         return {

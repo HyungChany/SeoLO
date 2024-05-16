@@ -2,6 +2,7 @@ import 'package:app/view_models/core/core_issue_view_model.dart';
 import 'package:app/view_models/loto/task_templates_view_model.dart';
 import 'package:app/widgets/button/common_icon_button.dart';
 import 'package:app/widgets/dialog/dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/inputbox/common_largeinputbox.dart';
@@ -98,12 +99,17 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> {
                                     })),
                           ),
                         ),
-                        LargeInputBox(
-                          hintText: '내용을 입력해 주세요',
-                          precaution: selectPrecaution,
-                          onTextSaved: (text) {
-                            selectPrecaution = text;
+                        GestureDetector(
+                          onTap: () {
+                            FocusScope.of(context).unfocus();
                           },
+                          child: LargeInputBox(
+                            hintText: '내용을 입력해 주세요',
+                            precaution: selectPrecaution,
+                            onTextSaved: (text) {
+                              selectPrecaution = text;
+                            },
+                          ),
                         ),
                       ],
                     ),

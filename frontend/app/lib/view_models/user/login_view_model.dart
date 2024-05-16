@@ -11,7 +11,9 @@ class LoginViewModel extends ChangeNotifier {
   bool _isFocused = false;
   bool _isLoading = false;
   String? _errorMessage;
+  int? _statusCode;
 
+  int? get statusCode => _statusCode;
   String get userName => _loginData.username;
 
   String get password => _loginData.password;
@@ -60,8 +62,10 @@ class LoginViewModel extends ChangeNotifier {
 
     if (!result['success']) {
       _errorMessage = result['message'];
+      _statusCode = result['statusCode'];
     } else {
       _errorMessage = null;
+      _statusCode = result['statusCode'];
     }
     notifyListeners();
   }

@@ -14,10 +14,10 @@ class NewsService {
       onRequest: (options, handler) async {
         String? token = await _storage.read(key: 'token');
         String? companyCode = await _storage.read(key: 'Company-Code');
+        options.headers['Device-Type'] = 'app';
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
           options.headers['Company-Code'] = companyCode;
-          options.headers['Device-Type'] = 'app';
         }
         return handler.next(options);
       },

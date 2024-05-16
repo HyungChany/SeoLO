@@ -1,4 +1,3 @@
-import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/main/main_navi_page.dart';
 import 'package:app/widgets/main/main_news_banner.dart';
 import 'package:app/widgets/main/main_welcome_banner.dart';

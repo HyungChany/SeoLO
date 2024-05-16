@@ -29,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final viewModel = Provider.of<LoginViewModel>(context);
     return SingleChildScrollView(
       padding:
-      EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.9,
         height: MediaQuery.of(context).size.height * 0.6,
@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onTap: () {
                 if (!viewModel.isLoading) {
                   viewModel.login().then((_) {
-                    if (viewModel.errorMessage == null) {
+                    if (viewModel.statusCode == 200) {
                       Navigator.pushReplacementNamed(context, '/main');
                     } else {
                       showDialog(
@@ -108,12 +108,17 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage('assets/images/login.png'))),
-        child: Center(child: loginBox()),
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage('assets/images/login.png'))),
+          child: Center(child: loginBox()),
+        ),
       ),
     );
   }
