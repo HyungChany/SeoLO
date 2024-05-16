@@ -2,7 +2,6 @@ package com.c104.seolo.global.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -37,10 +36,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> authExceptionHandler(AuthException e){
         return ResponseEntity.status(e.getHttpStatus())
                 .body(SeoloErrorResponse.builder()
-                .httpStatus(e.getHttpStatus())
-                .errorCode(e.getErrorCode())
-                .message(e.getMessage())
-                .build());
+                    .httpStatus(e.getHttpStatus())
+                    .errorCode(e.getErrorCode())
+                    .message(e.getMessage())
+                    .build());
     }
 
 

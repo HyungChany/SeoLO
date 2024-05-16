@@ -52,7 +52,15 @@ const InformationBox = styled.div`
   background-color: ${Color.WHITE};
   border-radius: 1.25rem;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
+  flex-direction: column;
   /* overflow: hidden; */
+`;
+const TopBox = styled.div`
+  width: 100%;
+  height: 88%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
 `;
 const LeftBox = styled.div`
   width: 47.5%;
@@ -82,6 +90,8 @@ const Photo = styled.div`
   color: ${Color.GRAY500};
   border: 1px solid ${Color.GRAY200};
   border-radius: 1.25rem;
+  font-size: 1.5rem;
+  font-weight: bold;
   cursor: pointer;
   transition:
     background-color 0.5s,
@@ -306,120 +316,122 @@ const Equipment = () => {
           <Typo.H0 color={Color.BLACK}>{facilities}</Typo.H0>
         </Card>
         <InformationBox>
-          <LeftBox>
-            <DropdownBox>
-              <Typo.H3>등록 작업장</Typo.H3>
-              <Dropdown
-                options={options}
-                selectedOption={selectedSubmitOption}
-                onOptionChange={handleSubmitOptionChange}
-                placeholder="공장을 선택하세요"
-              />
-            </DropdownBox>
-            <PhotoBox>
-              <Typo.H3>작업장 사진</Typo.H3>
-              <Photo onClick={handleFileUpload}>
-                {imagePreviewUrl ? (
-                  <Preview src={imagePreviewUrl} alt="Uploaded Image Preview" />
-                ) : (
-                  '사진을 업로드해주세요'
-                )}
-                <PhotoInputBox ref={fileInputRef} onChange={handleFileChange} />
-              </Photo>
-            </PhotoBox>
-          </LeftBox>
-          <RightBox>
-            <CommonBox>
-              <Typo.H3>장비 명</Typo.H3>
-              <WidthInputBox
-                height={3}
-                value={equipmentName}
-                onChange={handleEquipmentName}
-                placeholder="ex) 레이저 웰더"
-              />
-            </CommonBox>
-            <CommonBox>
-              <Typo.H3>장비 번호</Typo.H3>
-              <WidthInputBox
-                height={3}
-                value={equipmentNumber}
-                onChange={handleEquipmentNumber}
-                placeholder="ex)  L / W - 2"
-              />
-            </CommonBox>
-            <CommonBox>
-              <Typo.H3>도입 일자</Typo.H3>
-              <IntroBox>
+          <TopBox>
+            <LeftBox>
+              <DropdownBox>
+                <Typo.H3>등록 작업장</Typo.H3>
+                <Dropdown
+                  options={options}
+                  selectedOption={selectedSubmitOption}
+                  onOptionChange={handleSubmitOptionChange}
+                  placeholder="공장을 선택하세요"
+                />
+              </DropdownBox>
+              <PhotoBox>
+                <Typo.H3>작업장 사진</Typo.H3>
+                <Photo onClick={handleFileUpload}>
+                  {imagePreviewUrl ? (
+                    <Preview src={imagePreviewUrl} alt="Uploaded Image Preview" />
+                  ) : (
+                    '사진을 업로드해주세요'
+                  )}
+                  <PhotoInputBox ref={fileInputRef} onChange={handleFileChange} />
+                </Photo>
+              </PhotoBox>
+            </LeftBox>
+            <RightBox>
+              <CommonBox>
+                <Typo.H3>장비 명</Typo.H3>
                 <WidthInputBox
                   height={3}
-                  value={date}
-                  onChange={handleDate}
-                  placeholder="ex) 2024-05-20"
-                  onBlur={() => {
-                    if (!validateDate(date)) {
-                      console.log('Invalid date');
-                    } else {
-                      setDateError(''); // 오류가 없으면 오류 메시지 초기화
-                    }
-                  }}
+                  value={equipmentName}
+                  onChange={handleEquipmentName}
+                  placeholder="ex) 레이저 웰더"
                 />
-              </IntroBox>
-            </CommonBox>
-            <CommonBox>
-              <TypoBox>
-                <BoxTwo>
-                  <Typo.H3>담당자(정)</Typo.H3>
-                  <InputBox
-                    width={11}
+              </CommonBox>
+              <CommonBox>
+                <Typo.H3>장비 번호</Typo.H3>
+                <WidthInputBox
+                  height={3}
+                  value={equipmentNumber}
+                  onChange={handleEquipmentNumber}
+                  placeholder="ex)  L / W - 2"
+                />
+              </CommonBox>
+              <CommonBox>
+                <Typo.H3>도입 일자</Typo.H3>
+                <IntroBox>
+                  <WidthInputBox
                     height={3}
-                    value={mainManager}
-                    onChange={handleMainManager}
-                    placeholder="ex) 김대한"
+                    value={date}
+                    onChange={handleDate}
+                    placeholder="ex) 2024-05-20"
+                    onBlur={() => {
+                      if (!validateDate(date)) {
+                        console.log('Invalid date');
+                      } else {
+                        setDateError(''); // 오류가 없으면 오류 메시지 초기화
+                      }
+                    }}
                   />
-                </BoxTwo>
-                <BoxTwo>
-                  <Typo.H3>담당자(부)</Typo.H3>
-                  <InputBox
-                    width={11}
-                    height={3}
-                    value={subManager}
-                    onChange={handleSubManager}
-                    placeholder="ex) 박민국"
-                  />
-                </BoxTwo>
-              </TypoBox>
-            </CommonBox>
-            <ButtonBox>
-              <Button
-                width={5}
-                height={2.5}
-                $backgroundColor={Color.GRAY200}
-                $borderColor={Color.GRAY200}
-                $borderRadius={0.75}
-                $hoverBackgroundColor={Color.GRAY300}
-                $hoverBorderColor={Color.GRAY300}
-                onClick={handleSubmit}
-                fontSize={'1.2'}
-                fontWeight={'bold'}
-              >
-                취소
-              </Button>
-              <Button
-                width={5}
-                height={2.5}
-                $backgroundColor={Color.GRAY200}
-                $borderColor={Color.GRAY200}
-                $borderRadius={0.75}
-                $hoverBackgroundColor={Color.GRAY300}
-                $hoverBorderColor={Color.GRAY300}
-                onClick={handleSubmit}
-                fontSize={'1.2'}
-                fontWeight={'bold'}
-              >
-                완료
-              </Button>
-            </ButtonBox>
-          </RightBox>
+                </IntroBox>
+              </CommonBox>
+              <CommonBox>
+                <TypoBox>
+                  <BoxTwo>
+                    <Typo.H3>담당자(정)</Typo.H3>
+                    <InputBox
+                      width={11}
+                      height={3}
+                      value={mainManager}
+                      onChange={handleMainManager}
+                      placeholder="ex) 김대한"
+                    />
+                  </BoxTwo>
+                  <BoxTwo>
+                    <Typo.H3>담당자(부)</Typo.H3>
+                    <InputBox
+                      width={11}
+                      height={3}
+                      value={subManager}
+                      onChange={handleSubManager}
+                      placeholder="ex) 박민국"
+                    />
+                  </BoxTwo>
+                </TypoBox>
+              </CommonBox>
+            </RightBox>
+          </TopBox>
+          <ButtonBox>
+            <Button
+              width={5}
+              height={2.5}
+              $backgroundColor={Color.GRAY200}
+              $borderColor={Color.GRAY200}
+              $borderRadius={0.75}
+              $hoverBackgroundColor={Color.GRAY300}
+              $hoverBorderColor={Color.GRAY300}
+              onClick={handleSubmit}
+              fontSize={'1.2'}
+              fontWeight={'bold'}
+            >
+              취소
+            </Button>
+            <Button
+              width={5}
+              height={2.5}
+              $backgroundColor={Color.GRAY200}
+              $borderColor={Color.GRAY200}
+              $borderRadius={0.75}
+              $hoverBackgroundColor={Color.GRAY300}
+              $hoverBorderColor={Color.GRAY300}
+              onClick={handleSubmit}
+              fontSize={'1.2'}
+              fontWeight={'bold'}
+            >
+              완료
+            </Button>
+          </ButtonBox>
         </InformationBox>
       </Box>
     </Background>

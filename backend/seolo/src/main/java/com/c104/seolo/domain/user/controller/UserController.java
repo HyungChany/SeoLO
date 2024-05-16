@@ -7,8 +7,6 @@ import com.c104.seolo.domain.user.dto.request.UserPwdResetRequest;
 import com.c104.seolo.domain.user.dto.response.UserInfoResponse;
 import com.c104.seolo.domain.user.dto.response.UserJoinResponse;
 import com.c104.seolo.domain.user.dto.response.UserListResponse;
-import com.c104.seolo.domain.user.dto.response.UserLoginResponse;
-import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.domain.user.service.UserService;
 import com.c104.seolo.global.security.dto.request.PINLoginRequest;
 import com.c104.seolo.global.security.dto.request.PINResetRequest;
@@ -21,12 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -48,10 +43,12 @@ public class UserController {
 
     // JWT 토큰 전용 로그인
     @PostMapping("/login")
-    public JwtLoginSuccessResponse userLogin(@Valid @RequestBody UserLoginRequest userLoginRequest) {
-        return authService.userLogin(userLoginRequest);
+    public JwtLoginSuccessResponse userLogin(@Valid @RequestBody UserLoginRequest userLoginRequest,
+                                             @RequestHeader("Device-Type") String deviceType) {
+        return authService.userLogin(userLoginRequest, deviceType);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/logout")
     public void userLogout(@AuthenticationPrincipal CCodePrincipal cCodePrincipal) {
         authService.userLogout(cCodePrincipal);

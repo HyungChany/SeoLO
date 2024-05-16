@@ -17,8 +17,8 @@ import com.c104.seolo.global.security.jwt.service.JwtTokenService;
 import com.c104.seolo.global.security.service.AuthService;
 import com.c104.seolo.global.security.service.DBUserDetailService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,6 +29,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
@@ -36,18 +37,9 @@ public class AuthServiceImpl implements AuthService {
     private final JwtTokenService jwtTokenService;
     private final DBUserDetailService dbUserDetailService;
 
-    @Autowired
-    public AuthServiceImpl(AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, UserRepository userRepository, JwtTokenService jwtTokenService, DBUserDetailService dbUserDetailService) {
-        this.authenticationManager = authenticationManager;
-        this.passwordEncoder = passwordEncoder;
-        this.userRepository = userRepository;
-        this.jwtTokenService = jwtTokenService;
-        this.dbUserDetailService = dbUserDetailService;
-    }
-
     @Override
-    public JwtLoginSuccessResponse userLogin(UserLoginRequest userLoginRequest) {
-
+    public JwtLoginSuccessResponse userLogin(UserLoginRequest userLoginRequest, String deviceType) {
+        log.info("header : {}", deviceType);
         Authentication authentication = authenticationManager.authenticate(new DaoCompanycodeToken(
                 userLoginRequest.getUsername(),
                 userLoginRequest.getPassword(),
@@ -58,7 +50,8 @@ public class AuthServiceImpl implements AuthService {
         log.info("로그인 성공 객체정보 : {} ", authentication.toString());
 
         // JWT토큰 발급
-        IssuedToken issuedToken = jwtTokenService.issueToken(authentication);
+        IssuedToken issuedToken = jwtTokenService.issueToken(authentication, deviceType);
+        log.info("발급된 토큰 : {}", issuedToken.toString());
 
         AppUser appUser = (AppUser) authentication.getPrincipal();
         return JwtLoginSuccessResponse.builder()
@@ -73,10 +66,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void userLogout(CCodePrincipal cCodePrincipal) {
-        // 인증 정보삭제
-//        AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
-
-        // 유효한 access 토큰 블랙리스트에 저장
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = attr.getRequest();
         String token = request.getHeader("Authorization");

@@ -2,14 +2,11 @@ package com.c104.seolo.domain.alarm.controller;
 
 import com.c104.seolo.domain.alarm.dto.request.NotificationSendRequest;
 import com.c104.seolo.domain.alarm.service.NotificationService;
-import com.c104.seolo.domain.user.service.UserService;
-import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -25,8 +22,8 @@ public class NotificationController {
     @Secured("ROLE_MANAGER")
     @GetMapping(path = "/pub", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public SseEmitter subscribe(@AuthenticationPrincipal CCodePrincipal cCodePrincipal) {
-        return notificationService.subscribe(cCodePrincipal.getId());
+    public SseEmitter subscribe(HttpSession session) {
+        return notificationService.subscribe(session);
     }
 
     @ResponseStatus(HttpStatus.OK)

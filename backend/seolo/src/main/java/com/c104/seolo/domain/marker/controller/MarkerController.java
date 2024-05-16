@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/markers")
@@ -28,5 +26,12 @@ public class MarkerController {
     @GetMapping("/{markerId}")
     public MarkerInfoResponse receiveMarkerData(@PathVariable Long markerId) {
         return markerService.getMarkerInfoById(markerId);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Secured("ROLE_MANAGER")
+    @DeleteMapping("/{markerId}")
+    public void deleteMarker(@PathVariable Long markerId) {
+        markerService.deleteMarker(markerId);
     }
 }

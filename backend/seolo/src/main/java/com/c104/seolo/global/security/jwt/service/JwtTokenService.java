@@ -5,6 +5,6 @@ import org.springframework.security.core.Authentication;
 
 public interface JwtTokenService {
 
-    IssuedToken issueToken(Authentication authentication);
+    IssuedToken issueToken(Authentication authentication, String deviceType);
     void removeAccessToken(String accessToken);
 }
