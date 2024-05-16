@@ -17,6 +17,7 @@ export const MainInformation = async (facilityId: number) => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     return response.data;
@@ -37,6 +38,7 @@ export const blueprintRegitration = async (data: BlueprintType) => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Company-Code': companyCode,
+          'Device-Type': 'web',
         },
       },
     );
@@ -56,6 +58,7 @@ export const blueprintList = async (facilityId: number) => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     return response.data;
@@ -73,6 +76,7 @@ export const registrationMarker = async (data: MarkerType) => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     return response.data;
@@ -89,6 +93,7 @@ export const simpleMachineCheck = async (facilityId: number) => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     return response.data.machine_id_name_list;

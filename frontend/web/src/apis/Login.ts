@@ -8,7 +8,11 @@ interface LoginType {
 
 export const userLogin = async (loginData: LoginType) => {
   try {
-    const response = await api.post('/login', loginData);
+    const response = await api.post('/login', loginData, {
+      headers: {
+        'Device-Type': 'web',
+      },
+    });
     return response.data;
   } catch (error) {
     console.error('로그인 실패: ', error);
@@ -27,6 +31,7 @@ export const Logout = async () => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Company-Code': companyCode,
+          'Device-Type': 'web',
         },
       },
     );

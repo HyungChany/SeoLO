@@ -13,6 +13,7 @@ export const EmployeeList = async () => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     return response.data.employees;
@@ -28,6 +29,7 @@ export const RegistratedEmployee = async () => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     return response.data.workers;
@@ -43,6 +45,7 @@ export const EmployeeDetail = async (employeeNumber: string) => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     return response.data;
@@ -59,6 +62,7 @@ export const EmployeeRegistration = async (employeeData: EmployeeType) => {
     const response = await api.post(`/join`, employeeData, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
+        'Device-Type': 'web',
         // 'Company-Code': companyCode,
       },
     });
