@@ -21,6 +21,9 @@ const useSSE = () => {
     const accessToken = sessionStorage.getItem('accessToken') || '';
     const companyCode = sessionStorage.getItem('companyCode') || '';
 
+    console.log('Access Token:', accessToken);  // 로그 추가
+    console.log('Company Code:', companyCode);  // 로그 추가
+
     const connectSSE = () => {
       const eventSource = new EventSourcePolyfill(url, {
         headers: {
@@ -29,8 +32,9 @@ const useSSE = () => {
           'Device-Type': 'web',
         },
         heartbeatTimeout: 20 * 60 * 1000, // 20분
+    
       });
-
+      
       eventSource.onmessage = (event) => {
         if (event.data === 'heartbeat') {
           console.log('Heartbeat received');
@@ -51,7 +55,7 @@ const useSSE = () => {
         console.error('EventSource failed:', error);
         eventSource.close();
         if (isMounted) {
-          setTimeout(connectSSE, 5000); // 5초 후 재연결 시도
+          setTimeout(connectSSE, 15000); // 5초 후 재연결 시도
         }
       };
 

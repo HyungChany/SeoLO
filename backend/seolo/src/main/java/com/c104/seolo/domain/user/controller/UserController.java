@@ -48,6 +48,7 @@ public class UserController {
         return authService.userLogin(userLoginRequest, deviceType);
     }
 
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping("/logout")
     public void userLogout(@AuthenticationPrincipal CCodePrincipal cCodePrincipal) {
         authService.userLogout(cCodePrincipal);
