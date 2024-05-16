@@ -18,6 +18,7 @@ class _MainWelcomeBannerState extends State<MainWelcomeBanner> {
     super.initState();
     viewModel.myInfo();
   }
+
   content() {
     final viewModel = Provider.of<MyInfoViewModel>(context);
     return RichText(
