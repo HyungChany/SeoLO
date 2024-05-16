@@ -114,6 +114,7 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
                 text: '작업 내역 저장 및 자물쇠 잠금',
                 onTap: () {
                   // machine id 저장
+                  _storage.delete(key:'locker_uid');
                   _storage.write(key: 'machine_id', value: viewModel.machineId.toString());
                   // storage에 locker uid가 있다면 연결 먼저 한 것
                   // 그럼 issue api 요청 후 bluetooth 이동

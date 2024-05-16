@@ -21,23 +21,42 @@ class _ResultUnlockScreenState extends State<ResultUnlockScreen> {
               )
             : (unlockVM.errorMessage == null)
                 ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/images/success_loto.png'),
-                        SizedBox(height: 20,),
-                        const Text('잠금 해제 되었습니다.', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                      ],
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/images/success_loto.png'),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          const Text(
+                            '잠금 해제 되었습니다.',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
                     ),
-                )
+                  )
                 : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/images/fail_loto.png'),
-                        Text(unlockVM.errorMessage ?? '잠금 해제에 실패하였습니다.')
-                      ],
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/images/fail_loto.png'),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(
+                            unlockVM.errorMessage ?? '잠금 해제에 실패하였습니다.',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
                     ),
-                ));
+                  ));
   }
 }

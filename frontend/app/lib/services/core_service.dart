@@ -88,11 +88,11 @@ class CoreService {
       Dio.Response response = await _dio.post('$baseUrl/core/UNLOCK',
           data: coreUnlockModel.toJson());
       if (response.statusCode == 200) {
-        _storage.delete(key: 'Core-Code');
-        _storage.delete(key: 'machine_id');
-        _storage.delete(key: 'locker_uid');
-        _storage.delete(key: 'locker_token');
-        _storage.delete(key: 'locker_battery');
+        await _storage.delete(key: 'Core-Code');
+        await _storage.delete(key: 'machine_id');
+        await _storage.delete(key: 'locker_uid');
+        await _storage.delete(key: 'locker_token');
+        await _storage.delete(key: 'locker_battery');
         return {
           'success': true,
         };
@@ -118,7 +118,7 @@ class CoreService {
       debugPrint(coreLockedModel.toJson().toString());
       if (response.statusCode == 200) {
         // debugPrint(response.data);
-        _storage.write(key: 'Core-Code', value: response.data['next_code']);
+        await _storage.write(key: 'Core-Code', value: response.data['next_code']);
         return {
           'success': true,
         };

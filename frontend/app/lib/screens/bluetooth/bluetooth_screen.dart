@@ -8,6 +8,7 @@ import 'package:app/view_models/core/core_unlock_view_model.dart';
 import 'package:app/widgets/bluetooth/scan_result_tile.dart';
 import 'package:app/widgets/bluetooth/system_device_tile.dart';
 import 'package:app/widgets/button/common_text_button.dart';
+import 'package:app/widgets/dialog/dialog.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -172,63 +173,71 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                   String receivedString = utf8.decode(value);
                   _receivedValues = receivedString.split(',');
                   if (_receivedValues[4] == userId) {
-                    // CHECK거나 ALERT면 원래의 것 저장
-                    if (_receivedValues[0] != 'CHECK' ||
-                        _receivedValues[0] != 'ALERT') {
+                    if (_receivedValues[0] == 'ALERT') {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (BuildContext context) {
+                            return CommonDialog(
+                              content: '연결할 자물쇠를 확인해 주세요.',
+                              buttonText: '확인',
+                            );
+                          });
+                    } else {
+                      // CHECK거나 ALERT면 원래의 것 저장
+                      if (_receivedValues[0] != 'CHECK' ||
+                          _receivedValues[0] != 'ALERT') {
+                        _storage.write(
+                            key: 'Core-Code', value: _receivedValues[0]);
+                      }
                       _storage.write(
-                          key: 'Core-Code', value: _receivedValues[0]);
+                          key: 'locker_uid', value: _receivedValues[1]);
+                      _storage.write(
+                          key: 'machine_id', value: _receivedValues[2]);
+                      _storage.write(
+                          key: 'locker_battery', value: _receivedValues[3]);
                     }
-                    _storage.write(
-                        key: 'locker_uid', value: _receivedValues[1]);
-                    _storage.write(
-                        key: 'machine_id', value: _receivedValues[2]);
-                    _storage.write(
-                        key: 'locker_battery', value: _receivedValues[3]);
-                  }
-                  // 작업 내역을 미리 작성했다면
-                  if (_receivedValues[0] == 'WRITED') {
-                    String? battery =
-                        await _storage.read(key: 'locker_battery');
-                    int? batteryInfo =
-                        (battery != null) ? int.parse(battery) : 0;
-                    String? lockerUid = await _storage.read(key: 'locker_uid');
-                    (lockerUid != null)
-                        ? issueVM.setLockerUid(lockerUid)
-                        : issueVM.setLockerUid('');
-                    issueVM.setBattery(batteryInfo);
-                    issueVM.coreIssue().then((_) {
-                      // ISSUE API 성공하면 바로 LOCK
-                      writeToDevice(device);
-                    });
-                  }
-                  if (_receivedValues[0] == 'WRITE') {
-                    Navigator.pushReplacementNamed(context, '/checklist');
-                  }
-                  if (_receivedValues[0] == 'CHECK') {
-                    // locked에서 check로 왔다면 상태 되돌리기
-                    if (coreCode == "LOCKED") {
-                      unlockVM.setIsUnlocking();
+                    // 작업 내역을 미리 작성했다면
+                    if (_receivedValues[0] == 'WRITED') {
+                      String? battery =
+                          await _storage.read(key: 'locker_battery');
+                      int? batteryInfo =
+                          (battery != null) ? int.parse(battery) : 0;
+                      String? lockerUid =
+                          await _storage.read(key: 'locker_uid');
+                      (lockerUid != null)
+                          ? issueVM.setLockerUid(lockerUid)
+                          : issueVM.setLockerUid('');
+                      issueVM.setBattery(batteryInfo);
+                      issueVM.coreIssue().then((_) {
+                        // ISSUE API 성공하면 바로 LOCK
+                        writeToDevice(device);
+                      });
                     }
-                    Navigator.pushReplacementNamed(
-                        context, '/otherWorklistCheck');
-                  }
-                  if (_receivedValues[0] == 'UNLOCK') {
-                    setState(() {
-                      unlockVM.setIsUnlocking();
-                    });
-                    unlockVM.coreUnlock().then((_) {
-                      Navigator.pushNamedAndRemoveUntil(context,
-                          '/resultUnlock', ModalRoute.withName('/main'));
-                    });
-                  }
-                  if (_receivedValues[0] == 'LOCKED') {
-                    setState(() {
-                      lockedVM.setIsLocking();
-                    });
-                  }
-                  if (_receivedValues[0] == 'ALERT') {
-                    if (mounted) {
-                      Navigator.pushReplacementNamed(context, '/main');
+                    if (_receivedValues[0] == 'WRITE') {
+                      Navigator.pushReplacementNamed(context, '/checklist');
+                    }
+                    if (_receivedValues[0] == 'CHECK') {
+                      // locked에서 check로 왔다면 상태 되돌리기
+                      if (coreCode == "LOCKED") {
+                        unlockVM.setIsUnlocking();
+                      }
+                      Navigator.pushReplacementNamed(
+                          context, '/otherWorklistCheck');
+                    }
+                    if (_receivedValues[0] == 'UNLOCK') {
+                      setState(() {
+                        unlockVM.setIsUnlocking();
+                      });
+                      unlockVM.coreUnlock().then((_) {
+                        Navigator.pushNamedAndRemoveUntil(context,
+                            '/resultUnlock', ModalRoute.withName('/main'));
+                      });
+                    }
+                    if (_receivedValues[0] == 'LOCKED') {
+                      setState(() {
+                        lockedVM.setIsLocking();
+                      });
                     }
                   }
                 });
@@ -266,7 +275,9 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
         .map(
           (d) => SystemDeviceTile(
             device: d,
-            onOpen: () {connectToDevice(d);},
+            onOpen: () {
+              connectToDevice(d);
+            },
             onConnect: () => connectToDevice(d),
           ),
         )
@@ -278,7 +289,9 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
         .map(
           (r) => ScanResultTile(
               result: r,
-              onTap: () {connectToDevice(r.device);},
+              onTap: () {
+                connectToDevice(r.device);
+              },
               text: coreCode ?? ''),
         )
         .toList();
@@ -288,10 +301,10 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     return _lastScanResults
         .map(
           (r) => ScanResultTile(
-          result: r,
-          onTap: () => connectToDevice(r.device),
-          text: coreCode ?? ''),
-    )
+              result: r,
+              onTap: () => connectToDevice(r.device),
+              text: coreCode ?? ''),
+        )
         .toList();
   }
 

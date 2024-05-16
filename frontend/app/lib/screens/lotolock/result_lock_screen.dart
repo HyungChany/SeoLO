@@ -10,7 +10,6 @@ class ResultLockScreen extends StatefulWidget {
 }
 
 class _ResultLockScreenState extends State<ResultLockScreen> {
-  
   @override
   Widget build(BuildContext context) {
     final lockVM = Provider.of<CoreLockedViewModel>(context);
@@ -22,20 +21,34 @@ class _ResultLockScreenState extends State<ResultLockScreen> {
               )
             : (lockVM.errorMessage == null)
                 ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset('assets/images/success_loto.png'),
-                        const Text('잠금되었습니다.'),
-                      ],
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/images/success_loto.png'),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          const Text('잠금되었습니다.', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                        ],
+                      ),
                     ),
-                )
+                  )
                 : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Image.asset('assets/images/fail_loto.png'),
-                      Text(lockVM.errorMessage ?? '잠금에 실패하였습니다.')],
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.8,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset('assets/images/fail_loto.png'),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          Text(lockVM.errorMessage ?? '잠금에 실패하였습니다.', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),)
+                        ],
+                      ),
                     ),
-                ));
+                  ));
   }
 }
