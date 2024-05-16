@@ -331,11 +331,17 @@ const Equipment = () => {
                 <Typo.H3>작업장 사진</Typo.H3>
                 <Photo onClick={handleFileUpload}>
                   {imagePreviewUrl ? (
-                    <Preview src={imagePreviewUrl} alt="Uploaded Image Preview" />
+                    <Preview
+                      src={imagePreviewUrl}
+                      alt="Uploaded Image Preview"
+                    />
                   ) : (
                     '사진을 업로드해주세요'
                   )}
-                  <PhotoInputBox ref={fileInputRef} onChange={handleFileChange} />
+                  <PhotoInputBox
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                  />
                 </Photo>
               </PhotoBox>
             </LeftBox>
@@ -385,7 +391,7 @@ const Equipment = () => {
                       height={3}
                       value={mainManager}
                       onChange={handleMainManager}
-                      placeholder="ex) 김대한"
+                      placeholder="ex) 200500001"
                     />
                   </BoxTwo>
                   <BoxTwo>
@@ -395,7 +401,7 @@ const Equipment = () => {
                       height={3}
                       value={subManager}
                       onChange={handleSubManager}
-                      placeholder="ex) 박민국"
+                      placeholder="ex) 200100001"
                     />
                   </BoxTwo>
                 </TypoBox>
