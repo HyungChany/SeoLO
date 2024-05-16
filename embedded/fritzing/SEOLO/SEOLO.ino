@@ -10,6 +10,11 @@
 #include <Adafruit_PN532.h>
 #include <AccelStepper.h>
 
+#include <Arduino.h>
+#include <AESLib.h>
+#include "base64.h"
+#include "libb64/cdecode.h"
+
 // String -> Char
 std::vector<std::string> splitString(const std::string &s, char delimiter)
 {
@@ -28,6 +33,8 @@ std::vector<std::string> splitString(const std::string &s, char delimiter)
 #define CHARACTERISTIC_UUID "20240521-C104-C104-C104-012345678910"
 #define AUTHENTICATION_CODE "SFY001KOR"
 #define UID "1DA24G10"
+#define AES_KEY "1Uxl86dVL5irFevWjwPhRg=="
+
 bool isCheckCodeAvailableRunning = false; // 실행 중인지 여부를 추적하는 플래그
 
 // NFC 설정
@@ -43,7 +50,7 @@ Adafruit_PN532 nfc(SDA_PIN, SCL_PIN);
 AccelStepper stepper(8, IN1, IN3, IN2, IN4);
 
 // LOCK 상태
-byte masterKey[4] = {0xE7, 0xE2, 0x02, 0xE7};
+const byte masterKey[4] = {0xE7, 0xE2, 0x02, 0xE7};
 byte storedUID[7] = {0};
 bool uidStored = false;
 bool lockState = false;
@@ -70,326 +77,9 @@ String code = "";
 String token = "";
 String machine = "";
 String user = "";
+String feUID = "";
 int battery = 0;
 
-class MyCallbacks : public BLECharacteristicCallbacks
-{
-public:
-    void onWrite(BLECharacteristic *characteristic)
-    {
-        std::string receivedString = characteristic->getValue();
-
-        // 데이터가 없을 경우 예외처리
-        if (receivedString.empty())
-        {
-            stringCharacteristic->setValue(",,,,");
-            Serial.println("Empty data received");
-            return;
-        }
-
-        // 쉼표로 문자열을 분할
-        std::vector<std::string> tokens = splitString(receivedString, ',');
-
-        // 토큰이 5개 미만인 경우 예외처리
-        if (tokens.size() < 5)
-        {
-            stringCharacteristic->setValue(",,,,");
-            Serial.println("Insufficient data received");
-            return;
-        }
-
-        // 토큰들을 순서대로 할당
-        companyCode = tokens[0].c_str();
-        code = tokens[1].c_str();
-        token = tokens[2].c_str();
-        machine = tokens[3].c_str();
-        user = tokens[4].c_str();
-
-        Serial.print("BLE MESSAGE FROM CLIENT : ");
-        Serial.print(companyCode.c_str());
-        Serial.print(", ");
-        Serial.print(code.c_str());
-        Serial.print(", ");
-        Serial.print(token.c_str());
-        Serial.print(", ");
-        Serial.print(machine.c_str());
-        Serial.print(", ");
-        Serial.println(user.c_str());
-
-        // 회사 코드가 쓰인 시점에 메세지를 쓴! 클라이언트의 회사 코드를 확인하고, 다른 경우 연결을 해제합니다.
-        if (pServer->getConnectedCount() > 0)
-        {
-            std::map<uint16_t, conn_status_t> peerDevices = pServer->getPeerDevices(false);
-            for (auto conn : peerDevices)
-            {
-                uint16_t connId = conn.first;
-                conn_status_t connStatus = conn.second;
-                if (connStatus.connected && connStatus.peer_device != nullptr)
-                {
-                    // 클라이언트의 회사 코드와 쓰여진 회사 코드를 비교, user유무 확인
-                    if (companyCode != AUTHENTICATION_CODE || user == "")
-                    {
-                        // 회사 코드가 다르거나 user를 보내지 않은 경우 클라이언트의 연결을 해제
-                        pServer->disconnect(connId);
-                    }
-                    else
-                    {
-                        checkCodeAvailable(code, token, machine, user);
-                    }
-                }
-            }
-        }
-    }
-};
-
-class MyServerCallbacks : public BLEServerCallbacks
-{
-public:
-    void onConnect(BLEServer *pServer)
-    {
-        int connectedCount = pServer->getConnectedCount() + 1;
-        Serial.print("Connected devices count: ");
-        Serial.println(connectedCount);
-        pServer->startAdvertising();
-    }
-
-    void onDisconnect(BLEServer *pServer)
-    {
-        int connectedCount = pServer->getConnectedCount() - 1;
-        Serial.print("Connected devices count: ");
-        Serial.println(connectedCount);
-        pServer->startAdvertising();
-    }
-};
-
-MyServerCallbacks serverCallbacks;
-
-void checkCodeAvailable(String code, String token, String machine, String user)
-{
-    String message = "";
-
-    if (isCheckCodeAvailableRunning)
-    {
-        Serial.println("checkCodeAvailable is already running.");
-        return; // 다른 checkCodeAvailable 함수가 실행 중이면 함수를 종료합니다.
-    }
-    isCheckCodeAvailableRunning = true; // 함수가 실행 중임을 표시합니다.
-
-    if (code == "INIT")
-    {
-        if (savedToken != "")
-        {
-            // "CHECK, UID, MachineId, BATTERY" 전송
-            message += "CHECK";
-            message += ",";
-            message += UID;
-            message += ",";
-            message += savedMachine;
-        }
-        else
-        {
-            // "WRITE, UID, BATTERY" 전송
-            message += "WRITE";
-            message += ",";
-            message += UID;
-            message += ",";
-            message += machine;
-        }
-    }
-    else if (code == "LOCKED")
-    {
-        if (savedToken == "")
-        {
-            // "ALERT, BATTERY" 전송
-            message += "ALERT";
-            message += ",";
-            message += ",";
-        }
-        else if (savedToken == token)
-        {
-            // "UNLOCK, UID, BATTERY" 전송
-            message += "UNLOCK";
-            message += ",";
-            message += UID;
-            message += ",";
-
-            // 자물쇠 열기
-            stepper.moveTo(-700);
-
-            // 내장된 정보 삭제
-            savedToken = "";
-            savedMachine = "";
-        }
-        else
-        {
-            // "CHECK, UID, machineId, BATTERY" 전송
-            message += "CHECK";
-            message += ",";
-            message += UID;
-            message += ",";
-            message += savedMachine;
-        }
-    }
-    else if (code == "LOCK")
-    {
-        if (token != "" && savedToken == "")
-        {
-            // 자물쇠에 정보 저장
-            savedMachine = machine;
-            savedToken = token;
-            // 자물쇠 잠그기
-            stepper.moveTo(700);
-
-            // 잠금되면 데이터 전송("LOCKED",  "UID", "BATTERY")
-            message += "LOCKED";
-            message += ",";
-            message += UID;
-            message += ",";
-        }
-        else if (token == savedToken)
-        {
-            // 자물쇠 잠금
-            stepper.moveTo(700);
-
-            // 잠금되면 데이터 전송("LOCKED", "UID", "BATTERY")
-            message += "LOCKED";
-            message += ",";
-            message += UID;
-            message += ",";
-            message += savedMachine;
-        }
-        else
-        {
-            message += ",";
-            message += ",";
-        }
-    }
-    else
-    {
-        message += ",";
-        message += ",";
-    }
-
-    int adcValue = analogRead(analogPin);
-    float batteryVoltage = (adcValue * referenceVoltage / resolution) * voltageDivider;
-    int battery = mapBatteryVoltageToPercentage(batteryVoltage);
-
-    message += ",";
-    message += battery;
-    message += ",";
-    message += user;
-
-    // message 전송
-    Serial.print("BLE SENT MESSAGE : ");
-    Serial.println(message);
-    Serial.print("savedToken : ");
-    Serial.println(savedToken);
-    Serial.print("savedMachine : ");
-    Serial.println(savedMachine);
-    stringCharacteristic->setValue(message.c_str());
-    stringCharacteristic->notify();
-
-    isCheckCodeAvailableRunning = false; // 함수가 실행을 마쳤음을 표시합니다.
-}
-
-void setup()
-{
-    Serial.begin(115200);
-    while (!Serial)
-        ;
-
-    pinMode(IN1, OUTPUT);
-    pinMode(IN2, OUTPUT);
-    pinMode(IN3, OUTPUT);
-    pinMode(IN4, OUTPUT);
-
-    stepper.setMaxSpeed(500);
-    stepper.setAcceleration(200);
-
-    nfc.begin();
-    uint32_t versiondata = nfc.getFirmwareVersion();
-    if (!versiondata)
-    {
-        Serial.print("PN53x 보드를 찾을 수 없습니다");
-        while (1)
-            ;
-    }
-
-    nfc.SAMConfig();
-    Serial.println("NFC 카드를 기다리는 중...");
-
-    BLEDevice::init("SEOLO LOCK 1");
-
-    pServer = BLEDevice::createServer();
-    BLEService *pService = pServer->createService(BLEUUID(SERVICE_UUID));
-
-    pCharacteristic = pService->createCharacteristic(
-        BLEUUID(CHARACTERISTIC_UUID),
-        BLECharacteristic::PROPERTY_READ |
-            BLECharacteristic::PROPERTY_WRITE |
-            BLECharacteristic::PROPERTY_NOTIFY);
-
-    pCharacteristic->setCallbacks(new MyCallbacks());
-
-    pService->start();
-
-    BLEAdvertising *pAdvertising = pServer->getAdvertising();
-    pAdvertising->start();
-
-    Serial.println("SEOLO LOCK 1");
-
-    // stringCharacteristic, battery 초기화
-    stringCharacteristic = pCharacteristic;
-    battery = 0;
-
-    // 연결 및 연결 해제 이벤트 핸들러 등록
-    pServer->setCallbacks(&serverCallbacks);
-
-    preferences.begin("nfc-data", false);
-    uidStored = preferences.getBool("uidStored", false);
-    lockState = preferences.getBool("lockState", false);
-    savedToken = preferences.getString("savedToken", "");
-    savedMachine = preferences.getString("savedMachine", "");
-    if (uidStored)
-    {
-        size_t len = preferences.getBytesLength("storedUID");
-        if (len == sizeof(storedUID))
-        {
-            preferences.getBytes("storedUID", storedUID, len);
-        }
-    }
-}
-
-void loop()
-{
-    // 배터리 상태 확인
-    int adcValue = analogRead(analogPin);
-    float batteryVoltage = (adcValue * referenceVoltage / resolution) * voltageDivider;
-    battery = mapBatteryVoltageToPercentage(batteryVoltage);
-
-    // 디지털 핀의 상태를 읽어 종료 요청을 확인합니다.
-    // 만약 종료 요청이 들어오면 저장 로직 실행 후 재부팅합니다.
-    // if (digitalRead(EXIT_PIN) == HIGH || battery <= 10) {
-    //     // 종료 요청 시 저장 로직 실행
-    //     preferences.putString("savedToken", savedToken);
-    //     preferences.putString("savedMachine", savedMachine);
-    //     preferences.putBool("uidStored", uidStored);
-    //     preferences.putBool("lockState", lockState);
-    //     preferences.putBytes("storedUID", storedUID, sizeof(storedUID));
-    //     preferences.end(); // Preferences 객체 종료
-    //     delay(100); // 종료 지연
-    //     ESP.restart(); // 재부팅
-    // }
-
-    readNFCAndBattery(); // NFC와 배터리 상태를 확인합니다.
-    while (stepper.distanceToGo() != 0)
-    {
-        stepper.run();
-    }
-    disableMotor(); // 모터 사용 완료 후 비활성화
-
-    delay(5000); // 5초 딜레이
-}
 
 void disableMotor()
 {
@@ -433,6 +123,17 @@ void readNFCAndBattery()
 
         handleNFC(uid, uidLength);
     }
+}
+
+// UID 삭제
+void clearStoredUID()
+{
+    memset(storedUID, 0, sizeof(storedUID));
+    uidStored = false;
+    lockState = false;
+    preferences.putBool("uidStored", uidStored);
+    preferences.putBool("lockState", lockState);
+    preferences.remove("storedUID");
 }
 
 // NFC에 따른 로직
@@ -499,13 +200,382 @@ int mapBatteryVoltageToPercentage(float voltage)
     return 0;
 }
 
-// UID 삭제
-void clearStoredUID()
+class MyCallbacks : public BLECharacteristicCallbacks
 {
-    memset(storedUID, 0, sizeof(storedUID));
-    uidStored = false;
-    lockState = false;
-    preferences.putBool("uidStored", uidStored);
-    preferences.putBool("lockState", lockState);
-    preferences.remove("storedUID");
+public:
+    void onWrite(BLECharacteristic *characteristic)
+    {
+        std::string receivedString = characteristic->getValue();
+
+        // 데이터가 없을 경우 예외처리
+        if (receivedString.empty())
+        {
+            stringCharacteristic->setValue(",,,,");
+            Serial.println("Empty data received");
+            return;
+        }
+
+        // 쉼표로 문자열을 분할
+        std::vector<std::string> tokens = splitString(receivedString, ',');
+
+        // 토큰이 6개 미만인 경우 예외처리
+        if (tokens.size() < 6)
+        {
+            stringCharacteristic->setValue(",,,,");
+            Serial.println("Insufficient data received");
+            return;
+        }
+
+        // 토큰들을 순서대로 할당
+        companyCode = tokens[0].c_str();
+        token = tokens[1].c_str();
+        machine = tokens[2].c_str();
+        user = tokens[3].c_str();
+        feUID = tokens[4].c_str();
+        code = tokens[5].c_str();
+
+        Serial.print("BLE MESSAGE FROM CLIENT : ");
+        Serial.print(companyCode.c_str());
+        Serial.print(",");
+        Serial.print(token.c_str());
+        Serial.print(",");
+        Serial.print(machine.c_str());
+        Serial.print(",");
+        Serial.print(user.c_str());
+        Serial.print(",");
+        Serial.print(feUID.c_str());
+        Serial.print(",");
+        Serial.println(code.c_str());
+
+        // 회사 코드가 쓰인 시점에 메세지를 쓴! 클라이언트의 회사 코드를 확인하고, 다른 경우 연결을 해제합니다.
+        if (pServer->getConnectedCount() > 0)
+        {
+            std::map<uint16_t, conn_status_t> peerDevices = pServer->getPeerDevices(false);
+            for (auto conn : peerDevices)
+            {
+                uint16_t connId = conn.first;
+                conn_status_t connStatus = conn.second;
+                if (connStatus.connected && connStatus.peer_device != nullptr)
+                {
+                    // 클라이언트의 회사 코드와 쓰여진 회사 코드를 비교, user유무 확인
+                    if (companyCode != AUTHENTICATION_CODE || user == "")
+                    {
+                        // 회사 코드가 다르거나 user를 보내지 않은 경우 클라이언트의 연결을 해제
+                        pServer->disconnect(connId);
+                    }
+                    else
+                    {
+                        checkCodeAvailable(code, token, machine, user, feUID);
+                    }
+                }
+            }
+        }
+    }
+};
+
+class MyServerCallbacks : public BLEServerCallbacks
+{
+public:
+    void onConnect(BLEServer *pServer)
+    {
+        int connectedCount = pServer->getConnectedCount() + 1;
+        Serial.print("Connected devices count: ");
+        Serial.println(connectedCount);
+        pServer->startAdvertising();
+    }
+
+    void onDisconnect(BLEServer *pServer)
+    {
+        int connectedCount = pServer->getConnectedCount() - 1;
+        Serial.print("Connected devices count: ");
+        Serial.println(connectedCount);
+        pServer->startAdvertising();
+    }
+};
+
+MyServerCallbacks serverCallbacks;
+
+// Helper function to decode Base64
+std::string base64Decode(std::string toBeDecoded) {
+    char decoded[64];
+    base64_decodestate s;
+    base64_init_decodestate(&s);
+    int decodedLength = base64_decode_block(toBeDecoded.c_str(), toBeDecoded.length(), decoded, &s);
+    decoded[decodedLength] = '\0';
+    return decoded;
+}
+
+// Helper function to decrypt AES-128 ECB
+std::string decryptAES128ECB(const std::string &ciphertext, const std::string &base64Key)
+{
+    // Base64 디코딩된 텍스트를 얻기
+    std::string decodedCiphertext = base64Decode(ciphertext);
+
+    // Base64 디코딩된 키를 얻기
+    std::string key = base64Decode(base64Key);
+
+    // AES 객체 생성
+    AES aes;
+    byte keyBytes[16];
+    byte plaintextBytes[16];
+
+    // 키를 바이트 배열로 변환
+    memcpy(keyBytes, key.data(), 16);
+
+    // AES 키 설정
+    aes.set_key(keyBytes, sizeof(keyBytes));
+
+    // 복호화 수행
+    aes.decrypt(reinterpret_cast<const byte*>(decodedCiphertext.data()), plaintextBytes);
+
+    // 복호화된 결과를 문자열로 반환
+    return std::string(reinterpret_cast<char *>(plaintextBytes), 16);
+}
+
+void checkCodeAvailable(String code, String token, String machine, String user, String feUID)
+{
+    String message = "";
+
+    if (isCheckCodeAvailableRunning)
+    {
+        Serial.println("checkCodeAvailable is already running.");
+        return; // 다른 checkCodeAvailable 함수가 실행 중이면 함수를 종료합니다.
+    }
+    isCheckCodeAvailableRunning = true; // 함수가 실행 중임을 표시합니다.
+
+    std::string decodedToken = base64Decode(token.c_str());
+    std::string decodedKey = base64Decode(AES_KEY);
+
+    std::string decryptedToken = decryptAES128ECB(decodedToken, decodedKey);
+
+    String decryptedTokenString = String(decryptedToken.c_str());
+
+    if (code == "INIT")
+    {
+        if (savedToken != "")
+        {
+            // "CHECK, UID, MachineId, BATTERY" 전송
+            message += "CHECK";
+            message += ",";
+            message += UID;
+            message += ",";
+            message += savedMachine;
+        }
+        else if (machine == "")
+        {
+            // "WRITE, UID, BATTERY" 전송
+            message += "WRITE";
+            message += ",";
+            message += UID;
+            message += ",";
+            message += machine;
+        }
+        else if (machine != "")
+        {
+            // "WRITED, UID, BATTERY" 전송
+            message += "WRITED";
+            message += ",";
+            message += UID;
+            message += ",";
+            message += machine;
+            savedMachine = machine;
+        }
+    }
+    else if (code == "LOCKED")
+    {
+        if (savedToken == "")
+        {
+            // "ALERT, BATTERY" 전송
+            message += "ALERT";
+            message += ",";
+            message += UID;
+            message += ",";
+        }
+        else if (savedToken == decryptedTokenString)
+        {
+            // "UNLOCK, UID, BATTERY" 전송
+            message += "UNLOCK";
+            message += ",";
+            message += UID;
+            message += ",";
+
+            // 자물쇠 열기
+            stepper.moveTo(-700);
+
+            // 내장된 정보 삭제
+            savedToken = "";
+            savedMachine = "";
+        }
+        else
+        {
+            // "CHECK, UID, machineId, BATTERY" 전송
+            message += "CHECK";
+            message += ",";
+            message += UID;
+            message += ",";
+            message += savedMachine;
+        }
+    }
+    else if (code == "LOCK")
+    {
+        if (token != "" && savedToken == "" && feUID == UID)
+        {
+            // 자물쇠에 정보 저장
+            savedMachine = machine;
+            savedToken = decryptedTokenString;
+            // 자물쇠 잠그기
+            stepper.moveTo(700);
+
+            // 잠금되면 데이터 전송("LOCKED",  "UID", "BATTERY")
+            message += "LOCKED";
+            message += ",";
+            message += UID;
+            message += ",";
+            message += savedMachine;
+        }
+        else if (decryptedTokenString == savedToken && feUID == UID)
+        {
+            // 자물쇠 잠금
+            stepper.moveTo(700);
+
+            // 잠금되면 데이터 전송("LOCKED", "UID", "BATTERY")
+            message += "LOCKED";
+            message += ",";
+            message += UID;
+            message += ",";
+            message += savedMachine;
+        }
+        else
+        {
+            message += ",";
+            message += ",";
+        }
+    }
+    else
+    {
+        message += ",";
+        message += ",";
+    }
+
+    int adcValue = analogRead(analogPin);
+    float batteryVoltage = (adcValue * referenceVoltage / resolution) * voltageDivider;
+    int battery = mapBatteryVoltageToPercentage(batteryVoltage);
+
+    message += ",";
+    message += battery;
+    message += ",";
+    message += user;
+
+    // message 전송
+    Serial.print("BLE SENT MESSAGE : ");
+    Serial.println(message);
+    Serial.print("savedToken : ");
+    Serial.println(savedToken);
+    Serial.print("savedMachine : ");
+    Serial.println(savedMachine);
+    stringCharacteristic->setValue(message.c_str());
+    stringCharacteristic->notify();
+
+    isCheckCodeAvailableRunning = false; // 함수가 실행을 마쳤음을 표시합니다.
+}
+
+void setup()
+{
+    Serial.begin(115200);
+    while (!Serial)
+        ;
+
+    pinMode(IN1, OUTPUT);
+    pinMode(IN2, OUTPUT);
+    pinMode(IN3, OUTPUT);
+    pinMode(IN4, OUTPUT);
+
+    stepper.setMaxSpeed(500);
+    stepper.setAcceleration(200);
+
+    // nfc.begin();
+    // uint32_t versiondata = nfc.getFirmwareVersion();
+    // if (!versiondata)
+    // {
+    //     Serial.print("PN53x 보드를 찾을 수 없습니다");
+    //     while (1)
+    //         ;
+    // }
+
+    // nfc.SAMConfig();
+    // Serial.println("NFC 카드를 기다리는 중...");
+
+    BLEDevice::init("SEOLO LOCK 1");
+
+    pServer = BLEDevice::createServer();
+    BLEService *pService = pServer->createService(BLEUUID(SERVICE_UUID));
+
+    pCharacteristic = pService->createCharacteristic(
+        BLEUUID(CHARACTERISTIC_UUID),
+        BLECharacteristic::PROPERTY_READ |
+            BLECharacteristic::PROPERTY_WRITE |
+            BLECharacteristic::PROPERTY_NOTIFY);
+
+    pCharacteristic->setCallbacks(new MyCallbacks());
+
+    pService->start();
+
+    BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
+    pAdvertising->addServiceUUID(pService->getUUID());
+    pAdvertising->setScanResponse(false);
+    pAdvertising->start();
+
+    Serial.println("SEOLO LOCK 1");
+
+    // stringCharacteristic, battery 초기화
+    stringCharacteristic = pService->getCharacteristic(BLEUUID(CHARACTERISTIC_UUID));
+    battery = 0;
+
+    // 연결 및 연결 해제 이벤트 핸들러 등록
+    pServer->setCallbacks(&serverCallbacks);
+
+    preferences.begin("nfc-data", false);
+    uidStored = preferences.getBool("uidStored", false);
+    lockState = preferences.getBool("lockState", false);
+    savedToken = preferences.getString("savedToken", "");
+    savedMachine = preferences.getString("savedMachine", "");
+    if (uidStored)
+    {
+        size_t len = preferences.getBytesLength("storedUID");
+        if (len == sizeof(storedUID))
+        {
+            preferences.getBytes("storedUID", storedUID, len);
+        }
+    }
+}
+
+void loop()
+{
+    // 배터리 상태 확인
+    int adcValue = analogRead(analogPin);
+    float batteryVoltage = (adcValue * referenceVoltage / resolution) * voltageDivider;
+    battery = mapBatteryVoltageToPercentage(batteryVoltage);
+
+    // 디지털 핀의 상태를 읽어 종료 요청을 확인합니다.
+    // 만약 종료 요청이 들어오면 저장 로직 실행 후 재부팅합니다.
+    // if (digitalRead(EXIT_PIN) == HIGH || battery <= 10) {
+    //     // 종료 요청 시 저장 로직 실행
+    //     preferences.putString("savedToken", savedToken);
+    //     preferences.putString("savedMachine", savedMachine);
+    //     preferences.putBool("uidStored", uidStored);
+    //     preferences.putBool("lockState", lockState);
+    //     preferences.putBytes("storedUID", storedUID, sizeof(storedUID));
+    //     preferences.end(); // Preferences 객체 종료
+    //     delay(100); // 종료 지연
+    //     ESP.restart(); // 재부팅
+    // }
+
+    readNFCAndBattery(); // NFC와 배터리 상태를 확인합니다.
+    while (stepper.distanceToGo() != 0)
+    {
+        stepper.run();
+    }
+    disableMotor(); // 모터 사용 완료 후 비활성화
+
+    delay(5000); // 5초 딜레이
 }
