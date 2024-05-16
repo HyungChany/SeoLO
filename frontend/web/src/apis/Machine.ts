@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { api } from './Base.ts';
 interface MachinesType {
   facilityId: number;
@@ -22,7 +23,17 @@ export const MachineRegistration = async (machineData: MachinesType) => {
     alert('장비등록에 성공하였습니다.');
     return response.data;
   } catch (error) {
-    console.log(error);
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('공장:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
   }
 };
 
@@ -40,7 +51,17 @@ export const MachineList = async (facilityId: number) => {
     console.log(response.data.machines);
     return response.data.machines;
   } catch (error) {
-    console.log(error);
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('공장:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
   }
 };
 
@@ -57,6 +78,16 @@ export const MachinePhoto = async (machine: FormData) => {
     });
     return response.data;
   } catch (error) {
-    console.log(error);
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('공장:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
   }
 };

@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { api } from './Base.ts';
 
 interface ListType {
@@ -18,8 +19,17 @@ export const getBasicCheckList = async () => {
     });
     return response.data.basic_checklists;
   } catch (error) {
-    console.error('체크리스트 불러오기 실패: ', error);
-    throw error;
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('AxiosError:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
   }
 };
 export const getCheckList = async () => {
@@ -35,8 +45,17 @@ export const getCheckList = async () => {
     });
     return response.data.checklists;
   } catch (error) {
-    console.error('체크리스트 불러오기 실패: ', error);
-    throw error;
+    console.log('체크리스트', error);
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
   }
 };
 
@@ -54,8 +73,17 @@ export const postCheckList = async (listData: ListType) => {
     });
     return response.data;
   } catch (error) {
-    console.error('체크리스트 추가 실패: ', error);
-    throw error;
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('AxiosError:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
   }
 };
 
@@ -68,8 +96,17 @@ export const patchtCheckList = async (
     const response = await api.patch(`/checklist/${checklistId}`, listData);
     return response.data;
   } catch (error) {
-    console.error('체크리스트 수정 실패: ', error);
-    throw error;
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('AxiosError:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
   }
 };
 
@@ -87,7 +124,16 @@ export const deleteCheckList = async (checklistId: number) => {
     });
     return response;
   } catch (error) {
-    console.error('체크리스트 삭제 실패: ', error);
-    throw error;
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('AxiosError:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
   }
 };
