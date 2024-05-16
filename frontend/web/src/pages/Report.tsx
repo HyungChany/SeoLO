@@ -126,7 +126,7 @@ const StickyTh = styled.th`
   position: sticky;
   top: -2rem;
   background-color: white;
-  z-index: 10;
+  z-index: 1;
   font-weight: bold;
   padding: 0.5rem 0;
   border-bottom: 2px solid black;
@@ -394,10 +394,7 @@ const Report = () => {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
               {headerGroup.headers.map((column) => (
-                <StickyTh
-                  {...column.getHeaderProps()}
-                  key={column.id}
-                >
+                <StickyTh {...column.getHeaderProps()} key={column.id}>
                   {column.render('Header')}
                 </StickyTh>
               ))}
