@@ -51,7 +51,8 @@ class FacilityActivity : AppCompatActivity() {
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 val position = layoutManager.findFirstVisibleItemPosition()
                 selectedFacilityId = facilities.getOrNull(position)?.id.toString()
-                SessionManager.selectedFacilityName = facilities.getOrNull(position)?.name.toString()
+                SessionManager.selectedFacilityName =
+                    facilities.getOrNull(position)?.name.toString()
             }
         })
 
@@ -70,30 +71,40 @@ class FacilityActivity : AppCompatActivity() {
         val token = TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)
         val service = RetrofitClient.machineService
+        val deviceType = "watch"
+
 
         // 토큰 및 회사 코드가 유효한 경우 기계 목록 요청
         if (token != null && companyCode != null) {
-            service.getMachines("Bearer $token", companyCode, facilityId).enqueue(object :
-                Callback<MachineResponse> {
-                override fun onResponse(call: Call<MachineResponse>, response: Response<MachineResponse>) {
-                    if (response.isSuccessful) {
-                        val machines = response.body()?.machines ?: listOf()
-                        Log.d("MachineResponse", "Machines: $machines")
-                        // EquipmentActivity로 이동하고 기계 목록 전달
-                        val intent = Intent(this@FacilityActivity, EquipmentActivity::class.java)
-                        intent.putExtra("machines", ArrayList(machines))
-                        startActivity(intent)
-                    } else {
-                        // 응답 실패 시 에러 로그 출력
-                        Log.e("MachineError", "Error fetching machines: ${response.errorBody()?.string()}")
+            service.getMachines("Bearer $token", companyCode, deviceType, facilityId)
+                .enqueue(object :
+                    Callback<MachineResponse> {
+                    override fun onResponse(
+                        call: Call<MachineResponse>,
+                        response: Response<MachineResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val machines = response.body()?.machines ?: listOf()
+                            Log.d("MachineResponse", "Machines: $machines")
+                            // EquipmentActivity로 이동하고 기계 목록 전달
+                            val intent =
+                                Intent(this@FacilityActivity, EquipmentActivity::class.java)
+                            intent.putExtra("machines", ArrayList(machines))
+                            startActivity(intent)
+                        } else {
+                            // 응답 실패 시 에러 로그 출력
+                            Log.e(
+                                "MachineError",
+                                "Error fetching machines: ${response.errorBody()?.string()}"
+                            )
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<MachineResponse>, t: Throwable) {
-                    // 네트워크 오류 시 에러 로그 출력
-                    Log.e("MachineError", "Network error: ${t.message}")
-                }
-            })
+                    override fun onFailure(call: Call<MachineResponse>, t: Throwable) {
+                        // 네트워크 오류 시 에러 로그 출력
+                        Log.e("MachineError", "Network error: ${t.message}")
+                    }
+                })
         }
     }
 }

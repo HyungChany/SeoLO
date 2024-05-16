@@ -47,12 +47,12 @@ class RedoPinNumberFragment : Fragment() {
     private fun sendPinToServer(pinNumber: String) {
         val accessToken = TokenManager.getAccessToken(requireContext())
         val companyCode = TokenManager.getCompanyCode(requireContext())
-
+        val deviceType = "watch"
         val newPinRequest = NewPINRequest(pinNumber)
 
         if (companyCode != null) {
             RetrofitClient.NewPinService.sendPinNumber(
-                "Bearer $accessToken", companyCode, newPinRequest
+                "Bearer $accessToken", companyCode, deviceType, newPinRequest
             ).enqueue(object : Callback<String> {
                 override fun onResponse(
                     call: Call<String>, response: Response<String>

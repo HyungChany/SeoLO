@@ -15,7 +15,7 @@ interface ChecklistService {
     fun getChecklists(
         @Header("Authorization") authorization: String,
         @Header("Company-Code") companyCode: String,
-//        @Header("Device-Type") deviceType: String
+        @Header("Device-Type") deviceType: String
     ): Call<ChecklistResponse>
 }
 
@@ -25,7 +25,7 @@ interface FacilityService {
     fun getFacilities(
         @Header("Authorization") authorization: String,
         @Header("Company-Code") companyCode: String,
-//        @Header("Device-Type") deviceType: String,
+        @Header("Device-Type") deviceType: String,
         @Path("username") username: String
     ): Call<FacilityResponse>
 
@@ -37,7 +37,7 @@ interface MachineService {
     fun getMachines(
         @Header("Authorization") authorization: String,
         @Header("Company-Code") companyCode: String,
-//        @Header("Device-Type") deviceType: String,
+        @Header("Device-Type") deviceType: String,
         @Path("facilityId") facilityId: String
     ): Call<MachineResponse>
 }
@@ -49,6 +49,6 @@ interface TaskService {
     fun getTasks(
         @Header("Authorization") authorization: String,
         @Header("Company-Code") companyCode: String,
-//        @Header("Device-Type") deviceType: String
+        @Header("Device-Type") deviceType: String
     ): Call<TaskResponse>
 }
