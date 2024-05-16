@@ -36,7 +36,6 @@ const TitleBox = styled.div`
   position: sticky;
   top: 0rem;
   border-bottom: 2px solid ${Color.GRAY200};
-
 `;
 const Content = styled.div`
   width: 8.75rem;

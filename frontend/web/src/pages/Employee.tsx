@@ -51,7 +51,15 @@ const InformationBox = styled.div`
   background-color: ${Color.WHITE};
   border-radius: 1.25rem;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
+  flex-direction: column;
   /* overflow: hidden; */
+`;
+const TopBox = styled.div`
+  width: 100%;
+  height: 88%;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
 `;
 const LeftBox = styled.div`
   width: 47.5%;
@@ -83,15 +91,7 @@ const Photo = styled.div`
   border-radius: 1.25rem;
   font-size: 1.5rem;
   font-weight: bold;
-  cursor: pointer;
-  transition:
-    background-color 0.5s,
-    border-color 0.3s;
-
-  &:hover {
-    background-color: ${Color.GRAY200};
-    border-color: ${Color.GRAY300};
-  }
+  background-color: ${Color.GRAY100};
 `;
 const Preview = styled.img`
   width: 100%;
@@ -218,109 +218,111 @@ const Employee = () => {
           <Typo.H0 color={Color.BLACK}>{EmployeeNumber}</Typo.H0>
         </Card>
         <InformationBox>
-          <LeftBox>
-            <CommonBox>
-              <Typo.H3>사번</Typo.H3>
+          <TopBox>
+            <LeftBox>
+              <CommonBox>
+                <Typo.H3>사번</Typo.H3>
 
-              <SearchBox>
-                <WidthInputBox
-                  height={3}
-                  value={equipmentNumber}
-                  onChange={handleEquipmentNumber}
-                  placeholder="사번을 입력하세요"
-                />
-                <Button
-                  width={5}
-                  height={2.5}
-                  $backgroundColor={Color.GRAY200}
-                  $borderColor={Color.GRAY200}
-                  $borderRadius={0.75}
-                  $hoverBackgroundColor={Color.GRAY300}
-                  $hoverBorderColor={Color.GRAY300}
-                  onClick={handleSearch}
-                  fontSize={'1.2'}
-                  fontWeight={'bold'}
-                >
-                  검색
-                </Button>
-              </SearchBox>
-            </CommonBox>
-            <CommonBox>
-              <Typo.H3>이름</Typo.H3>
-              <ContentBox>
-                {employeeInformation ? (
-                  <Content>{employeeInformation.employee_name}</Content>
-                ) : (
-                  <Content></Content>
-                )}
-              </ContentBox>
-            </CommonBox>
-            <CommonBox>
-              <Typo.H3>소속 부서</Typo.H3>
-              <ContentBox>
-                {employeeInformation ? (
-                  <Content>{employeeInformation.employee_team}</Content>
-                ) : (
-                  <Content></Content>
-                )}
-              </ContentBox>
-            </CommonBox>
-            <CommonBox>
-              <Typo.H3>직급</Typo.H3>
-              <ContentBox>
-                {employeeInformation ? (
-                  <Content>{employeeInformation.employee_title}</Content>
-                ) : (
-                  <Content></Content>
-                )}
-              </ContentBox>
-            </CommonBox>
-          </LeftBox>
-          <RightBox>
-            <PhotoBox>
-              <Typo.H3>사원 사진</Typo.H3>
-              <Photo>
-                {employeeInformation ? (
-                  <Preview
-                    src={employeeInformation.employee_thum}
-                    alt="Uploaded Image Preview"
+                <SearchBox>
+                  <WidthInputBox
+                    height={3}
+                    value={equipmentNumber}
+                    onChange={handleEquipmentNumber}
+                    placeholder="사번을 입력하세요"
                   />
-                ) : (
-                  '사진'
-                )}
-              </Photo>
-            </PhotoBox>
-            <ButtonBox>
-              <Button
-                width={5}
-                height={2.5}
-                $backgroundColor={Color.GRAY200}
-                $borderColor={Color.GRAY200}
-                $borderRadius={0.75}
-                $hoverBackgroundColor={Color.GRAY300}
-                $hoverBorderColor={Color.GRAY300}
-                onClick={handleCancel}
-                fontSize={'1.2'}
-                fontWeight={'bold'}
-              >
-                취소
-              </Button>
-              <Button
-                width={5}
-                height={2.5}
-                $backgroundColor={Color.GRAY200}
-                $borderColor={Color.GRAY200}
-                $borderRadius={0.75}
-                $hoverBackgroundColor={Color.GRAY300}
-                $hoverBorderColor={Color.GRAY300}
-                onClick={handleSubmit}
-                fontSize={'1.2'}
-                fontWeight={'bold'}
-              >
-                완료
-              </Button>
-            </ButtonBox>
-          </RightBox>
+                  <Button
+                    width={5}
+                    height={2.5}
+                    $backgroundColor={Color.GRAY200}
+                    $borderColor={Color.GRAY200}
+                    $borderRadius={0.75}
+                    $hoverBackgroundColor={Color.GRAY300}
+                    $hoverBorderColor={Color.GRAY300}
+                    onClick={handleSearch}
+                    fontSize={'1.2'}
+                    fontWeight={'bold'}
+                  >
+                    검색
+                  </Button>
+                </SearchBox>
+              </CommonBox>
+              <CommonBox>
+                <Typo.H3>이름</Typo.H3>
+                <ContentBox>
+                  {employeeInformation ? (
+                    <Content>{employeeInformation.employee_name}</Content>
+                  ) : (
+                    <Content></Content>
+                  )}
+                </ContentBox>
+              </CommonBox>
+              <CommonBox>
+                <Typo.H3>소속 부서</Typo.H3>
+                <ContentBox>
+                  {employeeInformation ? (
+                    <Content>{employeeInformation.employee_team}</Content>
+                  ) : (
+                    <Content></Content>
+                  )}
+                </ContentBox>
+              </CommonBox>
+              <CommonBox>
+                <Typo.H3>직급</Typo.H3>
+                <ContentBox>
+                  {employeeInformation ? (
+                    <Content>{employeeInformation.employee_title}</Content>
+                  ) : (
+                    <Content></Content>
+                  )}
+                </ContentBox>
+              </CommonBox>
+            </LeftBox>
+            <RightBox>
+              <PhotoBox>
+                <Typo.H3>사원 사진</Typo.H3>
+                <Photo>
+                  {employeeInformation ? (
+                    <Preview
+                      src={employeeInformation.employee_thum}
+                      alt="Uploaded Image Preview"
+                    />
+                  ) : (
+                    '사진'
+                  )}
+                </Photo>
+              </PhotoBox>
+            </RightBox>
+          </TopBox> 
+          <ButtonBox>
+            <Button
+              width={5}
+              height={2.5}
+              $backgroundColor={Color.GRAY200}
+              $borderColor={Color.GRAY200}
+              $borderRadius={0.75}
+              $hoverBackgroundColor={Color.GRAY300}
+              $hoverBorderColor={Color.GRAY300}
+              onClick={handleCancel}
+              fontSize={'1.2'}
+              fontWeight={'bold'}
+            >
+              취소
+            </Button>
+            <Button
+              width={5}
+              height={2.5}
+              $backgroundColor={Color.GRAY200}
+              $borderColor={Color.GRAY200}
+              $borderRadius={0.75}
+              $hoverBackgroundColor={Color.GRAY300}
+              $hoverBorderColor={Color.GRAY300}
+              onClick={handleSubmit}
+              fontSize={'1.2'}
+              fontWeight={'bold'}
+            >
+              완료
+            </Button>
+          </ButtonBox>
         </InformationBox>
       </Box>
     </Background>

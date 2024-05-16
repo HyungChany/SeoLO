@@ -49,7 +49,11 @@ const ListBox = styled.div`
   box-sizing: border-box;
   justify-content: space-between;
   cursor: pointer;
+  &:hover {
+    background-color: ${Color.GRAY100};
+  }
 `;
+
 const PlusListBox = styled.div`
   width: 100%;
   height: 6.25rem;
@@ -63,6 +67,9 @@ const PlusListBox = styled.div`
   padding: 1.5rem;
   box-sizing: border-box;
   cursor: pointer;
+  &:hover {
+    background-color: ${Color.GRAY100};
+  }
 `;
 
 const ContentBox = styled.div`
