@@ -39,6 +39,10 @@ public class MarkerServiceImpl implements MarkerService {
     @Override
     @Transactional
     public void enrollMarker(AddMarkerRequest request) {
+        if (markerRepository.findByMachineId(request.getMachineId()) != null) {
+            throw new CommonException(MarkerErrorCode.ALREADY_ENROLLED_MACHINE);
+        }
+
         MachineDto machine = machineService.getMachineByMachineId(request.getMachineId());
 
         Marker newMarker = Marker.builder()

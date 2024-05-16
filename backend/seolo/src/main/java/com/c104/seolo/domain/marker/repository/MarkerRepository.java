@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface MarkerRepository extends JpaRepository<Marker, Long> {
     List<Marker> findAllByFacilityId(Long facilityId);
+
+    Marker findByMachineId(Long machineId);
 }
