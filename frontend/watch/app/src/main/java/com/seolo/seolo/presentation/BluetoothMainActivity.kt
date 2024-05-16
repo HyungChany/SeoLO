@@ -163,13 +163,13 @@ class BluetoothMainActivity : AppCompatActivity() {
                         TokenManager.getCompanyCode(this@BluetoothMainActivity) // 회사 코드 가져오기
                     val token =
                         TokenManager.getTokenValue(this@BluetoothMainActivity) // 자물쇠 토큰 값 가져오기
-                    val userId = TokenManager.getUserId(this@BluetoothMainActivity) // 사용자 Id 가져오기
-                    val lotoUid = LotoManager.getLotoUid(this@BluetoothMainActivity) // 자물쇠 Uid 가져오기
                     val machineId =
                         LotoManager.getLotoMachineId(this@BluetoothMainActivity) // 머신 Id 가져오기
+                    val userId = TokenManager.getUserId(this@BluetoothMainActivity) // 사용자 Id 가져오기
+                    val lotoUid = LotoManager.getLotoUid(this@BluetoothMainActivity) // 자물쇠 Uid 가져오기
 
-                    val sendData = if (lotoUid == null) {
-                        "$companyCode,$token,,$userId,,INIT"
+                    val sendData = if (lotoUid == "") {
+                        "$companyCode,$token,$machineId,$userId,$lotoUid,INIT"
                     } else {
                         "$companyCode,$token,$machineId,$userId,$lotoUid,LOCK"
                     }
