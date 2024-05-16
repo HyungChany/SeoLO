@@ -66,7 +66,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void userLogout(CCodePrincipal cCodePrincipal) {
-        // 유효한 access 토큰 블랙리스트에 저장
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = attr.getRequest();
         String token = request.getHeader("Authorization");
