@@ -36,7 +36,7 @@ public class LOCKED implements CodeState {
     private final LockerService lockerService;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public CoreResponse handle(Context context) {
         /*
             1. 데이터를 받은 백엔드 서버는 아래 데이터를 통해 `task_history 테이블에서 작업내역 튜플을 찾는다.
@@ -60,8 +60,13 @@ public class LOCKED implements CodeState {
 
         // 2
         if (currentTask.getTaskCode() != CODE.ISSUED) {
+            throw new CommonException(CoreErrorCode.IS_NOT_ISSUED_TASK);
+        }
+
+        if (!currentTask.getLockerUid().equals(coreRequest.getLockerUid())) {
             throw new CommonException(CoreErrorCode.IS_RELLY_SAME_LOCKER);
         }
+
 
         // 3
         updateTaskState(currentTask);

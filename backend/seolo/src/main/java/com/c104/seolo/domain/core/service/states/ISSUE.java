@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
+@Transactional
 public class ISSUE implements CodeState {
     private final CoreTokenService coreTokenService;
     private final TaskHistoryService taskHistoryService;
@@ -27,7 +28,6 @@ public class ISSUE implements CodeState {
     }
 
     @Override
-    @Transactional
     public CoreResponse handle(Context context) {
         /*
         1. 백엔드 서버는 작업내역 데이터를 DB에 저장한다.
@@ -40,6 +40,7 @@ public class ISSUE implements CodeState {
         // 1. 작업내역 데이터 등록
         CoreRequest coreRequest = context.getCoreRequest();
         taskHistoryService.enrollTaskHistory(context.getCCodePrincipal(),
+                coreRequest.getLockerUid(),
                 coreRequest.getTaskTemplateId(),
                 coreRequest.getMachineId(),
                 coreRequest.getEndTime(),

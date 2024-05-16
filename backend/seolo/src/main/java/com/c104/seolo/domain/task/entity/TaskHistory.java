@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.task.entity;
 
+import com.c104.seolo.domain.core.entity.Locker;
 import com.c104.seolo.domain.core.enums.CODE;
 import com.c104.seolo.domain.machine.entity.Machine;
 import com.c104.seolo.domain.user.entity.AppUser;
@@ -37,6 +38,10 @@ public class TaskHistory extends BaseEntity {
     @JoinColumn(name = "machine_id")
     private Machine machine;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "locker_id")
+    private Locker locker;
+
     @Column(name = "task_start_datetime")
     private LocalDateTime taskStartDateTime;
 
@@ -57,11 +62,12 @@ public class TaskHistory extends BaseEntity {
     private String taskPrecaution;
 
     @Builder
-    public TaskHistory(Long id, AppUser user, TaskTemplate taskTemplate, Machine machine, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime, LocalDateTime taskEndEstimatedDateTime, CODE taskCode, String taskPrecaution) {
+    public TaskHistory(Long id, AppUser user, TaskTemplate taskTemplate, Machine machine, Locker locker, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime, LocalDateTime taskEndEstimatedDateTime, CODE taskCode, String taskPrecaution) {
         this.id = id;
         this.user = user;
         this.taskTemplate = taskTemplate;
         this.machine = machine;
+        this.locker = locker;
         this.taskStartDateTime = taskStartDateTime;
         this.taskEndDateTime = taskEndDateTime;
         this.taskEndEstimatedDateTime = taskEndEstimatedDateTime;

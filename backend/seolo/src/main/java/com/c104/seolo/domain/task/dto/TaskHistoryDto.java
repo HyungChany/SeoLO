@@ -15,6 +15,7 @@ public class TaskHistoryDto {
     private Long userId;
     private TaskTemplateDto taskTemplate;
     private Long machineId;
+    private String lockerUid;
     private LocalDateTime taskStartDateTime;
     private LocalDateTime taskEndDateTime;
     private LocalDateTime taskEndEstimatedDateTime;
@@ -22,11 +23,12 @@ public class TaskHistoryDto {
     private String taskPrecaution;
 
     @Builder
-    public TaskHistoryDto(Long id, Long userId, TaskTemplateDto taskTemplate, Long machineId, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime, LocalDateTime taskEndEstimatedDateTime, CODE taskCode, String taskPrecaution) {
+    public TaskHistoryDto(Long id, Long userId, TaskTemplateDto taskTemplate, Long machineId, String lockerUid, LocalDateTime taskStartDateTime, LocalDateTime taskEndDateTime, LocalDateTime taskEndEstimatedDateTime, CODE taskCode, String taskPrecaution) {
         this.id = id;
         this.userId = userId;
         this.taskTemplate = taskTemplate;
         this.machineId = machineId;
+        this.lockerUid = lockerUid;
         this.taskStartDateTime = taskStartDateTime;
         this.taskEndDateTime = taskEndDateTime;
         this.taskEndEstimatedDateTime = taskEndEstimatedDateTime;
@@ -34,12 +36,15 @@ public class TaskHistoryDto {
         this.taskPrecaution = taskPrecaution;
     }
 
+
+
     public static TaskHistoryDto of(TaskHistory taskHistory) {
         return TaskHistoryDto.builder()
                 .id(taskHistory.getId())
                 .userId(taskHistory.getUser().getId())
                 .taskTemplate(TaskTemplateDto.of(taskHistory.getTaskTemplate()))
                 .machineId(taskHistory.getMachine().getId())
+                .lockerUid(taskHistory.getLocker().getUid())
                 .taskStartDateTime(taskHistory.getTaskStartDateTime())
                 .taskEndDateTime(taskHistory.getTaskEndDateTime())
                 .taskEndEstimatedDateTime(taskHistory.getTaskEndEstimatedDateTime())

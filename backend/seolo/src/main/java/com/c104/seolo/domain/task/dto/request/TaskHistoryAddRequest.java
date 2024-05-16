@@ -10,6 +10,7 @@ import lombok.ToString;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class TaskHistoryAddRequest {
     private Long taskTemplateId;
+    private String lockerUid;
     private Long machineId;
     private String taskPrecaution;
     private String endTime;
