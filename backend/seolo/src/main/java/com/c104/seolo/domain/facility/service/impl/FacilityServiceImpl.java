@@ -14,6 +14,8 @@ import com.c104.seolo.domain.machine.enums.Role;
 import com.c104.seolo.domain.machine.exception.MachineErrorCode;
 import com.c104.seolo.domain.machine.repository.MachineManagerRepository;
 import com.c104.seolo.domain.machine.repository.MachineRepository;
+import com.c104.seolo.domain.marker.entity.Marker;
+import com.c104.seolo.domain.marker.repository.MarkerRepository;
 import com.c104.seolo.global.exception.CommonException;
 import com.c104.seolo.global.s3.dto.response.S3OneFileResponse;
 import com.c104.seolo.global.s3.service.AmazonS3Service;
@@ -38,6 +40,7 @@ public class FacilityServiceImpl implements FacilityService {
     private final MachineRepository machineRepository;
     private final MachineManagerRepository machineManagerRepository;
     private final AmazonS3Service amazonS3Service;
+    private final MarkerRepository markerRepository;
 
     @Override
     public FacilityListResponse findFacilityByCompany(String companyCode) {
@@ -140,6 +143,9 @@ public class FacilityServiceImpl implements FacilityService {
 
         facility.changeLayout(s3OneFileResponse.getUrl());
         facilityRepository.save(facility);
+
+        List<Marker> markers = markerRepository.findAllByFacilityId(facilityId);
+        markerRepository.deleteAll(markers);
     }
 
     @Override

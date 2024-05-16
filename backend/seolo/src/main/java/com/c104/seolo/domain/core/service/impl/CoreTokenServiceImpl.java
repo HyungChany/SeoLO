@@ -57,8 +57,6 @@ public class CoreTokenServiceImpl implements CoreTokenService {
         String base64encryptionKey = locker.getEncryptionKey();
         // 해당 대칭키 Base64를 복호화한다.
         SecretKey encryptionKey = AesEncryption.decodeBase64ToSecretKey(base64encryptionKey);
-
-        // 복호화한 해당 대칭키를 이용해 자물쇠고유번호를 AES128 암호화한다.
         byte[] encryptedCoreToken = AesEncryption.encrypt(newCoreToken, encryptionKey);
 
         // AES128 암호화한 토큰을 Base64로 인코딩한다.
