@@ -9,7 +9,7 @@ import org.springframework.data.redis.core.index.Indexed;
 import java.util.UUID;
 
 @Getter
-@RedisHash(value = "jwtToken", timeToLive = 900) // 15분
+@RedisHash(value = "jwtToken", timeToLive = 36000)
 public class JwtToken {
     @Id
     private String id;
