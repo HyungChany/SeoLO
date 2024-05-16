@@ -20,6 +20,7 @@ class CoreService {
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
           options.headers['Company-Code'] = companyCode;
+          options.headers['Device-Type'] = 'app';
         }
         return handler.next(options);
       },

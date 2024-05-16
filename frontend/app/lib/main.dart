@@ -124,6 +124,8 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver {
+  final _storage = const FlutterSecureStorage();
+  bool isLogin = false;
 
   // @override
   // void dispose() {
