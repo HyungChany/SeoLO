@@ -291,7 +291,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     machine_id = SessionManager.selectedMachineId ?: "",
                     task_template_id = SessionManager.selectedTaskTemplateId ?: "",
                     task_precaution = SessionManager.selectedTaskPrecaution ?: "",
-                    end_time = SessionManager.selectedDate + SessionManager.selectedTime
+                    end_time = SessionManager.selectedDate + SessionManager.selectedTime + ":00"
                 )
             }
         }

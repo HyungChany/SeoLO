@@ -1,6 +1,7 @@
 package com.seolo.seolo.presentation
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
@@ -34,7 +35,7 @@ class LOTOInfoActivity : AppCompatActivity() {
         val date = SessionManager.selectedDate + SessionManager.selectedTime
         val simpleDate =
             SessionManager.selectedSimpleDate + "\n" + SessionManager.selectedSimpleTime
-
+        Log.d("LOTOInfoActivity", "$date:00")
         // Fragment 추가
         facilityName?.let { LOTOInfoFragment.newInstance("작업장", it) }
             ?.let { adapter.addFragment(it) }
