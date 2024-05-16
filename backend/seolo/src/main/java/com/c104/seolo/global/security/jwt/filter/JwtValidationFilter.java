@@ -77,7 +77,6 @@ public class JwtValidationFilter extends OncePerRequestFilter {
                             .build()));
             return;
         }
-
     }
 
 
