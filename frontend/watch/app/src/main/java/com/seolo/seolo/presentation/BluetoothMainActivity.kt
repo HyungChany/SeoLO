@@ -288,9 +288,12 @@ class BluetoothMainActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                             // 백으로 언락됐다는 API 연결 보내고 LotoManager 초기화
-                            unlockCoreLogic()
-
-                            // LotoManager.clearLoto(this)
+                            unlockCoreLogic {
+                                LotoManager.clearLoto(this@BluetoothMainActivity)
+                                val intent = Intent(this@BluetoothMainActivity, MainActivity::class.java)
+                                startActivity(intent)
+                                finish()
+                            }
                         }
                         LotoManager.clearLoto(this@BluetoothMainActivity)
                         Handler(Looper.getMainLooper()).postDelayed({
@@ -306,7 +309,7 @@ class BluetoothMainActivity : AppCompatActivity() {
     }
 
     // API 요청 함수
-    private fun unlockCoreLogic() {
+    private fun unlockCoreLogic(function: () -> Unit) {
         // API 요청
         val authorization = "Bearer " + TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)
@@ -323,6 +326,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                 }
             }
         }
+
         val call = lotoUnlockInfo?.let {
             RetrofitClient.unlockService.sendUnlockInfo(
                 authorization = authorization,
@@ -332,23 +336,37 @@ class BluetoothMainActivity : AppCompatActivity() {
             )
         }
 
-
         call?.enqueue(object : Callback<UnlockResponse> {
             override fun onResponse(
                 call: Call<UnlockResponse>, response: Response<UnlockResponse>
             ) {
                 if (response.isSuccessful) {
-                    Log.d("API 요청 성공_Main", "API 요청 성공")
+                    val unlockResponse = response.body()
+                    val message = unlockResponse?.message
+                    Log.d("API 요청 성공_Main", "API 요청 성공: $message")
+                    runOnUiThread {
+                        Toast.makeText(
+                            this@BluetoothMainActivity, message, Toast.LENGTH_LONG
+                        ).show()
+                    }
                 } else {
-                    Log.d("API 요청 실패_Main", "API 요청")
+                    val errorMessage = response.body()?.message
+                    Log.d("API 요청 실패_Main", "API 요청 실패: $errorMessage")
+                    runOnUiThread {
+                        Toast.makeText(
+                            this@BluetoothMainActivity, errorMessage, Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
 
             override fun onFailure(call: Call<UnlockResponse>, t: Throwable) {
                 Log.d("API_CALL", "Error: ${t.message}")
-                Toast.makeText(
-                    this@BluetoothMainActivity, "Error: ${t.message}", Toast.LENGTH_SHORT
-                ).show()
+                runOnUiThread {
+                    Toast.makeText(
+                        this@BluetoothMainActivity, "Error: ${t.message}", Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         })
     }
