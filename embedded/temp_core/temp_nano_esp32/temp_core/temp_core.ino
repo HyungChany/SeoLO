@@ -70,6 +70,7 @@ String code = "";
 String token = "";
 String machine = "";
 String user = "";
+String feUID = "";
 int battery = 0;
 
 class MyCallbacks : public BLECharacteristicCallbacks
@@ -90,8 +91,8 @@ public:
         // 쉼표로 문자열을 분할
         std::vector<std::string> tokens = splitString(receivedString, ',');
 
-        // 토큰이 5개 미만인 경우 예외처리
-        if (tokens.size() < 5)
+        // 토큰이 6개 미만인 경우 예외처리
+        if (tokens.size() < 6)
         {
             stringCharacteristic->setValue(",,,,");
             Serial.println("Insufficient data received");
@@ -100,21 +101,24 @@ public:
 
         // 토큰들을 순서대로 할당
         companyCode = tokens[0].c_str();
-        code = tokens[1].c_str();
-        token = tokens[2].c_str();
-        machine = tokens[3].c_str();
-        user = tokens[4].c_str();
+        token = tokens[1].c_str();
+        machine = tokens[2].c_str();
+        user = tokens[3].c_str();
+        feUID = tokens[4].c_str();
+        code = tokens[5].c_str();
 
         Serial.print("BLE MESSAGE FROM CLIENT : ");
         Serial.print(companyCode.c_str());
-        Serial.print(", ");
-        Serial.print(code.c_str());
-        Serial.print(", ");
+        Serial.print(",");
         Serial.print(token.c_str());
-        Serial.print(", ");
+        Serial.print(",");
         Serial.print(machine.c_str());
-        Serial.print(", ");
-        Serial.println(user.c_str());
+        Serial.print(",");
+        Serial.print(user.c_str());
+        Serial.print(",");
+        Serial.print(feUID.c_str());
+        Serial.print(",");
+        Serial.println(code.c_str());
 
         // 회사 코드가 쓰인 시점에 메세지를 쓴! 클라이언트의 회사 코드를 확인하고, 다른 경우 연결을 해제합니다.
         if (pServer->getConnectedCount() > 0)
@@ -126,15 +130,15 @@ public:
                 conn_status_t connStatus = conn.second;
                 if (connStatus.connected && connStatus.peer_device != nullptr)
                 {
-                    // 클라이언트의 회사 코드와 쓰여진 회사 코드를 비교
-                    if (companyCode != AUTHENTICATION_CODE)
+                    // 클라이언트의 회사 코드와 쓰여진 회사 코드를 비교, user유무 확인
+                    if (companyCode != AUTHENTICATION_CODE || user == "")
                     {
-                        // 회사 코드가 다를 경우 클라이언트의 연결을 해제
+                        // 회사 코드가 다르거나 user를 보내지 않은 경우 클라이언트의 연결을 해제
                         pServer->disconnect(connId);
                     }
                     else
                     {
-                        checkCodeAvailable(code, token, machine, user);
+                        checkCodeAvailable(code, token, machine, user, feUID);
                     }
                 }
             }
@@ -164,7 +168,7 @@ public:
 
 MyServerCallbacks serverCallbacks;
 
-void checkCodeAvailable(String code, String token, String machine, String user)
+void checkCodeAvailable(String code, String token, String machine, String user, String feUID)
 {
     String message = "";
 
@@ -186,13 +190,24 @@ void checkCodeAvailable(String code, String token, String machine, String user)
             message += ",";
             message += savedMachine;
         }
-        else
+        else if (machine == "")
         {
             // "WRITE, UID, BATTERY" 전송
             message += "WRITE";
             message += ",";
             message += UID;
             message += ",";
+            message += machine;
+        }
+        else if (machine != "")
+        {
+            // "WRITED, UID, BATTERY" 전송
+            message += "WRITED";
+            message += ",";
+            message += UID;
+            message += ",";
+            message += machine;
+            savedMachine = machine;
         }
     }
     else if (code == "LOCKED")
@@ -202,6 +217,7 @@ void checkCodeAvailable(String code, String token, String machine, String user)
             // "ALERT, BATTERY" 전송
             message += "ALERT";
             message += ",";
+            message += UID;
             message += ",";
         }
         else if (savedToken == token)
@@ -231,7 +247,7 @@ void checkCodeAvailable(String code, String token, String machine, String user)
     }
     else if (code == "LOCK")
     {
-        if (token != "" && savedToken == "")
+        if (token != "" && savedToken == "" && feUID == UID)
         {
             // 자물쇠에 정보 저장
             savedMachine = machine;
@@ -245,7 +261,7 @@ void checkCodeAvailable(String code, String token, String machine, String user)
             message += UID;
             message += ",";
         }
-        else if (token == savedToken)
+        else if (token == savedToken && feUID == UID)
         {
             // 자물쇠 잠금
             stepper.moveTo(700);
@@ -286,6 +302,7 @@ void checkCodeAvailable(String code, String token, String machine, String user)
     Serial.print("savedMachine : ");
     Serial.println(savedMachine);
     stringCharacteristic->setValue(message.c_str());
+    stringCharacteristic->notify();
 
     isCheckCodeAvailableRunning = false; // 함수가 실행을 마쳤음을 표시합니다.
 }
@@ -331,7 +348,9 @@ void setup()
 
     pService->start();
 
-    BLEAdvertising *pAdvertising = pServer->getAdvertising();
+    BLEAdvertising *pAdvertising = BLEDevice::getAdvertising();
+    pAdvertising->addServiceUUID(pService->getUUID());
+    pAdvertising->setScanResponse(false);
     pAdvertising->start();
 
     Serial.println("SEOLO LOCK 1");
