@@ -222,7 +222,8 @@ export const Leaflet = ({
           marker_y: popupPosition.lat,
         };
         markerMutate(formattedData);
-      }
+      } else alert('기계를 선택해주세요');
+
       setPopupPosition(null);
     }
   };
