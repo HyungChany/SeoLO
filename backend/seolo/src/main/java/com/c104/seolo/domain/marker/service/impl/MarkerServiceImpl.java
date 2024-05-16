@@ -140,4 +140,11 @@ public class MarkerServiceImpl implements MarkerService {
 
         markerRepository.delete(marker);
     }
+
+    @Override
+    @Transactional
+    public void deleteAllMarkers(Long facilityId) {
+        List<Marker> markers = markerRepository.findAllByFacilityId(facilityId);
+        markerRepository.deleteAll(markers);
+    }
 }
