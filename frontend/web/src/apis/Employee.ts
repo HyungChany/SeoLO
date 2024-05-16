@@ -1,5 +1,5 @@
 import { api } from './Base.ts';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 interface EmployeeType {
   username: string;
   password: string;
@@ -18,7 +18,17 @@ export const EmployeeList = async () => {
     });
     return response.data.employees;
   } catch (error) {
-    console.log(error);
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('AxiosError:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
   }
 };
 export const RegistratedEmployee = async () => {
@@ -34,7 +44,17 @@ export const RegistratedEmployee = async () => {
     });
     return response.data.workers;
   } catch (error) {
-    console.log(error);
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('AxiosError:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
   }
 };
 export const EmployeeDetail = async (employeeNumber: string) => {
@@ -50,8 +70,18 @@ export const EmployeeDetail = async (employeeNumber: string) => {
     });
     return response.data;
   } catch (error) {
-    console.log(error);
-    alert('해당 직원이 존재하지 않습니다.');
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('AxiosError:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+      alert('해당 직원이 존재하지 않습니다');
+    }
   }
 };
 
@@ -71,6 +101,11 @@ export const EmployeeRegistration = async (employeeData: EmployeeType) => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
+        const errorCode = error.response?.data.error_code;
+        if (errorCode && errorCode.startsWith('JT')) {
+          sessionStorage.removeItem('accessToken');
+          sessionStorage.removeItem('companyCode');
+        }
         alert(error.response.data.message); // 오류 메시지를 보여줍니다.
       } else {
         console.log('Error without response data');

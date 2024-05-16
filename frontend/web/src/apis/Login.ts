@@ -37,7 +37,7 @@ export const Logout = async () => {
     );
     sessionStorage.removeItem('accessToken');
     sessionStorage.removeItem('companyCode');
-    return response.data;
+    return response;
   } catch (error) {
     console.error('로그아웃 실패: ', error);
   }
