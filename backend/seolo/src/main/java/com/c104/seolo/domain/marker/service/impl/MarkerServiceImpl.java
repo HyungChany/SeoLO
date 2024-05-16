@@ -76,8 +76,11 @@ public class MarkerServiceImpl implements MarkerService {
             MarkerDto marker = getMarker(markerId);
             TaskHistoryDto nowTask = taskHistoryService.getLatestTaskHistoryEntityByMachineId(marker.getMachineId());
             AppUser worker = dbUserDetailService.loadUserById(nowTask.getUserId());
+            MachineDto machine = machineService.getMachineByMachineId(marker.getMachineId());
 
             return MarkerInfoResponse.builder()
+                    .machineNum(machine.getNumber())
+                    .machineName(machine.getName())
                     .workerName(worker.getUsername())
                     .estimatedEndTime(DateUtils.formatToLocalDateStr(nowTask.getTaskEndEstimatedDateTime()))
                     .content(nowTask.getTaskPrecaution())
@@ -127,5 +130,14 @@ public class MarkerServiceImpl implements MarkerService {
                     .blueprintURL(facilityService.getLayoutByFacility(facilityId))
                     .markers(locationResponses)
                     .build();
+    }
+
+    @Override
+    public void deleteMarker(Long markerId) {
+        Marker marker = markerRepository.findById(markerId).orElseThrow(
+                () -> new CommonException(MarkerErrorCode.NOT_EXIST_MARKER)
+        );
+
+        markerRepository.delete(marker);
     }
 }

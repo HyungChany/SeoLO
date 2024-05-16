@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.RedisHash;
 
 
 @Getter
-@RedisHash(value = "blackList", timeToLive = 900)
+@RedisHash(value = "blackList", timeToLive = 36000)
 public class InvalidJwtToken {
     @Id
     private String accessToken;
