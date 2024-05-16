@@ -157,12 +157,13 @@ class BluetoothLOTOActivity : AppCompatActivity() {
 
                 if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     // 권한이 있을 때
-                    // 데이터 쓰기 포맷(회사코드,명령어,토큰,머신ID,유저ID)
+                    // 데이터 쓰기 포맷(회사코드,토큰,머신ID,유저ID,자물쇠UID,명령어)
                     val companyCode = TokenManager.getCompanyCode(this@BluetoothLOTOActivity)
-                    val token = TokenManager.getAccessToken(this@BluetoothLOTOActivity)
+                    val token = TokenManager.getTokenValue(this@BluetoothLOTOActivity) + "dsada"
                     val machineId = SessionManager.selectedMachineId
                     val userId = TokenManager.getUserId(this@BluetoothLOTOActivity)
-                    val sendData = "$companyCode,LOCK,$token,$machineId,$userId"
+                    val lotoUid = LotoManager.getLotoUid(this@BluetoothLOTOActivity)
+                    val sendData = "$companyCode,$token,$machineId,$userId,$lotoUid,LOCK"
                     lastSentData = sendData
                     char?.setValue(sendData.toByteArray(StandardCharsets.UTF_8))
                     gatt?.writeCharacteristic(char)
@@ -197,8 +198,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             super.onCharacteristicWrite(gatt, characteristic, status)
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.d(
-                    "데이터 쓰기 성공_LOTO",
-                    "${characteristic?.value?.toString(StandardCharsets.UTF_8)}"
+                    "데이터 쓰기 성공_LOTO", "${characteristic?.value?.toString(StandardCharsets.UTF_8)}"
                 )
             }
         }
@@ -211,12 +211,12 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             // 아두이노에서 보내온 데이터 수신
             // 데이터 읽기 포맷(명령어,자물쇠uid.머신id,배터리잔량,유저id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
-            Log.d("수신데이터_LOTO", "$receivedData")
 
             // 송신 데이터와 수신 데이터가 같으면 리턴
             if (receivedData == lastSentData) {
                 return
             }
+            Log.d("수신데이터_LOTO", "$receivedData")
 
             receivedData?.let {
                 val dataParts = it.split(",")
@@ -237,7 +237,9 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     if (statusCode != "LOCKED") {
                         Handler(Looper.getMainLooper()).post {
                             Toast.makeText(
-                                this@BluetoothLOTOActivity, "$statusCode ,이미 잠겨져있는 자물쇠입니다. 다른 자물쇠를 선택하세요. \n 배터리 잔량: $batteryInfo", Toast.LENGTH_LONG
+                                this@BluetoothLOTOActivity,
+                                "$statusCode ,이미 잠겨져있는 자물쇠입니다. 다른 자물쇠를 선택하세요. \n 배터리 잔량: $batteryInfo",
+                                Toast.LENGTH_LONG
                             ).show()
                         }
                     } else {
@@ -245,9 +247,12 @@ class BluetoothLOTOActivity : AppCompatActivity() {
 
                         // 잠금 완료 시 메시지를 띄운 뒤 MainActivity로 이동
                         Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(this@BluetoothLOTOActivity, "$statusCode, 잠금완료", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@BluetoothLOTOActivity, "$statusCode, 잠금완료", Toast.LENGTH_SHORT
+                            ).show()
                             Handler(Looper.getMainLooper()).postDelayed({
-                                val intent = Intent(this@BluetoothLOTOActivity, MainActivity::class.java)
+                                val intent =
+                                    Intent(this@BluetoothLOTOActivity, MainActivity::class.java)
                                 startActivity(intent)
                                 finish()
                             }, 1000)

@@ -65,4 +65,12 @@ object RetrofitClient {
             .addConverterFactory(GsonConverterFactory.create()).build()
             .create(TaskService::class.java)
     }
+
+    // IssueService를 위한 Retrofit 인스턴스 생성
+    val issueService: IssueService by lazy {
+        Retrofit.Builder().baseUrl(BASE_URL).client(client)
+            .addConverterFactory(GsonConverterFactory.create()).build()
+            .create(IssueService::class.java)
+    }
+
 }

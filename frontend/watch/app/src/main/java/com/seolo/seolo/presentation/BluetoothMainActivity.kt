@@ -157,20 +157,20 @@ class BluetoothMainActivity : AppCompatActivity() {
 
                 if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     // 권한이 있을 때
-                    // 데이터 쓰기 포맷(회사코드,명령어,토큰,머신ID,유저ID)
+                    // 데이터 쓰기 포맷(회사코드,토큰,머신ID,유저ID,자물쇠UID,명령어)
                     val companyCode =
                         TokenManager.getCompanyCode(this@BluetoothMainActivity) // 회사 코드 가져오기
                     val token =
-                        TokenManager.getAccessToken(this@BluetoothMainActivity) // 실제 토큰 값 가져오기
-                    val userId =
-                        TokenManager.getUserId(this@BluetoothMainActivity) // 사용자 Id 가져오기
-                    val Uid = LotoManager.getLotoUid(this@BluetoothMainActivity) // 자물쇠 Uid 가져오기
-                    val machineId = LotoManager.getLotoMachineId(this@BluetoothMainActivity) // 머신 Id 가져오기
+                        TokenManager.getTokenValue(this@BluetoothMainActivity) // 자물쇠 토큰 값 가져오기
+                    val userId = TokenManager.getUserId(this@BluetoothMainActivity) // 사용자 Id 가져오기
+                    val lotoUid = LotoManager.getLotoUid(this@BluetoothMainActivity) // 자물쇠 Uid 가져오기
+                    val machineId =
+                        LotoManager.getLotoMachineId(this@BluetoothMainActivity) // 머신 Id 가져오기
 
-                    val sendData = if (Uid == null) {
-                        "$companyCode,INIT,$token,,$userId"
+                    val sendData = if (lotoUid == null) {
+                        "$companyCode,$token,,$userId,,INIT"
                     } else {
-                        "$companyCode,LOCKED,$token,$machineId,$userId"
+                        "$companyCode,$token,$machineId,$userId,$lotoUid,LOCK"
                     }
                     lastSentData = sendData
                     char?.setValue(sendData.toByteArray(StandardCharsets.UTF_8))
@@ -208,8 +208,7 @@ class BluetoothMainActivity : AppCompatActivity() {
             super.onCharacteristicWrite(gatt, characteristic, status)
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.d(
-                    "데이터 쓰기 성공_Main",
-                    "${characteristic?.value?.toString(StandardCharsets.UTF_8)}"
+                    "데이터 쓰기 성공_Main", "${characteristic?.value?.toString(StandardCharsets.UTF_8)}"
                 )
             }
         }
@@ -222,12 +221,12 @@ class BluetoothMainActivity : AppCompatActivity() {
             // 아두이노에서 보내온 데이터 수신
             // 데이터 읽기 포맷(명령어,자물쇠Uid,머신Id,배터리잔량,유저Id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
-            Log.d("수신데이터_Main", "Data received: $receivedData")
 
             // 송신 데이터와 수신 데이터가 같으면 리턴
             if (receivedData == lastSentData) {
                 return
             }
+            Log.d("수신데이터_Main", "Data received: $receivedData")
 
             receivedData?.let {
                 val dataParts = it.split(",")
