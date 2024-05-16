@@ -13,6 +13,5 @@ public interface ReportService {
     ReportsResponse getAllReports();
     ReportDto getReport(Long reportId);
     ReportDto updateReport(Long reportId, boolean isAccident, String accidentType, Integer victimsNum);
-
     ReportsResponse getReportsByDateRange(LocalDate startDate, LocalDate endDate);
 }

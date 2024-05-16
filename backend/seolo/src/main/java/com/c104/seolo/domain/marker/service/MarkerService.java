@@ -16,4 +16,5 @@ public interface MarkerService {
     List<MarkerDto> getAllMarkersByFacilityId(Long facilityId);
     FacilityBlueprintResponse getBlueprintAndMarkerByFacilityId(Long facilityId);
     void deleteMarker(Long markerId);
+    void deleteAllMarkers(Long facilityId);
 }
