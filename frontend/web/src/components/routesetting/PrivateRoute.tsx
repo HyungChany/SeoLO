@@ -1,12 +1,15 @@
 // PrivateRoute.tsx
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const accessToken = sessionStorage.getItem('accessToken');
-
+  useEffect(() => {
+    if (!accessToken) {
+      alert('로그인이 만료되었습니다');
+    }
+  }, [accessToken]);
   if (!accessToken) {
-    alert('로그인이 만료되었습니다');
     return <Navigate to="/login" replace />;
   }
 
