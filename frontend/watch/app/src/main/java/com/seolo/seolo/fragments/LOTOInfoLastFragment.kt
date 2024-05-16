@@ -1,9 +1,9 @@
 package com.seolo.seolo.fragments
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,8 +51,7 @@ class LOTOInfoLastFragment : Fragment() {
     private fun showConfirmationDialog() {
         val dialog = AlertDialog.Builder(
             requireActivity(), com.google.android.material.R.style.AlertDialog_AppCompat_Light
-        ).setTitle(" ").setMessage("Bluetooth 연결을 시작 하시겠습니까?")
-            .setPositiveButton("확인", null)
+        ).setTitle(" ").setMessage("Bluetooth 연결을 시작 하시겠습니까?").setPositiveButton("확인", null)
             .setNegativeButton("취소") { dialogInterface, _ ->
                 dialogInterface.cancel()
             }.create()
@@ -90,8 +89,8 @@ class LOTOInfoLastFragment : Fragment() {
 
         val lotoInfo = LotoInfo(
             locker_uid = "",
-            battery_info = 24,
-            machine_id = SessionManager.selectedMachineId ?:"",
+            battery_info = "",
+            machine_id = SessionManager.selectedMachineId ?: "",
             task_template_id = SessionManager.selectedTaskTemplateId ?: "",
             task_precaution = SessionManager.selectedTaskPrecaution ?: "",
             end_time = SessionManager.selectedDate + "T" + SessionManager.selectedTime
@@ -108,9 +107,12 @@ class LOTOInfoLastFragment : Fragment() {
             override fun onResponse(call: Call<IssueResponse>, response: Response<IssueResponse>) {
                 if (response.isSuccessful) {
                     val issueResponse = response.body()
-                    Toast.makeText(requireContext(), "Response: ${issueResponse?.next_code}", Toast.LENGTH_SHORT).show()
+                    Log.d("token_value, ", "Response.next_code: ${issueResponse?.next_code}")
+                    Log.d("token_value, ", "Response.token_value: ${issueResponse?.token_value}")
                 } else {
-                    Toast.makeText(requireContext(), "Failed: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Log.d(
+                        "Failed, ", "Failed: ${response.message()}"
+                    )
                 }
             }
 

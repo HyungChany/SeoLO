@@ -51,7 +51,7 @@ data class IssueResponse(
 @Parcelize
 data class LotoInfo(
     val locker_uid: String,
-    val battery_info: Int,
+    val battery_info: String,
     val machine_id: String,
     val task_template_id: String,
     val task_precaution: String,

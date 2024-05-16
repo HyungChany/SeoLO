@@ -33,7 +33,7 @@ object LotoManager{
 
     // LOTO 상태 코드 가져오는 메서드
     fun getLotoStatusCode(context: Context): String? {
-        return getPreferences(context).getString(PREF_LOTO_STATUS_CODE, null)
+        return getPreferences(context).getString(PREF_LOTO_STATUS_CODE, "")
     }
 
     // LOTO UID 설정 메서드
@@ -43,7 +43,7 @@ object LotoManager{
 
     // LOTO UID 가져오는 메서드
     fun getLotoUid(context: Context): String? {
-        return getPreferences(context).getString(PREF_LOTO_UID, null)
+        return getPreferences(context).getString(PREF_LOTO_UID, "")
     }
 
     // LOTO 머신 ID 설정 메서드
@@ -53,7 +53,7 @@ object LotoManager{
 
     // LOTO 머신 ID 가져오는 메서드
     fun getLotoMachineId(context: Context): String? {
-        return getPreferences(context).getString(PREF_LOTO_MACHINE_ID, null)
+        return getPreferences(context).getString(PREF_LOTO_MACHINE_ID, "")
     }
 
     // LOTO 배터리 정보 설정 메서드
@@ -63,7 +63,7 @@ object LotoManager{
 
     // LOTO 배터리 정보 가져오는 메서드
     fun getLotoBatteryInfo(context: Context): String? {
-        return getPreferences(context).getString(PREF_LOTO_BATTERY_INFO, null)
+        return getPreferences(context).getString(PREF_LOTO_BATTERY_INFO, "")
     }
 
     // LOTO 사용자 ID 설정 메서드
@@ -73,7 +73,7 @@ object LotoManager{
 
     // LOTO 사용자 ID 가져오는 메서드
     fun getLotoUserId(context: Context): String? {
-        return getPreferences(context).getString(PREF_LOTO_USER_ID, null)
+        return getPreferences(context).getString(PREF_LOTO_USER_ID, "")
     }
 
     // 저장된 모든 세션 정보 삭제하는 메서드

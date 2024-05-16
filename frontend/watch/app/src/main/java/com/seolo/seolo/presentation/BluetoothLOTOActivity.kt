@@ -26,6 +26,12 @@ import com.seolo.seolo.adapters.BluetoothDeviceAdapter
 import com.seolo.seolo.helper.LotoManager
 import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.helper.TokenManager
+import com.seolo.seolo.model.IssueResponse
+import com.seolo.seolo.model.LotoInfo
+import com.seolo.seolo.services.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.nio.charset.StandardCharsets
 import java.util.UUID
 
@@ -37,6 +43,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
     private var devices = mutableListOf<BluetoothDevice>()
     private var bluetoothGatt: BluetoothGatt? = null
     private var lastSentData: String? = null
+    private var selectedDevice: BluetoothDevice? = null
 
     companion object {
         private const val REQUEST_BLUETOOTH_PERMISSION = 101
@@ -84,6 +91,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
     private fun onDeviceSelected(device: BluetoothDevice) {
         // 기기 선택 시 GATT 스캐닝 중지
         bluetoothAdapter.stopDiscovery()
+        selectedDevice = device
 
         // 100ms 딜레이 후 기기 연결 시도
         Handler(Looper.getMainLooper()).postDelayed({
@@ -159,12 +167,13 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     // 권한이 있을 때
                     // 데이터 쓰기 포맷(회사코드,토큰,머신ID,유저ID,자물쇠UID,명령어)
                     val companyCode = TokenManager.getCompanyCode(this@BluetoothLOTOActivity)
-                    val token = TokenManager.getTokenValue(this@BluetoothLOTOActivity) + "dsada"
+                    val token = TokenManager.getTokenValue(this@BluetoothLOTOActivity)
                     val machineId = SessionManager.selectedMachineId
                     val userId = TokenManager.getUserId(this@BluetoothLOTOActivity)
                     val lotoUid = LotoManager.getLotoUid(this@BluetoothLOTOActivity)
-                    val sendData = "$companyCode,$token,$machineId,$userId,$lotoUid,LOCK"
+                    val sendData = "$companyCode,$token,$machineId,$userId,$lotoUid,INIT"
                     lastSentData = sendData
+                    Log.d("데이터 쓰기_LOTO", sendData)
                     char?.setValue(sendData.toByteArray(StandardCharsets.UTF_8))
                     gatt?.writeCharacteristic(char)
 
@@ -234,7 +243,12 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     LotoManager.setLotoBatteryInfo(this@BluetoothLOTOActivity, batteryInfo)
                     LotoManager.setLotoUserId(this@BluetoothLOTOActivity, lotoUserId)
 
-                    if (statusCode != "LOCKED") {
+                    if (statusCode == "WRITED") {
+                        // WRITE 상태인 경우 API 호출
+                        issueCoreLogic()
+                        lastSentData = receivedData
+
+                    } else if (statusCode != "WRITED") {
                         Handler(Looper.getMainLooper()).post {
                             Toast.makeText(
                                 this@BluetoothLOTOActivity,
@@ -246,18 +260,99 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                         // BE API 연결 필요
 
                         // 잠금 완료 시 메시지를 띄운 뒤 MainActivity로 이동
-                        Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(
-                                this@BluetoothLOTOActivity, "$statusCode, 잠금완료", Toast.LENGTH_SHORT
-                            ).show()
-                            Handler(Looper.getMainLooper()).postDelayed({
-                                val intent =
-                                    Intent(this@BluetoothLOTOActivity, MainActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            }, 1000)
-                        }
+//                        Handler(Looper.getMainLooper()).post {
+//                            Toast.makeText(
+//                                this@BluetoothLOTOActivity, "$statusCode, 잠금완료", Toast.LENGTH_SHORT
+//                            ).show()
+//                            Handler(Looper.getMainLooper()).postDelayed({
+//                                val intent =
+//                                    Intent(this@BluetoothLOTOActivity, MainActivity::class.java)
+//                                startActivity(intent)
+//                                finish()
+//                            }, 1000)
+//                        }
                     }
+                }
+            }
+        }
+    }
+
+    // API 요청 함수
+    private fun issueCoreLogic() {
+        val authorization = "Bearer " + TokenManager.getAccessToken(this)
+        val companyCode = TokenManager.getCompanyCode(this)
+        val deviceType = "watch"
+
+        val lotoInfo = LotoManager.getLotoUid(this@BluetoothLOTOActivity)?.let {
+            LotoManager.getLotoBatteryInfo(this@BluetoothLOTOActivity)?.let { it1 ->
+                LotoInfo(
+                    locker_uid = it,
+                    battery_info = it1,
+                    machine_id = SessionManager.selectedMachineId ?: "",
+                    task_template_id = SessionManager.selectedTaskTemplateId ?: "",
+                    task_precaution = SessionManager.selectedTaskPrecaution ?: "",
+                    end_time = SessionManager.selectedDate + SessionManager.selectedTime
+                )
+            }
+        }
+
+        val call = lotoInfo?.let {
+            RetrofitClient.issueService.sendLotoInfo(
+                authorization = authorization,
+                companyCode = companyCode ?: "",
+                deviceType = deviceType,
+                lotoInfo = it
+            )
+        }
+
+        // Debug logs to check the data before making the API call
+        Log.d("API_CALL", "Authorization: $authorization")
+        Log.d("API_CALL", "CompanyCode: $companyCode")
+        Log.d("API_CALL", "DeviceType: $deviceType")
+        Log.d("API_CALL", "LotoInfo: $lotoInfo")
+
+        call?.enqueue(object : Callback<IssueResponse> {
+            override fun onResponse(call: Call<IssueResponse>, response: Response<IssueResponse>) {
+                if (response.isSuccessful) {
+                    val issueResponse = response.body()
+                    Log.d("API_CALL", "Response Success: ${issueResponse?.next_code}")
+                    //                    Toast.makeText(this@BluetoothLOTOActivity, "Response: ${issueResponse?.next_code}", Toast.LENGTH_SHORT).show()
+                    issueResponse?.next_code?.let { sendBluetoothData(it) }
+                } else {
+                    Log.d("API_CALL", "Response Failed: ${response.message()}")
+                    Toast.makeText(
+                        this@BluetoothLOTOActivity,
+                        "Failed: ${response.message()}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            override fun onFailure(call: Call<IssueResponse>, t: Throwable) {
+                Log.d("API_CALL", "Error: ${t.message}")
+                Toast.makeText(
+                    this@BluetoothLOTOActivity, "Error: ${t.message}", Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+    }
+
+    // BE 응답의 next_code를 블루투스로 송신하는 함수
+    private fun sendBluetoothData(nextCode: String) {
+        selectedDevice?.let { device ->
+            bluetoothGatt?.let { gatt ->
+                val service = gatt.getService(SERVICE_UUID)
+                val char = service?.getCharacteristic(CHAR_UUID)
+                if (char != null) {
+                    val companyCode = TokenManager.getCompanyCode(this)
+                    val token = TokenManager.getTokenValue(this) + "dsada"
+                    val machineId = SessionManager.selectedMachineId
+                    val userId = TokenManager.getUserId(this)
+                    val lotoUid = LotoManager.getLotoUid(this)
+                    val sendData = "$companyCode,$token,$machineId,$userId,$lotoUid,$nextCode"
+                    lastSentData = sendData
+                    char.setValue(sendData.toByteArray(StandardCharsets.UTF_8))
+                    gatt.writeCharacteristic(char)
                 }
             }
         }

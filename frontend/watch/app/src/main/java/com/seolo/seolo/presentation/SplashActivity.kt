@@ -7,6 +7,8 @@ import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.seolo.seolo.R
+import com.seolo.seolo.helper.LotoManager
+import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.helper.TokenManager
 
 // SplashActivity 클래스 정의
@@ -23,6 +25,8 @@ class SplashActivity : ComponentActivity() {
         // 스플래시 화면을 잠시 유지한 후 토큰 체크 함수 호출
         Handler(Looper.getMainLooper()).postDelayed({
             checkTokenAndNavigate()
+            SessionManager.clear()
+            LotoManager.clearLoto(this)
         }, 2000)
     }
 

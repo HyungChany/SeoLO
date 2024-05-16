@@ -3,7 +3,6 @@ package com.seolo.seolo.presentation
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.R
@@ -11,13 +10,6 @@ import com.seolo.seolo.adapters.CarouselStateAdapter
 import com.seolo.seolo.fragments.LOTOInfoFragment
 import com.seolo.seolo.fragments.LOTOInfoLastFragment
 import com.seolo.seolo.helper.SessionManager
-import com.seolo.seolo.helper.TokenManager
-import com.seolo.seolo.model.IssueResponse
-import com.seolo.seolo.model.LotoInfo
-import com.seolo.seolo.services.RetrofitClient
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class LOTOInfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,56 +67,56 @@ class LOTOInfoActivity : AppCompatActivity() {
         }
     }
 
-    // ISSUE Core Logic 인증 정보 POST
-    private fun issueCoreLogic() {
-        // SessionManager에서 필요한 정보 받아오기
-        val authorization = "Bearer " + TokenManager.getAccessToken(this)
-        val companyCode = TokenManager.getCompanyCode(this)
-        val deviceType = "watch"
-
-        // LotoInfo 객체 생성
-        val lotoInfo = LotoInfo(
-            locker_uid = "1DA24G01",
-            battery_info = 24,
-            machine_id = SessionManager.selectedMachineId ?: "",
-            task_template_id = SessionManager.selectedTaskTemplateId ?: "",
-            task_precaution = SessionManager.selectedTaskPrecaution ?: "",
-            end_time = SessionManager.selectedDate + "T" + SessionManager.selectedTime
-        )
-
-        // API 요청
-        val call = companyCode?.let {
-            RetrofitClient.issueService.sendLotoInfo(
-                authorization = authorization,
-                companyCode = it,
-                deviceType = deviceType,
-                lotoInfo = lotoInfo
-            )
-        }
-
-        // API 응답 처리
-        if (call != null) {
-            call.enqueue(object : Callback<IssueResponse> {
-                override fun onResponse(call: Call<IssueResponse>, response: Response<IssueResponse>) {
-                    if (response.isSuccessful) {
-                        val issueResponse = response.body()
-                        Toast.makeText(
-                            this@LOTOInfoActivity,
-                            "Response: ${issueResponse?.next_code}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            this@LOTOInfoActivity, "Failed: ${response.message()}", Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<IssueResponse>, t: Throwable) {
-                    Toast.makeText(this@LOTOInfoActivity, "Error: ${t.message}", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            })
-        }
-    }
+//    // ISSUE Core Logic 인증 정보 POST
+//    private fun issueCoreLogic() {
+//        // SessionManager에서 필요한 정보 받아오기
+//        val authorization = "Bearer " + TokenManager.getAccessToken(this)
+//        val companyCode = TokenManager.getCompanyCode(this)
+//        val deviceType = "watch"
+//
+//        // LotoInfo 객체 생성
+//        val lotoInfo = LotoInfo(
+//            locker_uid = "",
+//            battery_info = SessionManager.selectedBatteryInfo ?: "",
+//            machine_id = SessionManager.selectedMachineId ?: "",
+//            task_template_id = SessionManager.selectedTaskTemplateId ?: "",
+//            task_precaution = SessionManager.selectedTaskPrecaution ?: "",
+//            end_time = SessionManager.selectedDate + "T" + SessionManager.selectedTime
+//        )
+//
+//        // API 요청
+//        val call = companyCode?.let {
+//            RetrofitClient.issueService.sendLotoInfo(
+//                authorization = authorization,
+//                companyCode = it,
+//                deviceType = deviceType,
+//                lotoInfo = lotoInfo
+//            )
+//        }
+//
+//        // API 응답 처리
+//        if (call != null) {
+//            call.enqueue(object : Callback<IssueResponse> {
+//                override fun onResponse(call: Call<IssueResponse>, response: Response<IssueResponse>) {
+//                    if (response.isSuccessful) {
+//                        val issueResponse = response.body()
+//                        Toast.makeText(
+//                            this@LOTOInfoActivity,
+//                            "Response: ${issueResponse?.next_code}",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    } else {
+//                        Toast.makeText(
+//                            this@LOTOInfoActivity, "Failed: ${response.message()}", Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                }
+//
+//                override fun onFailure(call: Call<IssueResponse>, t: Throwable) {
+//                    Toast.makeText(this@LOTOInfoActivity, "Error: ${t.message}", Toast.LENGTH_SHORT)
+//                        .show()
+//                }
+//            })
+//        }
 }
+
