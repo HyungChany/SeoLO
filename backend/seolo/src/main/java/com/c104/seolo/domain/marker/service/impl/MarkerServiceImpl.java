@@ -71,12 +71,14 @@ public class MarkerServiceImpl implements MarkerService {
 
     @Override
     public MarkerInfoResponse getMarkerInfoById(Long markerId) {
+        TaskHistoryDto nowTask = null;
+        AppUser worker = null;
+        MarkerDto marker = getMarker(markerId);
+        MachineDto machine = machineService.getMachineByMachineId(marker.getMachineId());
 
         try {
-            MarkerDto marker = getMarker(markerId);
-            TaskHistoryDto nowTask = taskHistoryService.getLatestTaskHistoryEntityByMachineId(marker.getMachineId());
-            AppUser worker = dbUserDetailService.loadUserById(nowTask.getUserId());
-            MachineDto machine = machineService.getMachineByMachineId(marker.getMachineId());
+            nowTask = taskHistoryService.getLatestTaskHistoryEntityByMachineId(marker.getMachineId());
+            worker = dbUserDetailService.loadUserById(nowTask.getUserId());
 
             return MarkerInfoResponse.builder()
                     .machineNum(machine.getNumber())
@@ -88,9 +90,11 @@ public class MarkerServiceImpl implements MarkerService {
 
         } catch (CommonException e) {
             return MarkerInfoResponse.builder()
-                    .workerName(null)
-                    .estimatedEndTime(null)
-                    .content(null)
+                    .machineNum(machine != null ? machine.getNumber() : null)
+                    .machineName(machine != null ? machine.getName() : null)
+                    .workerName(worker != null ? worker.getUsername() : null)
+                    .estimatedEndTime(nowTask != null ? DateUtils.formatToLocalDateStr(nowTask.getTaskEndEstimatedDateTime()) : null)
+                    .content(nowTask != null ? nowTask.getTaskPrecaution() : null)
                     .build();
         }
     }
