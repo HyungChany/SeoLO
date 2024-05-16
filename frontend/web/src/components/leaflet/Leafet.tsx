@@ -201,12 +201,17 @@ export const Leaflet = ({
       });
     }
   }, [markerData]);
-
-  const customIcon = L.icon({
-    iconUrl: '/Position.png',
-    iconSize: [20, 25],
-    iconAnchor: [10, 12.5],
+  // 알맞은 icon가져오기
+  const lockedIcon = L.icon({
+    iconUrl: '/Locked.png',
+    iconSize: [50, 40],
+    iconAnchor: [15, 12.5],
   });
+  // const openedIcon = L.icon({
+  //   iconUrl: '/OpenLocker.png',
+  //   iconSize: [50, 40],
+  //   iconAnchor: [25, 20],
+  // });
 
   if (!imageFile || !bounds) return null;
   const handleMarkerClick = (
@@ -279,7 +284,7 @@ export const Leaflet = ({
         <Marker
           key={marker.id}
           position={marker.position}
-          icon={customIcon}
+          icon={lockedIcon}
           eventHandlers={{
             click: () => {
               if (marker.id) {

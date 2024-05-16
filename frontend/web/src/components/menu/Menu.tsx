@@ -15,6 +15,9 @@ interface MenuProps {
 const Container = styled.div<Pick<MenuProps, 'width'>>`
   width: ${(props) =>
     typeof props.width === 'number' ? `${props.width}rem` : props.width};
+  :hover {
+    background-color: ${Color.GRAY100};
+  }
 `;
 
 const MenuContainer = styled.div`

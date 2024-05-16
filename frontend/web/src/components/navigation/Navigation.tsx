@@ -8,6 +8,7 @@ const NavigatorBox = styled.div`
   width: 100%;
   height: 6rem;
   padding: 3rem;
+
   display: flex;
   justify-content: center;
   background-color: ${Color.SNOW};
@@ -22,6 +23,9 @@ const NavigatorContent = styled.div`
   /* height: calc(100% - 2 * 2rem); */
   align-items: center;
   justify-content: space-between;
+  gap: 26rem;
+  flex-shrink: 0;
+  /* overflow: hidden; */
 `;
 const Title = styled(Link)`
   width: 11.125rem;
@@ -41,10 +45,13 @@ const Title = styled(Link)`
 const Menu = styled.div`
   display: flex;
   gap: 3rem;
+  overflow: hidden; /* 넘친 부분 숨김 */
+  flex-shrink: 0;
 `;
 
 const MenuLink = styled(Link)`
   text-decoration: none;
+  flex-shrink: 0;
 `;
 
 const Navigation = () => {
