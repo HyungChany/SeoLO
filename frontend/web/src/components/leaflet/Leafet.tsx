@@ -8,9 +8,11 @@ import {
   useMapEvents,
 } from 'react-leaflet';
 import * as Typo from '@/components/typography/Typography.tsx';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   blueprintList,
+  deleteMarker,
+  detailMarker,
   registrationMarker,
   simpleMachineCheck,
 } from '@/apis/Main.ts';
@@ -45,12 +47,34 @@ interface DropDownType {
   label: string;
 }
 
-const Button = styled.div`
-  width: 3.5rem;
-  height: 1rem;
+interface ButtonProps {
+  width: string;
+  height: string;
+  $hoverBackgroundColor: string;
+}
+
+interface MarkerStateType {
+  id: number | null;
+  position: L.LatLng;
+}
+
+interface ButtonBoxProps {
+  justifyContent: string;
+}
+
+interface MarkerDetailType {
+  machine_num: string;
+  machine_name: string;
+  worker_name: string;
+  estimated_end_time: string;
+  content: string;
+}
+const Button = styled.div<ButtonProps>`
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
   border-radius: 0.3rem;
   border: 1px solid ${Color.GRAY100};
-  padding: 0.7rem;
+  /* padding: 0.7rem; */
   align-items: center;
   justify-content: center;
   display: flex;
@@ -58,9 +82,21 @@ const Button = styled.div`
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.2);
   background-color: ${Color.GRAY100};
   &:hover {
-    background-color: ${Color.GREEN400};
+    background-color: ${(props) => props.$hoverBackgroundColor};
     border-color: ${Color.GRAY300};
   }
+`;
+const MarkerBox = styled.div`
+  min-width: 200px;
+  display: flex;
+  flex-direction: column;
+`;
+const ButtonBox = styled.div<ButtonBoxProps>`
+  width: 100%;
+  display: flex;
+  justify-content: ${(props) => props.justifyContent};
+  gap: 1rem;
+  margin-top: 0.5rem;
 `;
 export const Leaflet = ({
   imageFile,
@@ -68,14 +104,14 @@ export const Leaflet = ({
   selectedOption,
 }: ImageMapProps): JSX.Element | null => {
   const [bounds, setBounds] = useState<L.LatLngBounds | null>(null);
-  const [markers, setMarkers] = useState<L.LatLng[]>([]);
+  const [markers, setMarkers] = useState<MarkerStateType[]>([]);
   const [machineSelected, setMachineSelected] = useState<DropDownType | null>(
     null,
   );
   const [popupPosition, setPopupPosition] = useState<L.LatLng | null>(null);
-
   const map = useMap();
-
+  const queryClient = useQueryClient();
+  const [id, setId] = useState<number | null>(null);
   // 기존에 있는 마커 불러오기
   const { data: markerData } = useQuery({
     queryKey: ['markers', selectedOption],
@@ -85,8 +121,13 @@ export const Leaflet = ({
   // 마커 등록
   const { mutate: markerMutate } = useMutation({
     mutationFn: registrationMarker,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['markers'] }),
   });
-
+  // 마커 삭제
+  const { mutate: deleteMutate } = useMutation({
+    mutationFn: deleteMarker,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['markers'] }),
+  });
   // 마커 편집할 때 공장에 따른 기계 종류 불러오기
   const { data: machineData } = useQuery({
     queryKey: ['machine', selectedOption],
@@ -97,7 +138,12 @@ export const Leaflet = ({
       return null;
     },
   });
-
+  // 마커 정보 불러오기
+  const { data: markerDetail } = useQuery<MarkerDetailType>({
+    queryKey: ['markerDetail', id],
+    queryFn: () => detailMarker(id!),
+    enabled: id !== null,
+  });
   // 드롭다운 옵션
   const machineDropdown = machineData?.map((machine: MachineType) => ({
     value: machine.machine_id,
@@ -142,16 +188,20 @@ export const Leaflet = ({
   useEffect(() => {
     if (markerData) {
       const propsMarkers = markerData.markers;
+      setMarkers([]);
       propsMarkers.map((data: MarkerType) => {
-        const newMarker = L.latLng(
-          data.marker_locations.locationY,
-          data.marker_locations.locationX,
-        );
-        console.log('뉴마커', newMarker);
+        const newMarker = {
+          id: data.marker_id,
+          position: L.latLng(
+            data.marker_locations.locationY,
+            data.marker_locations.locationX,
+          ),
+        };
         setMarkers((currentMarkers) => [...currentMarkers, newMarker]);
       });
     }
   }, [markerData]);
+
   const customIcon = L.icon({
     iconUrl: '/Position.png',
     iconSize: [20, 25],
@@ -164,7 +214,7 @@ export const Leaflet = ({
   ) => {
     e.stopPropagation();
     if (popupPosition) {
-      setMarkers((currentMarkers) => [...currentMarkers, popupPosition]);
+      // setMarkers((currentMarkers) => [...currentMarkers, popupPosition]);
       if (machineSelected) {
         const formattedData = {
           machine_id: machineSelected.value,
@@ -174,6 +224,15 @@ export const Leaflet = ({
         markerMutate(formattedData);
       }
       setPopupPosition(null);
+    }
+  };
+  const handleDeleteClick = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    index: number,
+  ) => {
+    e.stopPropagation();
+    if (window.confirm('삭제하시겠습니까?')) {
+      deleteMutate(index);
     }
   };
   return (
@@ -198,24 +257,115 @@ export const Leaflet = ({
               onOptionChange={handleMachineChange}
               placeholder="기계를 선택하세요"
             />
-            <Button
-              onClick={(e) => {
-                handleMarkerClick(e);
-              }}
-            >
-              <Typo.Detail0>완료</Typo.Detail0>
-            </Button>
+            <ButtonBox justifyContent="flex-end">
+              <Button
+                width="3.5rem"
+                height="1.7rem"
+                $hoverBackgroundColor={Color.GREEN400}
+                onClick={(e) => {
+                  handleMarkerClick(e);
+                }}
+              >
+                <Typo.Detail0>완료</Typo.Detail0>
+              </Button>
+            </ButtonBox>
           </div>
         </Popup>
       )}
 
       <ImageOverlay url={imageFile} bounds={bounds} />
-      {markers.map((marker, idx) => (
-        <Marker key={idx} position={marker} icon={customIcon}>
+      {markers.map((marker) => (
+        <Marker
+          key={marker.id}
+          position={marker.position}
+          icon={customIcon}
+          eventHandlers={{
+            click: () => {
+              if (marker.id) {
+                setId(marker.id);
+              }
+            },
+          }}
+        >
           <Popup>
-            <Typo.Detail0>장비번호:123456</Typo.Detail0>
-            <Typo.Detail0>작업자:김철수</Typo.Detail0>
-            <Typo.Detail0>종료 예상 시간: mm.dd - hh.mm</Typo.Detail0>
+            {markerDetail ? (
+              <MarkerBox>
+                {markerDetail.estimated_end_time != null ? (
+                  <>
+                    <div
+                      style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: '1.25rem',
+                          color: `${Color.SAMSUNG_BLUE}`,
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        장비 정보
+                      </div>
+                    </div>
+                    <Typo.Detail0>
+                      장비명: {markerDetail.machine_name}
+                    </Typo.Detail0>
+                    <Typo.Detail0>
+                      작업자: {markerDetail.worker_name}
+                    </Typo.Detail0>
+                    <Typo.Detail0>
+                      종료 예상 시간: {markerDetail.estimated_end_time}
+                    </Typo.Detail0>
+                  </>
+                ) : (
+                  <>
+                    <div
+                      style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                        marginBottom: '1rem',
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: '1.25rem',
+                          color: `${Color.SAMSUNG_BLUE}`,
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        현재 작업중이 아닙니다
+                      </div>
+                    </div>
+                    <Typo.Detail0>
+                      장비명: {markerDetail.machine_name}
+                    </Typo.Detail0>
+                    <Typo.Detail0>
+                      장비번호: {markerDetail.machine_num}
+                    </Typo.Detail0>
+                  </>
+                )}
+
+                <ButtonBox justifyContent="flex-end">
+                  <Button
+                    width="3rem"
+                    height="1.2rem"
+                    onClick={(e) => {
+                      if (marker.id) {
+                        handleDeleteClick(e, marker.id);
+                      }
+                    }}
+                    $hoverBackgroundColor={Color.RED1}
+                  >
+                    <Typo.Detail0>삭제</Typo.Detail0>
+                  </Button>
+                </ButtonBox>
+              </MarkerBox>
+            ) : (
+              <Typo.Detail0>로딩 중 입니다</Typo.Detail0>
+            )}
           </Popup>
         </Marker>
       ))}

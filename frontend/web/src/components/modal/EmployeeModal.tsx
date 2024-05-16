@@ -14,7 +14,7 @@ interface EmployeeModalProps {
 interface EmployeeType {
   id: number;
   name: string;
-  empolyee_num: string;
+  employee_num: string;
   title: string;
   team: string;
   role: string;
@@ -35,12 +35,12 @@ const EmployeeModal = ({ onClick }: EmployeeModalProps) => {
       setEmployeeData(data);
     };
     fetchData();
-  });
-
+  }, []);
+  console.log(employeeData);
   const columns: Column<EmployeeType>[] = React.useMemo<Column<EmployeeType>[]>(
     () => [
       { Header: '이름', accessor: 'name' },
-      { Header: '사번', accessor: 'empolyee_num' },
+      { Header: '사번', accessor: 'employee_num' },
       { Header: '소속 부서', accessor: 'team' },
       { Header: '직급', accessor: 'title' },
       { Header: '역할', accessor: 'role' },
