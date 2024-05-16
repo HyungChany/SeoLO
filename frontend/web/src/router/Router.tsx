@@ -59,11 +59,11 @@ const informationRoute = [
   },
   {
     path: '/checklist',
-    element: With(<CheckListPage />),
+    element: <PrivateRoute>{With(<CheckListPage />)}</PrivateRoute>,
   },
   {
     path: '/report',
-    element: With(<Report />),
+    element: <PrivateRoute>{With(<Report />)}</PrivateRoute>,
   },
 ];
 const exampleRoute = { path: '/example', element: <Example /> };
