@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.WheelPickerAdapter
+import com.seolo.seolo.helper.LotoManager
 import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.helper.TokenManager
 import com.seolo.seolo.model.MachineItem
@@ -64,6 +65,7 @@ class EquipmentActivity : AppCompatActivity() {
         confirmButton.setOnClickListener {
             selectedMachineId?.let {
                 SessionManager.selectedMachineId = it
+                LotoManager.setLotoMachineId(this, it)
                 // 작업 목록 가져오기
                 getTasks {
                     // WorkActivity로 이동하고 작업 목록 전달

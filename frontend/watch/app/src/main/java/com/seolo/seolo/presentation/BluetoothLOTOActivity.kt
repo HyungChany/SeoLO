@@ -44,6 +44,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
     private var bluetoothGatt: BluetoothGatt? = null
     private var lastSentData: String? = null
     private var selectedDevice: BluetoothDevice? = null
+    private var isDataReceived = false // 데이터 수신 상태 플래그
 
     companion object {
         private const val REQUEST_BLUETOOTH_PERMISSION = 101
@@ -168,7 +169,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     // 데이터 쓰기 포맷(회사코드,토큰,머신ID,유저ID,자물쇠UID,명령어)
                     val companyCode = TokenManager.getCompanyCode(this@BluetoothLOTOActivity)
                     val token = TokenManager.getTokenValue(this@BluetoothLOTOActivity)
-                    val machineId = SessionManager.selectedMachineId
+                    val machineId = LotoManager.getLotoMachineId(this@BluetoothLOTOActivity)
                     val userId = TokenManager.getUserId(this@BluetoothLOTOActivity)
                     val lotoUid = LotoManager.getLotoUid(this@BluetoothLOTOActivity)
                     val sendData = "$companyCode,$token,$machineId,$userId,$lotoUid,INIT"
@@ -217,6 +218,15 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?
         ) {
             super.onCharacteristicChanged(gatt, characteristic)
+
+            // 데이터가 이미 수신되었으면 무시
+            if (isDataReceived) {
+                return
+            }
+
+            // 데이터 수신 상태 플래그 설정
+            isDataReceived = true
+
             // 아두이노에서 보내온 데이터 수신
             // 데이터 읽기 포맷(명령어,자물쇠uid.머신id,배터리잔량,유저id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
@@ -291,7 +301,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     machine_id = SessionManager.selectedMachineId ?: "",
                     task_template_id = SessionManager.selectedTaskTemplateId ?: "",
                     task_precaution = SessionManager.selectedTaskPrecaution ?: "",
-                    end_time = SessionManager.selectedDate + SessionManager.selectedTime + ":00"
+                    end_time = SessionManager.selectedDate + SessionManager.selectedTime
                 )
             }
         }
@@ -316,7 +326,9 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val issueResponse = response.body()
                     Log.d("API_CALL", "Response Success: ${issueResponse?.next_code}")
-                    //                    Toast.makeText(this@BluetoothLOTOActivity, "Response: ${issueResponse?.next_code}", Toast.LENGTH_SHORT).show()
+                    issueResponse?.token_value?.let {
+                        TokenManager.setTokenValue(this@BluetoothLOTOActivity, it)
+                    }
                     issueResponse?.next_code?.let { sendBluetoothData(it) }
                 } else {
                     Log.d("API_CALL", "Response Failed: ${response.message()}")
@@ -345,7 +357,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                 val char = service?.getCharacteristic(CHAR_UUID)
                 if (char != null) {
                     val companyCode = TokenManager.getCompanyCode(this)
-                    val token = TokenManager.getTokenValue(this) + "dsada"
+                    val token = TokenManager.getTokenValue(this)
                     val machineId = SessionManager.selectedMachineId
                     val userId = TokenManager.getUserId(this)
                     val lotoUid = LotoManager.getLotoUid(this)
