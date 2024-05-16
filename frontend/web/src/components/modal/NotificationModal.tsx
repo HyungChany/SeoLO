@@ -8,14 +8,7 @@ import battery60 from '/battery60.png';
 import battery80 from '/battery80.png';
 import battery100 from '/battery100.png';
 import lockerIcon from '/locker1.png';
-interface NotificationEvent {
-  battery_info: number;
-  worker_name: string;
-  facility_name: string;
-  machine_number: string;
-  locker_uid: string;
-  act_type: string;
-}
+
 const OuterContainer = styled.div`
   width: 100%;
   height: 100%;
