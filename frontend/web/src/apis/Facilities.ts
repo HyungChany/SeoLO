@@ -8,6 +8,7 @@ export const Facilities = async () => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
 
