@@ -335,11 +335,11 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     onCompleted()
                 } else {
                     Log.d("API_CALL", "Response Failed: ${response.message()}")
-                    Toast.makeText(
-                        this@BluetoothLOTOActivity,
-                        "Failed: ${response.message()}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+//                    Toast.makeText(
+//                        this@BluetoothLOTOActivity,
+//                        "Failed: ${response.message()}",
+//                        Toast.LENGTH_SHORT
+//                    ).show()
                 }
             }
 

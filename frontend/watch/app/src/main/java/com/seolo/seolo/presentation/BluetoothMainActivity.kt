@@ -36,6 +36,7 @@ class BluetoothMainActivity : AppCompatActivity() {
     private var devices = mutableListOf<BluetoothDevice>()
     private var bluetoothGatt: BluetoothGatt? = null
     private var lastSentData: String? = null
+    private var isDataReceived = false
 
     companion object {
         private const val REQUEST_BLUETOOTH_PERMISSION = 101
@@ -218,6 +219,15 @@ class BluetoothMainActivity : AppCompatActivity() {
             gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?
         ) {
             super.onCharacteristicChanged(gatt, characteristic)
+
+            // 데이터가 이미 수신되었으면 무시
+            if (isDataReceived) {
+                return
+            }
+
+            // 데이터 수신 상태 플래그 설정
+            isDataReceived = true
+
             // 아두이노에서 보내온 데이터 수신
             // 데이터 읽기 포맷(명령어,자물쇠Uid,머신Id,배터리잔량,유저Id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
@@ -333,5 +343,3 @@ class BluetoothMainActivity : AppCompatActivity() {
         }
     }
 }
-
-
