@@ -394,10 +394,7 @@ const Report = () => {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
               {headerGroup.headers.map((column) => (
-                <StickyTh
-                  {...column.getHeaderProps()}
-                  key={column.id}
-                >
+                <StickyTh {...column.getHeaderProps()} key={column.id}>
                   {column.render('Header')}
                 </StickyTh>
               ))}
