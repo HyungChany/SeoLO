@@ -25,7 +25,7 @@ class CoreUnlockViewModel extends ChangeNotifier {
   }
 
   void setIsUnlocking() async {
-    _isUnlocking != _isUnlocking;
+    _isUnlocking = !_isUnlocking;
     notifyListeners();
   }
 

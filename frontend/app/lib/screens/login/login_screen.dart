@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onTap: () {
                 if (!viewModel.isLoading) {
                   viewModel.login().then((_) {
-                    if (viewModel.statusCode == 200) {
+                    if (viewModel.errorMessage == null) {
                       Navigator.pushReplacementNamed(context, '/main');
                     } else {
                       showDialog(

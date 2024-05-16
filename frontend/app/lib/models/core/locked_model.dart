@@ -14,12 +14,5 @@ class CoreLockedModel {
     'battery_info': battery,
     'machine_id': machineId
   };
-
-// factory CoreIssueModel.fromJson(Map<String, dynamic> json) {
-//   return CoreIssueModel(
-//     nextCode: json['next_code'],
-//     tokenValue: json['tokenValue'],
-//   );
-// }
 }
 

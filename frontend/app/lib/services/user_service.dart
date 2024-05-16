@@ -42,6 +42,10 @@ class UserService {
         String? userId = response.data['userId'].toString();
         String? companyCode = loginModel.companyCode.toString();
         if (token != null) {
+          await _storage.delete(key: 'token');
+          await _storage.delete(key: 'Company-Code');
+          await _storage.delete(key: 'user_id');
+          await _storage.delete(key: 'Core-Code');
           await _storage.write(key: 'token', value: token);
           await _storage.write(key: 'Company-Code', value: companyCode);
           await _storage.write(key: 'user_id', value: userId);

@@ -23,7 +23,7 @@ class CoreLockedViewModel extends ChangeNotifier {
   }
 
   void setIsLocking() async {
-    _isLocking != _isLocking;
+    _isLocking = !_isLocking;
     notifyListeners();
   }
 

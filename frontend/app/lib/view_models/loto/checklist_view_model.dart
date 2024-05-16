@@ -16,25 +16,24 @@ class ChecklistViewModel extends ChangeNotifier{
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-  void loadInitialData() async{
+  void loadInitialData() async {
     _checklist = [];
-    _isCheckedList = [];
-    _isLoading = true;
-    _errorMessage = null;
-    notifyListeners();
-
-    final result = await _lotoService.checkList();
-    if (!result['success']){
-      _isLoading = false;
-      _errorMessage = 'API 연결에 실패했습니다';
-    }else{
-      _isLoading = false;
+    if (_checklist.isEmpty) {
+      _isLoading = true;
       _errorMessage = null;
-      _checklist = result['userCheckList'];
-      for (int i = 0; i < result['userCheckList'].length; i++) {
-        _isCheckedList.add(false);
+      notifyListeners();
+
+      final result = await _lotoService.checkList();
+      if (!result['success']) {
+        _isLoading = false;
+        _errorMessage = 'API 연결에 실패했습니다';
+      } else {
+        _isLoading = false;
+        _errorMessage = null;
+        _checklist = result['userCheckList'];
+        _isCheckedList = List<bool>.filled(_checklist.length, false); // _isCheckedList 초기화
       }
+      notifyListeners();
     }
-    notifyListeners();
   }
 }
