@@ -1,5 +1,6 @@
 import 'package:app/main.dart';
 import 'package:app/view_models/user/my_info_view_model.dart';
+import 'package:app/widgets/dialog/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +18,33 @@ class _MyInfoState extends State<MyInfo> {
   void initState() {
     final viewModel = Provider.of<MyInfoViewModel>(context, listen: false);
     super.initState();
-    viewModel.myInfo();
+    viewModel.myInfo().then((_) {
+      if (viewModel.errorMessage == 'JT') {
+        showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (BuildContext context) {
+              return CommonDialog(
+                content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                buttonText: '확인',
+                buttonClick: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/login', (route) => false);
+                },
+              );
+            });
+      } else {
+        showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (BuildContext context) {
+              return CommonDialog(
+                content: viewModel.errorMessage!,
+                buttonText: '확인',
+              );
+            });
+      }
+    });
   }
 
   @override

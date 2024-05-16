@@ -9,7 +9,7 @@ class MainNewsBanner extends StatefulWidget {
   const MainNewsBanner({super.key});
 
   @override
-  _MainNewsBannerState createState() => _MainNewsBannerState();
+  State<MainNewsBanner> createState() => _MainNewsBannerState();
 }
 
 class _MainNewsBannerState extends State<MainNewsBanner> {

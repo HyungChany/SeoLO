@@ -82,40 +82,56 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
               failCount = 0;
             });
           } else {
-            setState(() {
-              pin = '';
-              failCount += 1;
-              content = failCount == 5
-                  ? ''
-                  : '${viewModel.errorMessage!} ($failCount/5)';
-            });
-            failCount == 3
-                ? showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return const CommonDialog(
-                        content: 'pin 번호를 5번 틀릴 시 계정이 잠깁니다.',
-                        buttonText: '확인',
-                      );
-                    })
-                : null;
-            failCount == 5
-                ? showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return CommonDialog(
-                        content: viewModel.errorMessage!,
-                        buttonText: '확인',
-                        buttonClick: () {
-                          _storage.deleteAll();
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/login', (route) => false);
-                        },
-                      );
-                    })
-                : null;
+            if (viewModel.errorMessage == 'JT') {
+              showDialog(
+                  context: context,
+                  barrierDismissible: true,
+                  builder: (BuildContext context) {
+                    return CommonDialog(
+                      content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                      buttonText: '확인',
+                      buttonClick: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/login', (route) => false);
+                      },
+                    );
+                  });
+            } else {
+              setState(() {
+                pin = '';
+                failCount += 1;
+                content = failCount == 5
+                    ? ''
+                    : '${viewModel.errorMessage!} ($failCount/5)';
+              });
+              failCount == 3
+                  ? showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return const CommonDialog(
+                          content: 'pin 번호를 5번 틀릴 시 계정이 잠깁니다.',
+                          buttonText: '확인',
+                        );
+                      })
+                  : null;
+              failCount == 5
+                  ? showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return CommonDialog(
+                          content: viewModel.errorMessage!,
+                          buttonText: '확인',
+                          buttonClick: () {
+                            _storage.deleteAll();
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/login', (route) => false);
+                          },
+                        );
+                      })
+                  : null;
+            }
           }
         });
       }

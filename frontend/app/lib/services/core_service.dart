@@ -39,8 +39,7 @@ class CoreService {
         await _storage.write(
             key: 'Core-Code', value: response.data['next_code']);
         await _storage.write(
-            key: 'locker_token',
-            value: response.data['token_value']);
+            key: 'locker_token', value: response.data['token_value']);
         await _storage.write(
             key: 'machine_id', value: coreIssueModel.machineId.toString());
         return {
@@ -50,12 +49,23 @@ class CoreService {
         return {'success': false};
       }
     } on Dio.DioException catch (e) {
-      debugPrint(e.message);
-      return {
-        'success': false,
-        'statusCode': e.response?.statusCode,
-        'message': e.response?.data['message'],
-      };
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.delete(key: 'token');
+        await _storage.delete(key: 'Company-Code');
+        await _storage.delete(key: 'user_id');
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        debugPrint(e.message);
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
     }
   }
 
@@ -72,12 +82,23 @@ class CoreService {
         return {'success': false};
       }
     } on Dio.DioException catch (e) {
-      debugPrint(e.message);
-      return {
-        'success': false,
-        'statusCode': e.response?.statusCode,
-        'message': e.response?.data['message'],
-      };
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.delete(key: 'token');
+        await _storage.delete(key: 'Company-Code');
+        await _storage.delete(key: 'user_id');
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        debugPrint(e.message);
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
     }
   }
 
@@ -100,12 +121,23 @@ class CoreService {
         return {'success': false};
       }
     } on Dio.DioException catch (e) {
-      debugPrint(e.message);
-      return {
-        'success': false,
-        'statusCode': e.response?.statusCode,
-        'message': e.response?.data['message'],
-      };
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.delete(key: 'token');
+        await _storage.delete(key: 'Company-Code');
+        await _storage.delete(key: 'user_id');
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        debugPrint(e.message);
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
     }
   }
 
@@ -118,7 +150,8 @@ class CoreService {
       debugPrint(coreLockedModel.toJson().toString());
       if (response.statusCode == 200) {
         // debugPrint(response.data);
-        await _storage.write(key: 'Core-Code', value: response.data['next_code']);
+        await _storage.write(
+            key: 'Core-Code', value: response.data['next_code']);
         return {
           'success': true,
         };
@@ -126,12 +159,23 @@ class CoreService {
         return {'success': false};
       }
     } on Dio.DioException catch (e) {
-      debugPrint(e.message);
-      return {
-        'success': false,
-        'statusCode': e.response?.statusCode,
-        'message': e.response?.data['message'],
-      };
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.delete(key: 'token');
+        await _storage.delete(key: 'Company-Code');
+        await _storage.delete(key: 'user_id');
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        debugPrint(e.message);
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
     }
   }
 }

@@ -25,22 +25,41 @@ class NewsService {
     _dio.interceptors.add(LoggingInterceptor());
   }
 
-
-  Future<List<NewsModel>> getNews() async {
-    // try {
-      final response = await _dio.get('$baseUrl/news');
-
-      // if (response.statusCODE == 200) {
-        List<dynamic> responseData = response.data;
-        List<NewsModel> newsList = responseData.map((data) => NewsModel.fromJson(data)).toList();
-        // debugPrint('$newsList');
-        return newsList;
-      // } else {
-        throw Exception('뉴스 로드 실패');
-      // }
-    // } on DioError catch (e) {
-    //   throw Exception('뉴스 로드 실패: ${e.response?.statusCODE}');
-    // }
+  Future<Map<String, dynamic>> getNews() async {
+    try {
+      Dio.Response response = await _dio.get(
+        '$baseUrl/news',
+      );
+      if (response.statusCode == 200) {
+        List<NewsModel> newsList = [];
+        for (var item in response.data) {
+          newsList.add(
+            NewsModel.fromJson(item),
+          );
+        }
+        return {'success': true, 'newsList': newsList};
+      } else {
+        return {'success': false};
+      }
+    } on Dio.DioException catch (e) {
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.delete(key: 'token');
+        await _storage.delete(key: 'Company-Code');
+        await _storage.delete(key: 'user_id');
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        debugPrint(e.message);
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
+    }
   }
 }
 

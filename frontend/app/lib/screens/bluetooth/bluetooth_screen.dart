@@ -122,9 +122,11 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
       // code가 write라면 init을 보냈는데 그 뒤에 꺼졌을 때
       if (coreCode == 'WRITE') {
         await _storage.write(key: 'Core-Code', value: 'INIT');
+        coreCode = 'INIT';
       }
       if (coreCode == 'WRITED') {
         await _storage.write(key: 'Core-Code', value: 'INIT');
+        coreCode = 'INIT';
       }
       for (var service in services) {
         if (service.uuid.toString().toUpperCase() ==
@@ -210,8 +212,35 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                           : issueVM.setLockerUid('');
                       issueVM.setBattery(batteryInfo);
                       issueVM.coreIssue().then((_) {
-                        // ISSUE API 성공하면 바로 LOCK
-                        writeToDevice(device);
+                        if (issueVM.errorMessage == null) {
+                          writeToDevice(device);
+                        } else {
+                          if (issueVM.errorMessage == 'JT') {
+                            showDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (BuildContext context) {
+                                  return CommonDialog(
+                                    content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                                    buttonText: '확인',
+                                    buttonClick: () {
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context, '/login', (route) => false);
+                                    },
+                                  );
+                                });
+                          } else {
+                            showDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (BuildContext context) {
+                                  return CommonDialog(
+                                    content: issueVM.errorMessage!,
+                                    buttonText: '확인',
+                                  );
+                                });
+                          }
+                        }
                       });
                     }
                     if (_receivedValues[0] == 'WRITE') {
@@ -230,8 +259,29 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                         unlockVM.setIsUnlocking();
                       });
                       unlockVM.coreUnlock().then((_) {
-                        Navigator.pushNamedAndRemoveUntil(context,
-                            '/resultUnlock', ModalRoute.withName('/main'));
+                        if (unlockVM.errorMessage == null) {
+                          Navigator.pushNamedAndRemoveUntil(context,
+                              '/resultUnlock', ModalRoute.withName('/main'));
+                        } else {
+                          if (unlockVM.errorMessage == 'JT') {
+                            showDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (BuildContext context) {
+                                  return CommonDialog(
+                                    content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                                    buttonText: '확인',
+                                    buttonClick: () {
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context, '/login', (route) => false);
+                                    },
+                                  );
+                                });
+                          } else {
+                            Navigator.pushNamedAndRemoveUntil(context,
+                                '/resultUnlock', ModalRoute.withName('/main'));
+                          }
+                        }
                       });
                     }
                     if (_receivedValues[0] == 'LOCKED') {

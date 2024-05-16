@@ -13,7 +13,7 @@ class FacilityViewModel extends ChangeNotifier{
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-  void loadInitialData() async{
+  Future<void> loadInitialData() async{
     _facilities = [];
     _isLoading = true;
     _errorMessage = null;

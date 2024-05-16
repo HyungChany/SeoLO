@@ -47,8 +47,35 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> {
 
   @override
   void initState() {
+    final viewModel = Provider.of<TaskTemplatesViewModel>(context, listen: false);
     super.initState();
-    Provider.of<TaskTemplatesViewModel>(context, listen: false).getTemplates();
+    viewModel.getTemplates().then((_) {
+      if (viewModel.errorMessage == 'JT') {
+        showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (BuildContext context) {
+              return CommonDialog(
+                content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                buttonText: '확인',
+                buttonClick: () {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/login', (route) => false);
+                },
+              );
+            });
+      } else {
+        showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (BuildContext context) {
+              return CommonDialog(
+                content: viewModel.errorMessage!,
+                buttonText: '확인',
+              );
+            });
+      }
+    });
     selectId = 0;
     selectName = '';
   }

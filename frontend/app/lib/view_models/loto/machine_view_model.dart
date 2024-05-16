@@ -18,7 +18,7 @@ class MachineViewModel extends ChangeNotifier{
     facilityId = value;
   }
 
-  void loadInitialData() async{
+  Future<void> loadInitialData() async{
     _machines = [];
     _isLoading = true;
     _errorMessage = null;
@@ -27,7 +27,7 @@ class MachineViewModel extends ChangeNotifier{
     final result = await _lotoService.getMachines(facilityId);
     if (!result['success']){
       _isLoading = false;
-      _errorMessage = 'API 연결에 실패했습니다';
+      _errorMessage = result['message'];
     }else{
       _isLoading = false;
       _errorMessage = null;

@@ -16,7 +16,7 @@ class ChecklistViewModel extends ChangeNotifier{
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-  void loadInitialData() async {
+  Future<void> loadInitialData() async {
     _checklist = [];
     if (_checklist.isEmpty) {
       _isLoading = true;
@@ -26,7 +26,7 @@ class ChecklistViewModel extends ChangeNotifier{
       final result = await _lotoService.checkList();
       if (!result['success']) {
         _isLoading = false;
-        _errorMessage = 'API 연결에 실패했습니다';
+        _errorMessage = result['message'];
       } else {
         _isLoading = false;
         _errorMessage = null;

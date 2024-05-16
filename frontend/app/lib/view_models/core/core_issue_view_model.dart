@@ -17,7 +17,7 @@ class CoreIssueViewModel extends ChangeNotifier {
   String? battery;
   String? lockerUid;
 
-  void fetchMyInfo() async {
+  Future<void> fetchMyInfo() async {
     await _myInfoViewModel.myInfo();
     myInfo = _myInfoViewModel.myInfoModel!;
 

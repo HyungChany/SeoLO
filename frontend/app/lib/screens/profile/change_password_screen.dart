@@ -10,7 +10,7 @@ class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});
 
   @override
-  _ChangePasswordState createState() => _ChangePasswordState();
+  State<ChangePassword> createState() => _ChangePasswordState();
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
@@ -79,14 +79,32 @@ class _ChangePasswordState extends State<ChangePassword> {
                               );
                             });
                       } else {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return CommonDialog(
-                                content: viewModel.errorMessage!,
-                                buttonText: '확인',
-                              );
-                            });
+
+                        if (viewModel.errorMessage == 'JT') {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (BuildContext context) {
+                                return CommonDialog(
+                                  content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                                  buttonText: '확인',
+                                  buttonClick: () {
+                                    Navigator.pushNamedAndRemoveUntil(
+                                        context, '/login', (route) => false);
+                                  },
+                                );
+                              });
+                        } else {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (BuildContext context) {
+                                return CommonDialog(
+                                  content: viewModel.errorMessage!,
+                                  buttonText: '확인',
+                                );
+                              });
+                        }
                       }
                     });
                   },

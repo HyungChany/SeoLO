@@ -53,8 +53,23 @@ class LotoService {
         return {'success': false};
       }
     } on Dio.DioException catch (e) {
-      debugPrint(e.message);
-      return {'success': false, 'statusCode': e.response?.statusCode};
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.delete(key: 'token');
+        await _storage.delete(key: 'Company-Code');
+        await _storage.delete(key: 'user_id');
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        debugPrint(e.message);
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
     }
   }
 
@@ -83,8 +98,23 @@ class LotoService {
         return {'success': false};
       }
     } on Dio.DioException catch (e) {
-      debugPrint(e.message);
-      return {'success': false, 'statusCode': e.response?.statusCode, 'message': e.message};
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.delete(key: 'token');
+        await _storage.delete(key: 'Company-Code');
+        await _storage.delete(key: 'user_id');
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        debugPrint(e.message);
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
     }
   }
   ///////////////////////// machine //////////////////////////////////
@@ -106,8 +136,23 @@ class LotoService {
         return {'success': false};
       }
     } on Dio.DioException catch (e) {
-      debugPrint(e.message);
-      return {'success': false, 'statusCode': e.response?.statusCode};
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.delete(key: 'token');
+        await _storage.delete(key: 'Company-Code');
+        await _storage.delete(key: 'user_id');
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        debugPrint(e.message);
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
     }
   }
 
@@ -129,8 +174,23 @@ class LotoService {
         return {'success': false};
       }
     } on Dio.DioException catch (e) {
-      debugPrint(e.message);
-      return {'success': false, 'statusCode': e.response?.statusCode};
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.delete(key: 'token');
+        await _storage.delete(key: 'Company-Code');
+        await _storage.delete(key: 'user_id');
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        debugPrint(e.message);
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
     }
   }
 }
