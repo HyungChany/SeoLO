@@ -15,13 +15,13 @@ interface NotificationEvent {
 const useSSE = () => {
   const setEvents = useSetRecoilState(notificationEventsState);
   const url = `${import.meta.env.VITE_REACT_APP_API_URL}/pub`;
-
   useEffect(() => {
+    // if (accessToken && companyCode) {
+    console.log(1);
     let isMounted = true;
-    const accessToken = sessionStorage.getItem('accessToken') || '';
-    const companyCode = sessionStorage.getItem('companyCode') || '';
-
     const connectSSE = () => {
+      const accessToken = sessionStorage.getItem('accessToken') || '';
+      const companyCode = sessionStorage.getItem('companyCode') || '';
       const eventSource = new EventSourcePolyfill(url, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -66,6 +66,7 @@ const useSSE = () => {
       isMounted = false;
       disconnectSSE();
     };
+    // }
   }, [url, setEvents]);
 
   return null;
