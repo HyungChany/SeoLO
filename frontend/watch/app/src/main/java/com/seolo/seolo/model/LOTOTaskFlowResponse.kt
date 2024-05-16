@@ -57,3 +57,22 @@ data class LotoInfo(
     val task_precaution: String,
     val end_time: String
 ) : Parcelable
+
+@Parcelize
+data class LotoUnlockInfo(
+    val locker_uid: String,
+    val battery_info: String,
+    val machine_id: String,
+    val token_value: String,
+) : Parcelable
+
+
+@Parcelize
+data class UnlockResponse(
+    val next_code: String,
+    val token_value: String,
+    val task_history: String?,
+    val check_more_response: String?,
+    val http_status: String,
+    val message: String?
+) : Parcelable

@@ -73,4 +73,10 @@ object RetrofitClient {
             .create(IssueService::class.java)
     }
 
+    // unlockService 위한 Retrofit 인스턴스 생성
+    val unlockService: UnlockService by lazy {
+        Retrofit.Builder().baseUrl(BASE_URL).client(client)
+            .addConverterFactory(GsonConverterFactory.create()).build()
+            .create(UnlockService::class.java)
+    }
 }

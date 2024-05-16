@@ -281,6 +281,10 @@ class BluetoothMainActivity : AppCompatActivity() {
                                 "자물쇠 잠금을 해제 합니다. \n 배터리 잔량: $batteryInfo",
                                 Toast.LENGTH_SHORT
                             ).show()
+
+                            // 백으로 언락됐다는 API 연결 보내고 LotoManager 초기화
+
+                            // LotoManager.clearLoto(this)
                         }
                         LotoManager.clearLoto(this@BluetoothMainActivity)
                         Handler(Looper.getMainLooper()).postDelayed({
