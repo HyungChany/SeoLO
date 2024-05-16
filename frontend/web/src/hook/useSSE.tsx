@@ -55,7 +55,7 @@ const useSSE = () => {
         console.error('EventSource failed:', error);
         eventSource.close();
         if (isMounted) {
-          setTimeout(connectSSE, 15000); // 5초 후 재연결 시도
+          setTimeout(connectSSE, 5000); // 5초 후 재연결 시도
         }
       };
 
