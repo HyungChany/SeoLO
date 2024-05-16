@@ -126,7 +126,7 @@ const StickyTh = styled.th`
   position: sticky;
   top: -2rem;
   background-color: white;
-  z-index: 10;
+  z-index: 1;
   font-weight: bold;
   padding: 0.5rem 0;
   border-bottom: 2px solid black;
