@@ -7,6 +7,7 @@ import 'package:app/view_models/core/core_locked_view_model.dart';
 import 'package:app/view_models/core/core_unlock_view_model.dart';
 import 'package:app/widgets/bluetooth/scan_result_tile.dart';
 import 'package:app/widgets/bluetooth/system_device_tile.dart';
+import 'package:app/widgets/button/common_text_button.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -24,6 +25,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   final _storage = const FlutterSecureStorage();
   List<BluetoothDevice> _systemDevices = [];
   List<ScanResult> _scanResults = [];
+  List<ScanResult> _lastScanResults = [];
   bool _isScanning = false;
   late StreamSubscription<List<ScanResult>> _scanResultsSubscription;
   late StreamSubscription<bool> _isScanningSubscription;
@@ -58,6 +60,8 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
         setState(() {});
       }
     });
+
+    _lastScanResults = FlutterBluePlus.lastScanResults;
   }
 
   @override
@@ -251,14 +255,9 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
 
   Widget buildScanButton(BuildContext context) {
     if (FlutterBluePlus.isScanningNow) {
-      return FloatingActionButton(
-        onPressed: onStopPressed,
-        backgroundColor: Colors.red,
-        child: const Icon(Icons.stop),
-      );
+      return CommonTextButton(text: '검색 중', onTap: onStopPressed);
     } else {
-      return FloatingActionButton(
-          onPressed: onScanPressed, child: const Text("SCAN"));
+      return CommonTextButton(text: '연결 가능한 자물쇠 찾기', onTap: onScanPressed);
     }
   }
 
@@ -267,7 +266,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
         .map(
           (d) => SystemDeviceTile(
             device: d,
-            onOpen: () {},
+            onOpen: () {connectToDevice(d);},
             onConnect: () => connectToDevice(d),
           ),
         )
@@ -278,11 +277,21 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     return _scanResults
         .map(
           (r) => ScanResultTile(
-            result: r,
-            onTap: () => connectToDevice(r.device),
-            text: coreCode ?? ''
-          ),
+              result: r,
+              onTap: () {connectToDevice(r.device);},
+              text: coreCode ?? ''),
         )
+        .toList();
+  }
+
+  List<Widget> _buildLastScanResultTiles(BuildContext context) {
+    return _lastScanResults
+        .map(
+          (r) => ScanResultTile(
+          result: r,
+          onTap: () => connectToDevice(r.device),
+          text: coreCode ?? ''),
+    )
         .toList();
   }
 
@@ -292,17 +301,28 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
       appBar: const Header(title: '자물쇠 선택', back: true),
       body: RefreshIndicator(
         onRefresh: onRefresh,
-        child: ListView(
-          children: <Widget>[
-            Text('receive: $_receivedValues'),
-            Text('system'),
-            ..._buildSystemDeviceTiles(context),
-            Text('scan'),
-            ..._buildScanResultTiles(context),
+        child: Stack(
+          children: [
+            ListView(
+              children: <Widget>[
+                Text('receive: $_receivedValues'),
+                Text('나의 자물쇠'),
+                ..._buildSystemDeviceTiles(context),
+                Text('최근 연결한 자물쇠'),
+                ..._buildLastScanResultTiles(context),
+                Text('새로운 자물쇠'),
+                ..._buildScanResultTiles(context),
+              ],
+            ),
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                    padding:
+                        const EdgeInsets.only(bottom: 20, left: 50, right: 50),
+                    child: buildScanButton(context)))
           ],
         ),
       ),
-      floatingActionButton: buildScanButton(context),
     );
   }
 }
