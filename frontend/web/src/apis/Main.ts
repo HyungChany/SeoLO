@@ -60,10 +60,12 @@ export const blueprintRegitration = async (data: BlueprintType) => {
       if (errorCode && errorCode.startsWith('JT')) {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('companyCode');
+      } else if (errorCode && errorCode.startsWith('SF')) {
+        alert(error.response?.data.message);
+      } else {
+        // Handle other errors
+        console.log('Unexpected Error:', error);
       }
-    } else {
-      // Handle other errors
-      console.log('Unexpected Error:', error);
     }
   }
 };
