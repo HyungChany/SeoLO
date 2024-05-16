@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import { api } from './Base.ts';
 interface BlueprintType {
   data: FormData;
@@ -22,8 +23,17 @@ export const MainInformation = async (facilityId: number) => {
     });
     return response.data;
   } catch (error) {
-    console.error('메인정보 불러오기 실패: ', error);
-    throw error;
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('공장:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
   }
 };
 
@@ -42,11 +52,19 @@ export const blueprintRegitration = async (data: BlueprintType) => {
         },
       },
     );
-    console.log(1);
     return response.data;
   } catch (error) {
-    console.error('도면 등록 실패: ', error);
-    throw error;
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('공장:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
   }
 };
 
@@ -63,8 +81,17 @@ export const blueprintList = async (facilityId: number) => {
     });
     return response.data;
   } catch (error) {
-    console.error('도면 불러오기 실패: ', error);
-    throw error;
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('공장:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
   }
 };
 
@@ -81,7 +108,17 @@ export const registrationMarker = async (data: MarkerType) => {
     });
     return response.data;
   } catch (error) {
-    console.log(error);
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('공장:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
   }
 };
 
@@ -97,7 +134,17 @@ export const simpleMachineCheck = async (facilityId: number) => {
       },
     });
     return response.data.machine_id_name_list;
-  } catch (e) {
-    console.log(e);
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      const errorCode = error.response?.data.error_code;
+      console.log('공장:', error.response);
+      if (errorCode && errorCode.startsWith('JT')) {
+        sessionStorage.removeItem('accessToken');
+        sessionStorage.removeItem('companyCode');
+      }
+    } else {
+      // Handle other errors
+      console.log('Unexpected Error:', error);
+    }
   }
 };

@@ -265,8 +265,10 @@ const MainPage = () => {
   const handleLogout = () => {
     const fetchLogout = async () => {
       try {
-        await Logout();
-        navigate('/login');
+        const data = await Logout();
+        if (data?.status === 200) {
+          navigate('/login');
+        }
       } catch (e) {
         console.log(e);
       }
