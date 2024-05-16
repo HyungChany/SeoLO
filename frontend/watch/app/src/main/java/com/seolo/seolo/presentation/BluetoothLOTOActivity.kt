@@ -255,10 +255,21 @@ class BluetoothLOTOActivity : AppCompatActivity() {
 
                     if (statusCode == "WRITED") {
                         // WRITE 상태인 경우 API 호출
-                        issueCoreLogic()
-                        lastSentData = receivedData
-
-                    } else if (statusCode != "WRITED") {
+                        issueCoreLogic {
+                            Handler(Looper.getMainLooper()).post {
+                                Toast.makeText(
+                                    this@BluetoothLOTOActivity, "$statusCode, 잠금완료", Toast.LENGTH_SHORT
+                                ).show()
+                                Handler(Looper.getMainLooper()).postDelayed({
+                                    val intent = Intent(
+                                        this@BluetoothLOTOActivity, MainActivity::class.java
+                                    )
+                                    startActivity(intent)
+                                    finish()
+                                }, 1000)
+                            }
+                        }
+                    } else {
                         Handler(Looper.getMainLooper()).post {
                             Toast.makeText(
                                 this@BluetoothLOTOActivity,
@@ -266,21 +277,6 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                                 Toast.LENGTH_LONG
                             ).show()
                         }
-                    } else {
-                        // BE API 연결 필요
-
-                        // 잠금 완료 시 메시지를 띄운 뒤 MainActivity로 이동
-//                        Handler(Looper.getMainLooper()).post {
-//                            Toast.makeText(
-//                                this@BluetoothLOTOActivity, "$statusCode, 잠금완료", Toast.LENGTH_SHORT
-//                            ).show()
-//                            Handler(Looper.getMainLooper()).postDelayed({
-//                                val intent =
-//                                    Intent(this@BluetoothLOTOActivity, MainActivity::class.java)
-//                                startActivity(intent)
-//                                finish()
-//                            }, 1000)
-//                        }
                     }
                 }
             }
@@ -288,16 +284,16 @@ class BluetoothLOTOActivity : AppCompatActivity() {
     }
 
     // API 요청 함수
-    private fun issueCoreLogic() {
+    private fun issueCoreLogic(onCompleted: () -> Unit) {
         val authorization = "Bearer " + TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)
         val deviceType = "watch"
 
         val lotoInfo = LotoManager.getLotoUid(this@BluetoothLOTOActivity)?.let {
-            LotoManager.getLotoBatteryInfo(this@BluetoothLOTOActivity)?.let { it1 ->
+            LotoManager.getLotoBatteryInfo(this@BluetoothLOTOActivity)?.let { batteryInfo ->
                 LotoInfo(
                     locker_uid = it,
-                    battery_info = it1,
+                    battery_info = batteryInfo,
                     machine_id = SessionManager.selectedMachineId ?: "",
                     task_template_id = SessionManager.selectedTaskTemplateId ?: "",
                     task_precaution = SessionManager.selectedTaskPrecaution ?: "",
@@ -326,10 +322,17 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val issueResponse = response.body()
                     Log.d("API_CALL", "Response Success: ${issueResponse?.next_code}")
+
+                    // 응답에서 token_value 저장
                     issueResponse?.token_value?.let {
                         TokenManager.setTokenValue(this@BluetoothLOTOActivity, it)
                     }
+
+                    // next_code를 사용하여 Bluetooth 데이터 전송
                     issueResponse?.next_code?.let { sendBluetoothData(it) }
+
+                    // onCompleted 콜백 호출
+                    onCompleted()
                 } else {
                     Log.d("API_CALL", "Response Failed: ${response.message()}")
                     Toast.makeText(
