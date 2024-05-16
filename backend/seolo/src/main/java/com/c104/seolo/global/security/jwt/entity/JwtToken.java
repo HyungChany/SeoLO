@@ -6,18 +6,32 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.index.Indexed;
 
+import java.util.UUID;
+
 @Getter
-@RedisHash(value = "jwtToken", timeToLive = 360_000_000)
+@RedisHash(value = "jwtToken", timeToLive = 900) // 15분
 public class JwtToken {
     @Id
-    private Long id;
+    private String id;
+
+    @Indexed
+    private Long userId;
+
+    @Indexed
+    private String deviceType; // 기기 식별자 추가
+
+    @Indexed
+    private String accessToken;
 
     @Indexed
     private String refreshToken;
 
     @Builder
-    public JwtToken(Long id, String refreshToken) {
-        this.id = id;
+    public JwtToken(Long userId, String deviceType, String accessToken, String refreshToken) {
+        this.id = UUID.randomUUID().toString();
+        this.userId = userId;
+        this.deviceType = deviceType;
+        this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
 }

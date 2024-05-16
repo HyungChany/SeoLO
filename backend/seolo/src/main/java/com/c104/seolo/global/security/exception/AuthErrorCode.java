@@ -14,8 +14,7 @@ public enum AuthErrorCode {
     NOT_SAME_AS_CHECKPWD("AH05", "비밀번호와 확인 비밀번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
     INVALID_PIN("AH06", "PIN번호가 일치하지 않습니다.", HttpStatus.BAD_REQUEST),
     TOO_MANY_TRY_WRONG_LOGIN("AH07", "너무 많은 로그인 실패로 계정이 잠겼습니다. 관리자에게 문의하세요", HttpStatus.BAD_REQUEST),
-    INVALID_PASSWORD_FOR_CHECK("AH08", "비밀번호가 다릅니다.", HttpStatus.BAD_REQUEST)
-    ;
+    INVALID_PASSWORD_FOR_CHECK("AH08", "비밀번호가 다릅니다.", HttpStatus.BAD_REQUEST);
 
     private final String errorCode;
     private final String message;

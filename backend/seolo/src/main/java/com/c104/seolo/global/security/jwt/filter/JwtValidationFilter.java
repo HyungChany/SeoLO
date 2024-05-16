@@ -1,9 +1,12 @@
 package com.c104.seolo.global.security.jwt.filter;
 
 
+import com.c104.seolo.global.exception.AuthException;
+import com.c104.seolo.global.exception.SeoloErrorResponse;
 import com.c104.seolo.global.security.jwt.JwtUtils;
 import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
 import com.c104.seolo.global.security.jwt.entity.JWTAuthenticationToken;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import jakarta.servlet.FilterChain;
@@ -17,7 +20,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -31,6 +33,7 @@ public class JwtValidationFilter extends OncePerRequestFilter {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String BEARER_PREFIX = "Bearer ";
+    public static final String DEVICE_TYPE_HEADER = "Device-Type"; // 기기종류 구분 헤더
 
     @Autowired
     public JwtValidationFilter(JwtUtils jwtUtils) {
@@ -39,21 +42,44 @@ public class JwtValidationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String[] tokenFromClient = StringUtils.split(request.getHeader(AUTHORIZATION_HEADER), BEARER_PREFIX);
-        //authorizationHeader 가 null 이 아니고 authorizationHeader에 앞에 BEARER_PREFIX 가 있을 경우만 accessToken 값 있음, 아니면 null
-        String accessToken = (tokenFromClient != null && tokenFromClient.length == 2 && tokenFromClient[0].isEmpty()) ? tokenFromClient[1] : null;
+        String authorizationHeader = request.getHeader(AUTHORIZATION_HEADER);
+        String deviceType = request.getHeader(DEVICE_TYPE_HEADER);
+        String accessToken = null;
 
-        if (accessToken == null) {
-            doFilter(request, response, filterChain);
+        if (authorizationHeader != null && authorizationHeader.startsWith(BEARER_PREFIX)) {
+            accessToken = authorizationHeader.substring(BEARER_PREFIX.length());
+        }
+
+        log.info("Received accessToken: {}", accessToken);
+        log.info("Received deviceType: {}", deviceType);
+
+        if (accessToken == null || deviceType == null) {
+            log.warn("Access token or device type is null");
+            filterChain.doFilter(request, response);
             return;
         }
-        //엑세스 토큰 검증
-         Authentication authentication = getAuthentication(jwtUtils.validateAccessToken(accessToken));
 
-        // DB 접근 자주하는거 막기위해서 jwt토큰에서 파싱할 수 있는 정보만 context에 저장
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        filterChain.doFilter(request, response);
+        //엑세스 토큰 검증
+        try {
+            Authentication authentication = getAuthentication(jwtUtils.validateAccessToken(accessToken, deviceType));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            filterChain.doFilter(request, response);
+        } catch (AuthException e) {
+            log.error("Token validation failed", e);
+            SecurityContextHolder.clearContext();
+            response.setStatus(e.getHttpStatus().value());
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write(new ObjectMapper().writeValueAsString(
+                    SeoloErrorResponse.builder()
+                            .httpStatus(e.getHttpStatus())
+                            .errorCode(e.getErrorCode())
+                            .message(e.getMessage())
+                            .build()));
+            return;
+        }
+
     }
+
 
     private Authentication getAuthentication(Jws<Claims> claims) {
         String username = claims.getBody().getSubject();
