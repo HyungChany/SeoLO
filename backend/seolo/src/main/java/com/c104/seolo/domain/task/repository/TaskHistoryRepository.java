@@ -30,8 +30,12 @@ public interface TaskHistoryRepository extends JpaRepository<TaskHistory, Long> 
     @Query("SELECT t FROM TaskHistory t WHERE t.machine.id = :machineId AND t.user.id = :userId AND t.taskCode is NOT NULL")
     Optional<TaskHistory> getCurrentTaskHistoryByMachineIdAndUserId(Long machineId, Long userId);
 
-    @Query("SELECT t FROM TaskHistory t WHERE (t.machine.id = :machineId OR t.user.id = :userId) AND t.taskCode is NOT NULL")
-    Optional<TaskHistory> findByMachineIdOrUserIdAndTaskCode(Long machineId, Long userId);
+//    @Query("SELECT t FROM TaskHistory t WHERE (t.machine.id = :machineId OR t.user.id = :userId) AND t.taskCode is NOT NULL")
+//    Optional<TaskHistory> findByMachineIdOrUserIdAndTaskCode(Long machineId, Long userId);
+
+    @Query("SELECT t FROM TaskHistory t WHERE (t.machine.id = :machineId OR t.user.id = :userId) AND t.taskCode IS NOT NULL")
+    List<TaskHistory> findByMachineIdOrUserIdAndTaskCode(@Param("machineId") Long machineId, @Param("userId") Long userId);
+
 
     @Query("SELECT new com.c104.seolo.domain.task.dto.info.TaskHistoryInfo( " +
             "t.id, t.taskTemplate.taskType, t.taskStartDateTime, t.taskEndDateTime, t.taskEndEstimatedDateTime, " +
