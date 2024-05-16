@@ -17,7 +17,7 @@ public class MarkerController {
     @ResponseStatus(HttpStatus.CREATED)
     @Secured("ROLE_MANAGER")
     @PostMapping()
-    public void receiveMarkerData(@RequestBody AddMarkerRequest markerRequests) {
+    public void addMarkerData(@RequestBody AddMarkerRequest markerRequests) {
         markerService.enrollMarker(markerRequests);
     }
 
