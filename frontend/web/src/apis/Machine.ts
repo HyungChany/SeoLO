@@ -16,6 +16,7 @@ export const MachineRegistration = async (machineData: MachinesType) => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     alert('장비등록에 성공하였습니다.');
@@ -33,6 +34,7 @@ export const MachineList = async (facilityId: number) => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     console.log(response.data.machines);
@@ -50,6 +52,7 @@ export const MachinePhoto = async (machine: FormData) => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     return response.data;

@@ -13,6 +13,7 @@ export const getBasicCheckList = async () => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     return response.data.basic_checklists;
@@ -29,6 +30,7 @@ export const getCheckList = async () => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     return response.data.checklists;
@@ -47,6 +49,7 @@ export const postCheckList = async (listData: ListType) => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     return response.data;
@@ -79,6 +82,7 @@ export const deleteCheckList = async (checklistId: number) => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     return response;

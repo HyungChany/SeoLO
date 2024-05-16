@@ -26,6 +26,7 @@ const useSSE = () => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Company-Code': companyCode,
+          'Device-Type': 'web',
         },
         heartbeatTimeout: 20 * 60 * 1000, // 20분
       });

@@ -13,6 +13,7 @@ export const totalReport = async () => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     return response.data.reports;
@@ -29,6 +30,7 @@ export const detailReport = async (id: number) => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     return response.data;
@@ -50,6 +52,7 @@ export const modifyReport = async (data: PatchData) => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Company-Code': companyCode,
+        'Device-Type': 'web',
       },
     });
     return response.data;
@@ -68,6 +71,7 @@ export const RangeReport = async (start: string, end: string) => {
         headers: {
           Authorization: `Bearer ${accessToken}`,
           'Company-Code': companyCode,
+          'Device-Type': 'web',
         },
       },
     );
