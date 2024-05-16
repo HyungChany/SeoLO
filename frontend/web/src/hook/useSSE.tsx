@@ -15,16 +15,13 @@ interface NotificationEvent {
 const useSSE = () => {
   const setEvents = useSetRecoilState(notificationEventsState);
   const url = `${import.meta.env.VITE_REACT_APP_API_URL}/pub`;
-
   useEffect(() => {
+    // if (accessToken && companyCode) {
+    console.log(1);
     let isMounted = true;
-    const accessToken = sessionStorage.getItem('accessToken') || '';
-    const companyCode = sessionStorage.getItem('companyCode') || '';
-
-    console.log('Access Token:', accessToken);  // 로그 추가
-    console.log('Company Code:', companyCode);  // 로그 추가
-
     const connectSSE = () => {
+      const accessToken = sessionStorage.getItem('accessToken') || '';
+      const companyCode = sessionStorage.getItem('companyCode') || '';
       const eventSource = new EventSourcePolyfill(url, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -32,9 +29,8 @@ const useSSE = () => {
           'Device-Type': 'web',
         },
         heartbeatTimeout: 20 * 60 * 1000, // 20분
-    
       });
-      
+
       eventSource.onmessage = (event) => {
         if (event.data === 'heartbeat') {
           console.log('Heartbeat received');
@@ -70,6 +66,7 @@ const useSSE = () => {
       isMounted = false;
       disconnectSSE();
     };
+    // }
   }, [url, setEvents]);
 
   return null;
