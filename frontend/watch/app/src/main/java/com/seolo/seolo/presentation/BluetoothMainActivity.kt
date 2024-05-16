@@ -25,6 +25,12 @@ import com.seolo.seolo.adapters.BluetoothAdapter
 import com.seolo.seolo.adapters.BluetoothDeviceAdapter
 import com.seolo.seolo.helper.LotoManager
 import com.seolo.seolo.helper.TokenManager
+import com.seolo.seolo.model.LotoUnlockInfo
+import com.seolo.seolo.model.UnlockResponse
+import com.seolo.seolo.services.RetrofitClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.nio.charset.StandardCharsets
 import java.util.UUID
 
@@ -171,7 +177,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                     val sendData = if (lotoUid == "") {
                         "$companyCode,$token,$machineId,$userId,$lotoUid,INIT"
                     } else {
-                        "$companyCode,$token,$machineId,$userId,$lotoUid,LOCK"
+                        "$companyCode,$token,$machineId,$userId,$lotoUid,LOCKED"
                     }
                     lastSentData = sendData
                     char?.setValue(sendData.toByteArray(StandardCharsets.UTF_8))
@@ -270,7 +276,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                         Handler(Looper.getMainLooper()).post {
                             Toast.makeText(
                                 this@BluetoothMainActivity,
-                                "이미 열려있는 자물쇠입니다. \n 배터리 잔량: $batteryInfo",
+                                "2개 이상의 자물쇠를 잠굴 수 없습니다! \n 배터리 잔량: $batteryInfo",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -281,8 +287,8 @@ class BluetoothMainActivity : AppCompatActivity() {
                                 "자물쇠 잠금을 해제 합니다. \n 배터리 잔량: $batteryInfo",
                                 Toast.LENGTH_SHORT
                             ).show()
-
                             // 백으로 언락됐다는 API 연결 보내고 LotoManager 초기화
+                            unlockCoreLogic()
 
                             // LotoManager.clearLoto(this)
                         }
@@ -298,6 +304,55 @@ class BluetoothMainActivity : AppCompatActivity() {
             }
         }
     }
+
+    // API 요청 함수
+    private fun unlockCoreLogic() {
+        // API 요청
+        val authorization = "Bearer " + TokenManager.getAccessToken(this)
+        val companyCode = TokenManager.getCompanyCode(this)
+        val deviceType = "watch"
+
+        val lotoUnlockInfo = LotoManager.getLotoUid(this@BluetoothMainActivity)?.let { uid ->
+            LotoManager.getLotoBatteryInfo(this@BluetoothMainActivity)?.let { batteryInfo ->
+                LotoManager.getLotoMachineId(this@BluetoothMainActivity)?.let { machineId ->
+                    TokenManager.getTokenValue(this@BluetoothMainActivity)?.let { tokenValue ->
+                        LotoUnlockInfo(
+                            uid, batteryInfo, machineId, tokenValue
+                        )
+                    }
+                }
+            }
+        }
+        val call = lotoUnlockInfo?.let {
+            RetrofitClient.unlockService.sendUnlockInfo(
+                authorization = authorization,
+                companyCode = companyCode ?: "",
+                deviceType = deviceType,
+                lotoUnlockInfo = it
+            )
+        }
+
+
+        call?.enqueue(object : Callback<UnlockResponse> {
+            override fun onResponse(
+                call: Call<UnlockResponse>, response: Response<UnlockResponse>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d("API 요청 성공_Main", "API 요청 성공")
+                } else {
+                    Log.d("API 요청 실패_Main", "API 요청")
+                }
+            }
+
+            override fun onFailure(call: Call<UnlockResponse>, t: Throwable) {
+                Log.d("API_CALL", "Error: ${t.message}")
+                Toast.makeText(
+                    this@BluetoothMainActivity, "Error: ${t.message}", Toast.LENGTH_SHORT
+                ).show()
+            }
+        })
+    }
+
 
     // Bluetooth 권한 확인 및 Bluetooth 활성화 함수
     @RequiresApi(Build.VERSION_CODES.S)
