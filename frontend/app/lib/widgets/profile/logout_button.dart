@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LogoutButton extends StatelessWidget {
+  const LogoutButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<LogoutViewModel>(context);
@@ -48,9 +50,9 @@ class LogoutButton extends StatelessWidget {
         height: MediaQuery.of(context).size.height * 0.045,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
-            color: Color.fromRGBO(217, 217, 217, 1),
-            boxShadow: [shadow]),
-        child: Row(
+            color: const Color.fromRGBO(217, 217, 217, 1),
+            boxShadow: const [shadow]),
+        child: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.logout),

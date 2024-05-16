@@ -1,5 +1,6 @@
 import 'package:app/main.dart';
 import 'package:app/view_models/main/news_view_model.dart';
+import 'package:app/widgets/dialog/dialog.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,42 @@ class MainNewsBanner extends StatefulWidget {
 
 class _MainNewsBannerState extends State<MainNewsBanner> {
   final CarouselController _controller = CarouselController();
+
+  @override
+  void initState() {
+    final viewModel = Provider.of<NewsViewModel>(context, listen: false);
+    super.initState();
+    viewModel.loadInitialData().then((_) {
+      if (viewModel.errorMessage == null) {
+      } else {
+        if (viewModel.errorMessage == 'JT') {
+          showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (BuildContext context) {
+                return CommonDialog(
+                  content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                  buttonText: '확인',
+                  buttonClick: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/login', (route) => false);
+                  },
+                );
+              });
+        } else {
+          showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (BuildContext context) {
+                return CommonDialog(
+                  content: viewModel.errorMessage!,
+                  buttonText: '확인',
+                );
+              });
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +79,6 @@ class _MainNewsBannerState extends State<MainNewsBanner> {
                         ? Image.asset('assets/images/loading_icon.png')
                         : InkWell(
                             onTap: () async {
-                              // debugPrint('${viewModel.news[index].link}클릭');
                               final url = Uri.parse(
                                 viewModel.news[index].link,
                               );

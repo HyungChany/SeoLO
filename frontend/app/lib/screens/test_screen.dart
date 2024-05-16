@@ -1,10 +1,7 @@
-
 import 'package:app/widgets/button/common_text_button.dart';
-import 'package:app/widgets/inputbox/common_smallinputbox.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/navigator/common_navigation_bar.dart';
 
-import 'package:app/widgets/checklist/check_list.dart';
 class TestScreen extends StatefulWidget {
   const TestScreen({super.key});
 

@@ -125,7 +125,6 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
                         if (viewModel.errorMessage == null) {
                           Navigator.pushNamedAndRemoveUntil(context, '/bluetooth', (route) => false);
                         } else {
-
                           if (viewModel.errorMessage == 'JT') {
                             showDialog(
                                 context: context,

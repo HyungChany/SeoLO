@@ -5,7 +5,7 @@ class MyActivity extends StatefulWidget {
   const MyActivity({super.key});
 
   @override
-  _MyActivityState createState() => _MyActivityState();
+  State<MyActivity> createState() => _MyActivityState();
 }
 
 class _MyActivityState extends State<MyActivity> {

@@ -21,6 +21,8 @@ class _CheckScreenState extends State<CheckScreen> {
     final viewModel = Provider.of<ChecklistViewModel>(context, listen: false);
     super.initState();
     viewModel.loadInitialData().then((_) {
+      if (viewModel.errorMessage == null) {
+      } else {
         if (viewModel.errorMessage == 'JT') {
           showDialog(
               context: context,
@@ -46,6 +48,7 @@ class _CheckScreenState extends State<CheckScreen> {
                 );
               });
         }
+      }
     });
   }
 

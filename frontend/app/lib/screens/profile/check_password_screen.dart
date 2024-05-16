@@ -57,7 +57,6 @@ class _CheckPasswordState extends State<CheckPassword> {
                         if (viewModel.errorMessage == null) {
                           Navigator.pushReplacementNamed(context, '/changePassword');
                         } else {
-
                           if (viewModel.errorMessage == 'JT') {
                             showDialog(
                                 context: context,

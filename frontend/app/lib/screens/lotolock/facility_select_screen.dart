@@ -20,7 +20,9 @@ class _FacilitySelectScreenState extends State<FacilitySelectScreen> {
   void initState() {
     final viewModel = Provider.of<FacilityViewModel>(context, listen: false);
     super.initState();
-    viewModel.loadInitialData().then((_){
+    viewModel.loadInitialData().then((_) {
+      if (viewModel.errorMessage == null) {
+      } else {
         if (viewModel.errorMessage == 'JT') {
           showDialog(
               context: context,
@@ -46,6 +48,7 @@ class _FacilitySelectScreenState extends State<FacilitySelectScreen> {
                 );
               });
         }
+      }
     });
     Provider.of<CoreIssueViewModel>(context, listen: false).fetchMyInfo();
   }

@@ -18,30 +18,33 @@ class _MainWelcomeBannerState extends State<MainWelcomeBanner> {
     final viewModel = Provider.of<MyInfoViewModel>(context, listen: false);
     super.initState();
     viewModel.myInfo().then((_) {
-      if (viewModel.errorMessage == 'JT') {
-        showDialog(
-            context: context,
-            barrierDismissible: true,
-            builder: (BuildContext context) {
-              return CommonDialog(
-                content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
-                buttonText: '확인',
-                buttonClick: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, '/login', (route) => false);
-                },
-              );
-            });
+      if (viewModel.errorMessage == null) {
       } else {
-        showDialog(
-            context: context,
-            barrierDismissible: true,
-            builder: (BuildContext context) {
-              return CommonDialog(
-                content: viewModel.errorMessage!,
-                buttonText: '확인',
-              );
-            });
+        if (viewModel.errorMessage == 'JT') {
+          showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (BuildContext context) {
+                return CommonDialog(
+                  content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                  buttonText: '확인',
+                  buttonClick: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/login', (route) => false);
+                  },
+                );
+              });
+        } else {
+          showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (BuildContext context) {
+                return CommonDialog(
+                  content: viewModel.errorMessage!,
+                  buttonText: '확인',
+                );
+              });
+        }
       }
     });
   }
