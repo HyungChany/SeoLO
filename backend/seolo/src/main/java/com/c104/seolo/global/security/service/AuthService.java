@@ -9,7 +9,7 @@ import com.c104.seolo.global.security.dto.response.PINLoginResponse;
 import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
 
 public interface AuthService {
-    JwtLoginSuccessResponse userLogin(UserLoginRequest userLoginRequest);
+    JwtLoginSuccessResponse userLogin(UserLoginRequest userLoginRequest, String deviceType);
     void userLogout(CCodePrincipal cCodePrincipal);
     PINLoginResponse pinLogin(CCodePrincipal cCodePrincipal, PINLoginRequest pinLoginRequest);
     void resetPin(CCodePrincipal cCodePrincipal, PINResetRequest pinResetRequest);
