@@ -353,18 +353,25 @@ class BluetoothLOTOActivity : AppCompatActivity() {
     private fun sendBluetoothData(nextCode: String) {
         selectedDevice?.let { device ->
             bluetoothGatt?.let { gatt ->
-                val service = gatt.getService(SERVICE_UUID)
-                val char = service?.getCharacteristic(CHAR_UUID)
-                if (char != null) {
-                    val companyCode = TokenManager.getCompanyCode(this)
-                    val token = TokenManager.getTokenValue(this)
-                    val machineId = SessionManager.selectedMachineId
-                    val userId = TokenManager.getUserId(this)
-                    val lotoUid = LotoManager.getLotoUid(this)
-                    val sendData = "$companyCode,$token,$machineId,$userId,$lotoUid,$nextCode"
-                    lastSentData = sendData
-                    char.setValue(sendData.toByteArray(StandardCharsets.UTF_8))
-                    gatt.writeCharacteristic(char)
+                if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
+                    val service = gatt.getService(SERVICE_UUID)
+                    val char = service?.getCharacteristic(CHAR_UUID)
+                    if (char != null) {
+                        val companyCode = TokenManager.getCompanyCode(this)
+                        val token = TokenManager.getTokenValue(this)
+                        val machineId = SessionManager.selectedMachineId
+                        val userId = TokenManager.getUserId(this)
+                        val lotoUid = LotoManager.getLotoUid(this)
+                        val sendData = "$companyCode,$token,$machineId,$userId,$lotoUid,$nextCode"
+                        lastSentData = sendData
+                        char.setValue(sendData.toByteArray(StandardCharsets.UTF_8))
+                        gatt.writeCharacteristic(char)
+                    }
+                } else {
+                    // 권한이 없는 경우 사용자에게 권한 요청 또는 예외 처리
+                    requestPermissions(
+                        arrayOf(Manifest.permission.BLUETOOTH_CONNECT), REQUEST_BLUETOOTH_PERMISSION
+                    )
                 }
             }
         }
