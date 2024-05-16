@@ -35,13 +35,14 @@ public class WelcomeController {
         return coreTokenService.issueCoreAuthToken(cCodePrincipal, lockerEnrollRequest.getLockerUid());
     }
 
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    @PostMapping("/enroll-task-history")
-    @ResponseBody
-    public void enrollHistoryTest(@AuthenticationPrincipal CCodePrincipal cCodePrincipal, @RequestBody TaskHistoryAddRequest taskHistoryAddRequest) {
-        taskHistoryService.enrollTaskHistory(cCodePrincipal, taskHistoryAddRequest.getTaskTemplateId(),
-                taskHistoryAddRequest.getMachineId(),
-                taskHistoryAddRequest.getEndTime(),
-                taskHistoryAddRequest.getTaskPrecaution());
-    }
+//    @ResponseStatus(HttpStatus.ACCEPTED)
+//    @PostMapping("/enroll-task-history")
+//    @ResponseBody
+//    public void enrollHistoryTest(@AuthenticationPrincipal CCodePrincipal cCodePrincipal, @RequestBody TaskHistoryAddRequest taskHistoryAddRequest) {
+//        taskHistoryService.enrollTaskHistory(cCodePrincipal, taskHistoryAddRequest.getTaskTemplateId(),
+//                taskHistoryAddRequest.getLockerUid(),
+//                taskHistoryAddRequest.getMachineId(),
+//                taskHistoryAddRequest.getEndTime(),
+//                taskHistoryAddRequest.getTaskPrecaution());
+//    }
 }

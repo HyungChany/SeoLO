@@ -14,6 +14,7 @@ public interface TaskHistoryService {
     TaskHistoryDto getCurrentTaskHistoryByMachineIdAndUserId(Long machineId, Long userId);
     TaskListResponse getTaskHistoryEntityByEmployeeNum(String employeeNum);
     void enrollTaskHistory(CCodePrincipal cCodePrincipal,
+                           String lockerUid,
                            Long taskTemplateId,
                            Long machineId,
                            String endTime,

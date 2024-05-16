@@ -1,6 +1,8 @@
 package com.c104.seolo.domain.task.service.impl;
 
+import com.c104.seolo.domain.core.entity.Locker;
 import com.c104.seolo.domain.core.enums.CODE;
+import com.c104.seolo.domain.core.service.LockerService;
 import com.c104.seolo.domain.machine.dto.MachineDto;
 import com.c104.seolo.domain.machine.service.MachineService;
 import com.c104.seolo.domain.task.dto.TaskHistoryDto;
@@ -35,6 +37,7 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
     private final TaskTemplateService taskTemplateService;
     private final DBUserDetailService dbUserDetailService;
     private final MachineService machineService;
+    private final LockerService lockerService;
 
     @Override
     public TaskHistoryResponse getTaskHistory(Long taskId, String companyCode) {
@@ -77,18 +80,20 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
 
     @Override
     public void enrollTaskHistory(CCodePrincipal cCodePrincipal,
+                                  String lockerUid,
                                   Long taskTemplateId,
                                   Long machineId,
                                   String endTime,
                                   String taskPrecaution) {
 
         AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
-
         TaskTemplateDto template = taskTemplateService.getTemplate(taskTemplateId);
         MachineDto machine = machineService.getMachineByMachineId(machineId);
+        Locker locker = lockerService.getLockerByUid(lockerUid);
 
         TaskHistory newTaskHistory = TaskHistory.builder()
                 .user(appUser)
+                .locker(locker)
                 .taskTemplate(template.toEntity())
                 .machine(machine.toEntity())
                 .taskEndEstimatedDateTime(LocalDateTime.parse(endTime))
@@ -100,10 +105,10 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
         장비ID와 유저ID로 기존에 있던 모든 작업내역 DB를 조회하되 TASK_CODE 상태가 ISSUED, LOCKED 인 튜플이 있다면
         에러를 띄운다. → 이미 잠금로직 진행중이라는 뜻이니까
         */
-        taskHistoryRepository.findByMachineIdOrUserIdAndTaskCode(machineId, appUser.getId())
-                .ifPresent(taskHistory -> {
-                    throw new CommonException(TaskErrorCode.ALREADY_LOCKING);
-                });
+        List<TaskHistory> taskHistories = taskHistoryRepository.findByMachineIdOrUserIdAndTaskCode(machineId, appUser.getId());
+        if (!taskHistories.isEmpty()) {
+            throw new CommonException(TaskErrorCode.ALREADY_LOCKING);
+        }
 
         taskHistoryRepository.save(newTaskHistory);
     }
