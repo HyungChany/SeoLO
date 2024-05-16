@@ -60,10 +60,12 @@ export const blueprintRegitration = async (data: BlueprintType) => {
       if (errorCode && errorCode.startsWith('JT')) {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('companyCode');
+      } else if (errorCode && errorCode.startsWith('SF')) {
+        alert(error.response?.data.message);
+      } else {
+        // Handle other errors
+        console.log('Unexpected Error:', error);
       }
-    } else {
-      // Handle other errors
-      console.log('Unexpected Error:', error);
     }
   }
 };
@@ -114,10 +116,9 @@ export const registrationMarker = async (data: MarkerType) => {
       if (errorCode && errorCode.startsWith('JT')) {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('companyCode');
+      } else if (errorCode && errorCode.startsWith('MR')) {
+        alert(error.response?.data.message);
       }
-    } else {
-      // Handle other errors
-      console.log('Unexpected Error:', error);
     }
   }
 };

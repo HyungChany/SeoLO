@@ -201,6 +201,12 @@ const Employee = () => {
     };
     fetchData();
   }, []);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
   return (
     <Background>
       <Box>
@@ -229,6 +235,7 @@ const Employee = () => {
                     value={equipmentNumber}
                     onChange={handleEquipmentNumber}
                     placeholder="사번을 입력하세요"
+                    onKeyDown={handleKeyDown}
                   />
                   <Button
                     width={5}
@@ -292,7 +299,7 @@ const Employee = () => {
                 </Photo>
               </PhotoBox>
             </RightBox>
-          </TopBox> 
+          </TopBox>
           <ButtonBox>
             <Button
               width={5}

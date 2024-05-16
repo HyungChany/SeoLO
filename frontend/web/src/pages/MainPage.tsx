@@ -18,7 +18,7 @@ import { Menu } from '@/components/menu/Menu.tsx';
 import * as Typo from '@/components/typography/Typography.tsx';
 import * as Color from '@/config/color/Color.ts';
 import 'leaflet/dist/leaflet.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { MapContainer } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -180,6 +180,7 @@ const CardDrawing = styled.div`
   box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.25);
   overflow: hidden;
   transition: background-color 0.3s;
+  cursor: pointer;
 
   &:hover {
     background-color: ${Color.GRAY100};
@@ -216,7 +217,14 @@ const MainPage = () => {
   const [selectedOption, setSelectedOption] = useState<DropDownType | null>(
     null,
   );
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const handleCardDrawingClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
 
+    if (fileInputRef.current) {
+      fileInputRef.current.click(); // 파일 입력 요소 클릭
+    }
+  };
   const navigate = useNavigate();
 
   // 작업장 편집모드 활성화, 비활성화
@@ -249,6 +257,7 @@ const MainPage = () => {
 
   // 작업장 추가
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.stopPropagation();
     const file = event.target.files ? event.target.files[0] : null;
     if (file && selectedOption) {
       const reader = new FileReader();
@@ -422,14 +431,16 @@ const MainPage = () => {
                 </MapContainer>
               </CardDrawing>
             ) : (
-              <CardDrawing onClick={() => console.log('클릭')}>
+              <CardDrawing onClick={handleCardDrawingClick}>
                 <input
                   type="file"
                   onChange={handleImageChange}
                   style={{ display: 'none' }}
                   id="fileInput"
+                  ref={fileInputRef}
                 />
-                <label htmlFor="fileInput">
+                {/* <label htmlFor="fileInput" style={{ cursor: 'pointer' }}> */}
+                <div>
                   <Typo.Body0B color={Color.GRAY400}>
                     저장된 도면이 없습니다. 도면을 추가하세요.
                   </Typo.Body0B>
@@ -437,7 +448,9 @@ const MainPage = () => {
                   <Typo.Body0B color={Color.GRAY400}>
                     권장 이미지 비율은 다음과 같습니다. 가로 5: 세로 3
                   </Typo.Body0B>
-                </label>
+                </div>
+
+                {/* </label> */}
               </CardDrawing>
             )}
             <Cards>
