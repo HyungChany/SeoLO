@@ -427,9 +427,7 @@ const Report = () => {
             <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
               {headerGroup.headers.map((column) => (
                 <StickyTh
-                  {...(column.id === 'selected'
-                    ? column.getHeaderProps()
-                    : column.getHeaderProps(column.getSortByToggleProps()))}
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
                   key={column.id}
                 >
                   {column.render('Header')}
@@ -454,7 +452,7 @@ const Report = () => {
               <TableRow
                 {...row.getRowProps()}
                 key={row.id}
-                onClick={() => handleReport(row.original.reportId)}
+                // onClick={() => handleReport(row.original.reportId)}
               >
                 {row.cells.map((cell) => (
                   <td
