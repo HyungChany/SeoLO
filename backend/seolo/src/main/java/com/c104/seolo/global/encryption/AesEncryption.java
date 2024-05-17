@@ -27,7 +27,7 @@ public class AesEncryption {
             throw new CommonException(AesEncryptionErrorCode.KEY_GENERATION_ERROR);
         }
     }
-    
+
     // 대칭키 DB 저장을 위한 Base64 인코딩
     public static String getBase64EncodedKey(SecretKey secretKey) {
         return Base64.getEncoder().encodeToString(secretKey.getEncoded());
