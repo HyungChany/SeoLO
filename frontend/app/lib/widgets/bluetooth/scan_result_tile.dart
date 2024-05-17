@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ScanResultTile extends StatefulWidget {
   const ScanResultTile(

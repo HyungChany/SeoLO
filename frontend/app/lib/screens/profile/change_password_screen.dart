@@ -79,7 +79,6 @@ class _ChangePasswordState extends State<ChangePassword> {
                               );
                             });
                       } else {
-
                         if (viewModel.errorMessage == 'JT') {
                           showDialog(
                               context: context,

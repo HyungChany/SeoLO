@@ -21,7 +21,6 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     isConnect();
   }

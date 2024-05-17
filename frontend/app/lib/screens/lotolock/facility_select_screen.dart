@@ -18,39 +18,41 @@ class FacilitySelectScreen extends StatefulWidget {
 class _FacilitySelectScreenState extends State<FacilitySelectScreen> {
   @override
   void initState() {
-    final viewModel = Provider.of<FacilityViewModel>(context, listen: false);
     super.initState();
-    viewModel.loadInitialData().then((_) {
-      if (viewModel.errorMessage == null) {
-      } else {
-        if (viewModel.errorMessage == 'JT') {
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return CommonDialog(
-                  content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
-                  buttonText: '확인',
-                  buttonClick: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/login', (route) => false);
-                  },
-                );
-              });
+    final viewModel = Provider.of<FacilityViewModel>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<CoreIssueViewModel>(context, listen: false).fetchMyInfo();
+      viewModel.loadInitialData().then((_) {
+        if (viewModel.errorMessage == null) {
         } else {
-          showDialog(
-              context: context,
-              barrierDismissible: true,
-              builder: (BuildContext context) {
-                return CommonDialog(
-                  content: viewModel.errorMessage!,
-                  buttonText: '확인',
-                );
-              });
+          if (viewModel.errorMessage == 'JT') {
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return CommonDialog(
+                    content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                    buttonText: '확인',
+                    buttonClick: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/login', (route) => false);
+                    },
+                  );
+                });
+          } else {
+            showDialog(
+                context: context,
+                barrierDismissible: true,
+                builder: (BuildContext context) {
+                  return CommonDialog(
+                    content: viewModel.errorMessage!,
+                    buttonText: '확인',
+                  );
+                });
+          }
         }
-      }
+      });
     });
-    Provider.of<CoreIssueViewModel>(context, listen: false).fetchMyInfo();
   }
 
   @override

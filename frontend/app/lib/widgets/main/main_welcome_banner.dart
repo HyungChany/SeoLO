@@ -12,6 +12,7 @@ class MainWelcomeBanner extends StatefulWidget {
 }
 
 class _MainWelcomeBannerState extends State<MainWelcomeBanner> {
+
   @override
   void initState() {
     super.initState();
@@ -57,12 +58,10 @@ class _MainWelcomeBannerState extends State<MainWelcomeBanner> {
             style: const TextStyle(
                 fontSize: 23, fontWeight: FontWeight.bold, color: Colors.black),
             children: [
-          viewModel.isLoading
+          (viewModel.isLoading || viewModel.myInfoModel == null)
               ? TextSpan(text: '           ')
               : TextSpan(
-                  text: (viewModel.myInfoModel != null)
-                      ? viewModel.myInfoModel!.employeeName
-                      : '',
+                  text: viewModel.myInfoModel!.employeeName,
                   style: TextStyle(color: blue400)),
           const TextSpan(text: '님, 오늘도 '),
           const TextSpan(text: '서로 ', style: TextStyle(color: safetyBlue)),

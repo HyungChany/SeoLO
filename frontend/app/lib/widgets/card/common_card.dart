@@ -18,7 +18,7 @@ class CommonCard extends StatefulWidget {
       required this.center});
 
   @override
-  _CommonCardState createState() => _CommonCardState();
+  State<CommonCard> createState() => _CommonCardState();
 }
 
 class _CommonCardState extends State<CommonCard> {

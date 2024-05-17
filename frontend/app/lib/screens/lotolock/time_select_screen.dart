@@ -8,7 +8,7 @@ import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/button/common_text_button.dart';
 
 class TimeSelect extends StatefulWidget {
-  const TimeSelect({Key? key}) : super(key: key);
+  const TimeSelect({super.key});
 
   @override
   State<TimeSelect> createState() => _TimeSelectState();

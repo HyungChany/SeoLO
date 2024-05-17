@@ -1,53 +1,54 @@
 import 'package:app/main.dart';
 import 'package:app/view_models/loto/checklist_view_model.dart';
 import 'package:app/widgets/dialog/dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/checklist/check_banner.dart';
 import 'package:app/widgets/button/common_text_button.dart';
 import 'package:provider/provider.dart';
 
-class CheckScreen extends StatefulWidget {
-  const CheckScreen({super.key});
+class ChecklistScreen extends StatefulWidget {
+  const ChecklistScreen({super.key});
 
   @override
-  State<CheckScreen> createState() => _CheckScreenState();
+  State<ChecklistScreen> createState() => _ChecklistScreenState();
 }
 
-class _CheckScreenState extends State<CheckScreen> {
+class _ChecklistScreenState extends State<ChecklistScreen> {
   @override
   void initState() {
-    final viewModel = Provider.of<ChecklistViewModel>(context, listen: false);
     super.initState();
-    viewModel.loadInitialData().then((_) {
-      if (viewModel.errorMessage == null) {
-      } else {
-        if (viewModel.errorMessage == 'JT') {
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return CommonDialog(
-                  content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
-                  buttonText: '확인',
-                  buttonClick: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/login', (route) => false);
-                  },
-                );
-              });
+    final viewModel = Provider.of<ChecklistViewModel>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      viewModel.loadInitialData().then((_) {
+        if (viewModel.errorMessage == null) {
         } else {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return CommonDialog(
-                  content: viewModel.errorMessage!,
-                  buttonText: '확인',
-                );
-              });
+          if (viewModel.errorMessage == 'JT') {
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return CommonDialog(
+                    content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                    buttonText: '확인',
+                    buttonClick: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/login', (route) => false);
+                    },
+                  );
+                });
+          } else {
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CommonDialog(
+                    content: viewModel.errorMessage!,
+                    buttonText: '확인',
+                  );
+                });
+          }
         }
-      }
+      });
     });
   }
 
