@@ -16,6 +16,8 @@ import { Button } from '@/components/button/Button.tsx';
 import { Column, Row } from 'react-table';
 import { useTable } from 'react-table';
 import { useQuery } from '@tanstack/react-query';
+import { useRecoilValue } from 'recoil';
+import { notificationEventsState } from '@/recoil/sseState.tsx';
 
 dayjs.locale('ko');
 // interface ButtonProps {
@@ -128,7 +130,7 @@ const StickyTh = styled.th`
   top: -2rem;
   background-color: white;
   font-family: NYJGothicM;
-  font-size: 24px
+  font-size: 24px;
   font-weight: bold;
   z-index: 1;
   padding: 0.5rem 0;
@@ -145,7 +147,7 @@ const Report = () => {
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const [formatStartDate, setFormatStartDate] = useState<string>('');
   const [formatEndDate, setFormatEndDate] = useState<string>('');
-
+  const events = useRecoilValue(notificationEventsState);
   const transformDataForCsv = (data: EquipmentData[]): CsvEquipmentData[] => {
     return data.map((item) => ({
       '보고서 ID': item.reportId,
@@ -248,7 +250,7 @@ const Report = () => {
   >([]);
 
   const { data: totalData } = useQuery({
-    queryKey: ['report'],
+    queryKey: ['report', events],
     queryFn: () => totalReport(),
   });
 
@@ -420,7 +422,7 @@ const Report = () => {
                     style={{
                       padding: '1rem',
                       textAlign: 'center',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                   >
                     {cell.render('Cell')}

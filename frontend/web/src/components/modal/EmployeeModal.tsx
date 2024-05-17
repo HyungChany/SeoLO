@@ -115,6 +115,7 @@ const EmployeeModal = ({ onClick }: EmployeeModalProps) => {
                       padding: '1rem',
                       textAlign: 'center',
                       fontWeight: 'bold',
+                      fontFamily: 'NYJGothicB',
                     }}
                   >
                     {cell.render('Cell')}
