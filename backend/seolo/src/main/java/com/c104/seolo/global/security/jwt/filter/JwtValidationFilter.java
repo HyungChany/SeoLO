@@ -50,9 +50,6 @@ public class JwtValidationFilter extends OncePerRequestFilter {
             accessToken = authorizationHeader.substring(BEARER_PREFIX.length());
         }
 
-        log.info("Received accessToken: {}", accessToken);
-        log.info("Received deviceType: {}", deviceType);
-
         if (accessToken == null || deviceType == null) {
             log.warn("Access token or device type is null");
             filterChain.doFilter(request, response);

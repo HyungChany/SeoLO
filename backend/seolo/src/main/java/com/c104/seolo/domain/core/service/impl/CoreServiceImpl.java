@@ -77,8 +77,7 @@ public class CoreServiceImpl implements CoreService {
 //            state = (CodeState) clazz.getDeclaredConstructor().newInstance();
             state = (CodeState) applicationContext.getBean(clazz);
 
-            log.info("clazz : {}", clazz);
-            log.info("state : {}", state);
+            log.debug("state : {}", state);
         } catch (Exception e) {
             throw new CommonException(CoreErrorCode.STATE_REFLECTION_ERROR);
         }
