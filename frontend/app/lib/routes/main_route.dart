@@ -1,13 +1,10 @@
 import 'package:app/screens/bluetooth/bluetooth_screen.dart';
-import 'package:app/screens/loading/loading_lock_screen.dart';
-import 'package:app/screens/loading/loading_unlock_screen.dart';
 import 'package:app/screens/login/login_screen.dart';
 import 'package:app/screens/login/pin_login_screen.dart';
 import 'package:app/screens/loto_process/loto_process_screen.dart';
 import 'package:app/screens/lotolock/result_lock_screen.dart';
 import 'package:app/screens/lotolock/result_unlock_screen.dart';
 import 'package:app/screens/main/main_screen.dart';
-import 'package:app/screens/nfc/nfc_screen.dart';
 import 'package:app/screens/profile/change_password_screen.dart';
 import 'package:app/screens/profile/change_pin_check_screen.dart';
 import 'package:app/screens/profile/change_pin_screen.dart';
@@ -56,8 +53,6 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => ChangePinScreen());
     case '/changePinCheck':
       return MaterialPageRoute(builder: (context) => ChangePinCheckScreen());
-    case '/nfc':
-      return MaterialPageRoute(builder: (context) => NfcScreen());
     case '/bluetooth':
       return MaterialPageRoute(builder: (context) => BluetoothScreen());
     case '/selectDay':
@@ -73,10 +68,6 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => LoginScreen());
     case '/lotoProcess':
       return MaterialPageRoute(builder: (context) => LotoProcessScreen());
-    case '/loadingLock':
-      return MaterialPageRoute(builder: (context) => LoadingLockScreen());
-    case '/loadingUnlock':
-      return MaterialPageRoute(builder: (context) => LoadingUnlockScreen());
     case '/resultLock':
       return MaterialPageRoute(builder: (context) => ResultLockScreen());
     case '/resultUnlock':

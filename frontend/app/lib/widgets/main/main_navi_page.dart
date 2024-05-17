@@ -19,7 +19,12 @@ class _MainNaviPageState extends State<MainNaviPage> {
 
   final List<String> pageText = ['BLUETOOTH', '내 작업 일지', 'LOTO 잠금', 'LOTO 절차'];
 
-  final List<String> pageTap = ['/bluetooth', '/profile', '/checklist', '/lotoProcess'];
+  final List<String> pageTap = [
+    '/bluetooth',
+    '/profile',
+    '/checklist',
+    '/lotoProcess'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -37,12 +42,14 @@ class _MainNaviPageState extends State<MainNaviPage> {
           shrinkWrap: true,
           children: List.generate(
             pageIcon.length,
-                (index) => CommonIconButton(
+            (index) => CommonIconButton(
               text: pageText[index],
               iconImage: pageIcon[index],
               shape: BoxShape.rectangle,
               onTap: () {
-                Navigator.pushNamed(context, pageTap[index]);
+                (index != 1)
+                    ? Navigator.pushNamed(context, pageTap[index])
+                    : Navigator.pushReplacementNamed(context, pageTap[index]);
               },
             ),
           ),
@@ -50,5 +57,4 @@ class _MainNaviPageState extends State<MainNaviPage> {
       ),
     );
   }
-
 }

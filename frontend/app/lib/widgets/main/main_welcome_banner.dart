@@ -12,57 +12,63 @@ class MainWelcomeBanner extends StatefulWidget {
 }
 
 class _MainWelcomeBannerState extends State<MainWelcomeBanner> {
-
   @override
   void initState() {
-    final viewModel = Provider.of<MyInfoViewModel>(context, listen: false);
     super.initState();
-    viewModel.myInfo().then((_) {
-      if (viewModel.errorMessage == null) {
-      } else {
-        if (viewModel.errorMessage == 'JT') {
-          showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return CommonDialog(
-                  content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
-                  buttonText: '확인',
-                  buttonClick: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, '/login', (route) => false);
-                  },
-                );
-              });
+    final viewModel = Provider.of<MyInfoViewModel>(context, listen: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      viewModel.myInfo().then((_) {
+        if (viewModel.errorMessage == null) {
         } else {
-          showDialog(
-              context: context,
-              barrierDismissible: true,
-              builder: (BuildContext context) {
-                return CommonDialog(
-                  content: viewModel.errorMessage!,
-                  buttonText: '확인',
-                );
-              });
+          if (viewModel.errorMessage == 'JT') {
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return CommonDialog(
+                    content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                    buttonText: '확인',
+                    buttonClick: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/login', (route) => false);
+                    },
+                  );
+                });
+          } else {
+            showDialog(
+                context: context,
+                barrierDismissible: true,
+                builder: (BuildContext context) {
+                  return CommonDialog(
+                    content: viewModel.errorMessage!,
+                    buttonText: '확인',
+                  );
+                });
+          }
         }
-      }
+      });
     });
   }
 
-  content() {
+  Widget content() {
     final viewModel = Provider.of<MyInfoViewModel>(context);
     return RichText(
         text: TextSpan(
             style: const TextStyle(
                 fontSize: 23, fontWeight: FontWeight.bold, color: Colors.black),
             children: [
-          viewModel.isLoading ? TextSpan(text: '           ') : TextSpan(text: viewModel.myInfoModel!.employeeName, style: TextStyle(color: blue400)),
+          viewModel.isLoading
+              ? TextSpan(text: '           ')
+              : TextSpan(
+                  text: (viewModel.myInfoModel != null)
+                      ? viewModel.myInfoModel!.employeeName
+                      : '',
+                  style: TextStyle(color: blue400)),
           const TextSpan(text: '님, 오늘도 '),
           const TextSpan(text: '서로 ', style: TextStyle(color: safetyBlue)),
           const TextSpan(text: '지켰나요?')
         ]));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +83,11 @@ class _MainWelcomeBannerState extends State<MainWelcomeBanner> {
         children: [
           content(),
           Text(' '),
-          Image.asset('assets/images/seolo_character.png', width: 30, height: 50,)
+          Image.asset(
+            'assets/images/seolo_character.png',
+            width: 30,
+            height: 50,
+          )
         ],
       ),
     );

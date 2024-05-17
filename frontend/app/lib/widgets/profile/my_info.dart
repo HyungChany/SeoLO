@@ -60,7 +60,7 @@ class _MyInfoState extends State<MyInfo> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            (viewModel.isLoading)
+            (viewModel.isLoading || viewModel.myInfoModel == null)
                 ? Container(
                     width: 80,
                     height: 80,
@@ -69,7 +69,7 @@ class _MyInfoState extends State<MyInfo> {
                         borderRadius: BorderRadius.circular(50)),
                   )
                 : ClipOval(
-                  child: Image.network(viewModel.myInfoModel!.employeeThum,
+                  child: Image.network(viewModel.myInfoModel!.employeeThum!,
                       width: 80, height: 80, fit: BoxFit.cover),
                 ),
             Padding(
@@ -78,7 +78,7 @@ class _MyInfoState extends State<MyInfo> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  (viewModel.isLoading)
+                  (viewModel.isLoading || viewModel.myInfoModel == null)
                       ? Container(
                           width: 150,
                           height: 20,
@@ -87,10 +87,10 @@ class _MyInfoState extends State<MyInfo> {
                               borderRadius: BorderRadius.circular(20)),
                         )
                       : Text(
-                          viewModel.myInfoModel!.employeeTeam,
+                          viewModel.myInfoModel!.employeeTeam!,
                           style: const TextStyle(fontSize: 20),
                         ),
-                  (viewModel.isLoading)
+                  (viewModel.isLoading || viewModel.myInfoModel == null)
                       ? Container(
                           width: 150,
                           height: 20,
@@ -100,12 +100,12 @@ class _MyInfoState extends State<MyInfo> {
                         )
                       : Row(
                           children: [
-                            Text(viewModel.myInfoModel!.employeeName,
+                            Text(viewModel.myInfoModel!.employeeName!,
                                 style: const TextStyle(fontSize: 20)),
                             const SizedBox(
                               width: 5,
                             ),
-                            Text(viewModel.myInfoModel!.employeeTitle,
+                            Text(viewModel.myInfoModel!.employeeTitle!,
                                 style: const TextStyle(fontSize: 20))
                           ],
                         )

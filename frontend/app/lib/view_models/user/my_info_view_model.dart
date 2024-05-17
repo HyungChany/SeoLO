@@ -15,6 +15,7 @@ class MyInfoViewModel extends ChangeNotifier {
 
   String? get errorMessage => _errorMessage;
 
+
   Future<void> myInfo() async {
     _isLoading = true;
     _errorMessage = null;

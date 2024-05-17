@@ -54,7 +54,6 @@ class _CheckScreenState extends State<CheckScreen> {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<ChecklistViewModel>(context);
-    debugPrint(viewModel.isCheckedList.toString());
 
     return Scaffold(
       appBar: const Header(

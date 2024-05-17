@@ -31,7 +31,7 @@ class ChecklistViewModel extends ChangeNotifier{
         _isLoading = false;
         _errorMessage = null;
         _checklist = result['userCheckList'];
-        _isCheckedList = List<bool>.filled(_checklist.length, false); // _isCheckedList 초기화
+        _isCheckedList = List<bool>.filled(_checklist.length, false);
       }
       notifyListeners();
     }

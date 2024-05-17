@@ -73,12 +73,13 @@ class CoreService {
 
   ///////////////////////// check //////////////////////////////////
   Future<Map<String, dynamic>> coreCheck(CoreCheckModel coreCheckModel) async {
-    // debugPrint(coreCheckModel.toJson().toString());
+    debugPrint('core check api 보내기 : ${coreCheckModel.toJson().toString()}');
     try {
       Dio.Response response =
           await _dio.post('$baseUrl/core/CHECK', data: coreCheckModel.toJson());
       if (response.statusCode == 200) {
         CoreCheckModel coreCheckModel = CoreCheckModel.fromJson(response.data);
+        debugPrint('core check api 응답값 : ${CoreCheckModel.fromJson(response.data)}');
         return {'success': true, 'coreCheckModel': coreCheckModel};
       } else {
         return {'success': false};

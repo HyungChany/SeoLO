@@ -65,7 +65,7 @@ class _MyLotoState extends State<MyLoto> {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<MyTasksViewModel>(context);
-    return (viewModel.isLoading)
+    return (viewModel.isLoading || viewModel.myTasksModel == null)
         ? SizedBox(
             height: MediaQuery.of(context).size.height * 0.4,
             child: Center(
@@ -146,8 +146,8 @@ class _MyLotoState extends State<MyLoto> {
             child: Transform.scale(
               scale: index == currentIndex ? 1.0 : 0.75,
               child: CommonCard(
-                facility: viewModel.myTasksModel![index].facilityName,
-                machine: viewModel.myTasksModel![index].machineName,
+                facility: viewModel.myTasksModel![index].facilityName!,
+                machine: viewModel.myTasksModel![index].machineName!,
                 start: formattedStartTime,
                 end: formattedEndTime,
                 center: index == currentIndex ? true : false,

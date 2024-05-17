@@ -17,13 +17,7 @@ class WorkListCheckScreen extends StatefulWidget {
 class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
   final _storage = const FlutterSecureStorage();
   String? lockerUid;
-  List<String> workListTitle = [
-    '작업장',
-    '장비 명',
-    '작업 담당자',
-    '종료 예상 시간',
-    '작업 내용'
-  ];
+  List<String> workListTitle = ['작업장', '장비 명', '작업 담당자', '종료 예상 시간', '작업 내용'];
 
   @override
   void initState() {
@@ -55,7 +49,8 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
         children: [
           SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0), // 전체 내용의 양쪽 패딩
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              // 전체 내용의 양쪽 패딩
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -91,15 +86,16 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
                     width: screenWidth * 0.9,
                     height: screenHeight * 0.3,
                     padding: const EdgeInsets.all(16.0),
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: SingleChildScrollView(
-                      child: Text(viewModel.taskPrecaution!, style: TextStyle(fontSize: 16.0)),
+                      child: Text(viewModel.taskPrecaution!,
+                          style: TextStyle(fontSize: 16.0)),
                     ),
                   ),
                 ],
@@ -112,9 +108,10 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
               padding: const EdgeInsets.only(bottom: 20, left: 50, right: 50),
               child: CommonTextButton(
                 text: '작업 내역 저장 및 자물쇠 잠금',
-                onTap: () {
+                onTap: () async {
                   // machine id 저장
-                  _storage.write(key: 'machine_id', value: viewModel.machineId.toString());
+                  await _storage.write(
+                      key: 'machine_id', value: viewModel.machineId.toString());
                   // storage에 locker uid가 있다면 연결 먼저 한 것
                   // 그럼 issue api 요청 후 bluetooth 이동
                   if (lockerUid != null) {
@@ -122,8 +119,13 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
                       viewModel.coreIssue().then((_) {
                         // 일지 작성 후 lock 하러 가기!
                         if (viewModel.errorMessage == null) {
-                          Navigator.pushNamedAndRemoveUntil(context,
-                              '/bluetooth', ModalRoute.withName('/main'));
+                          Navigator.pushNamedAndRemoveUntil(
+                            context,
+                            '/bluetooth',
+                                (Route<dynamic> route) => route.isFirst,
+                          );
+                          // Navigator.pushNamedAndRemoveUntil(context,
+                          //     '/bluetooth', ModalRoute.withName('/main'));
                         } else {
                           if (viewModel.errorMessage == 'JT') {
                             showDialog(
@@ -142,11 +144,15 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
                           } else {
                             showDialog(
                                 context: context,
-                                barrierDismissible: true,
+                                barrierDismissible: false,
                                 builder: (BuildContext context) {
                                   return CommonDialog(
                                     content: viewModel.errorMessage!,
                                     buttonText: '확인',
+                                    buttonClick: () {
+                                      Navigator.pushNamedAndRemoveUntil(
+                                          context, '/main', (route) => false);
+                                    },
                                   );
                                 });
                           }
@@ -155,8 +161,13 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
                     }
                   } else {
                     // locker uid가 null이라면 일지 먼저 작성한 것
-                    Navigator.pushNamedAndRemoveUntil(context,
-                        '/bluetooth', ModalRoute.withName('/main'));
+                    // Navigator.pushNamedAndRemoveUntil(
+                    //   context,
+                    //   '/bluetooth',
+                    //       (Route<dynamic> route) => route.isFirst,
+                    // );
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, '/bluetooth', ModalRoute.withName('/main'));
                   }
                 },
               ),

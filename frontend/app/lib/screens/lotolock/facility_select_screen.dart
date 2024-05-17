@@ -90,7 +90,8 @@ class _FacilitySelectScreenState extends State<FacilitySelectScreen> {
                               return SelectList(
                                 title: viewModel.facilities[index].facilityName,
                                 onTap: () {
-                                  coreViewModel.setFacilityName(viewModel.facilities[index].facilityName);
+                                  coreViewModel.setFacilityName(
+                                      viewModel.facilities[index].facilityName);
                                   machineViewModel.setFacilityId(
                                       viewModel.facilities[index].facilityId);
                                   Navigator.pushNamed(context, '/machine');

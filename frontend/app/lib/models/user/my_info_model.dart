@@ -1,16 +1,16 @@
 class MyInfoModel {
-  final String employeeName;
-  final String employeeTitle;
-  final String employeeTeam;
-  final String employeeThum;
-  final String employeeNum;
+  final String? employeeName;
+  final String? employeeTitle;
+  final String? employeeTeam;
+  final String? employeeThum;
+  final String? employeeNum;
 
   MyInfoModel({
-    required this.employeeName,
-    required this.employeeTitle,
-    required this.employeeTeam,
-    required this.employeeThum,
-    required this.employeeNum,
+    this.employeeName = '',
+    this.employeeTitle = '',
+    this.employeeTeam = '',
+    this.employeeThum = '',
+    this.employeeNum = '',
   });
 
   factory MyInfoModel.fromJson(Map<String, dynamic> json) {
