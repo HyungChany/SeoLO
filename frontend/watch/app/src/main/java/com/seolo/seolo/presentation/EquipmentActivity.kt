@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.WheelPickerAdapter
+import com.seolo.seolo.helper.LotoManager
 import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.helper.TokenManager
 import com.seolo.seolo.model.MachineItem
@@ -54,7 +55,8 @@ class EquipmentActivity : AppCompatActivity() {
                 val layoutManager = recyclerView.layoutManager as LinearLayoutManager
                 val position = layoutManager.findFirstVisibleItemPosition()
                 selectedMachineId = equipments.getOrNull(position)?.machineId.toString()
-                SessionManager.selectedMachineName = equipments.getOrNull(position)?.machineName.toString()
+                SessionManager.selectedMachineName =
+                    equipments.getOrNull(position)?.machineName.toString()
             }
         })
 
@@ -63,6 +65,7 @@ class EquipmentActivity : AppCompatActivity() {
         confirmButton.setOnClickListener {
             selectedMachineId?.let {
                 SessionManager.selectedMachineId = it
+                LotoManager.setLotoMachineId(this, it)
                 // 작업 목록 가져오기
                 getTasks {
                     // WorkActivity로 이동하고 작업 목록 전달
@@ -79,28 +82,30 @@ class EquipmentActivity : AppCompatActivity() {
         val token = TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)
         val service = RetrofitClient.taskService
+        val deviceType = "watch"
 
         // 토큰 및 회사 코드가 유효한 경우 작업 목록 요청
         if (token != null && companyCode != null) {
-            service.getTasks("Bearer $token", companyCode).enqueue(object : Callback<TaskResponse> {
-                override fun onResponse(
-                    call: Call<TaskResponse>, response: Response<TaskResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        tasksTemplate = response.body()?.tasks ?: listOf()
-                        Log.d("TaskResponse", "Tasks: $tasksTemplate")
-                        callback(tasksTemplate)
-                    } else {
-                        // 응답 실패 시 에러 로그 출력
-                        Log.e("TaskError", "Failed to get tasks: ${response.errorBody()}")
+            service.getTasks("Bearer $token", companyCode, deviceType)
+                .enqueue(object : Callback<TaskResponse> {
+                    override fun onResponse(
+                        call: Call<TaskResponse>, response: Response<TaskResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            tasksTemplate = response.body()?.tasks ?: listOf()
+                            Log.d("TaskResponse", "Tasks: $tasksTemplate")
+                            callback(tasksTemplate)
+                        } else {
+                            // 응답 실패 시 에러 로그 출력
+                            Log.e("TaskError", "Failed to get tasks: ${response.errorBody()}")
+                        }
                     }
-                }
 
-                override fun onFailure(call: Call<TaskResponse>, t: Throwable) {
-                    // 네트워크 오류 시 에러 로그 출력
-                    Log.e("MachineError", "Network error: ${t.message}")
-                }
-            })
+                    override fun onFailure(call: Call<TaskResponse>, t: Throwable) {
+                        // 네트워크 오류 시 에러 로그 출력
+                        Log.e("MachineError", "Network error: ${t.message}")
+                    }
+                })
         }
     }
 }

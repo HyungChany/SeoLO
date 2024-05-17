@@ -31,12 +31,12 @@ class PinNumberActivity : AppCompatActivity() {
     private fun sendPinToServer(pinNumber: String) {
         val accessToken = TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)
-
+        val deviceType = "watch"
         val pinRequest = PINRequest(pinNumber)
 
         companyCode?.let {
             RetrofitClient.pinService.sendPinNumber(
-                "Bearer $accessToken", it, pinRequest
+                "Bearer $accessToken", companyCode, deviceType, pinRequest
             )
         }?.enqueue(object : Callback<PINResponse> {
             override fun onResponse(call: Call<PINResponse>, response: Response<PINResponse>) {

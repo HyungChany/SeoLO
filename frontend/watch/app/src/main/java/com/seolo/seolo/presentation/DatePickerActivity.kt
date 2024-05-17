@@ -31,14 +31,16 @@ class DatePickerActivity : AppCompatActivity() {
         confirmButton.setOnClickListener {
             // 선택된 날짜를 문자열로 변환하여 저장
             val selectedYear = datePicker.year
-            val selectedMonth = datePicker.month
+            val selectedMonth = datePicker.month + 1
             val selectedDay = datePicker.day
-            val dateString = "$selectedYear-${selectedMonth + 1}-$selectedDay-"
-            val SimpleDateString = "$selectedYear. ${selectedMonth + 1}. $selectedDay"
+
+            // 날짜를 yyyy-MM-dd 형식으로 포맷
+            val dateString = String.format("%04d-%02d-%02d", selectedYear, selectedMonth, selectedDay)
+            val simpleDateString = String.format("%04d. %02d. %02d", selectedYear, selectedMonth, selectedDay)
 
             // SessionManager에 날짜 저장
             SessionManager.selectedDate = dateString
-            SessionManager.selectedSimpleDate = SimpleDateString
+            SessionManager.selectedSimpleDate = simpleDateString
 
             // TimePickerActivity로 이동하는 인텐트 생성
             val intent = Intent(this, TimePickerActivity::class.java)

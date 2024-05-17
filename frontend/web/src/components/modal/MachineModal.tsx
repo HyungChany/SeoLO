@@ -136,6 +136,7 @@ const EquipmentModal = ({ onClick, option }: EquipmentModalProps) => {
                       padding: '1rem',
                       textAlign: 'center',
                       fontWeight: 'bold',
+                      fontFamily: 'NYJGothicB',
                     }}
                   >
                     {cell.render('Cell')}
