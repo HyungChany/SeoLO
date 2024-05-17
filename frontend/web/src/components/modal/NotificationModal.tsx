@@ -130,7 +130,7 @@ const NotificationModal: React.FC = () => {
       setVisible(true);
       const timer = setTimeout(() => {
         setVisible(false);
-      }, 100000); // 5초 후 모달 닫기
+      }, 8000); // 8초 후 모달 닫기
 
       return () => clearTimeout(timer);
     }
