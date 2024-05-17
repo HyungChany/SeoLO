@@ -310,7 +310,6 @@ class BluetoothMainActivity : AppCompatActivity() {
 
     // API 요청 함수
     private fun unlockCoreLogic(function: () -> Unit) {
-        // API 요청
         val authorization = "Bearer " + TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)
         val deviceType = "watch"

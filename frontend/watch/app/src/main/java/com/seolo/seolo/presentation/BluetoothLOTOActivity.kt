@@ -190,7 +190,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     // 1초 후 onCharacteristicChanged 메서드 호출
                     Handler(Looper.getMainLooper()).postDelayed({
                         onCharacteristicChanged(gatt, char)
-                    }, 1000)
+                    }, 2000)
 
                 } else {
                     // 권한이 없을 때 사용자에게 권한 요청
@@ -210,6 +210,8 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                 Log.d(
                     "데이터 쓰기 성공_LOTO", "${characteristic?.value?.toString(StandardCharsets.UTF_8)}"
                 )
+            } else {
+                Log.e("데이터 쓰기 실패_LOTO", "Status: $status")
             }
         }
 
@@ -322,14 +324,19 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val issueResponse = response.body()
                     Log.d("API_CALL", "Response Success: ${issueResponse?.next_code}")
-
+                    val nextCode = issueResponse?.next_code
                     // 응답에서 token_value 저장
                     issueResponse?.token_value?.let {
                         TokenManager.setTokenValue(this@BluetoothLOTOActivity, it)
                     }
+                    Log.d("API_CALL", "response.body(): $issueResponse")
+                    Log.d("API_CALL", "response.body()?.token_value: ${issueResponse?.token_value}")
+                    Log.d("API_CALL", "response.body()?.next_code: ${issueResponse?.next_code}")
 
                     // next_code를 사용하여 Bluetooth 데이터 전송
-                    issueResponse?.next_code?.let { sendBluetoothData(it) }
+                    if (nextCode != null) {
+                        sendBluetoothData(nextCode)
+                    }
 
                     // onCompleted 콜백 호출
                     onCompleted()
@@ -368,7 +375,22 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                         val sendData = "$companyCode,$token,$machineId,$userId,$lotoUid,$nextCode"
                         lastSentData = sendData
                         char.setValue(sendData.toByteArray(StandardCharsets.UTF_8))
-                        gatt.writeCharacteristic(char)
+
+                        // 데이터 전송 로그 추가
+                        Log.d("sendBluetoothData", "Sending data: $sendData")
+                        val success = gatt.writeCharacteristic(char)
+                        Log.d("sendBluetoothData", "writeCharacteristic success: $success")
+
+                        // 데이터 전송이 실패할 경우 처리
+                        if (!success) {
+                            Log.e("sendBluetoothData", "Failed to send data")
+                            Toast.makeText(this, "블루투스 데이터 전송 실패", Toast.LENGTH_SHORT).show()
+                        } else {
+                            isDataReceived = false
+                            Log.d("sendBluetoothData", "Data sent successfully")
+                        }
+                    } else {
+                        Log.e("sendBluetoothData", "Characteristic is null")
                     }
                 } else {
                     // 권한이 없는 경우 사용자에게 권한 요청 또는 예외 처리

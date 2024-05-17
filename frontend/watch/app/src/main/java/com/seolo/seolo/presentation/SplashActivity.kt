@@ -26,7 +26,7 @@ class SplashActivity : ComponentActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             checkTokenAndNavigate()
             SessionManager.clear()
-//            LotoManager.clearLoto(this)
+            LotoManager.clearLoto(this)
         }, 2000)
     }
 
