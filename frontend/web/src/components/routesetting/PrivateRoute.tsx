@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const accessToken = sessionStorage.getItem('accessToken');
-  const initialRender = useRef(true);
+  const initialRender = useRef<boolean>(true);
   useEffect(() => {
     console.log('이니셜', initialRender.current);
     if (initialRender.current) {
