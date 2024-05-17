@@ -285,28 +285,54 @@ public:
 MyServerCallbacks serverCallbacks;
 
 // Helper function to decode Base64
-std::string base64Decode(std::string toBeDecoded) {
-  char decoded[64];
+std::string base64Decode(const std::string& toBeDecoded) {
+  // Allocate a buffer large enough to hold the decoded data
+  int bufferLength = (toBeDecoded.length() * 3) / 4;
+  std::string decoded;
+  decoded.resize(bufferLength);
+
   base64_decodestate s;
   base64_init_decodestate(&s);
-  int decodedLength = base64_decode_block(toBeDecoded.c_str(), toBeDecoded.length(), decoded, &s);
-  decoded[decodedLength] = '\0';
+
+  // Perform the decoding
+  int decodedLength = base64_decode_block(toBeDecoded.c_str(), toBeDecoded.length(), &decoded[0], &s);
+  decoded.resize(decodedLength);  // Resize to actual decoded length
+
   return decoded;
 }
+
+// std::string base64Decode(std::string toBeDecoded) {
+//   char decoded[64];
+//   base64_decodestate s;
+//   base64_init_decodestate(&s);
+
+//   int decodedLength = base64_decode_block(toBeDecoded.c_str(), toBeDecoded.length(), decoded, &s);
+//   decoded[decodedLength] = '\0';
+
+//   return decoded;
+// }
 
 // Helper function to decrypt AES-128 ECB
 std::string decryptAES128ECB(const std::string &ciphertext, const std::string &base64Key) {
   // Base64 디코딩된 텍스트를 얻기
   std::string decodedCiphertext = base64Decode(ciphertext);
 
-  Serial.print("decodedCiphertext ");
-  Serial.println(base64Decode(ciphertext).c_str());
+  Serial.print("decodedCiphertext: ");
+  for (size_t i = 0; i < decodedCiphertext.size(); ++i) {
+    Serial.print(decodedCiphertext[i], HEX);
+    Serial.print(" ");
+  }
+  Serial.println();
 
   // Base64 디코딩된 키를 얻기
   std::string key = base64Decode(base64Key);
   
   Serial.print("key ");
-  Serial.println(base64Decode(base64Key).c_str());
+  for (size_t i = 0; i < key.size(); ++i) {
+    Serial.print(key[i], HEX);
+    Serial.print(" ");
+  }
+  Serial.println();
 
   // AES 객체 생성
   AES aes;
@@ -323,7 +349,11 @@ std::string decryptAES128ECB(const std::string &ciphertext, const std::string &b
   aes.decrypt(reinterpret_cast<const byte *>(decodedCiphertext.data()), plaintextBytes);
 
   Serial.print("decrypted: ");
-  Serial.println(aes.decrypt(reinterpret_cast<const byte *>(decodedCiphertext.data()), plaintextBytes));
+  for (size_t i = 0; i < 16; ++i) {
+    Serial.print(plaintextBytes[i], HEX);
+    Serial.print(" ");
+  }
+  Serial.println();
 
   // 복호화된 결과를 문자열로 반환
   return std::string(reinterpret_cast<char *>(plaintextBytes), 16);
@@ -376,12 +406,15 @@ void checkCodeAvailable(String code, String token, String machine, String user, 
       message += ",";
       message += UID;
       message += ",";
+      message += savedMachine;
+
     } else if (savedToken == decryptedTokenString) {
       // "UNLOCK, UID, BATTERY" 전송
       message += "UNLOCK";
       message += ",";
       message += UID;
       message += ",";
+      message += savedMachine;
 
       // 자물쇠 열기
       stepper.moveTo(-700);
@@ -446,6 +479,8 @@ void checkCodeAvailable(String code, String token, String machine, String user, 
   Serial.println(savedToken);
   Serial.print("savedMachine : ");
   Serial.println(savedMachine);
+  Serial.println();
+
   stringCharacteristic->setValue(message.c_str());
   stringCharacteristic->notify();
 
