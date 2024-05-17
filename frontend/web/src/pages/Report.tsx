@@ -128,7 +128,7 @@ const StickyTh = styled.th`
   top: -2rem;
   background-color: white;
   font-family: NYJGothicM;
-  font-size: 24px
+  font-size: 24px;
   font-weight: bold;
   z-index: 1;
   padding: 0.5rem 0;
@@ -420,7 +420,7 @@ const Report = () => {
                     style={{
                       padding: '1rem',
                       textAlign: 'center',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                   >
                     {cell.render('Cell')}
