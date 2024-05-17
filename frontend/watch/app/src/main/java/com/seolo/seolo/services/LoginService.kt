@@ -12,8 +12,9 @@ import retrofit2.http.POST
 
 interface LoginService {
     @POST("login")
-    fun login(@Body loginData: Map<String, String>): Call<TokenResponse>
-
+    fun login(
+        @Header("Device-Type") deviceType: String, @Body loginData: Map<String, String>
+    ): Call<TokenResponse>
 }
 
 interface PINService {
@@ -21,6 +22,7 @@ interface PINService {
     fun sendPinNumber(
         @Header("Authorization") authorization: String,
         @Header("Company-Code") companyCode: String,
+        @Header("Device-Type") deviceType: String,
         @Body pinRequest: PINRequest
     ): Call<PINResponse>
 }
@@ -30,6 +32,7 @@ interface NewPINService {
     fun sendPinNumber(
         @Header("Authorization") authorization: String,
         @Header("Company-Code") companyCode: String,
+        @Header("Device-Type") deviceType: String,
         @Body newPinRequest: NewPINRequest
     ): Call<String>
 
