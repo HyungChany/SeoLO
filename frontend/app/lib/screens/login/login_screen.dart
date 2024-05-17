@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 if (!viewModel.isLoading) {
                   viewModel.login().then((_) {
                     if (viewModel.errorMessage == null) {
-                      Navigator.pushReplacementNamed(context, '/main');
+                      Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
                     } else {
                       showDialog(
                           context: context,

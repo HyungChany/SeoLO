@@ -70,11 +70,11 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   }
 
   Future onScanPressed() async {
-    _storage.delete(key: 'Core-Code');
-    _storage.delete(key: 'locker_battery');
-    _storage.delete(key: 'machine_id');
-    _storage.delete(key: 'locker_token');
-    _storage.delete(key: 'locker_uid');
+    // _storage.delete(key: 'Core-Code');
+    // _storage.delete(key: 'locker_battery');
+    // _storage.delete(key: 'machine_id');
+    // _storage.delete(key: 'locker_token');
+    // _storage.delete(key: 'locker_uid');
     try {
       await FlutterBluePlus.startScan(
           timeout: const Duration(seconds: 5), withKeywords: ["SEOLO"]);
@@ -287,8 +287,13 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                         unlockVM.coreUnlock().then((_) {
                           if (unlockVM.errorMessage == null) {
                             // Navigator.pushNamed(context, '/resultUnlock');
-                            Navigator.pushNamedAndRemoveUntil(context,
-                                '/resultUnlock', ModalRoute.withName('/main'));
+                            // Navigator.pushNamedAndRemoveUntil(context,
+                            //     '/resultUnlock', ModalRoute.withName('/main'));
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              '/resultUnlock',
+                                  (Route<dynamic> route) => route.isFirst,
+                            );
                           } else {
                             if (unlockVM.errorMessage == 'JT') {
                               showDialog(
@@ -308,10 +313,15 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                                   });
                             } else {
                               // Navigator.pushNamed(context, '/resultUnlock');
+                              // Navigator.pushNamedAndRemoveUntil(
+                              //     context,
+                              //     '/resultUnlock',
+                              //     ModalRoute.withName('/main'));
                               Navigator.pushNamedAndRemoveUntil(
-                                  context,
-                                  '/resultUnlock',
-                                  ModalRoute.withName('/main'));
+                                context,
+                                '/resultUnlock',
+                                    (Route<dynamic> route) => route.isFirst,
+                              );
                             }
                           }
                         });
@@ -323,8 +333,13 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                         lockedVM.coreLocked().then((_) {
                           if (lockedVM.errorMessage == null) {
                             // Navigator.pushNamed(context, '/resultLock');
-                            Navigator.pushNamedAndRemoveUntil(context,
-                                '/resultLock', ModalRoute.withName('/main'));
+                            // Navigator.pushNamedAndRemoveUntil(context,
+                            //     '/resultLock', ModalRoute.withName('/main'));
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              '/resultLock',
+                                  (Route<dynamic> route) => route.isFirst,
+                            );
                           } else {
                             if (lockedVM.errorMessage == 'JT') {
                               showDialog(
@@ -344,8 +359,13 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                                   });
                             } else {
                               // Navigator.pushNamed(context, '/resultLock');
-                              Navigator.pushNamedAndRemoveUntil(context,
-                                  '/resultLock', ModalRoute.withName('/main'));
+                              // Navigator.pushNamedAndRemoveUntil(context,
+                              //     '/resultLock', ModalRoute.withName('/main'));
+                              Navigator.pushNamedAndRemoveUntil(
+                                context,
+                                '/resultLock',
+                                    (Route<dynamic> route) => route.isFirst,
+                              );
                             }
                           }
                         });

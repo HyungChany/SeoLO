@@ -76,14 +76,10 @@ class _ScanResultTileState extends State<ScanResultTile> {
             widget.result.device.platformName,
             overflow: TextOverflow.ellipsis,
           ),
-          Text(
-            widget.result.device.remoteId.str,
-            style: Theme.of(context).textTheme.bodySmall,
-          )
         ],
       );
     } else {
-      return Text(widget.result.device.remoteId.str);
+      return Text('알 수 없음');
     }
   }
 

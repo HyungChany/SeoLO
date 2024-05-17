@@ -1,5 +1,4 @@
 import 'package:app/view_models/core/core_check_view_model.dart';
-import 'package:app/widgets/dialog/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/button/common_text_button.dart';
@@ -39,13 +38,13 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
     '${endParts[0]} | ${endParts[1].substring(0, 5)}';
 
     final List<String> workListContent = [
-      viewModel.facilityName!,
-      viewModel.machineName!,
-      viewModel.machineCode!,
+      viewModel.facilityName ?? '조회 불가',
+      viewModel.machineName ?? '조회 불가',
+      viewModel.machineCode ?? '조회 불가',
       '${viewModel.workerTeam} ${viewModel.workerName} ${viewModel.workerTitle}',
       formattedStartTime,
       formattedEndTime,
-      viewModel.taskType!,
+      viewModel.taskType ?? '조회 불가',
     ];
     return Scaffold(
       appBar: Header(title: '${viewModel.workerName}님의 작업 내역', back: true),
@@ -97,7 +96,7 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: SingleChildScrollView(
-                      child: Text(viewModel.precaution!, style: TextStyle(fontSize: 16.0)),
+                      child: Text(viewModel.precaution ?? '조회 불가', style: TextStyle(fontSize: 16.0)),
                     ),
                   ),
                 ],

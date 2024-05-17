@@ -78,8 +78,15 @@ class CoreService {
       Dio.Response response =
           await _dio.post('$baseUrl/core/CHECK', data: coreCheckModel.toJson());
       if (response.statusCode == 200) {
-        CoreCheckModel coreCheckModel = CoreCheckModel.fromJson(response.data);
-        debugPrint('core check api 응답값 : ${CoreCheckModel.fromJson(response.data)}');
+        debugPrint('check 응답: ${response.data.toString()}');
+        await _storage.delete(key: 'locker_uid');
+        await _storage.delete(key: 'machine_id');
+        await _storage.delete(key: 'locker_battery');
+        CoreCheckModel coreCheckModel = CoreCheckModel.fromJson(response.data['check_more_response']);
+        coreCheckModel.taskType = response.data['task_history']['taskTemplate']['task_type'].toString();
+        coreCheckModel.startTime = response.data['task_history']['taskStartDateTime'].toString();
+        coreCheckModel.endTime = response.data['task_history']['taskEndEstimatedDateTime'].toString();
+        coreCheckModel.precaution = response.data['task_history']['taskPrecaution'].toString();
         return {'success': true, 'coreCheckModel': coreCheckModel};
       } else {
         return {'success': false};

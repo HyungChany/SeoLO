@@ -160,13 +160,13 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
                     }
                   } else {
                     // locker uid가 null이라면 일지 먼저 작성한 것
-                    // Navigator.pushNamedAndRemoveUntil(
-                    //   context,
-                    //   '/bluetooth',
-                    //       (Route<dynamic> route) => route.isFirst,
-                    // );
                     Navigator.pushNamedAndRemoveUntil(
-                        context, '/bluetooth', ModalRoute.withName('/main'));
+                      context,
+                      '/bluetooth',
+                          (Route<dynamic> route) => route.isFirst,
+                    );
+                    // Navigator.pushNamedAndRemoveUntil(
+                    //     context, '/bluetooth', ModalRoute.withName('/main'));
                   }
                 },
               ),

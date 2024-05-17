@@ -50,7 +50,7 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
     bool isAuthenticated = await FingerprintAuth.authenticate();
     // 지문인식 성공
     if (isAuthenticated) {
-      Navigator.pushReplacementNamed(context, '/main');
+      Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
       setState(() {
         pin = '';
         failCount = 0;
@@ -76,7 +76,7 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
       if (!viewModel.isLoading) {
         viewModel.pinLogin().then((_) {
           if (viewModel.errorMessage == null) {
-            Navigator.pushReplacementNamed(context, '/main');
+            Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
             setState(() {
               pin = '';
               failCount = 0;
