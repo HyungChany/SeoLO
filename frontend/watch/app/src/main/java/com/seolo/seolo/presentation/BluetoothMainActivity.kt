@@ -43,6 +43,8 @@ class BluetoothMainActivity : AppCompatActivity() {
     private var bluetoothGatt: BluetoothGatt? = null
     private var lastSentData: String? = null
     private var isDataReceived = false
+    private val handler = Handler(Looper.getMainLooper())
+    private val scanInterval: Long = 10000
 
     companion object {
         private const val REQUEST_BLUETOOTH_PERMISSION = 101
@@ -85,17 +87,32 @@ class BluetoothMainActivity : AppCompatActivity() {
         }
     }
 
-    // 기기 선택 시 호출되는 함수
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun startBluetoothScan() {
+        bluetoothAdapter.startDiscoveryForSpecificDevices("SEOLO LOCK") { newDevices ->
+            deviceAdapter.updateDevices(newDevices)
+        }
+
+        // 주기적으로 Bluetooth 스캔을 재시작
+        handler.postDelayed({
+            stopBluetoothScan()
+            startBluetoothScan()
+        }, scanInterval)
+    }
+
+    private fun stopBluetoothScan() {
+        bluetoothAdapter.stopDiscovery()
+    }
+
     @RequiresApi(Build.VERSION_CODES.S)
     private fun onDeviceSelected(device: BluetoothDevice) {
-        // 기기 선택 시 GATT 스캐닝 중지
-        bluetoothAdapter.stopDiscovery()
-
-        // 100ms 딜레이 후 기기 연결 시도
+        stopBluetoothScan()
         Handler(Looper.getMainLooper()).postDelayed({
             connectToDevice(device)
         }, 100)
     }
+
+
 
     // 기기 연결 및 데이터 전송 로직을 포함한 함수
     @RequiresApi(Build.VERSION_CODES.S)
