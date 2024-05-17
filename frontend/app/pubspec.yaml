@@ -103,6 +103,7 @@ flutter:
     - assets/images/success_loto.png
     - assets/images/fail_loto.png
     - assets/images/bluetooth_icon.png
+    - assets/images/loto_process_character.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

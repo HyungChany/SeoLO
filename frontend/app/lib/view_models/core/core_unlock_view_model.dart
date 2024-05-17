@@ -20,10 +20,6 @@ class CoreUnlockViewModel extends ChangeNotifier {
   bool get isUnlocking => _isUnlocking;
   String? get errorMessage => _errorMessage;
 
-  CoreUnlockViewModel() {
-    coreUnlock();
-  }
-
   void setIsUnlocking() async {
     _isUnlocking = !_isUnlocking;
     notifyListeners();

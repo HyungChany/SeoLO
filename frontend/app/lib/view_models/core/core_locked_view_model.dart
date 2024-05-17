@@ -18,9 +18,6 @@ class CoreLockedViewModel extends ChangeNotifier {
   bool get isLocking => _isLocking;
   String? get errorMessage => _errorMessage;
 
-  CoreLockedViewModel() {
-    coreLocked();
-  }
 
   void setIsLocking() async {
     _isLocking = !_isLocking;

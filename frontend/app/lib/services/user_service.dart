@@ -95,9 +95,11 @@ class UserService {
       );
 
       if (response.statusCode == 200) {
+        await _storage.deleteAll();
         await _storage.delete(key: 'token');
         await _storage.delete(key: 'Company-Code');
         await _storage.delete(key: 'user_id');
+
         return {'success': true};
       } else {
         return {

@@ -13,7 +13,7 @@ class PinLoginScreen extends StatefulWidget {
   const PinLoginScreen({super.key});
 
   @override
-  _PinLoginScreenState createState() => _PinLoginScreenState();
+  State<PinLoginScreen> createState() => _PinLoginScreenState();
 }
 
 class _PinLoginScreenState extends State<PinLoginScreen> {

@@ -35,6 +35,7 @@ class CoreService {
         '$baseUrl/core/ISSUE',
         data: coreIssueModel.toJson(),
       );
+      debugPrint('issue 요청값 : ${coreIssueModel.toJson().toString()}');
       if (response.statusCode == 200) {
         await _storage.write(
             key: 'Core-Code', value: response.data['next_code']);
@@ -50,6 +51,7 @@ class CoreService {
       }
     } on Dio.DioException catch (e) {
       if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.deleteAll();
         await _storage.delete(key: 'token');
         await _storage.delete(key: 'Company-Code');
         await _storage.delete(key: 'user_id');
@@ -71,7 +73,7 @@ class CoreService {
 
   ///////////////////////// check //////////////////////////////////
   Future<Map<String, dynamic>> coreCheck(CoreCheckModel coreCheckModel) async {
-    debugPrint(coreCheckModel.toJson().toString());
+    // debugPrint(coreCheckModel.toJson().toString());
     try {
       Dio.Response response =
           await _dio.post('$baseUrl/core/CHECK', data: coreCheckModel.toJson());
@@ -108,6 +110,7 @@ class CoreService {
     try {
       Dio.Response response = await _dio.post('$baseUrl/core/UNLOCK',
           data: coreUnlockModel.toJson());
+      debugPrint('unlock 요청값 : ${coreUnlockModel.toJson().toString()}');
       if (response.statusCode == 200) {
         await _storage.delete(key: 'Core-Code');
         await _storage.delete(key: 'machine_id');

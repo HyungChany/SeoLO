@@ -83,6 +83,6 @@ Route<dynamic> generateMainRoute(RouteSettings settings) {
       return MaterialPageRoute(builder: (context) => ResultUnlockScreen());
     default:
       debugPrint('Route Error');
-      return MaterialPageRoute(builder: (context) => const TestScreen());
+      return MaterialPageRoute(builder: (context) => const MainScreen());
   }
 }

@@ -114,7 +114,6 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
                 text: '작업 내역 저장 및 자물쇠 잠금',
                 onTap: () {
                   // machine id 저장
-                  _storage.delete(key:'locker_uid');
                   _storage.write(key: 'machine_id', value: viewModel.machineId.toString());
                   // storage에 locker uid가 있다면 연결 먼저 한 것
                   // 그럼 issue api 요청 후 bluetooth 이동
@@ -123,7 +122,8 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
                       viewModel.coreIssue().then((_) {
                         // 일지 작성 후 lock 하러 가기!
                         if (viewModel.errorMessage == null) {
-                          Navigator.pushNamedAndRemoveUntil(context, '/bluetooth', (route) => false);
+                          Navigator.pushNamedAndRemoveUntil(context,
+                              '/bluetooth', ModalRoute.withName('/main'));
                         } else {
                           if (viewModel.errorMessage == 'JT') {
                             showDialog(
@@ -155,7 +155,8 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
                     }
                   } else {
                     // locker uid가 null이라면 일지 먼저 작성한 것
-                    Navigator.pushNamedAndRemoveUntil(context, '/bluetooth', (route) => false);
+                    Navigator.pushNamedAndRemoveUntil(context,
+                        '/bluetooth', ModalRoute.withName('/main'));
                   }
                 },
               ),

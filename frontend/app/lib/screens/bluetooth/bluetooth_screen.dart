@@ -43,9 +43,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   @override
   void initState() {
     super.initState();
-    if (_scanResults == []) {
-      onScanPressed();
-    }
     _scanResultsSubscription = FlutterBluePlus.scanResults.listen((results) {
       _scanResults = results;
       if (mounted) {
@@ -102,17 +99,18 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     }
   }
 
-  void connectToDevice(BluetoothDevice device) async {
+  Future<void> connectToDevice(BluetoothDevice device) async {
     await device.connect();
     FlutterBluePlus.stopScan();
-    writeToDevice(device);
+    await writeToDevice(device);
   }
 
-  void writeToDevice(BluetoothDevice device) async {
+  Future<void> writeToDevice(BluetoothDevice device) async {
     final issueVM = Provider.of<CoreIssueViewModel>(context, listen: false);
+    final checkVM = Provider.of<CoreCheckViewModel>(context, listen: false);
     final lockedVM = Provider.of<CoreLockedViewModel>(context, listen: false);
     final unlockVM = Provider.of<CoreUnlockViewModel>(context, listen: false);
-    device.discoverServices().then((services) async {
+    await device.discoverServices().then((services) async {
       companyCode = await _storage.read(key: 'Company-Code');
       coreCode = await _storage.read(key: 'Core-Code');
       lockerToken = await _storage.read(key: 'locker_token');
@@ -140,6 +138,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
               bluetoothCharacteristic = characteristic;
               debugPrint('쓰기 시도');
               //회사코드 토큰 장비 유저 uid coreCode
+              // String message = 'SFY001KOR,,,5,,INIT';
               String message =
                   "${companyCode ?? ''},${lockerToken ?? ''},${machineId ?? ''},${userId ?? ''},${lockerUid ?? ''},${coreCode ?? 'INIT'}";
               debugPrint('보내는 값: $message');
@@ -156,7 +155,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     setState(() {
                       lockedVM.setIsLocking();
                     });
-                    Navigator.pushReplacementNamed(context, '/loadingLock');
                   }
                 }
                 // // 잠금 해제도 마찬가지로 loading screen
@@ -166,7 +164,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     setState(() {
                       unlockVM.setIsUnlocking();
                     });
-                    Navigator.pushReplacementNamed(context, '/loadingUnlock');
                   }
                 }
                 characteristic.setNotifyValue(true);
@@ -174,120 +171,194 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                 characteristic.lastValueStream.listen((value) async {
                   String receivedString = utf8.decode(value);
                   _receivedValues = receivedString.split(',');
+                  debugPrint('응답값: $receivedString');
+                  debugPrint('응답토큰: ${receivedString[5]}');
                   if (_receivedValues[4] == userId) {
-                    if (_receivedValues[0] == 'ALERT') {
-                      showDialog(
-                          context: context,
-                          barrierDismissible: true,
-                          builder: (BuildContext context) {
-                            return CommonDialog(
-                              content: '연결할 자물쇠를 확인해 주세요.',
-                              buttonText: '확인',
-                            );
+                    if (mounted) {
+                      if (_receivedValues[0] == 'ALERT') {
+                        showDialog(
+                            context: context,
+                            barrierDismissible: true,
+                            builder: (BuildContext context) {
+                              return CommonDialog(
+                                content: '연결할 자물쇠를 확인해 주세요.',
+                                buttonText: '확인',
+                              );
+                            });
+                      } else {
+                        // CHECK거나 ALERT가 아니면 code 덮기
+                        if (_receivedValues[0] != 'CHECK') {
+                          await _storage.write(
+                              key: 'Core-Code', value: _receivedValues[0]);
+                        }
+                        await _storage.write(
+                            key: 'locker_uid', value: _receivedValues[1]);
+                        await _storage.write(
+                            key: 'machine_id', value: _receivedValues[2]);
+                        await _storage.write(
+                            key: 'locker_battery', value: _receivedValues[3]);
+                      }
+                      // 작업 내역을 미리 작성했다면
+                      if (_receivedValues[0] == 'WRITED') {
+                        String? battery =
+                            await _storage.read(key: 'locker_battery');
+                        int? batteryInfo =
+                            (battery != null) ? int.parse(battery) : 0;
+                        String? lockerUid =
+                            await _storage.read(key: 'locker_uid');
+                        (lockerUid != null)
+                            ? issueVM.setLockerUid(lockerUid)
+                            : issueVM.setLockerUid('');
+                        issueVM.setBattery(batteryInfo);
+                        issueVM.coreIssue().then((_) {
+                          if (issueVM.errorMessage == null) {
+                            writeToDevice(device);
+                          } else {
+                            if (issueVM.errorMessage == 'JT') {
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (BuildContext context) {
+                                    return CommonDialog(
+                                      content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                                      buttonText: '확인',
+                                      buttonClick: () {
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            '/login',
+                                            (route) => false);
+                                      },
+                                    );
+                                  });
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (BuildContext context) {
+                                    return CommonDialog(
+                                      content: issueVM.errorMessage!,
+                                      buttonText: '확인',
+                                    );
+                                  });
+                            }
+                          }
+                        });
+                      }
+                      if (_receivedValues[0] == 'WRITE') {
+                        Navigator.pushReplacementNamed(context, '/checklist');
+                      }
+                      if (_receivedValues[0] == 'CHECK') {
+                        // locked에서 check로 왔다면 상태 되돌리기
+                        if (coreCode == "LOCKED") {
+                          setState(() {
+                            unlockVM.setIsUnlocking();
                           });
-                    } else {
-                      // CHECK거나 ALERT면 원래의 것 저장
-                      if (_receivedValues[0] != 'CHECK' ||
-                          _receivedValues[0] != 'ALERT') {
-                        _storage.write(
-                            key: 'Core-Code', value: _receivedValues[0]);
-                      }
-                      _storage.write(
-                          key: 'locker_uid', value: _receivedValues[1]);
-                      _storage.write(
-                          key: 'machine_id', value: _receivedValues[2]);
-                      _storage.write(
-                          key: 'locker_battery', value: _receivedValues[3]);
-                    }
-                    // 작업 내역을 미리 작성했다면
-                    if (_receivedValues[0] == 'WRITED') {
-                      String? battery =
-                          await _storage.read(key: 'locker_battery');
-                      int? batteryInfo =
-                          (battery != null) ? int.parse(battery) : 0;
-                      String? lockerUid =
-                          await _storage.read(key: 'locker_uid');
-                      (lockerUid != null)
-                          ? issueVM.setLockerUid(lockerUid)
-                          : issueVM.setLockerUid('');
-                      issueVM.setBattery(batteryInfo);
-                      issueVM.coreIssue().then((_) {
-                        if (issueVM.errorMessage == null) {
-                          writeToDevice(device);
-                        } else {
-                          if (issueVM.errorMessage == 'JT') {
-                            showDialog(
-                                context: context,
-                                barrierDismissible: true,
-                                builder: (BuildContext context) {
-                                  return CommonDialog(
-                                    content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
-                                    buttonText: '확인',
-                                    buttonClick: () {
-                                      Navigator.pushNamedAndRemoveUntil(
-                                          context, '/login', (route) => false);
-                                    },
-                                  );
-                                });
-                          } else {
-                            showDialog(
-                                context: context,
-                                barrierDismissible: true,
-                                builder: (BuildContext context) {
-                                  return CommonDialog(
-                                    content: issueVM.errorMessage!,
-                                    buttonText: '확인',
-                                  );
-                                });
-                          }
                         }
-                      });
-                    }
-                    if (_receivedValues[0] == 'WRITE') {
-                      Navigator.pushReplacementNamed(context, '/checklist');
-                    }
-                    if (_receivedValues[0] == 'CHECK') {
-                      // locked에서 check로 왔다면 상태 되돌리기
-                      if (coreCode == "LOCKED") {
-                        unlockVM.setIsUnlocking();
-                      }
-                      Navigator.pushReplacementNamed(
-                          context, '/otherWorklistCheck');
-                    }
-                    if (_receivedValues[0] == 'UNLOCK') {
-                      setState(() {
-                        unlockVM.setIsUnlocking();
-                      });
-                      unlockVM.coreUnlock().then((_) {
-                        if (unlockVM.errorMessage == null) {
-                          Navigator.pushNamedAndRemoveUntil(context,
-                              '/resultUnlock', ModalRoute.withName('/main'));
-                        } else {
-                          if (unlockVM.errorMessage == 'JT') {
-                            showDialog(
-                                context: context,
-                                barrierDismissible: true,
-                                builder: (BuildContext context) {
-                                  return CommonDialog(
-                                    content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
-                                    buttonText: '확인',
-                                    buttonClick: () {
-                                      Navigator.pushNamedAndRemoveUntil(
-                                          context, '/login', (route) => false);
-                                    },
-                                  );
-                                });
+                        checkVM.coreCheck().then((_) {
+                          if (checkVM.errorMessage == null) {
+                            Navigator.pushReplacementNamed(
+                                context, '/otherWorklistCheck');
                           } else {
-                            Navigator.pushNamedAndRemoveUntil(context,
-                                '/resultUnlock', ModalRoute.withName('/main'));
+                            if (checkVM.errorMessage == 'JT') {
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (BuildContext context) {
+                                    return CommonDialog(
+                                      content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                                      buttonText: '확인',
+                                      buttonClick: () {
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            '/login',
+                                            (route) => false);
+                                      },
+                                    );
+                                  });
+                            } else {
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (BuildContext context) {
+                                    return CommonDialog(
+                                      content: checkVM.errorMessage!,
+                                      buttonText: '확인',
+                                    );
+                                  });
+                            }
                           }
-                        }
-                      });
-                    }
-                    if (_receivedValues[0] == 'LOCKED') {
-                      setState(() {
-                        lockedVM.setIsLocking();
-                      });
+                        });
+                      }
+                      if (_receivedValues[0] == 'UNLOCK') {
+                        setState(() {
+                          unlockVM.setIsUnlocking();
+                        });
+                        unlockVM.coreUnlock().then((_) {
+                          if (unlockVM.errorMessage == null) {
+                            Navigator.pushNamed(context, '/resultUnlock');
+                            // Navigator.pushNamedAndRemoveUntil(context,
+                            //     '/resultUnlock', ModalRoute.withName('/main'));
+                          } else {
+                            if (unlockVM.errorMessage == 'JT') {
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (BuildContext context) {
+                                    return CommonDialog(
+                                      content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                                      buttonText: '확인',
+                                      buttonClick: () {
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            '/login',
+                                            (route) => false);
+                                      },
+                                    );
+                                  });
+                            } else {
+                              Navigator.pushNamed(context, '/resultUnlock');
+                              // Navigator.pushNamedAndRemoveUntil(
+                              //     context,
+                              //     '/resultUnlock',
+                              //     ModalRoute.withName('/main'));
+                            }
+                          }
+                        });
+                      }
+                      if (_receivedValues[0] == 'LOCKED') {
+                        setState(() {
+                          lockedVM.setIsLocking();
+                        });
+                        lockedVM.coreLocked().then((_) {
+                          if (lockedVM.errorMessage == null) {
+                            Navigator.pushNamed(context, '/resultLock');
+                            // Navigator.pushNamedAndRemoveUntil(context,
+                            //     '/resultLock', ModalRoute.withName('/main'));
+                          } else {
+                            if (lockedVM.errorMessage == 'JT') {
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (BuildContext context) {
+                                    return CommonDialog(
+                                      content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                                      buttonText: '확인',
+                                      buttonClick: () {
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context,
+                                            '/login',
+                                            (route) => false);
+                                      },
+                                    );
+                                  });
+                            } else {
+                              Navigator.pushNamed(context, '/resultLock');
+                              // Navigator.pushNamedAndRemoveUntil(context,
+                              //     '/resultLock', ModalRoute.withName('/main'));
+                            }
+                          }
+                        });
+                      }
                     }
                   }
                 });
@@ -320,20 +391,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     }
   }
 
-  List<Widget> _buildSystemDeviceTiles(BuildContext context) {
-    return _systemDevices
-        .map(
-          (d) => SystemDeviceTile(
-            device: d,
-            onOpen: () {
-              connectToDevice(d);
-            },
-            onConnect: () => connectToDevice(d),
-          ),
-        )
-        .toList();
-  }
-
   List<Widget> _buildScanResultTiles(BuildContext context) {
     return _scanResults
         .map(
@@ -360,32 +417,39 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final lockedVM = Provider.of<CoreLockedViewModel>(context);
+    final unlockVM = Provider.of<CoreUnlockViewModel>(context);
     return Scaffold(
       appBar: const Header(title: '자물쇠 선택', back: true),
-      body: RefreshIndicator(
-        onRefresh: onRefresh,
-        child: Stack(
-          children: [
-            ListView(
-              children: <Widget>[
-                Text('receive: $_receivedValues'),
-                Text('나의 자물쇠'),
-                ..._buildSystemDeviceTiles(context),
-                Text('최근 연결한 자물쇠'),
-                ..._buildLastScanResultTiles(context),
-                Text('새로운 자물쇠'),
-                ..._buildScanResultTiles(context),
-              ],
+      body: (lockedVM.isLocking || unlockVM.isUnlocking)
+          ? Center(
+              child: Image.asset(
+              'assets/images/loading_icon.gif',
+              width: 200,
+              height: 200,
+            ))
+          : RefreshIndicator(
+              onRefresh: onRefresh,
+              child: Stack(
+                children: [
+                  ListView(
+                    children: <Widget>[
+                      Text('receive: $_receivedValues'),
+                      Text('최근 연결한 자물쇠'),
+                      ..._buildLastScanResultTiles(context),
+                      Text('새로운 자물쇠'),
+                      ..._buildScanResultTiles(context),
+                    ],
+                  ),
+                  Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                          padding: const EdgeInsets.only(
+                              bottom: 20, left: 50, right: 50),
+                          child: buildScanButton(context)))
+                ],
+              ),
             ),
-            Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: 20, left: 50, right: 50),
-                    child: buildScanButton(context)))
-          ],
-        ),
-      ),
     );
   }
 }
