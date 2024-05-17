@@ -1,7 +1,10 @@
 import styled from 'styled-components';
 import * as Color from '@/config/color/Color.ts';
 import { lockCheck } from '@/apis/Lock.ts';
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import { notificationEventsState } from '@/recoil/sseState.tsx';
+import { useQuery } from '@tanstack/react-query';
 interface ContentBoxProps {
   battery: number; // battery 속성에 대한 타입 정의
 }
@@ -11,6 +14,7 @@ interface LockTypes {
   locked: boolean;
   battery: number;
 }
+
 const BackGround = styled.div`
   width: 100%;
   height: auto;
@@ -57,30 +61,36 @@ const ContentBox = styled.div<ContentBoxProps>`
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  background-color: ${(props) => 
-    props.battery < 25 ? Color.RED1 : 
-    props.battery <= 50 ? Color.YELLOW100 : null};
+  background-color: ${(props) =>
+    props.battery < 25
+      ? Color.RED1
+      : props.battery <= 50
+        ? Color.YELLOW100
+        : null};
   border-bottom: 2px solid ${Color.GRAY200};
   /* color: ${(props) => (props.battery < 40 ? Color.WHITE : Color.BLACK)}; */
 `;
 const CurrentLOTO = () => {
-  const [lockers, setLockers] = useState<LockTypes[]>([]);
-  // const lock = lockCheck('SFY001KOR');
-  // console.log('라커', lock);
-  useEffect(() => {
-    const fetchLocks = async () => {
-      const data = await lockCheck();
-      console.log('라커', data); // data를 상태로 설정
-      const newOptions = data.map((locks: LockTypes) => ({
-        id: locks.id,
-        uid: locks.uid,
-        locked: locks.locked,
-        battery: locks.battery,
-      }));
-      setLockers(newOptions);
-    };
-    fetchLocks();
-  }, []);
+  // const [lockers, setLockers] = useState<LockTypes[]>([]);
+  const events = useRecoilValue(notificationEventsState);
+  const { data: locker } = useQuery({
+    queryKey: ['locker', events],
+    queryFn: () => lockCheck(),
+  });
+  // useEffect(() => {
+  //   const fetchLocks = async () => {
+  //     const data = await lockCheck();
+  //     console.log('라커', data); // data를 상태로 설정
+  //     const newOptions = data.map((locks: LockTypes) => ({
+  //       id: locks.id,
+  //       uid: locks.uid,
+  //       locked: locks.locked,
+  //       battery: locks.battery,
+  //     }));
+  //     setLockers(newOptions);
+  //   };
+  //   fetchLocks();
+  // }, []);
   return (
     <BackGround>
       <Box>
@@ -98,12 +108,12 @@ const CurrentLOTO = () => {
             배터리 잔량
           </Content>
         </TitleBox>
-        {lockers.map((locker) => (
-          <ContentBox key={locker.id} battery={locker.battery}>
-            <Content>{locker.id}</Content>
-            <Content>{locker.uid}</Content>
-            <Content>{locker.locked ? 'LOCK' : 'UNLOCK'}</Content>
-            <Content>{locker.battery}%</Content>
+        {locker?.map((data: LockTypes) => (
+          <ContentBox key={data.id} battery={data.battery}>
+            <Content>{data.id}</Content>
+            <Content>{data.uid}</Content>
+            <Content>{data.locked ? 'LOCK' : 'UNLOCK'}</Content>
+            <Content>{data.battery}%</Content>
           </ContentBox>
         ))}
       </Box>

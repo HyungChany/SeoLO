@@ -19,7 +19,7 @@ class LoginActivity : AppCompatActivity() {
     // 액티비티 생성 시 호출되는 메서드
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_login)
         supportActionBar?.hide()
 
         viewPager = findViewById(R.id.viewPager)

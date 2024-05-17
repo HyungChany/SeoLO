@@ -73,10 +73,11 @@ class ChecklistActivity : AppCompatActivity() {
         val accessToken = TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)
         val username = TokenManager.getUserName(this)
+        val deviceType = "watch"
         if (accessToken != null && companyCode != null && username != null) {
             // Retrofit을 사용하여 서버로부터 시설물 정보 요청
             RetrofitClient.facilityService.getFacilities(
-                "Bearer $accessToken", companyCode, username
+                "Bearer $accessToken", companyCode, deviceType, username
             ).enqueue(object : Callback<FacilityResponse> {
                 override fun onResponse(
                     call: Call<FacilityResponse>, response: Response<FacilityResponse>

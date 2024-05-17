@@ -134,7 +134,7 @@ export const Leaflet = ({
   });
   // 마커 편집할 때 공장에 따른 기계 종류 불러오기
   const { data: machineData } = useQuery({
-    queryKey: ['machine', selectedOption],
+    queryKey: ['machine', selectedOption, events],
     queryFn: () => {
       if (selectedOption) {
         return simpleMachineCheck(selectedOption);
@@ -144,7 +144,7 @@ export const Leaflet = ({
   });
   // 마커 정보 불러오기
   const { data: markerDetail } = useQuery<MarkerDetailType>({
-    queryKey: ['markerDetail', id],
+    queryKey: ['markerDetail', id, events],
     queryFn: () => detailMarker(id!),
     enabled: id !== null,
   });
@@ -321,7 +321,7 @@ export const Leaflet = ({
                           fontWeight: 'bold',
                         }}
                       >
-                        장비 정보
+                        현재 작업중입니다
                       </div>
                     </div>
                     <Typo.Detail0>
@@ -338,8 +338,6 @@ export const Leaflet = ({
                   <>
                     <div
                       style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
                         textAlign: 'center',
                         marginBottom: '1rem',
                       }}
