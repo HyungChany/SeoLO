@@ -17,7 +17,6 @@ const useSSE = () => {
   const url = `${import.meta.env.VITE_REACT_APP_API_URL}/pub`;
   useEffect(() => {
     // if (accessToken && companyCode) {
-    console.log(1);
     let isMounted = true;
     const connectSSE = () => {
       const accessToken = sessionStorage.getItem('accessToken') || '';

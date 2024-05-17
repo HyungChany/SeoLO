@@ -1,7 +1,6 @@
 import CheckList from '@/../assets/icons/CheckList.svg?react';
 import ListModify from '@/../assets/icons/ListModify.svg?react';
 import logoutIcon from '@/../assets/images/Logout.png';
-import Position from '@/../assets/icons/Position.svg?react';
 import { Facilities } from '@/apis/Facilities.ts';
 import { Logout } from '@/apis/Login.ts';
 import {
@@ -138,11 +137,6 @@ const LogoutBtn = styled.button`
 
 const LogoutIcon = styled.img`
   width: 2.3rem;
-`;
-
-const PositionIcon = styled(Position)`
-  width: 2.5rem;
-  margin-right: 5%;
 `;
 
 const CheckListIcon = styled(CheckList)`
@@ -339,15 +333,6 @@ const MainPage = () => {
               <Banner>Menu</Banner>
             </BannerContainer>
             <SideMenuBox>
-              <Menu
-                onClick={() => console.log('클릭')}
-                width={'100%'}
-                $enterSize={1}
-              >
-                <PositionIcon />
-                <Typo.Body1B color={Color.ONYX}>작업장 위치 선택</Typo.Body1B>
-              </Menu>
-              <Spacer space={'1rem'} />
               <input
                 type="file"
                 onChange={handleImageChange}
