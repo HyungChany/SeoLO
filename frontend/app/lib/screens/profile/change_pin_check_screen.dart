@@ -64,7 +64,7 @@ class _ChangePinCheckScreenState extends State<ChangePinCheckScreen> {
               if (viewModel.errorMessage == 'JT') {
                 showDialog(
                     context: context,
-                    barrierDismissible: true,
+                    barrierDismissible: false,
                     builder: (BuildContext context) {
                       return CommonDialog(
                         content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',

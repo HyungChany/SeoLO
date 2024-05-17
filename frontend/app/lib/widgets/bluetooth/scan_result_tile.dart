@@ -5,25 +5,29 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ScanResultTile extends StatefulWidget {
-  const ScanResultTile({super.key, required this.result, this.onTap, required this.text});
+  const ScanResultTile(
+      {super.key, required this.result, this.onTap,});
 
   final ScanResult result;
   final VoidCallback? onTap;
-  final String text;
 
   @override
   State<ScanResultTile> createState() => _ScanResultTileState();
 }
 
 class _ScanResultTileState extends State<ScanResultTile> {
-  BluetoothConnectionState _connectionState = BluetoothConnectionState.disconnected;
+  BluetoothConnectionState _connectionState =
+      BluetoothConnectionState.disconnected;
 
-  late StreamSubscription<BluetoothConnectionState> _connectionStateSubscription;
+  late StreamSubscription<BluetoothConnectionState>
+      _connectionStateSubscription;
   String? coreCode;
+
   @override
   void initState() {
     super.initState();
-    _connectionStateSubscription = widget.result.device.connectionState.listen((state) {
+    _connectionStateSubscription =
+        widget.result.device.connectionState.listen((state) {
       _connectionState = state;
       if (mounted) {
         setState(() {});
@@ -42,11 +46,17 @@ class _ScanResultTileState extends State<ScanResultTile> {
   }
 
   String getNiceManufacturerData(List<List<int>> data) {
-    return data.map((val) => '${getNiceHexArray(val)}').join(', ').toUpperCase();
+    return data
+        .map((val) => '${getNiceHexArray(val)}')
+        .join(', ')
+        .toUpperCase();
   }
 
   String getNiceServiceData(Map<Guid, List<int>> data) {
-    return data.entries.map((v) => '${v.key}: ${getNiceHexArray(v.value)}').join(', ').toUpperCase();
+    return data.entries
+        .map((v) => '${v.key}: ${getNiceHexArray(v.value)}')
+        .join(', ')
+        .toUpperCase();
   }
 
   String getNiceServiceUuids(List<Guid> serviceUuids) {
@@ -80,12 +90,13 @@ class _ScanResultTileState extends State<ScanResultTile> {
 
   Widget _buildConnectButton(BuildContext context) {
     return ElevatedButton(
-      child: isConnected ? Text(widget.text) : const Text('연결'),
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),
-      onPressed: (widget.result.advertisementData.connectable) ? widget.onTap : null,
+      onPressed:
+          (widget.result.advertisementData.connectable) ? widget.onTap : null,
+      child: isConnected ? Text('연결') : const Text('선택'),
     );
   }
 
@@ -102,7 +113,10 @@ class _ScanResultTileState extends State<ScanResultTile> {
           Expanded(
             child: Text(
               value,
-              style: Theme.of(context).textTheme.bodySmall?.apply(color: Colors.black),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall
+                  ?.apply(color: Colors.black),
               softWrap: true,
             ),
           ),

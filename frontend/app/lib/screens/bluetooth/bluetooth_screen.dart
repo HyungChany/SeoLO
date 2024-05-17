@@ -6,7 +6,6 @@ import 'package:app/view_models/core/core_issue_view_model.dart';
 import 'package:app/view_models/core/core_locked_view_model.dart';
 import 'package:app/view_models/core/core_unlock_view_model.dart';
 import 'package:app/widgets/bluetooth/scan_result_tile.dart';
-import 'package:app/widgets/bluetooth/system_device_tile.dart';
 import 'package:app/widgets/button/common_text_button.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:app/widgets/header/header.dart';
@@ -24,7 +23,6 @@ class BluetoothScreen extends StatefulWidget {
 
 class _BluetoothScreenState extends State<BluetoothScreen> {
   final _storage = const FlutterSecureStorage();
-  List<BluetoothDevice> _systemDevices = [];
   List<ScanResult> _scanResults = [];
   List<ScanResult> _lastScanResults = [];
   bool _isScanning = false;
@@ -80,11 +78,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
           timeout: const Duration(seconds: 5), withKeywords: ["SEOLO"]);
     } catch (e) {
       debugPrint("Start Scan Error: $e");
-    }
-    try {
-      _systemDevices = await FlutterBluePlus.systemDevices;
-    } catch (e) {
-      debugPrint("System Devices Error: $e");
     }
     if (mounted) {
       setState(() {});
@@ -217,7 +210,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                             if (issueVM.errorMessage == 'JT') {
                               showDialog(
                                   context: context,
-                                  barrierDismissible: true,
+                                  barrierDismissible: false,
                                   builder: (BuildContext context) {
                                     return CommonDialog(
                                       content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
@@ -233,7 +226,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                             } else {
                               showDialog(
                                   context: context,
-                                  barrierDismissible: true,
                                   builder: (BuildContext context) {
                                     return CommonDialog(
                                       content: issueVM.errorMessage!,
@@ -262,7 +254,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                             if (checkVM.errorMessage == 'JT') {
                               showDialog(
                                   context: context,
-                                  barrierDismissible: true,
+                                  barrierDismissible: false,
                                   builder: (BuildContext context) {
                                     return CommonDialog(
                                       content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
@@ -278,7 +270,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                             } else {
                               showDialog(
                                   context: context,
-                                  barrierDismissible: true,
                                   builder: (BuildContext context) {
                                     return CommonDialog(
                                       content: checkVM.errorMessage!,
@@ -302,7 +293,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                             if (unlockVM.errorMessage == 'JT') {
                               showDialog(
                                   context: context,
-                                  barrierDismissible: true,
+                                  barrierDismissible: false,
                                   builder: (BuildContext context) {
                                     return CommonDialog(
                                       content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
@@ -338,7 +329,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                             if (lockedVM.errorMessage == 'JT') {
                               showDialog(
                                   context: context,
-                                  barrierDismissible: true,
+                                  barrierDismissible: false,
                                   builder: (BuildContext context) {
                                     return CommonDialog(
                                       content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
@@ -398,8 +389,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
               result: r,
               onTap: () {
                 connectToDevice(r.device);
-              },
-              text: coreCode ?? ''),
+              },),
         )
         .toList();
   }
@@ -409,8 +399,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
         .map(
           (r) => ScanResultTile(
               result: r,
-              onTap: () => connectToDevice(r.device),
-              text: coreCode ?? ''),
+              onTap: () => connectToDevice(r.device),),
         )
         .toList();
   }
