@@ -119,6 +119,7 @@ const TableRow = styled.tr`
   &:hover {
     background-color: ${Color.GRAY100}; // 원하는 호버 배경 색
   }
+  font-family: NYJGothicM;
 `;
 
 const StickyTh = styled.th`
@@ -126,10 +127,12 @@ const StickyTh = styled.th`
   position: sticky;
   top: -2rem;
   background-color: white;
-  z-index: 1;
+  font-family: NYJGothicM;
+  font-size: 24px
   font-weight: bold;
+  z-index: 1;
   padding: 0.5rem 0;
-  border-bottom: 2px solid black;
+  border-bottom: 1.2px solid black;
 `;
 
 const Report = () => {
@@ -417,7 +420,7 @@ const Report = () => {
                     style={{
                       padding: '1rem',
                       textAlign: 'center',
-                      cursor: 'pointer',
+                      cursor: 'pointer'
                     }}
                   >
                     {cell.render('Cell')}

@@ -96,6 +96,7 @@ const Content = styled.div`
   height: 2rem;
   font-size: 1.3rem;
   font-style: normal;
+  font-family: NYJGothicM;
   font-weight: 700;
   color: ${Color.SAMSUNG_BLUE};
   display: flex;
@@ -105,9 +106,10 @@ const Content = styled.div`
 const RightContent = styled.div`
   width: auto;
   height: 2rem;
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 700;
+  font-size: 20px;
+  font-family: NYJGothicM;
+  font-weight: 500;
+  wordWrap: 'break-word'
   color: ${Color.BLACK};
   display: flex;
   align-items: center;
@@ -357,6 +359,7 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
             <Button
               width={5}
               height={2.5}
+              fontFamily="NYJGothicM"            
               $backgroundColor={Color.WHITE}
               $borderColor={Color.GRAY100}
               $borderRadius={2.5}

@@ -14,6 +14,7 @@ interface ButtonProps {
   children: React.ReactNode;
   fontWeight?: number | string;
   fontSize?: number | string;
+  fontFamily?: string;
 }
 
 // 스타일 정의
@@ -24,6 +25,7 @@ const ButtonContainer = styled.button<ButtonProps>`
     typeof props.height === 'number' ? `${props.height}rem` : props.height};
   border-radius: ${(props) => props.$borderRadius}rem;
   border: 1px solid ${(props) => props.$borderColor};
+  font-family: ${(props)=> props.fontFamily};
   font-size: ${(props) => props.fontSize}rem;
   font-weight: ${(props) => props.fontWeight || 'normal'};
   padding: 0.7rem;
@@ -84,6 +86,7 @@ export const Button = ({
   children,
   fontWeight,
   fontSize,
+  fontFamily,
   $hoverTextColor,
 }: ButtonProps) => (
   <ButtonContainer
@@ -97,6 +100,7 @@ export const Button = ({
     width={width}
     fontWeight={fontWeight}
     fontSize={fontSize}
+    fontFamily={fontFamily}
     $hoverTextColor={$hoverTextColor}
   >
     {children}
