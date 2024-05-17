@@ -22,22 +22,20 @@ public class NotificationService {
 
     public SseEmitter subscribe(HttpSession session) {
         String sessionId = session.getId();
-        log.info("SSE 구독 요청 시작: {} (스레드: {})", sessionId, Thread.currentThread().getName());
         SseEmitter emitter = new SseEmitter(TIMEOUT);
         emitterMap.put(sessionId, emitter);
 
         emitter.onCompletion(() -> {
-            log.info("onCompletion callback for session: {}", sessionId);
+            log.debug("onCompletion callback for session: {}", sessionId);
             emitterMap.remove(sessionId);
         });
 
         emitter.onTimeout(() -> {
-            log.info("onTimeout callback for session: {}", sessionId);
+            log.debug("onTimeout callback for session: {}", sessionId);
             emitter.complete();
             emitterMap.remove(sessionId);
         });
 
-        log.info("SSE 구독 요청 완료: {} (스레드: {})", sessionId, Thread.currentThread().getName());
         return emitter;
     }
 
@@ -46,7 +44,7 @@ public class NotificationService {
         emitterMap.forEach((sessionId, emitter) -> {
             try {
                 emitter.send(SseEmitter.event().data(sendRequest)); // 모든 사용자에게 메시지 전송
-                log.info("서버로부터 SSE 전송 성공: 세션 {}, 데이터 {}", sessionId, sendRequest);
+                log.debug("서버로부터 SSE 전송 성공: 세션 {}, 데이터 {}", sessionId, sendRequest);
             } catch (IOException e) {
                 log.error("SSE 전송 실패: 세션 {}, 오류 메시지 {}", sessionId, e.getMessage(), e);
                 emitter.completeWithError(e);
