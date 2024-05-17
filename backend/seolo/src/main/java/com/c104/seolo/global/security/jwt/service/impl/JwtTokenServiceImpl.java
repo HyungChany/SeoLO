@@ -3,7 +3,6 @@ package com.c104.seolo.global.security.jwt.service.impl;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.global.security.jwt.JwtUtils;
 import com.c104.seolo.global.security.jwt.dto.response.IssuedToken;
-import com.c104.seolo.global.security.jwt.entity.InvalidJwtToken;
 import com.c104.seolo.global.security.jwt.entity.JwtToken;
 import com.c104.seolo.global.security.jwt.repository.InvalidTokenRepository;
 import com.c104.seolo.global.security.jwt.repository.JwtTokenRepository;
@@ -40,7 +39,7 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         log.info("Issuing token for user: {}, deviceType: {}", appUser.getId(), deviceType);
         if (existingToken != null) {
             log.info("Existing token found: {}, deviceType: {}, invalidating and deleting", existingToken.getAccessToken(), existingToken.getDeviceType());
-            invalidTokenRepository.save(new InvalidJwtToken(existingToken.getAccessToken()));
+//            invalidTokenRepository.save(new InvalidJwtToken(existingToken.getAccessToken()));
             jwtTokenRepository.delete(existingToken);
         } else {
             log.info("No existing token found for user: {}, deviceType: {}", appUser.getId(), deviceType);
@@ -64,11 +63,11 @@ public class JwtTokenServiceImpl implements JwtTokenService {
 
     @Override
     public void removeAccessToken(String accessToken) {
-        if (jwtTokenRepository.existsByAccessToken(accessToken)) {
-            JwtToken jwtToken = jwtTokenRepository.findByAccessToken(accessToken);
+        JwtToken jwtToken = jwtTokenRepository.findByAccessToken(accessToken);
+        if (jwtToken != null) {
             jwtTokenRepository.delete(jwtToken);
-            log.info("로그아웃 Access token 삭제 : {}", accessToken);
-        } else {
+            log.debug("로그아웃 Access token 삭제 : {}", accessToken);
+        }  else {
             log.warn("Access token 저장소에 없음 : {}", accessToken);
         }
     }

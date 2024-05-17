@@ -1,12 +1,9 @@
 package com.c104.seolo.global.security.jwt.repository;
 
 import com.c104.seolo.global.security.jwt.entity.JwtToken;
-import io.lettuce.core.dynamic.annotation.Param;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 public interface JwtTokenRepository extends CrudRepository<JwtToken, Long> {
     JwtToken findByUserIdAndDeviceType(Long userId, String deviceType);
     JwtToken findByAccessToken(String accessToken);
-    boolean existsByAccessToken(String accessToken);
 }
