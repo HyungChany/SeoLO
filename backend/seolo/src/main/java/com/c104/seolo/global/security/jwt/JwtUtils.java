@@ -103,7 +103,6 @@ public class JwtUtils {
 
     public Jws<Claims> validateAccessToken(final String token, String deviceType) {
         try {
-            log.info("토큰 검증 시작 : {}", token);
             if (token == null || token.isEmpty()) {
                 log.error("Token is null or empty");
                 throw new AuthException(JwtErrorCode.INVALID_TOKEN);
@@ -124,7 +123,6 @@ public class JwtUtils {
 
             // 토큰의 서명을 검증하고 클레임 추출
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(accessSecretKey).parseClaimsJws(token);
-            log.debug("Token validated successfully: {}", token);
 
             // Device-Type 검증
             String tokenDeviceType = claimsJws.getBody().get("deviceType", String.class);
