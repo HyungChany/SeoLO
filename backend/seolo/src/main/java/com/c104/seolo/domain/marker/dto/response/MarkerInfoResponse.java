@@ -9,18 +9,20 @@ import lombok.Getter;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Getter
 public class MarkerInfoResponse {
-    private String machineNum;
-    private String machineName;
-    private String workerName;
-    private String estimatedEndTime;
-    private String content;
+    private final String machineNum;
+    private final String machineName;
+    private final String workerName;
+    private final String estimatedEndTime;
+    private final String content;
+    private final String nowTaskStatus;
 
     @Builder
-    public MarkerInfoResponse(String machineNum, String machineName, String workerName, String estimatedEndTime, String content) {
+    public MarkerInfoResponse(String machineNum, String machineName, String workerName, String estimatedEndTime, String content, String nowTaskStatus) {
         this.machineNum = machineNum;
         this.machineName = machineName;
         this.workerName = workerName;
         this.estimatedEndTime = estimatedEndTime;
         this.content = content;
+        this.nowTaskStatus = nowTaskStatus;
     }
 }

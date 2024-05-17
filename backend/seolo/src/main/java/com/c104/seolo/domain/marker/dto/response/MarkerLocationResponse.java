@@ -11,10 +11,12 @@ import lombok.Getter;
 public class MarkerLocationResponse {
     private Long markerId;
     private MarkerLocation markerLocations;
+    private String nowTaskStatus;
 
     @Builder
-    public MarkerLocationResponse(Long markerId, MarkerLocation markerLocations) {
+    public MarkerLocationResponse(Long markerId, MarkerLocation markerLocations, String nowTaskStatus) {
         this.markerId = markerId;
         this.markerLocations = markerLocations;
+        this.nowTaskStatus = nowTaskStatus;
     }
 }

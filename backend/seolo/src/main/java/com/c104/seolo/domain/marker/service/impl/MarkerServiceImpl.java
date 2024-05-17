@@ -90,6 +90,7 @@ public class MarkerServiceImpl implements MarkerService {
                     .workerName(worker.getUsername())
                     .estimatedEndTime(DateUtils.formatToLocalDateStr(nowTask.getTaskEndEstimatedDateTime()))
                     .content(nowTask.getTaskPrecaution())
+                    .nowTaskStatus(nowTask.getTaskCode().name())
                     .build();
 
         } catch (CommonException e) {
@@ -99,6 +100,7 @@ public class MarkerServiceImpl implements MarkerService {
                     .workerName(worker != null ? worker.getUsername() : null)
                     .estimatedEndTime(nowTask != null ? DateUtils.formatToLocalDateStr(nowTask.getTaskEndEstimatedDateTime()) : null)
                     .content(nowTask != null ? nowTask.getTaskPrecaution() : null)
+                    .nowTaskStatus(nowTask != null ? nowTask.getTaskCode().name() : null)
                     .build();
         }
     }
@@ -128,10 +130,20 @@ public class MarkerServiceImpl implements MarkerService {
                     .locationY(marker.getLocationY())
                     .build();
 
-            locationResponses.add(MarkerLocationResponse.builder()
-                    .markerId(marker.getId())
-                    .markerLocations(location)
-                    .build());
+            try {
+                TaskHistoryDto nowTask = taskHistoryService.getLatestTaskHistoryEntityByMachineId(marker.getMachineId());
+                locationResponses.add(MarkerLocationResponse.builder()
+                        .markerId(marker.getId())
+                        .nowTaskStatus(nowTask.getTaskCode().name())
+                        .markerLocations(location)
+                        .build());
+            } catch (CommonException e) {
+                locationResponses.add(MarkerLocationResponse.builder()
+                        .markerId(marker.getId())
+                        .nowTaskStatus(null)
+                        .markerLocations(location)
+                        .build());
+            }
         }
 
         return FacilityBlueprintResponse.builder()
@@ -139,6 +151,7 @@ public class MarkerServiceImpl implements MarkerService {
                     .markers(locationResponses)
                     .build();
     }
+
 
     @Override
     public void deleteMarker(Long markerId) {
