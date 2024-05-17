@@ -14,6 +14,7 @@ interface InputBoxProps {
   min?: string;
   max?: string;
   maxLength?: number;
+  disabled?: boolean;
 }
 const ValueCnt = styled.div`
   width: 100%;
@@ -47,6 +48,10 @@ const InputBoxContainer = styled.textarea<InputBoxProps>`
 
   &::placeholder {
     color: ${Color.GRAY400};
+  }
+  &:disabled {
+    background-color: ${Color.GRAY200}; // 비활성화 시 배경색 변경 (옵션)
+    cursor: not-allowed; // 비활성화 시 커서 변경 (옵션)
   }
 `;
 

@@ -12,6 +12,7 @@ interface InputBoxProps {
   children?: React.ReactNode;
   onBlur?: (e: FocusEvent<HTMLInputElement>) => void;
   onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  disabled?: boolean;
 }
 
 const InputBoxContainer = styled.input<InputBoxProps>`
@@ -25,6 +26,10 @@ const InputBoxContainer = styled.input<InputBoxProps>`
 
   &::placeholder {
     color: ${Color.GRAY400};
+  }
+  &:disabled {
+    background-color: ${Color.GRAY200}; // 비활성화 시 배경색 변경 (옵션)
+    cursor: not-allowed; // 비활성화 시 커서 변경 (옵션)
   }
 `;
 
