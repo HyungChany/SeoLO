@@ -13,8 +13,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import 'dayjs/locale/ko';
 import { Button } from '@/components/button/Button.tsx';
-import { Column, Row } from 'react-table';
-import { useTable } from 'react-table';
+import { Column, Row, useSortBy, useTable } from 'react-table';
 import { useQuery } from '@tanstack/react-query';
 
 dayjs.locale('ko');
@@ -128,7 +127,7 @@ const StickyTh = styled.th`
   top: -2rem;
   background-color: white;
   font-family: NYJGothicM;
-  font-size: 24px
+  font-size: 1.2rem;
   font-weight: bold;
   z-index: 1;
   padding: 0.5rem 0;
@@ -211,6 +210,7 @@ const Report = () => {
           </div>
         ),
         accessor: 'selected',
+        disableSortBy: true,
         Cell: ({ row }: { row: Row<EquipmentData> }) => (
           <img
             src={row.original.selected ? Check : NonCheck}
@@ -222,20 +222,47 @@ const Report = () => {
           />
         ),
       },
-      { Header: '장비 번호', accessor: 'machineNumber' },
-      { Header: '장비 명', accessor: 'machineName' },
-      { Header: '담당자', accessor: 'workerName' },
-      { Header: 'LOTO 목적', accessor: 'tasktype' },
-      { Header: '사고 여부', accessor: 'accident' },
-      { Header: '사고 유형', accessor: 'accidentType' },
-      { Header: '인명피해(명)', accessor: 'victimsNum' },
-      { Header: '시작 일시', accessor: 'taskStartDateTime' },
-      { Header: '종료 일시', accessor: 'taskEndDateTime' },
+      {
+        Header: '장비 번호',
+        accessor: 'machineNumber',
+      },
+      {
+        Header: '장비 명',
+        accessor: 'machineName',
+      },
+      {
+        Header: '담당자',
+        accessor: 'workerName',
+      },
+      {
+        Header: 'LOTO 목적',
+        accessor: 'tasktype',
+      },
+      {
+        Header: '사고 여부',
+        accessor: 'accident',
+      },
+      {
+        Header: '사고 유형',
+        accessor: 'accidentType',
+      },
+      {
+        Header: '인명피해(명)',
+        accessor: 'victimsNum',
+      },
+      {
+        Header: '시작 일시',
+        accessor: 'taskStartDateTime',
+      },
+      {
+        Header: '종료 일시',
+        accessor: 'taskEndDateTime',
+      },
     ],
     [tableData],
   );
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({ columns, data: tableData });
+    useTable({ columns, data: tableData }, useSortBy);
 
   // react query로 변경
 
@@ -397,8 +424,22 @@ const Report = () => {
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
               {headerGroup.headers.map((column) => (
-                <StickyTh {...column.getHeaderProps()} key={column.id}>
+                <StickyTh
+                  {...(column.id === 'selected'
+                    ? column.getHeaderProps()
+                    : column.getHeaderProps(column.getSortByToggleProps()))}
+                  key={column.id}
+                >
                   {column.render('Header')}
+                  {column.id !== 'selected' && (
+                    <span>
+                      {column.isSorted
+                        ? column.isSortedDesc
+                          ? ''
+                          : ''
+                        : ''}
+                    </span>
+                  )}
                 </StickyTh>
               ))}
             </tr>
@@ -420,7 +461,7 @@ const Report = () => {
                     style={{
                       padding: '1rem',
                       textAlign: 'center',
-                      cursor: 'pointer'
+                      cursor: 'pointer',
                     }}
                   >
                     {cell.render('Cell')}
