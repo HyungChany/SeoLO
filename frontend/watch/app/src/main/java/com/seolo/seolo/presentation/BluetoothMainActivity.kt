@@ -194,10 +194,10 @@ class BluetoothMainActivity : AppCompatActivity() {
                     descriptor?.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
                     gatt?.writeDescriptor(descriptor)
 
-                    // 1초 후 onCharacteristicChanged 메서드 호출
+                    // 5초 후 onCharacteristicChanged 메서드 호출
                     Handler(Looper.getMainLooper()).postDelayed({
                         onCharacteristicChanged(gatt, char)
-                    }, 1000)
+                    }, 5000)
 
                 } else {
                     // 권한이 없을 때 사용자에게 권한 요청
@@ -215,7 +215,7 @@ class BluetoothMainActivity : AppCompatActivity() {
             super.onCharacteristicWrite(gatt, characteristic, status)
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.d(
-                    "데이터 쓰기 성공_Main", "${characteristic?.value?.toString(StandardCharsets.UTF_8)}"
+                    "데이터 읽기 쓰기 성공_Main", "${characteristic?.value?.toString(StandardCharsets.UTF_8)}"
                 )
             }
         }
@@ -238,7 +238,7 @@ class BluetoothMainActivity : AppCompatActivity() {
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
             val lotoUserId = TokenManager.getUserId(this@BluetoothMainActivity)
             // 송신 데이터와 수신 데이터가 같으면 리턴
-            if (receivedData == lastSentData && lotoUserId == null) return
+            if (receivedData == lastSentData) return
             Log.d("수신데이터_Main", "Data received: $receivedData")
 
             receivedData?.let {
@@ -249,6 +249,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                     val machineId = dataParts[2]
                     val batteryInfo = dataParts[3]
                     // 자물쇠 상태 확인 명령어가 CHECK일 때(자물쇠가 잠겨있는데 그냥 일단 찍어본 경우)
+                    Log.d("체크", "$statusCode, $lotoUid, $machineId, $batteryInfo, $lotoUserId")
                     if (statusCode == "CHECK") {
                         Handler(Looper.getMainLooper()).post {
                             Toast.makeText(
@@ -277,28 +278,23 @@ class BluetoothMainActivity : AppCompatActivity() {
                             ).show()
                         }
                     } else if (statusCode == "UNLOCK") {
+                        Log.d("수신데이터_Main", "UNLOCK 상태 수신됨")
                         Handler(Looper.getMainLooper()).post {
                             Toast.makeText(
-                                this@BluetoothMainActivity,
-                                "자물쇠 잠금을 해제 합니다. \n 배터리 잔량: $batteryInfo",
+                                this@BluetoothMainActivity, "잠금 해제 요청을 처리합니다.",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            // 백으로 언락됐다는 API 연결 보내고 LotoManager 초기화
-                            unlockCoreLogic {
-                                LotoManager.clearLoto(this@BluetoothMainActivity)
+                        }
+                        unlockCoreLogic {
+                            Log.d("수신데이터_Main", "unlockCoreLogic 호출됨")
+                            LotoManager.clearLoto(this@BluetoothMainActivity)
+                            Handler(Looper.getMainLooper()).post {
                                 val intent =
                                     Intent(this@BluetoothMainActivity, MainActivity::class.java)
                                 startActivity(intent)
                                 finish()
                             }
                         }
-                        LotoManager.clearLoto(this@BluetoothMainActivity)
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            val intent =
-                                Intent(this@BluetoothMainActivity, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }, 2500)
                     }
                 }
             }
@@ -306,7 +302,7 @@ class BluetoothMainActivity : AppCompatActivity() {
     }
 
     // API 요청 함수
-    private fun unlockCoreLogic(function: () -> Unit) {
+    private fun unlockCoreLogic(onCompleted: () -> Unit) {
         val authorization = "Bearer " + TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)
         val deviceType = "watch"
@@ -322,7 +318,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                 }
             }
         }
-
+        Log.d("unlock call 직전", "언락 콜 직전")
         val call = unlockInfo?.let {
             RetrofitClient.unlockService.sendUnlockInfo(
                 authorization = authorization,
@@ -331,7 +327,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                 unlockInfo = it
             )
         }
-
+        Log.d("unlock 응답 직전", "언락 응답 직전")
         call?.enqueue(object : Callback<UnlockResponse> {
             override fun onResponse(
                 call: Call<UnlockResponse>, response: Response<UnlockResponse>
@@ -346,7 +342,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                         ).show()
                     }
                 } else {
-                    val errorMessage = response.body()?.message
+                    val errorMessage = response.message()
                     Log.d("API 요청 실패_Main", "API 요청 실패: $errorMessage")
                     runOnUiThread {
                         Toast.makeText(
@@ -354,15 +350,17 @@ class BluetoothMainActivity : AppCompatActivity() {
                         ).show()
                     }
                 }
+                onCompleted()
             }
 
             override fun onFailure(call: Call<UnlockResponse>, t: Throwable) {
-                Log.d("API_CALL", "Error: ${t.message}")
+                Log.d("API 요청 실패_Main", "Error: ${t.message}")
                 runOnUiThread {
                     Toast.makeText(
                         this@BluetoothMainActivity, "Error: ${t.message}", Toast.LENGTH_SHORT
                     ).show()
                 }
+                onCompleted()
             }
         })
     }

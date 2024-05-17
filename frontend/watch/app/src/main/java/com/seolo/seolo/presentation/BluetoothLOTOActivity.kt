@@ -189,10 +189,10 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     descriptor?.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
                     gatt?.writeDescriptor(descriptor)
 
-                    // 3초 후 onCharacteristicChanged 메서드 호출
+                    // 5초 후 onCharacteristicChanged 메서드 호출
                     Handler(Looper.getMainLooper()).postDelayed({
                         onCharacteristicChanged(gatt, char)
-                    }, 3000)
+                    }, 5000)
 
                 } else {
                     // 권한이 없을 때 사용자에게 권한 요청
@@ -235,14 +235,14 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
 
             // 송신 데이터와 수신 데이터가 같으면 리턴
-            if (receivedData == lastSentData) {
-                return
-            }
+            if (receivedData == lastSentData) return
+
             Log.d("수신데이터_LOTO", "$receivedData")
 
             receivedData?.let {
                 val dataParts = it.split(",")
                 val lotoUserId = TokenManager.getUserId(this@BluetoothLOTOActivity)
+
                 if (dataParts.size >= 4 && (lotoUserId != null)) {
                     val statusCode = dataParts[0]
                     val lotoUid = dataParts[1]
