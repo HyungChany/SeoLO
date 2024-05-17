@@ -49,17 +49,6 @@ data class IssueResponse(
 ) : Parcelable
 
 @Parcelize
-data class LotoLOCKInfo(
-    val next_code: String,
-    val token_value: String,
-    val task_history: String?,
-    val check_more_response: String?,
-    val http_status: String,
-    val message: String?
-) : Parcelable
-
-
-@Parcelize
 data class LotoInfo(
     val locker_uid: String,
     val battery_info: String,
@@ -70,14 +59,24 @@ data class LotoInfo(
 ) : Parcelable
 
 @Parcelize
-data class LotoLockInfo(
+data class LockedInfo(
     val locker_uid: String,
     val battery_info: String,
     val machine_id: String,
 ) : Parcelable
 
 @Parcelize
-data class LotoUnlockInfo(
+data class LockedResponse(
+    val next_code: String,
+    val token_value: String,
+    val task_history: String?,
+    val check_more_response: String?,
+    val http_status: String,
+    val message: String?
+) : Parcelable
+
+@Parcelize
+data class UnlockInfo(
     val locker_uid: String,
     val battery_info: String,
     val machine_id: String,

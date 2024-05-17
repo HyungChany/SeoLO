@@ -25,7 +25,7 @@ import com.seolo.seolo.adapters.BluetoothAdapter
 import com.seolo.seolo.adapters.BluetoothDeviceAdapter
 import com.seolo.seolo.helper.LotoManager
 import com.seolo.seolo.helper.TokenManager
-import com.seolo.seolo.model.LotoUnlockInfo
+import com.seolo.seolo.model.UnlockInfo
 import com.seolo.seolo.model.UnlockResponse
 import com.seolo.seolo.services.RetrofitClient
 import retrofit2.Call
@@ -227,9 +227,8 @@ class BluetoothMainActivity : AppCompatActivity() {
             super.onCharacteristicChanged(gatt, characteristic)
 
             // 데이터가 이미 수신되었으면 무시
-            if (isDataReceived) {
-                return
-            }
+            if (isDataReceived) return
+
 
             // 데이터 수신 상태 플래그 설정
             isDataReceived = true
@@ -237,21 +236,18 @@ class BluetoothMainActivity : AppCompatActivity() {
             // 아두이노에서 보내온 데이터 수신
             // 데이터 읽기 포맷(명령어,자물쇠Uid,머신Id,배터리잔량,유저Id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
-
+            val lotoUserId = TokenManager.getUserId(this@BluetoothMainActivity)
             // 송신 데이터와 수신 데이터가 같으면 리턴
-            if (receivedData == lastSentData) {
-                return
-            }
+            if (receivedData == lastSentData && lotoUserId == null) return
             Log.d("수신데이터_Main", "Data received: $receivedData")
 
             receivedData?.let {
                 val dataParts = it.split(",")
-                if (dataParts.size == 5) {
+                if (dataParts.size >= 4) {
                     val statusCode = dataParts[0]
                     val lotoUid = dataParts[1]
                     val machineId = dataParts[2]
                     val batteryInfo = dataParts[3]
-                    val lotoUserId = dataParts[4]
                     // 자물쇠 상태 확인 명령어가 CHECK일 때(자물쇠가 잠겨있는데 그냥 일단 찍어본 경우)
                     if (statusCode == "CHECK") {
                         Handler(Looper.getMainLooper()).post {
@@ -290,7 +286,8 @@ class BluetoothMainActivity : AppCompatActivity() {
                             // 백으로 언락됐다는 API 연결 보내고 LotoManager 초기화
                             unlockCoreLogic {
                                 LotoManager.clearLoto(this@BluetoothMainActivity)
-                                val intent = Intent(this@BluetoothMainActivity, MainActivity::class.java)
+                                val intent =
+                                    Intent(this@BluetoothMainActivity, MainActivity::class.java)
                                 startActivity(intent)
                                 finish()
                             }
@@ -314,11 +311,11 @@ class BluetoothMainActivity : AppCompatActivity() {
         val companyCode = TokenManager.getCompanyCode(this)
         val deviceType = "watch"
 
-        val lotoUnlockInfo = LotoManager.getLotoUid(this@BluetoothMainActivity)?.let { uid ->
+        val unlockInfo = LotoManager.getLotoUid(this@BluetoothMainActivity)?.let { uid ->
             LotoManager.getLotoBatteryInfo(this@BluetoothMainActivity)?.let { batteryInfo ->
                 LotoManager.getLotoMachineId(this@BluetoothMainActivity)?.let { machineId ->
                     TokenManager.getTokenValue(this@BluetoothMainActivity)?.let { tokenValue ->
-                        LotoUnlockInfo(
+                        UnlockInfo(
                             uid, batteryInfo, machineId, tokenValue
                         )
                     }
@@ -326,12 +323,12 @@ class BluetoothMainActivity : AppCompatActivity() {
             }
         }
 
-        val call = lotoUnlockInfo?.let {
+        val call = unlockInfo?.let {
             RetrofitClient.unlockService.sendUnlockInfo(
                 authorization = authorization,
                 companyCode = companyCode ?: "",
                 deviceType = deviceType,
-                lotoUnlockInfo = it
+                unlockInfo = it
             )
         }
 

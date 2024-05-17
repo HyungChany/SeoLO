@@ -1,10 +1,10 @@
 package com.seolo.seolo.services
 
 import com.seolo.seolo.model.IssueResponse
+import com.seolo.seolo.model.LockedInfo
+import com.seolo.seolo.model.LockedResponse
 import com.seolo.seolo.model.LotoInfo
-import com.seolo.seolo.model.LotoLOCKInfo
-import com.seolo.seolo.model.LotoLockInfo
-import com.seolo.seolo.model.LotoUnlockInfo
+import com.seolo.seolo.model.UnlockInfo
 import com.seolo.seolo.model.UnlockResponse
 import retrofit2.Call
 import retrofit2.http.Body
@@ -27,8 +27,8 @@ interface LockedService {
         @Header("Authorization") authorization: String,
         @Header("Company-Code") companyCode: String,
         @Header("Device-Type") deviceType: String,
-        @Body lotoLockInfo: LotoLockInfo
-    ): Call<LotoLOCKInfo>
+        @Body lockedInfo: LockedInfo
+    ): Call<LockedResponse>
 }
 
 interface UnlockService {
@@ -37,6 +37,6 @@ interface UnlockService {
         @Header("Authorization") authorization: String,
         @Header("Company-Code") companyCode: String,
         @Header("Device-Type") deviceType: String,
-        @Body lotoUnlockInfo: LotoUnlockInfo
+        @Body unlockInfo: UnlockInfo
     ): Call<UnlockResponse>
 }

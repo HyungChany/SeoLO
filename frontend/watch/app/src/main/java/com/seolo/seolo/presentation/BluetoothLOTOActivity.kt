@@ -27,6 +27,8 @@ import com.seolo.seolo.helper.LotoManager
 import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.helper.TokenManager
 import com.seolo.seolo.model.IssueResponse
+import com.seolo.seolo.model.LockedInfo
+import com.seolo.seolo.model.LockedResponse
 import com.seolo.seolo.model.LotoInfo
 import com.seolo.seolo.services.RetrofitClient
 import retrofit2.Call
@@ -187,10 +189,10 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     descriptor?.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
                     gatt?.writeDescriptor(descriptor)
 
-                    // 1초 후 onCharacteristicChanged 메서드 호출
+                    // 3초 후 onCharacteristicChanged 메서드 호출
                     Handler(Looper.getMainLooper()).postDelayed({
                         onCharacteristicChanged(gatt, char)
-                    }, 2000)
+                    }, 3000)
 
                 } else {
                     // 권한이 없을 때 사용자에게 권한 요청
@@ -222,15 +224,14 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             super.onCharacteristicChanged(gatt, characteristic)
 
             // 데이터가 이미 수신되었으면 무시
-            if (isDataReceived) {
-                return
-            }
+            if (isDataReceived) return
+
 
             // 데이터 수신 상태 플래그 설정
             isDataReceived = true
 
             // 아두이노에서 보내온 데이터 수신
-            // 데이터 읽기 포맷(명령어,자물쇠uid.머신id,배터리잔량,유저id)
+            // 데이터 읽기 포맷(명령어,자물쇠uid,머신id,배터리잔량,유저id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
 
             // 송신 데이터와 수신 데이터가 같으면 리턴
@@ -241,26 +242,28 @@ class BluetoothLOTOActivity : AppCompatActivity() {
 
             receivedData?.let {
                 val dataParts = it.split(",")
-                if (dataParts.size == 5) {
+                val lotoUserId = TokenManager.getUserId(this@BluetoothLOTOActivity)
+                if (dataParts.size >= 4 && (lotoUserId != null)) {
                     val statusCode = dataParts[0]
                     val lotoUid = dataParts[1]
                     val machineId = dataParts[2]
                     val batteryInfo = dataParts[3]
-                    val lotoUserId = dataParts[4]
 
-                    // LotoManager에 데이터 설정machineId
+                    // LotoManager에 데이터 설정
                     LotoManager.setLotoStatusCode(this@BluetoothLOTOActivity, statusCode)
                     LotoManager.setLotoUid(this@BluetoothLOTOActivity, lotoUid)
                     LotoManager.setLotoMachineId(this@BluetoothLOTOActivity, machineId)
                     LotoManager.setLotoBatteryInfo(this@BluetoothLOTOActivity, batteryInfo)
                     LotoManager.setLotoUserId(this@BluetoothLOTOActivity, lotoUserId)
-
+                    Log.d("수신데이터_LOTO체크", "statusCode: $statusCode, lotoUid: $lotoUid")
                     if (statusCode == "WRITED") {
                         // WRITE 상태인 경우 API 호출
                         issueCoreLogic {
                             Handler(Looper.getMainLooper()).post {
                                 Toast.makeText(
-                                    this@BluetoothLOTOActivity, "$statusCode, 잠금완료", Toast.LENGTH_SHORT
+                                    this@BluetoothLOTOActivity,
+                                    "$statusCode, 잠금완료",
+                                    Toast.LENGTH_SHORT
                                 ).show()
                                 Handler(Looper.getMainLooper()).postDelayed({
                                     val intent = Intent(
@@ -280,12 +283,23 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                             ).show()
                         }
                     }
+                } else {
+                    // 데이터 형식이 올바르지 않을 경우 로그 및 오류 처리
+                    Log.e("수신데이터 오류_LOTO", "수신된 데이터 형식이 올바르지 않습니다: $receivedData")
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                            this@BluetoothLOTOActivity,
+                            "수신된 데이터 형식이 올바르지 않습니다: $receivedData",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
         }
     }
 
-    // API 요청 함수
+
+    // ISSUE API 요청 함수
     private fun issueCoreLogic(onCompleted: () -> Unit) {
         val authorization = "Bearer " + TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)
@@ -314,24 +328,29 @@ class BluetoothLOTOActivity : AppCompatActivity() {
         }
 
         // Debug logs to check the data before making the API call
-        Log.d("API_CALL", "Authorization: $authorization")
-        Log.d("API_CALL", "CompanyCode: $companyCode")
-        Log.d("API_CALL", "DeviceType: $deviceType")
-        Log.d("API_CALL", "LotoInfo: $lotoInfo")
+        Log.d("API_CALL_ISSUE", "Authorization: $authorization")
+        Log.d("API_CALL_ISSUE", "CompanyCode: $companyCode")
+        Log.d("API_CALL_ISSUE", "DeviceType: $deviceType")
+        Log.d("API_CALL_ISSUE", "LotoInfo: $lotoInfo")
 
         call?.enqueue(object : Callback<IssueResponse> {
             override fun onResponse(call: Call<IssueResponse>, response: Response<IssueResponse>) {
                 if (response.isSuccessful) {
                     val issueResponse = response.body()
-                    Log.d("API_CALL", "Response Success: ${issueResponse?.next_code}")
+                    Log.d("API_CALL_ISSUE", "Response Success: ${issueResponse?.next_code}")
                     val nextCode = issueResponse?.next_code
                     // 응답에서 token_value 저장
                     issueResponse?.token_value?.let {
                         TokenManager.setTokenValue(this@BluetoothLOTOActivity, it)
                     }
-                    Log.d("API_CALL", "response.body(): $issueResponse")
-                    Log.d("API_CALL", "response.body()?.token_value: ${issueResponse?.token_value}")
-                    Log.d("API_CALL", "response.body()?.next_code: ${issueResponse?.next_code}")
+                    Log.d("API_CALL_ISSUE", "response.body(): $issueResponse")
+                    Log.d(
+                        "API_CALL_ISSUE",
+                        "response.body()?.token_value: ${issueResponse?.token_value}"
+                    )
+                    Log.d(
+                        "API_CALL_ISSUE", "response.body()?.next_code: ${issueResponse?.next_code}"
+                    )
 
                     // next_code를 사용하여 Bluetooth 데이터 전송
                     if (nextCode != null) {
@@ -341,7 +360,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     // onCompleted 콜백 호출
                     onCompleted()
                 } else {
-                    Log.d("API_CALL", "Response Failed: ${response.message()}")
+                    Log.d("API_CALL_ISSUE", "Response Failed: ${response.message()}")
 //                    Toast.makeText(
 //                        this@BluetoothLOTOActivity,
 //                        "Failed: ${response.message()}",
@@ -351,7 +370,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<IssueResponse>, t: Throwable) {
-                Log.d("API_CALL", "Error: ${t.message}")
+                Log.d("API_CALL_ISSUE", "Error: ${t.message}")
                 Toast.makeText(
                     this@BluetoothLOTOActivity, "Error: ${t.message}", Toast.LENGTH_SHORT
                 ).show()
@@ -387,6 +406,9 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                             Toast.makeText(this, "블루투스 데이터 전송 실패", Toast.LENGTH_SHORT).show()
                         } else {
                             isDataReceived = false
+                            lockedCoreLogic {
+                                Log.d("sendBluetoothData", "Locked API called")
+                            }
                             Log.d("sendBluetoothData", "Data sent successfully")
                         }
                     } else {
@@ -402,6 +424,70 @@ class BluetoothLOTOActivity : AppCompatActivity() {
         }
     }
 
+    // LOCKED API 요청 함수
+    private fun lockedCoreLogic(onCompleted: () -> Unit) {
+        val authorization = "Bearer " + TokenManager.getAccessToken(this)
+        val companyCode = TokenManager.getCompanyCode(this)
+        val deviceType = "watch"
+
+        val lotoInfo = LotoManager.getLotoUid(this@BluetoothLOTOActivity)?.let { uid ->
+            LotoManager.getLotoBatteryInfo(this@BluetoothLOTOActivity)?.let { batteryInfo ->
+                LockedInfo(
+                    locker_uid = uid,
+                    battery_info = batteryInfo,
+                    machine_id = SessionManager.selectedMachineId ?: ""
+                )
+            }
+        }
+
+        val call = lotoInfo?.let {
+            RetrofitClient.lockedService.sendLockedInfo(
+                authorization = authorization,
+                companyCode = companyCode ?: "",
+                deviceType = deviceType,
+                lockedInfo = it
+            )
+        }
+
+        // Debug logs to check the data before making the API call
+        Log.d("API_CALL_LOCKED", "Authorization: $authorization")
+        Log.d("API_CALL_LOCKED", "CompanyCode: $companyCode")
+        Log.d("API_CALL_LOCKED", "DeviceType: $deviceType")
+        Log.d("API_CALL_LOCKED", "LotoInfo: $lotoInfo")
+
+        call?.enqueue(object : Callback<LockedResponse> {
+            override fun onResponse(
+                call: Call<LockedResponse>, response: Response<LockedResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val issueResponse = response.body()
+                    Log.d("API_CALL_LOCKED", "response.body(): $issueResponse")
+                    Log.d("API_CALL_LOCKED", "Response Success: ${issueResponse?.next_code}")
+                    val nextCode = issueResponse?.next_code
+                    Log.d(
+                        "API_CALL_LOCKED", "response.body()?.next_code: ${issueResponse?.next_code}"
+                    )
+                    val message = issueResponse?.message
+
+                    // onCompleted 콜백 호출
+                    onCompleted()
+                } else {
+                    Log.d("API_CALL_LOCKED", "Response Failed: ${response.message()}")
+                }
+            }
+
+            override fun onFailure(call: Call<LockedResponse>, t: Throwable) {
+                Log.d("API_CALL_LOCKED", "Error: ${t.message}")
+                Toast.makeText(
+                    this@BluetoothLOTOActivity, "Error: ${t.message}", Toast.LENGTH_SHORT
+                ).show()
+                // onCompleted 콜백 호출
+                onCompleted()
+            }
+        }) ?: onCompleted() // call이 null인 경우에도 onCompleted 콜백 호출
+    }
+
+
     // Bluetooth 권한 확인 및 Bluetooth 활성화 함수
     @RequiresApi(Build.VERSION_CODES.S)
     private fun checkBluetoothPermissions() {
@@ -416,7 +502,9 @@ class BluetoothLOTOActivity : AppCompatActivity() {
 
     // Bluetooth 활성화 결과 처리 함수
     @RequiresApi(Build.VERSION_CODES.S)
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+    override fun onActivityResult(
+        requestCode: Int, resultCode: Int, data: Intent?
+    ) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == bluetoothAdapter.REQUEST_ENABLE_BT && resultCode == RESULT_OK) {
             bluetoothAdapter.startDiscovery()

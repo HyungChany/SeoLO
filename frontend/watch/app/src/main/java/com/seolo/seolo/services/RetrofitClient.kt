@@ -73,8 +73,8 @@ object RetrofitClient {
             .create(IssueService::class.java)
     }
 
-    // lockService 위한 Retrofit 인스턴스 생성
-    val lockService: LockedService by lazy {
+    // lockedService 위한 Retrofit 인스턴스 생성
+    val lockedService: LockedService by lazy {
         Retrofit.Builder().baseUrl(BASE_URL).client(client)
             .addConverterFactory(GsonConverterFactory.create()).build()
             .create(LockedService::class.java)

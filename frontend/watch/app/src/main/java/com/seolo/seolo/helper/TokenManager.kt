@@ -77,12 +77,12 @@ object TokenManager {
         return getPreferences(context).getString(PREF_USER_ID, null)
     }
 
-    // 액세스 토큰 설정 메서드
+    // 1회용 토큰 설정 메서드
     fun setTokenValue(context: Context, token: String) {
         getPreferences(context).edit().putString(PREF_TOKEN_VALUE, token).apply()
     }
 
-    // 액세스 토큰 가져오는 메서드
+    // 1회용 토큰 가져오는 메서드
     fun getTokenValue(context: Context): String? {
         return getPreferences(context).getString(PREF_TOKEN_VALUE, "")
     }
