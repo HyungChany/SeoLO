@@ -5,6 +5,7 @@ import com.c104.seolo.global.config.JwtProperties;
 import com.c104.seolo.global.exception.AuthException;
 import com.c104.seolo.global.security.enums.DEVICETYPE;
 import com.c104.seolo.global.security.exception.JwtErrorCode;
+import com.c104.seolo.global.security.jwt.entity.JwtToken;
 import com.c104.seolo.global.security.jwt.repository.InvalidTokenRepository;
 import com.c104.seolo.global.security.jwt.repository.JwtTokenRepository;
 import io.jsonwebtoken.*;
@@ -110,19 +111,20 @@ public class JwtUtils {
 
             // Redis에 저장된 무효 토큰 검증
             invalidTokenRepository.findById(token).ifPresent(value -> {
-                log.info("무효화 된 토큰 : {}", token);
+                log.warn("무효화 된 토큰 : {}", token);
                 throw new AuthException(JwtErrorCode.TOKEN_SIGNATURE_ERROR);
             });
 
             // Redis에 저장된 유효 토큰 검증
-            if (!jwtTokenRepository.existsByAccessToken(token)) {
-                log.info("해당 accessToken 저장소에 없음 : {}", token);
+            JwtToken jwtToken = jwtTokenRepository.findByAccessToken(token);
+            if (jwtToken == null) {
+                log.warn("해당 accessToken 저장소에 없음 : {}", token);
                 throw new AuthException(JwtErrorCode.INVALID_TOKEN);
             }
 
             // 토큰의 서명을 검증하고 클레임 추출
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(accessSecretKey).parseClaimsJws(token);
-            log.info("Token validated successfully: {}", token);
+            log.debug("Token validated successfully: {}", token);
 
             // Device-Type 검증
             String tokenDeviceType = claimsJws.getBody().get("deviceType", String.class);
