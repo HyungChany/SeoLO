@@ -23,7 +23,7 @@ const NavigatorContent = styled.div`
   /* height: calc(100% - 2 * 2rem); */
   align-items: center;
   justify-content: space-between;
-  gap: 26rem;
+  gap: 20rem;
   flex-shrink: 0;
   /* overflow: hidden; */
 `;
