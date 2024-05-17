@@ -48,7 +48,7 @@ class LoginPartTwoFragment : Fragment() {
         val username = activity.username
         val password = inputPwText.text.toString()
         val companyCode = activity.companyCode
-
+        val deviceType = "watch"
         // 로그인 데이터 맵 구성
         val loginData = mapOf(
             "username" to username, "password" to password, "company_code" to companyCode
@@ -58,7 +58,7 @@ class LoginPartTwoFragment : Fragment() {
         Log.d("LoginData", "Login request data: $loginData")
 
         // Retrofit을 사용하여 서버에 로그인 요청 보내기
-        RetrofitClient.loginService.login(loginData).enqueue(object : Callback<TokenResponse> {
+        RetrofitClient.loginService.login(deviceType, loginData).enqueue(object : Callback<TokenResponse> {
             override fun onResponse(
                 call: Call<TokenResponse>, response: Response<TokenResponse>
             ) {

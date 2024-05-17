@@ -67,10 +67,10 @@ class MainChkFragment : Fragment() {
         // 액세스 토큰과 회사 코드 가져오기
         val accessToken = TokenManager.getAccessToken(requireContext())
         val companyCode = TokenManager.getCompanyCode(requireContext())
-
+        val deviceType = "watch"
         if (accessToken != null && companyCode != null) {
             // Retrofit을 사용하여 서버에서 체크리스트 데이터 가져오기
-            RetrofitClient.checklistService.getChecklists("Bearer $accessToken", companyCode)
+            RetrofitClient.checklistService.getChecklists("Bearer $accessToken", companyCode, deviceType)
                 .enqueue(object : Callback<ChecklistResponse> {
                     override fun onResponse(
                         call: Call<ChecklistResponse>, response: Response<ChecklistResponse>

@@ -1,6 +1,7 @@
 package com.seolo.seolo.helper
 
 object SessionManager {
+    var selectedBatteryInfo: String? = null
     var selectedFacilityName: String? = null
     var selectedMachineId: String? = null
     var selectedMachineName: String? = null
@@ -17,9 +18,9 @@ object SessionManager {
     var lotoUserId: String? = null
 
 
-
     // 세션 데이터를 초기화하는 메서드
     fun clear() {
+        selectedBatteryInfo = null
         selectedFacilityName = null
         selectedMachineName = null
         selectedMachineId = null

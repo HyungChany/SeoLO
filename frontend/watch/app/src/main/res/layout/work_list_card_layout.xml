@@ -14,19 +14,21 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.61"
+        app:layout_constraintHeight_percent="0.7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.61">
+        app:layout_constraintWidth_percent="0.7">
 
         <TextView
             android:id="@+id/TitleView"
             android:layout_width="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_height="wrap_content"
             android:text="@string/sample_text"
             android:textAlignment="center"
             android:textColor="@color/SAMSUNG_BLUE"
-            android:textSize="24sp" />
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/ContentView"

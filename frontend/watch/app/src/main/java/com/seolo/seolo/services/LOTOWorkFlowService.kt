@@ -1,5 +1,6 @@
 package com.seolo.seolo.services
 
+import com.seolo.seolo.model.ChecklistResponse
 import com.seolo.seolo.model.FacilityResponse
 import com.seolo.seolo.model.MachineResponse
 import com.seolo.seolo.model.TaskResponse
@@ -8,12 +9,23 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Path
 
+// 체크리스트 목록 조회
+interface ChecklistService {
+    @GET("checklists")
+    fun getChecklists(
+        @Header("Authorization") authorization: String,
+        @Header("Company-Code") companyCode: String,
+        @Header("Device-Type") deviceType: String
+    ): Call<ChecklistResponse>
+}
+
 // 사원에게 할당된 작업장 조회
 interface FacilityService {
     @GET("facilities/{username}")
     fun getFacilities(
         @Header("Authorization") authorization: String,
         @Header("Company-Code") companyCode: String,
+        @Header("Device-Type") deviceType: String,
         @Path("username") username: String
     ): Call<FacilityResponse>
 
@@ -25,6 +37,7 @@ interface MachineService {
     fun getMachines(
         @Header("Authorization") authorization: String,
         @Header("Company-Code") companyCode: String,
+        @Header("Device-Type") deviceType: String,
         @Path("facilityId") facilityId: String
     ): Call<MachineResponse>
 }
@@ -35,6 +48,7 @@ interface TaskService {
     @GET("task-templates")
     fun getTasks(
         @Header("Authorization") authorization: String,
-        @Header("Company-Code") companyCode: String
+        @Header("Company-Code") companyCode: String,
+        @Header("Device-Type") deviceType: String
     ): Call<TaskResponse>
 }

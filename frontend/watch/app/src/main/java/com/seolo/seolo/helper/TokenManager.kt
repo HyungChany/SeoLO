@@ -9,6 +9,7 @@ object TokenManager {
     private const val PREFS_FILE_NAME = "encrypted_prefs"
     private const val PREF_ACCESS_TOKEN = "access_token"
     private const val PREF_REFRESH_TOKEN = "refresh_token"
+    private const val PREF_TOKEN_VALUE = "token_value"
     private const val PREF_COMPANY_CODE = "company_code"
     private const val PREF_USERNAME = "username"
     private const val PREF_USER_ID = "user_id"
@@ -74,6 +75,16 @@ object TokenManager {
     // 사용자 아이디 가져오는 메서드
     fun getUserId(context: Context): String? {
         return getPreferences(context).getString(PREF_USER_ID, null)
+    }
+
+    // 1회용 토큰 설정 메서드
+    fun setTokenValue(context: Context, token: String) {
+        getPreferences(context).edit().putString(PREF_TOKEN_VALUE, token).apply()
+    }
+
+    // 1회용 토큰 가져오는 메서드
+    fun getTokenValue(context: Context): String? {
+        return getPreferences(context).getString(PREF_TOKEN_VALUE, "")
     }
 
     // 저장된 토큰 모두 삭제하는 메서드
