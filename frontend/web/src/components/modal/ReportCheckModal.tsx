@@ -38,12 +38,13 @@ const Box = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 1rem 1rem 0 1rem;
+  justify-content: space-between;
+  padding: 1rem 1rem 0.5rem;
   box-sizing: border-box;
 `;
 const ContentBox = styled.div`
   width: 100%;
-  height: auto;
+  height: 90%;
   display: flex;
   flex-direction: row;
   gap: 4%;
@@ -59,36 +60,36 @@ const RightContainer = styled.div`
   width: 48%;
   height: auto;
   display: flex;
-  gap: 1rem;
+  gap: 2rem;
   flex-direction: row;
 `;
 const LeftTitleBox = styled.div`
-  width: 45%;
+  width: 40%;
   height: auto;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 `;
 const LeftContentBox = styled.div`
-  width: 50%;
+  width: auto;
   height: auto;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 `;
 const RightTitleBox = styled.div`
   width: auto;
   height: auto;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 `;
 const RightContentBox = styled.div`
-  width: auto;
-  height: auto;
+  width: 60%;
+  height: 101%;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 `;
 
 const Content = styled.div`
@@ -109,11 +110,13 @@ const RightContent = styled.div`
   font-size: 20px;
   font-family: NYJGothicM;
   font-weight: 500;
-  wordWrap: 'break-word'
   color: ${Color.BLACK};
   display: flex;
+  word-wrap: break-word;
   align-items: center;
+  overflow-wrap: break-word;
 `;
+
 const ButtonBox = styled.div`
   width: 100%;
   height: auto;
@@ -330,8 +333,8 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
                   </RightContent>
                   {modifyModal ? (
                     <StyledInputBox
-                      width={12}
-                      height={7}
+                      width={12.5}
+                      height={4.3}
                       value={accidentText}
                       onChange={handleAccidentText}
                       maxLength={50}
@@ -359,12 +362,13 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
             <Button
               width={5}
               height={2.5}
-              fontFamily="NYJGothicM"            
+              fontWeight={700}
+              fontSize={1.1}
               $backgroundColor={Color.WHITE}
               $borderColor={Color.GRAY100}
               $borderRadius={2.5}
-              $hoverBackgroundColor={Color.GRAY300}
-              $hoverBorderColor={Color.GRAY100}
+              $hoverBackgroundColor={Color.GRAY200}
+              $hoverBorderColor={Color.GRAY200}
               onClick={handleModify}
             >
               확인
@@ -373,24 +377,28 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
             <>
               <Button
                 width={5}
-                height={2}
+                height={2.5}
+                fontWeight={700}
+                fontSize={1.1}
                 $backgroundColor={Color.WHITE}
                 $borderColor={Color.GRAY100}
                 $borderRadius={2.5}
-                $hoverBackgroundColor={Color.GRAY300}
-                $hoverBorderColor={Color.GRAY100}
+                $hoverBackgroundColor={Color.GRAY200}
+                $hoverBorderColor={Color.GRAY200}
                 onClick={handleModifyClick}
               >
                 수정
               </Button>
               <Button
                 width={5}
-                height={2}
+                height={2.5}
+                fontWeight={700}
+                fontSize={1.1}
                 $backgroundColor={Color.WHITE}
                 $borderColor={Color.GRAY100}
                 $borderRadius={2.5}
-                $hoverBackgroundColor={Color.GRAY300}
-                $hoverBorderColor={Color.GRAY100}
+                $hoverBackgroundColor={Color.GRAY200}
+                $hoverBorderColor={Color.GRAY200}
                 onClick={handleCloseModal}
               >
                 확인
