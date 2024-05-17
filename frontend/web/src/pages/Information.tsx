@@ -12,6 +12,7 @@ import { Facilities } from '@/apis/Facilities.ts';
 import { MachineList } from '@/apis/Machine.ts';
 import { RegistratedEmployee } from '@/apis/Employee.ts';
 import EmployeeModal from '@/components/modal/EmployeeModal.tsx';
+import { useQuery } from '@tanstack/react-query';
 
 interface OptionType {
   value: number;
@@ -22,6 +23,27 @@ interface FacilityType {
   name: string;
 }
 
+interface EmployeeType {
+  id: number;
+  employee_num: string;
+  name: string;
+  title: string;
+  team: string;
+  role: string;
+}
+
+interface MachineType {
+  machine_id: string;
+  facility_id: string;
+  facility_name: string;
+  machine_name: string;
+  machine_code: string;
+  introduction_date: string;
+  main_manager_id: string;
+  main_manager_name: string;
+  sub_manager_id: string;
+  sub_manager_name: string;
+}
 const Background = styled.div`
   box-sizing: border-box;
   width: 100%;
@@ -86,34 +108,53 @@ const CompanyInformation = () => {
   ) => {
     e.stopPropagation();
   };
+  // 드롭다운에 넣을 데이터 불러우기
+  const { data: dropdownData } = useQuery({
+    queryKey: ['dropdown'],
+    queryFn: () => Facilities(),
+  });
+
+  // 드롭다운 옵션에서 키값을 value와 label로 받아줘야해서 수정
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await Facilities();
-      const newOptions = data.map((facility: FacilityType) => ({
+    if (dropdownData) {
+      const newOptions = dropdownData?.map((facility: FacilityType) => ({
         value: facility.id,
         label: facility.name,
       }));
       setOptions(newOptions);
-    };
-    fetchData();
-  }, []);
-  useEffect(() => {
-    const fetchEquipment = async () => {
-      if (selectedOption?.value) {
-        const equipmentData = await MachineList(selectedOption.value);
-        console.log(equipmentData);
-        setFacilities(equipmentData.length);
+    }
+  }, [dropdownData]);
+
+  // 기계 리스트 불러오기
+  const { data: machineData } = useQuery<MachineType[]>({
+    queryKey: ['machineList', selectedOption],
+    queryFn: () => {
+      if (selectedOption) {
+        return MachineList(selectedOption.value);
+      } else {
+        return [];
       }
-    };
-    fetchEquipment();
-  }, [selectedOption]);
+    },
+  });
+
+  // 데이터 길이 추출
   useEffect(() => {
-    const fetchEmployee = async () => {
-      const data = await RegistratedEmployee();
-      setEmployees(data.length);
-    };
-    fetchEmployee();
-  }, []);
+    if (machineData) {
+      setFacilities(machineData.length);
+    }
+  }, [selectedOption, machineData]);
+
+  // 등록 임직원 데이터 불러오기
+  const { data: employeeData } = useQuery<EmployeeType[]>({
+    queryKey: ['employee'],
+    queryFn: () => RegistratedEmployee(),
+  });
+
+  useEffect(() => {
+    if (employeeData) {
+      setEmployees(employeeData.length);
+    }
+  }, [employeeData]);
   const handleOptionChange = (option: OptionType): void => {
     setSelectedOption(option);
   };

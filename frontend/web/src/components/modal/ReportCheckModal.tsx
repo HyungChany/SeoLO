@@ -6,7 +6,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import InputBox from '../inputbox/InputBox.tsx';
 import { detailReport, modifyReport } from '@/apis/Report.ts';
 import StyledInputBox from '../inputbox/StyledInputBox.tsx';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface EquipmentData {
   reportId: number;
@@ -159,27 +159,33 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
       setAccidentPeopleCount(number); // 숫자로 변환된 값이 유효한 경우에만 상태 업데이트
     }
   };
+  const { data: detailReportData } = useQuery({
+    queryKey: ['detailReport', contentIndex],
+    queryFn: () => {
+      if (contentIndex) {
+        return detailReport(contentIndex);
+      }
+    },
+  });
 
   useEffect(() => {
-    const report = async () => {
-      try {
-        const data = await detailReport(contentIndex);
-        const formattedData = {
-          ...data,
-          taskStartDateTime: formatDate(data.taskStartDateTime),
-          taskEndDateTime: formatDate(data.taskEndDateTime),
-          accidentType: data.accidentType === null ? '-' : data.accidentType,
-          victimsNum: data.victimsNum === null ? '-' : data.victimsNum,
-        };
-        setReportData(formattedData);
-        console.log(data);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    report();
-    // console.log(reportData);
-  }, [contentIndex]);
+    if (detailReportData) {
+      const formattedData = {
+        ...detailReportData,
+        taskStartDateTime: formatDate(detailReportData.taskStartDateTime),
+        taskEndDateTime: formatDate(detailReportData.taskEndDateTime),
+        accidentType:
+          detailReportData.accidentType === null
+            ? '-'
+            : detailReportData.accidentType,
+        victimsNum:
+          detailReportData.victimsNum === null
+            ? '-'
+            : detailReportData.victimsNum,
+      };
+      setReportData(formattedData);
+    }
+  }, [contentIndex, detailReportData]);
   const leftTitle = [
     '작업자',
     '사번',
@@ -238,17 +244,42 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
       victims_num: accidentPeopleCount,
       index: contentIndex,
     };
-    modifyMutate(data);
+    if (data.accident_type && data.victims_num) {
+      modifyMutate(data);
+    } else if (!data.accident_type && !data.victims_num) {
+      alert('사고 유형과 인명 피해를 모두 입력해주세요');
+      return;
+    } else if (data.accident_type === '') {
+      alert('사고 유형을 입력해주세요');
+      return;
+    } else if (!data.victims_num) {
+      alert('인명 피해를 입력해주세요');
+      return;
+    }
     onClose();
   };
   useEffect(() => {
     if (modifyModal && reportData) {
-      setAccidentText(reportData.accidentType || '');
-      setAccidentPeople(reportData.victimsNum?.toString() || '');
-      setAccidentPeopleCount(reportData.victimsNum || 0);
       setAccidentBtn(reportData.accident);
+      setAccidentPeopleCount(reportData.victimsNum || 0);
+      if (
+        reportData.accidentType === '-' &&
+        reportData.victimsNum?.toString() === '-'
+      ) {
+        setAccidentText('');
+        setAccidentPeople('');
+        return;
+      } else {
+        setAccidentText(reportData.accidentType || '');
+        setAccidentPeople(reportData.victimsNum?.toString() || '');
+        return;
+      }
     }
   }, [modifyModal, reportData]);
+
+  const handleCancle = () => {
+    onClose();
+  };
   return (
     <Modal onClick={handleInnerClick}>
       <Box>
@@ -304,41 +335,53 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
                       </AccidentButton>
                     )}
                   </RightContent>
-                  {/* <RightContent>
-                    {modifyModal ? (
-                      <InputBox
-                        width={10}
-                        height={2.3}
-                        value={accidentText}
-                        onChange={handleAccidentText}
-                      />
-                    ) : (
-                      reportData.accidentType
-                    )}
-                  </RightContent> */}
                   <RightContent>
                     {modifyModal ? (
-                      <>
-                        <InputBox
-                          width={4}
-                          height={2.3}
-                          value={accidentPeople}
-                          onChange={handleAccidentPeopleText}
-                        />
-                        <span style={{ marginLeft: '1rem' }}>명</span>
-                      </>
+                      accidentBtn ? (
+                        <>
+                          <InputBox
+                            width={4}
+                            height={2.3}
+                            value={accidentPeople}
+                            onChange={handleAccidentPeopleText}
+                          />
+                          <span style={{ marginLeft: '1rem' }}>명</span>
+                        </>
+                      ) : (
+                        <>
+                          <InputBox
+                            width={4}
+                            height={2.3}
+                            value={accidentPeople}
+                            onChange={handleAccidentPeopleText}
+                            disabled={true}
+                          />
+                          <span style={{ marginLeft: '1rem' }}>명</span>
+                        </>
+                      )
                     ) : (
                       reportData.victimsNum
                     )}
                   </RightContent>
                   {modifyModal ? (
-                    <StyledInputBox
-                      width={12.5}
-                      height={4.3}
-                      value={accidentText}
-                      onChange={handleAccidentText}
-                      maxLength={50}
-                    />
+                    accidentBtn ? (
+                      <StyledInputBox
+                        width={12.5}
+                        height={4.3}
+                        value={accidentText}
+                        onChange={handleAccidentText}
+                        maxLength={50}
+                      />
+                    ) : (
+                      <StyledInputBox
+                        width={12.5}
+                        height={4.3}
+                        value={accidentText}
+                        onChange={handleAccidentText}
+                        maxLength={50}
+                        disabled={true}
+                      />
+                    )
                   ) : (
                     <RightContent>{reportData.accidentType}</RightContent>
                   )}
@@ -359,20 +402,36 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
         </ModifyBox> */}
         <ButtonBox>
           {modifyModal ? (
-            <Button
-              width={5}
-              height={2.5}
-              fontWeight={700}
-              fontSize={1.1}
-              $backgroundColor={Color.WHITE}
-              $borderColor={Color.GRAY100}
-              $borderRadius={2.5}
-              $hoverBackgroundColor={Color.GRAY200}
-              $hoverBorderColor={Color.GRAY200}
-              onClick={handleModify}
-            >
-              확인
-            </Button>
+            <>
+              <Button
+                width={5}
+                height={2.5}
+                fontWeight={700}
+                fontSize={1.1}
+                $backgroundColor={Color.WHITE}
+                $borderColor={Color.GRAY100}
+                $borderRadius={2.5}
+                $hoverBackgroundColor={Color.GRAY200}
+                $hoverBorderColor={Color.GRAY200}
+                onClick={handleCancle}
+              >
+                취소
+              </Button>
+              <Button
+                width={5}
+                height={2.5}
+                fontWeight={700}
+                fontSize={1.1}
+                $backgroundColor={Color.WHITE}
+                $borderColor={Color.GRAY100}
+                $borderRadius={2.5}
+                $hoverBackgroundColor={Color.GRAY200}
+                $hoverBorderColor={Color.GRAY200}
+                onClick={handleModify}
+              >
+                확인
+              </Button>
+            </>
           ) : (
             <>
               <Button

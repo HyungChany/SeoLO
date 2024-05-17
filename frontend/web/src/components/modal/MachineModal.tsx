@@ -12,7 +12,7 @@ interface EquipmentModalProps {
   option: number;
 }
 interface EquipmentType {
-  id: string;
+  machine_id: string;
   facility_id: string;
   facility_name: string;
   machine_name: string;
