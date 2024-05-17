@@ -13,6 +13,7 @@ import {
   MachinePhoto,
   MachineRegistration,
 } from '@/apis/Machine.ts';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 interface OptionType {
   value: number;
@@ -22,6 +23,20 @@ interface FacilityType {
   id: string;
   name: string;
 }
+
+interface MachineType {
+  machine_id: string;
+  facility_id: string;
+  facility_name: string;
+  machine_name: string;
+  machine_code: string;
+  introduction_date: string;
+  main_manager_id: string;
+  main_manager_name: string;
+  sub_manager_id: string;
+  sub_manager_name: string;
+}
+
 const Background = styled.div`
   box-sizing: border-box;
   width: 100%;
@@ -232,63 +247,81 @@ const Equipment = () => {
   const handleFileUpload = async () => {
     fileInputRef.current?.click();
   };
+  const { mutate: machineMutate } = useMutation({
+    mutationFn: MachineRegistration,
+  });
   const handleSubmit = () => {
     if (dateError) {
       alert(dateError);
       return;
     }
     if (selectedSubmitOption && image) {
-      const fetchMachine = async () => {
-        const machineData = {
-          facilityId: selectedSubmitOption.value,
-          machineName: equipmentName,
-          machineCode: equipmentNumber,
-          machineThum: imageURL,
-          introductionDate: date,
-          mainManagerNum: mainManager,
-          subManagerNum: subManager,
-        };
-        console.log(machineData);
-        await MachineRegistration(machineData);
+      const machineData = {
+        facilityId: selectedSubmitOption.value,
+        machineName: equipmentName,
+        machineCode: equipmentNumber,
+        machineThum: imageURL,
+        introductionDate: date,
+        mainManagerNum: mainManager,
+        subManagerNum: subManager,
       };
-      fetchMachine();
+      machineMutate(machineData);
     }
   };
+  // 드롭다운에 넣을 데이터 불러우기
+  const { data: dropdownData } = useQuery({
+    queryKey: ['dropdown'],
+    queryFn: () => Facilities(),
+  });
+
+  // 드롭다운 옵션에서 키값을 value와 label로 받아줘야해서 수정
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await Facilities();
-      const newOptions = data.map((facility: FacilityType) => ({
-        value: facility.id,
-        label: facility.name,
-      }));
-      setOptions(newOptions);
-    };
-    fetchData();
-  }, []);
+    const newOptions = dropdownData?.map((facility: FacilityType) => ({
+      value: facility.id,
+      label: facility.name,
+    }));
+    setOptions(newOptions);
+  }, [dropdownData]);
+
   const handleOptionChange = (option: OptionType): void => {
     setSelectedOption(option); // 선택된 옵션 상태 업데이트
   };
-  useEffect(() => {
-    const fetchEquipment = async () => {
-      if (selectedOption?.value) {
-        const equipmentData = await MachineList(selectedOption.value);
-        console.log(equipmentData);
-        setFacilities(equipmentData.length);
+
+  // 기계 리스트 불러오기
+  const { data: machineData } = useQuery<MachineType[]>({
+    queryKey: ['machineList', selectedOption],
+    queryFn: () => {
+      if (selectedOption) {
+        return MachineList(selectedOption.value);
+      } else {
+        return [];
       }
-    };
-    fetchEquipment();
-  }, [selectedOption]);
+    },
+  });
+
+  // 데이터 길이 추출
+  useEffect(() => {
+    if (machineData) {
+      setFacilities(machineData.length);
+    }
+  }, [selectedOption, machineData]);
+
+  // 이미지 업로드 api
+  const { mutate: uploadImage } = useMutation({
+    mutationFn: MachinePhoto,
+    onSuccess: (data) => {
+      setImageURL(data.urls.url1);
+    },
+  });
+
+  // 이미지 업로드시 api 호출
   useEffect(() => {
     if (imagePreviewUrl && image) {
-      const fetchData = async () => {
-        const machine = new FormData();
-        machine.append('multipartFiles', image);
-        const data = await MachinePhoto(machine);
-        setImageURL(data.urls.url1);
-      };
-      fetchData();
+      const machine = new FormData();
+      machine.append('multipartFiles', image);
+      uploadImage(machine);
     }
-  }, [image, imagePreviewUrl]);
+  }, [image, imagePreviewUrl, uploadImage]);
 
   const handleSubmitOptionChange = (option: OptionType): void => {
     setSelectedSubmitOption(option);
