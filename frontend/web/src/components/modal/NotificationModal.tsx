@@ -16,7 +16,7 @@ const OuterContainer = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  width: 238px;
+  width: 260px;
   height: 193px;
   position: absolute;
   right: 40px;
@@ -31,12 +31,12 @@ const AdditionalImage = styled.img`
   height: 70.65px;
   position: absolute;
   right: 10px;
-  bottom: 5px;
+  bottom: 15px;
 `;
 
 const Modal = styled.div`
   width: 238px;
-  height: 193px;
+  height: 150px;
   position: relative;
   background-color: #fffafa;
   box-shadow: 6px 10px 4px 1px rgba(0, 0, 0, 0.25);
@@ -59,7 +59,7 @@ const BatteryIcon = styled.img`
 `;
 
 const TextContainer = styled.div`
-  width: 208px;
+  width: 250px;
   height: 146px;
   padding: 10px;
 `;
@@ -68,7 +68,7 @@ const WorkerName = styled.span`
   color: #135b9e;
   font-size: 24px;
   font-family: Arial;
-  font-weight: 400;
+  font-weight: bold;
   word-wrap: break-word;
 `;
 
@@ -80,11 +80,22 @@ const Text = styled.span`
   word-wrap: break-word;
 `;
 
-const ActionType = styled.span`
-  color: #fd4154;
+const ActionType = styled.span<{ type: string }>`
+  color: ${({ type }) => {
+    switch (type) {
+      case '열기':
+        return '#019444'; // Green
+      case '잠금':
+        return '#dc3545'; // Red
+      case '작업확인':
+        return '#DFA44C'; // Yellow
+      default:
+        return '#fd4154'; // Default color
+    }
+  }};
   font-size: 24px;
   font-family: Arial;
-  font-weight: 400;
+  font-weight: bold;
   word-wrap: break-word;
 `;
 
@@ -93,7 +104,7 @@ const NotificationModal: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [batteryImage, setBatteryImage] = useState<string>('');
   const event = events[events.length - 1];
-  console.log('이��트', event);
+  console.log('이벤트', event);
   console.log('저 왔어요');
   useEffect(() => {
     if (events.length > 0) {
@@ -119,7 +130,7 @@ const NotificationModal: React.FC = () => {
       setVisible(true);
       const timer = setTimeout(() => {
         setVisible(false);
-      }, 5000); // 5초 후 모달 닫기
+      }, 100000); // 5초 후 모달 닫기
 
       return () => clearTimeout(timer);
     }
@@ -145,8 +156,8 @@ const NotificationModal: React.FC = () => {
               {event.machine_number} 장비
               <br />
             </Text>
-            <ActionType>{event.act_type}</ActionType>
-            <Text> 하셨습니다.</Text>
+            <ActionType type={event.act_type}>{event.act_type}</ActionType>
+            <Text>하셨습니다.</Text>
           </TextContainer>
         </Modal>
       </ModalContainer>
