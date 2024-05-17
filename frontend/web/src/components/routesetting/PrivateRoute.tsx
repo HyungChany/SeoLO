@@ -15,6 +15,7 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
 
     if (!accessToken && !firstRender) {
       alert('로그인이 만료되었습니다');
+      console.log(3333333333);
     }
     setFirstRender(false);
   }, [accessToken]);
