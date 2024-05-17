@@ -19,8 +19,9 @@ import {
 import Dropdown from '../dropdown/DropDown.tsx';
 import * as Color from '@/config/color/Color.ts';
 import styled from 'styled-components';
+import { useRecoilValue } from 'recoil';
 // import { Button } from '@/components/button/Button.tsx';
-
+import { notificationEventsState } from '@/recoil/sseState.tsx';
 interface ImageMapProps {
   imageFile: string | null;
   modifyMode: boolean;
@@ -35,6 +36,7 @@ interface MarkerLocationType {
 interface MarkerType {
   marker_id: number;
   marker_locations: MarkerLocationType;
+  now_task_status: string | null;
 }
 
 interface MachineType {
@@ -56,6 +58,7 @@ interface ButtonProps {
 interface MarkerStateType {
   id: number | null;
   position: L.LatLng;
+  now: string | null;
 }
 
 interface ButtonBoxProps {
@@ -109,12 +112,13 @@ export const Leaflet = ({
     null,
   );
   const [popupPosition, setPopupPosition] = useState<L.LatLng | null>(null);
+  const events = useRecoilValue(notificationEventsState);
   const map = useMap();
   const queryClient = useQueryClient();
   const [id, setId] = useState<number | null>(null);
   // 기존에 있는 마커 불러오기
   const { data: markerData } = useQuery({
-    queryKey: ['markers', selectedOption],
+    queryKey: ['markers', selectedOption, events],
     queryFn: () => blueprintList(selectedOption),
   });
 
@@ -196,6 +200,7 @@ export const Leaflet = ({
             data.marker_locations.locationY,
             data.marker_locations.locationX,
           ),
+          now: data.now_task_status,
         };
         setMarkers((currentMarkers) => [...currentMarkers, newMarker]);
       });
@@ -204,14 +209,14 @@ export const Leaflet = ({
   // 알맞은 icon가져오기
   const lockedIcon = L.icon({
     iconUrl: '/Locked.png',
-    iconSize: [50, 40],
-    iconAnchor: [15, 12.5],
+    iconSize: [50, 50],
+    iconAnchor: [25, 25],
   });
-  // const openedIcon = L.icon({
-  //   iconUrl: '/OpenLocker.png',
-  //   iconSize: [50, 40],
-  //   iconAnchor: [25, 20],
-  // });
+  const openedIcon = L.icon({
+    iconUrl: '/OpenLocker.png',
+    iconSize: [50, 40],
+    iconAnchor: [25, 20],
+  });
 
   if (!imageFile || !bounds) return null;
   const handleMarkerClick = (
@@ -284,7 +289,11 @@ export const Leaflet = ({
         <Marker
           key={marker.id}
           position={marker.position}
-          icon={lockedIcon}
+          icon={
+            marker.now === null || marker.now === 'ISSUED'
+              ? openedIcon
+              : lockedIcon
+          }
           eventHandlers={{
             click: () => {
               if (marker.id) {
