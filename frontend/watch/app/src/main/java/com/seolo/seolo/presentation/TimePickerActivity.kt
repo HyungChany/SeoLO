@@ -28,7 +28,7 @@ class TimePickerActivity : AppCompatActivity() {
 
         // 현재 시간 설정
         val now = Calendar.getInstance()
-        timePicker.weekday = now.get(Calendar.DAY_OF_WEEK)
+        timePicker.weekday = now.get(Calendar.DAY_OF_WEEK) -1
         timePicker.hour = now.get(Calendar.HOUR_OF_DAY)
         timePicker.minute = now.get(Calendar.MINUTE)
 

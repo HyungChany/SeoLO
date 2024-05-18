@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:gravity="center"
-        android:text="연결 가능 블루투스 장치 목록"
+        android:text="연결 가능 SeoLo \n 목록"
         android:textColor="@color/WHITE"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
