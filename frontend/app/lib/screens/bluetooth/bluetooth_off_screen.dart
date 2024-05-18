@@ -25,6 +25,7 @@ class BluetoothOffScreen extends StatelessWidget {
           try {
             if (Platform.isAndroid) {
               await FlutterBluePlus.turnOn();
+              Navigator.pushReplacementNamed(context, '/bluetooth');
             }
           } catch (e) {
             debugPrint("Error Turning On: $e");

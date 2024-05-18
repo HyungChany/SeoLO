@@ -64,16 +64,16 @@ class _MyInfoState extends State<MyInfo> {
           children: [
             (viewModel.isLoading || viewModel.myInfoModel == null)
                 ? Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                        color: gray200,
-                        borderRadius: BorderRadius.circular(50)),
-                  )
+              width: 80,
+              height: 80,
+              decoration: BoxDecoration(
+                  color: gray200,
+                  borderRadius: BorderRadius.circular(50)),
+            )
                 : ClipOval(
-                  child: Image.network(viewModel.myInfoModel!.employeeThum!,
-                      width: 80, height: 80, fit: BoxFit.cover),
-                ),
+              child: Image.network(viewModel.myInfoModel!.employeeThum!,
+                  width: 80, height: 80, fit: BoxFit.cover),
+            ),
             Padding(
               padding: const EdgeInsets.only(left: 20.0),
               child: Column(
@@ -82,35 +82,35 @@ class _MyInfoState extends State<MyInfo> {
                 children: [
                   (viewModel.isLoading || viewModel.myInfoModel == null)
                       ? Container(
-                          width: 150,
-                          height: 20,
-                          decoration: BoxDecoration(
-                              color: gray200,
-                              borderRadius: BorderRadius.circular(20)),
-                        )
+                    width: 150,
+                    height: 20,
+                    decoration: BoxDecoration(
+                        color: gray200,
+                        borderRadius: BorderRadius.circular(20)),
+                  )
                       : Text(
-                          viewModel.myInfoModel!.employeeTeam!,
-                          style: const TextStyle(fontSize: 20),
-                        ),
+                    viewModel.myInfoModel!.employeeTeam!,
+                    style: const TextStyle(fontSize: 20),
+                  ),
                   (viewModel.isLoading || viewModel.myInfoModel == null)
                       ? Container(
-                          width: 150,
-                          height: 20,
-                          decoration: BoxDecoration(
-                              color: gray200,
-                              borderRadius: BorderRadius.circular(20)),
-                        )
+                    width: 150,
+                    height: 20,
+                    decoration: BoxDecoration(
+                        color: gray200,
+                        borderRadius: BorderRadius.circular(20)),
+                  )
                       : Row(
-                          children: [
-                            Text(viewModel.myInfoModel!.employeeName!,
-                                style: const TextStyle(fontSize: 20)),
-                            const SizedBox(
-                              width: 5,
-                            ),
-                            Text(viewModel.myInfoModel!.employeeTitle!,
-                                style: const TextStyle(fontSize: 20))
-                          ],
-                        )
+                    children: [
+                      Text(viewModel.myInfoModel!.employeeName!,
+                          style: const TextStyle(fontSize: 20)),
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(viewModel.myInfoModel!.employeeTitle!,
+                          style: const TextStyle(fontSize: 20))
+                    ],
+                  )
                 ],
               ),
             )

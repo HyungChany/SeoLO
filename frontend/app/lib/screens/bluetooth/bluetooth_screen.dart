@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:app/screens/bluetooth/bluetooth_off_screen.dart';
 import 'package:app/view_models/core/core_check_view_model.dart';
 import 'package:app/view_models/core/core_issue_view_model.dart';
 import 'package:app/view_models/core/core_locked_view_model.dart';
@@ -22,6 +23,8 @@ class BluetoothScreen extends StatefulWidget {
 }
 
 class _BluetoothScreenState extends State<BluetoothScreen> {
+  BluetoothAdapterState _adapterState = BluetoothAdapterState.unknown;
+  late StreamSubscription<BluetoothAdapterState> _adapterStateStateSubscription;
   final _storage = const FlutterSecureStorage();
   List<ScanResult> _scanResults = [];
   List<ScanResult> _lastScanResults = [];
@@ -39,10 +42,23 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   BluetoothCharacteristic? bluetoothCharacteristic;
   bool _isLocking = false;
   bool _isUnlocking = false;
+  bool _isWriting = false;
 
   @override
   void initState() {
     super.initState();
+
+    _adapterStateStateSubscription = FlutterBluePlus.adapterState.listen((state) {
+      _adapterState = state;
+      if (_adapterState != BluetoothAdapterState.on) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const BluetoothOffScreen()));
+      }
+      if (mounted) {
+        setState(() {});
+      }
+    });
+
     _scanResultsSubscription = FlutterBluePlus.scanResults.listen((results) {
       _scanResults = results;
       if (mounted) {
@@ -66,6 +82,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   void dispose() {
     _scanResultsSubscription.cancel();
     _isScanningSubscription.cancel();
+    _adapterStateStateSubscription.cancel();
     super.dispose();
   }
 
@@ -97,6 +114,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   Future<void> connectToDevice(BluetoothDevice device) async {
     await device.connect();
     FlutterBluePlus.stopScan();
+    _isWriting = true;
     await writeToDevice(device);
   }
 
@@ -160,9 +178,10 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                 characteristic.lastValueStream.listen((value) async {
                   String receivedString = utf8.decode(value);
                   _receivedValues = receivedString.split(',');
-                  // 코드 uid 장비 배터리 유저id
-                  debugPrint('응답값: $receivedString');
                   if (_receivedValues[4] == userId) {
+                    _isWriting = false;
+                    // 코드 uid 장비 배터리 유저id
+                    debugPrint('응답값: $receivedString');
                     if (mounted) {
                       if (_receivedValues[0] == 'ALERT' && !hasExecutedAlert) {
                         hasExecutedAlert = true;
@@ -374,6 +393,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                   }
                 });
               } catch (e) {
+                _isWriting = false;
                 debugPrint('write error: $e');
               }
             }
@@ -430,7 +450,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const Header(title: '자물쇠 선택', back: true),
-      body: (_isLocking == true || _isUnlocking == true)
+      body: (_isLocking == true || _isUnlocking == true || _isWriting == true)
           ? Center(
               child: Image.asset(
               'assets/images/loading_icon.gif',

@@ -138,7 +138,7 @@ class _MyAppState extends State<MyApp> {
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
               fontFamily: 'font'),
-          home: const LoginScreen(),
+          home: const SplashScreen(),
           onGenerateRoute: generateMainRoute,
         ));
   }
@@ -155,76 +155,76 @@ class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver
   final _storage = const FlutterSecureStorage();
   bool isLogin = false;
 
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addObserver(this);
-  // }
-  //
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   super.didChangeAppLifecycleState(state);
-  //   debugPrint('state = $state');
-  //   switch(state) {
-  //     case AppLifecycleState.resumed:
-  //       _resumed();
-  //       break;
-  //     case AppLifecycleState.paused:
-  //       _paused();
-  //       break;
-  //     case AppLifecycleState.inactive:
-  //       _inactive();
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
-  //
-  // final lastKnownStateKey = 'lastKnownStateKey';
-  // final backgroundedTimeKey = 'backgroundedTimeKey';
-  //
-  // Future _paused() async {
-  //   final sp = await SharedPreferences.getInstance();
-  //   sp.setInt(lastKnownStateKey, AppLifecycleState.paused.index);
-  // }
-  //
-  // Future _inactive() async {
-  //   debugPrint('inactive');
-  //   final sp = await SharedPreferences.getInstance();
-  //   final prevState = sp.getInt(lastKnownStateKey);
-  //
-  //   final prevStateIsNotPaused = prevState != null &&
-  //       AppLifecycleState.values[prevState] != AppLifecycleState.paused;
-  //
-  //   if( prevStateIsNotPaused ) {
-  //     sp.setInt(backgroundedTimeKey, DateTime.now().millisecondsSinceEpoch);
-  //   }
-  //
-  //   sp.setInt(lastKnownStateKey, AppLifecycleState.inactive.index);
-  // }
-  //
-  // final pinLockMillis = 2000;
-  // Future _resumed() async {
-  //   debugPrint('resumed');
-  //   final sp = await SharedPreferences.getInstance();
-  //
-  //   final bgTime = sp.getInt(backgroundedTimeKey) ?? 0;
-  //   final allowedBackgroundTime = bgTime + pinLockMillis;
-  //   final shouldShowPIN = DateTime.now().millisecondsSinceEpoch > allowedBackgroundTime;
-  //
-  //   if(shouldShowPIN) {
-  //     // show PIN screen
-  //     Navigator.pushNamed(context, '/pinLogin');
-  //   }
-  //   sp.remove(backgroundedTimeKey);
-  //   sp.setInt(lastKnownStateKey, AppLifecycleState.resumed.index);
-  // }
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    debugPrint('state = $state');
+    switch(state) {
+      case AppLifecycleState.resumed:
+        _resumed();
+        break;
+      case AppLifecycleState.paused:
+        _paused();
+        break;
+      case AppLifecycleState.inactive:
+        _inactive();
+        break;
+      default:
+        break;
+    }
+  }
+
+  final lastKnownStateKey = 'lastKnownStateKey';
+  final backgroundedTimeKey = 'backgroundedTimeKey';
+
+  Future _paused() async {
+    final sp = await SharedPreferences.getInstance();
+    sp.setInt(lastKnownStateKey, AppLifecycleState.paused.index);
+  }
+
+  Future _inactive() async {
+    debugPrint('inactive');
+    final sp = await SharedPreferences.getInstance();
+    final prevState = sp.getInt(lastKnownStateKey);
+
+    final prevStateIsNotPaused = prevState != null &&
+        AppLifecycleState.values[prevState] != AppLifecycleState.paused;
+
+    if( prevStateIsNotPaused ) {
+      sp.setInt(backgroundedTimeKey, DateTime.now().millisecondsSinceEpoch);
+    }
+
+    sp.setInt(lastKnownStateKey, AppLifecycleState.inactive.index);
+  }
+
+  final pinLockMillis = 2000;
+  Future _resumed() async {
+    debugPrint('resumed');
+    final sp = await SharedPreferences.getInstance();
+
+    final bgTime = sp.getInt(backgroundedTimeKey) ?? 0;
+    final allowedBackgroundTime = bgTime + pinLockMillis;
+    final shouldShowPIN = DateTime.now().millisecondsSinceEpoch > allowedBackgroundTime;
+
+    if(shouldShowPIN) {
+      // show PIN screen
+      Navigator.pushNamedAndRemoveUntil(context, '/pinLogin', (route) => false);
+    }
+    sp.remove(backgroundedTimeKey);
+    sp.setInt(lastKnownStateKey, AppLifecycleState.resumed.index);
+  }
 
   @override
   Widget build(BuildContext context) {
