@@ -124,7 +124,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
         // Bluetooth 연결 권한 확인
         if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
             val deviceName = device.name ?: "Unknown Device"
-            Toast.makeText(this@BluetoothLOTOActivity, "$deviceName 클릭", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@BluetoothLOTOActivity, "$deviceName 와 연결을 \n 시도하고 있습니다.", Toast.LENGTH_SHORT).show()
 
             // Bluetooth GATT로 기기 연결 시작 (BluetoothDevice.TRANSPORT_LE 사용)
             bluetoothGatt =
@@ -299,11 +299,11 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     }
                 } else {
                     // 데이터 형식이 올바르지 않을 경우 로그 및 오류 처리
-                    Log.e("수신데이터 오류_LOTO", "수신된 데이터 형식이 올바르지 않습니다: $receivedData")
+                    Log.e("수신데이터 오류_LOTO", "$receivedData")
                     Handler(Looper.getMainLooper()).post {
                         Toast.makeText(
                             this@BluetoothLOTOActivity,
-                            "수신된 데이터 형식이 올바르지 않습니다: $receivedData",
+                            "블루투스 통신에 실패 했습니다.",
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -374,18 +374,18 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     onCompleted()
                 } else {
                     Log.d("API_CALL_ISSUE", "Response Failed: ${response.message()}")
-//                    Toast.makeText(
-//                        this@BluetoothLOTOActivity,
-//                        "Failed: ${response.message()}",
-//                        Toast.LENGTH_SHORT
-//                    ).show()
+                    Toast.makeText(
+                        this@BluetoothLOTOActivity,
+                        "네트워크 연결을 다시 한 번 확인하세요.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
 
             override fun onFailure(call: Call<IssueResponse>, t: Throwable) {
                 Log.d("API_CALL_ISSUE", "Error: ${t.message}")
                 Toast.makeText(
-                    this@BluetoothLOTOActivity, "Error: ${t.message}", Toast.LENGTH_SHORT
+                    this@BluetoothLOTOActivity, "네트워크 연결을 다시 한 번 확인하세요.", Toast.LENGTH_SHORT
                 ).show()
             }
         })
@@ -492,7 +492,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             override fun onFailure(call: Call<LockedResponse>, t: Throwable) {
                 Log.d("API_CALL_LOCKED", "Error: ${t.message}")
                 Toast.makeText(
-                    this@BluetoothLOTOActivity, "Error: ${t.message}", Toast.LENGTH_SHORT
+                    this@BluetoothLOTOActivity, "네트워크 연결을 다시 한 번 확인하세요.", Toast.LENGTH_SHORT
                 ).show()
                 // onCompleted 콜백 호출
                 onCompleted()
