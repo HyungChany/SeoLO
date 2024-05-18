@@ -62,10 +62,25 @@ class PinNumberActivity : AppCompatActivity() {
                         ).show()
                     }
                 } else {
-                    // 서버 응답 실패
-                    Toast.makeText(
-                        this@PinNumberActivity, "서버 응답이 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT
-                    ).show()
+                    if (response.code() == 403) {
+                        // 에러 응답 본문을 파싱하여 에러 코드 확인
+                        val errorBody = response.errorBody()?.string()
+                        if (errorBody != null && errorBody.contains("\"error_code\":\"JT03\"")) {
+                            // 토큰 만료 처리
+                            Toast.makeText(
+                                this@PinNumberActivity, "토큰이 만료되었습니다. 다시 로그인 해주세요.", Toast.LENGTH_SHORT
+                            ).show()
+                            navigateToLoginActivity()
+                        } else {
+                            Toast.makeText(
+                                this@PinNumberActivity, "서버 응답이 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    } else {
+                        Toast.makeText(
+                            this@PinNumberActivity, "서버 응답이 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
 
@@ -83,4 +98,11 @@ class PinNumberActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
+
+    private fun navigateToLoginActivity() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
 }
