@@ -17,6 +17,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -43,9 +44,8 @@ class BluetoothMainActivity : AppCompatActivity() {
     private var bluetoothGatt: BluetoothGatt? = null
     private var lastSentData: String? = null
     private var isDataReceived = false
-    private val handler = Handler(Looper.getMainLooper())
-    private val scanInterval: Long = 3000
     private var statusCode: String = "INIT"
+
 
     companion object {
         private const val REQUEST_BLUETOOTH_PERMISSION = 101
@@ -86,34 +86,33 @@ class BluetoothMainActivity : AppCompatActivity() {
                 deviceAdapter.updateDevices(newDevices)
             }
         }
-    }
 
-    @RequiresApi(Build.VERSION_CODES.S)
-    private fun startBluetoothScan() {
-        bluetoothAdapter.startDiscoveryForSpecificDevices("SEOLO LOCK") { newDevices ->
-            deviceAdapter.updateDevices(newDevices)
+        // 최상위 레이아웃에 클릭 리스너 추가
+        val mainLayout = findViewById<ConstraintLayout>(R.id.mainLayout)
+        mainLayout.setOnClickListener {
+            // 블루투스 재탐색 시작
+            if (!bluetoothAdapter.checkBluetoothPermissions()) {
+                bluetoothAdapter.requestBluetoothPermissions()
+            } else {
+                bluetoothAdapter.startDiscoveryForSpecificDevices("SEOLO LOCK") { newDevices ->
+                    deviceAdapter.updateDevices(newDevices)
+                }
+            }
         }
 
-        // 주기적으로 Bluetooth 스캔을 재시작
-        handler.postDelayed({
-            stopBluetoothScan()
-            startBluetoothScan()
-        }, scanInterval)
     }
 
-    private fun stopBluetoothScan() {
-        bluetoothAdapter.stopDiscovery()
-    }
-
+    // 기기 선택 시 호출되는 함수
     @RequiresApi(Build.VERSION_CODES.S)
     private fun onDeviceSelected(device: BluetoothDevice) {
-        stopBluetoothScan()
+        // 기기 선택 시 GATT 스캐닝 중지
+        bluetoothAdapter.stopDiscovery()
+
+        // 100ms 딜레이 후 기기 연결 시도
         Handler(Looper.getMainLooper()).postDelayed({
             connectToDevice(device)
         }, 100)
     }
-
-
 
     // 기기 연결 및 데이터 전송 로직을 포함한 함수
     @RequiresApi(Build.VERSION_CODES.S)

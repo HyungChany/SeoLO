@@ -14,9 +14,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -47,8 +49,6 @@ class BluetoothLOTOActivity : AppCompatActivity() {
     private var lastSentData: String? = null
     private var selectedDevice: BluetoothDevice? = null
     private var isDataReceived = false
-    private val handler = Handler(Looper.getMainLooper())
-    private val scanInterval: Long = 3000
     private var statusCode: String = "INIT"
 
     companion object {
@@ -90,28 +90,29 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                 deviceAdapter.updateDevices(newDevices)
             }
         }
-    }
 
-    @RequiresApi(Build.VERSION_CODES.S)
-    private fun startBluetoothScan() {
-        bluetoothAdapter.startDiscoveryForSpecificDevices("SEOLO LOCK") { newDevices ->
-            deviceAdapter.updateDevices(newDevices)
+        // 최상위 레이아웃에 클릭 리스너 추가
+        val mainLayout = findViewById<ConstraintLayout>(R.id.mainLayout)
+        mainLayout.setOnClickListener {
+            // 블루투스 재탐색 시작
+            if (!bluetoothAdapter.checkBluetoothPermissions()) {
+                bluetoothAdapter.requestBluetoothPermissions()
+            } else {
+                bluetoothAdapter.startDiscoveryForSpecificDevices("SEOLO LOCK") { newDevices ->
+                    deviceAdapter.updateDevices(newDevices)
+                }
+            }
         }
-
-        // 주기적으로 Bluetooth 스캔을 재시작
-        handler.postDelayed({
-            stopBluetoothScan()
-            startBluetoothScan()
-        }, scanInterval)
     }
 
-    private fun stopBluetoothScan() {
-        bluetoothAdapter.stopDiscovery()
-    }
-
+    // 기기 선택 시 호출되는 함수
     @RequiresApi(Build.VERSION_CODES.S)
     private fun onDeviceSelected(device: BluetoothDevice) {
-        stopBluetoothScan()
+        // 기기 선택 시 GATT 스캐닝 중지
+        bluetoothAdapter.stopDiscovery()
+        selectedDevice = device
+
+        // 100ms 딜레이 후 기기 연결 시도
         Handler(Looper.getMainLooper()).postDelayed({
             connectToDevice(device)
         }, 100)
@@ -241,7 +242,6 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             // 데이터가 이미 수신되었으면 무시
             if (isDataReceived) return
 
-
             // 데이터 수신 상태 플래그 설정
             isDataReceived = true
 
@@ -275,6 +275,11 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                         // WRITE 상태인 경우 API 호출
                         issueCoreLogic {
                             Handler(Looper.getMainLooper()).post {
+                                Toast.makeText(
+                                    this@BluetoothLOTOActivity,
+                                    "$statusCode, 잠금완료",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                                 Handler(Looper.getMainLooper()).postDelayed({
                                     val intent = Intent(
                                         this@BluetoothLOTOActivity, MainActivity::class.java
@@ -284,7 +289,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                                 }, 1000)
                             }
                         }
-                    } else if (statusCode =="CHECKED"){
+                    } else {
                         Handler(Looper.getMainLooper()).post {
                             Toast.makeText(
                                 this@BluetoothLOTOActivity,
@@ -292,8 +297,6 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                                 Toast.LENGTH_LONG
                             ).show()
                         }
-                    } else {
-
                     }
                 } else {
                     // 데이터 형식이 올바르지 않을 경우 로그 및 오류 처리
@@ -309,7 +312,6 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             }
         }
     }
-
 
     // ISSUE API 요청 함수
     private fun issueCoreLogic(onCompleted: () -> Unit) {
@@ -365,7 +367,10 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     )
 
                     // next_code를 사용하여 Bluetooth 데이터 전송
-                    if (nextCode != null) sendBluetoothData(nextCode)
+                    if (nextCode != null) {
+                        sendBluetoothData(nextCode)
+                    }
+
                     // onCompleted 콜백 호출
                     onCompleted()
                 } else {
@@ -470,16 +475,14 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     val issueResponse = response.body()
-                    val nextCode = issueResponse?.next_code
-                    val message = issueResponse?.message
                     Log.d("API_CALL_LOCKED", "response.body(): $issueResponse")
                     Log.d("API_CALL_LOCKED", "Response Success: ${issueResponse?.next_code}")
+                    val nextCode = issueResponse?.next_code
                     Log.d(
                         "API_CALL_LOCKED", "response.body()?.next_code: ${issueResponse?.next_code}"
                     )
-                    Log.d(
-                        "API_CALL_LOCKED", "response.body()?.message: $message"
-                    )
+                    val message = issueResponse?.message
+
                     // onCompleted 콜백 호출
                     onCompleted()
                 } else {
@@ -497,7 +500,6 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             }
         }) ?: onCompleted() // call이 null인 경우에도 onCompleted 콜백 호출
     }
-
 
     // Bluetooth 권한 확인 및 Bluetooth 활성화 함수
     @RequiresApi(Build.VERSION_CODES.S)
