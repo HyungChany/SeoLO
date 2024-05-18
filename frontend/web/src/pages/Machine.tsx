@@ -14,6 +14,7 @@ import {
   MachineRegistration,
 } from '@/apis/Machine.ts';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { useLocation } from 'react-router-dom';
 
 interface OptionType {
   value: number;
@@ -186,6 +187,8 @@ const Equipment = () => {
   const [selectedOption, setSelectedOption] = useState<OptionType | null>(null);
   const [facilities, setFacilities] = useState<number>(0);
   const [dateError, setDateError] = useState<string>('');
+  const location = useLocation();
+  const { option } = location.state as { option: number };
   const validateDate = (data: string): boolean => {
     // YYYY-MM-DD 정규식
     const regex = /^\d{4}-\d{2}-\d{2}$/;
@@ -283,8 +286,8 @@ const Equipment = () => {
     setOptions(newOptions);
   }, [dropdownData]);
 
-  const handleOptionChange = (option: OptionType): void => {
-    setSelectedOption(option); // 선택된 옵션 상태 업데이트
+  const handleOptionChange = (selecOption: OptionType): void => {
+    setSelectedOption(selecOption); // 선택된 옵션 상태 업데이트
   };
 
   // 기계 리스트 불러오기
@@ -323,9 +326,16 @@ const Equipment = () => {
     }
   }, [image, imagePreviewUrl, uploadImage]);
 
-  const handleSubmitOptionChange = (option: OptionType): void => {
-    setSelectedSubmitOption(option);
+  const handleSubmitOptionChange = (selectOption: OptionType): void => {
+    setSelectedSubmitOption(selectOption);
   };
+
+  // 드롭다운 옵션
+  useEffect(() => {
+    if (option && options) {
+      setSelectedOption(options[option - 1]);
+    }
+  }, [option, options]);
   return (
     <Background>
       <Box>
