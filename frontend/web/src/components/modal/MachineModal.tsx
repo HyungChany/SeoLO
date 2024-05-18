@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { MachineList } from '@/apis/Machine.ts';
 import { Column } from 'react-table';
 import { useTable } from 'react-table';
+import { useQuery } from '@tanstack/react-query';
 interface EquipmentModalProps {
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   option: number;
@@ -37,18 +38,27 @@ const EquipmentModal = ({ onClick, option }: EquipmentModalProps) => {
     navigate('/equipment', { state: { option } });
   };
   const [machineData, setMachineData] = useState<EquipmentType[]>([]);
+  // 장비 데이터 불러오기
+  const { data: machine } = useQuery({
+    queryKey: ['machineList', option],
+    queryFn: () => {
+      if (option) {
+        return MachineList(option);
+      } else {
+        return [];
+      }
+    },
+  });
   useEffect(() => {
-    const fetchEquipment = async () => {
-      const equipmentData = await MachineList(option);
+    if (machine) {
       setMachineData(
-        equipmentData.map((item: EquipmentType) => ({
+        machine.map((item: EquipmentType) => ({
           ...item,
           introduction_date: item.introduction_date.split('T')[0], // 'T' 전까지만 파싱
         })),
       );
-    };
-    fetchEquipment();
-  }, []);
+    }
+  }, [machine]);
   // 표 만들기
 
   const columns: Column<EquipmentType>[] = React.useMemo<
