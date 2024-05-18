@@ -209,14 +209,14 @@ export const Leaflet = ({
   }, [markerData]);
   // 알맞은 icon가져오기
   const lockedIcon = L.icon({
-    iconUrl: '/Locked.png',
+    iconUrl: '/Locked1.png',
     iconSize: [30, 30],
     iconAnchor: [15.5, 15],
   });
   const openedIcon = L.icon({
-    iconUrl: '/OpenLocker.png',
+    iconUrl: '/OpenLocker1.png',
     iconSize: [30, 30],
-    iconAnchor: [11.5, 15],
+    iconAnchor: [15.5, 15],
   });
 
   if (!imageFile || !bounds) return null;
@@ -364,8 +364,8 @@ export const Leaflet = ({
 
                 <ButtonBox justifyContent="flex-end">
                   <Button
-                    width="3rem"
-                    height="1.2rem"
+                    width="3.3rem"
+                    height="1.8rem"
                     onClick={(e) => {
                       if (marker.id) {
                         handleDeleteClick(e, marker.id);
