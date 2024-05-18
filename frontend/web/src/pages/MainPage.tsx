@@ -22,6 +22,8 @@ import { MapContainer } from 'react-leaflet';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRecoilValue } from 'recoil';
+import { notificationEventsState } from '@/recoil/sseState.tsx';
 interface NumberType {
   color: string;
   marginTop?: string;
@@ -215,6 +217,7 @@ const MainPage = () => {
   const [selectedOption, setSelectedOption] = useState<DropDownType | null>(
     null,
   );
+  const events = useRecoilValue(notificationEventsState);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleCardDrawingClick = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
@@ -295,7 +298,7 @@ const MainPage = () => {
 
   // 메인페이지 통합 옵션 가져오기
   const { data: mainData } = useQuery({
-    queryKey: ['main', selectedOption],
+    queryKey: ['main', selectedOption, events],
     queryFn: () => {
       if (selectedOption) {
         return MainInformation(selectedOption.value);
