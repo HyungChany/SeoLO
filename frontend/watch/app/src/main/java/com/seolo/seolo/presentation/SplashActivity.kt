@@ -27,7 +27,7 @@ class SplashActivity : ComponentActivity() {
             checkTokenAndNavigate()
             SessionManager.clear()
 //            TokenManager.clearTokens(this)
-            LotoManager.clearLoto(this)
+//            LotoManager.clearLoto(this)
         }, 2000)
     }
 

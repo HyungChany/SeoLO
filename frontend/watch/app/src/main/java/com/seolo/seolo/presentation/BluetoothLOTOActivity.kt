@@ -281,9 +281,8 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                                     Toast.LENGTH_SHORT
                                 ).show()
                                 Handler(Looper.getMainLooper()).postDelayed({
-                                    val intent = Intent(
-                                        this@BluetoothLOTOActivity, MainActivity::class.java
-                                    )
+                                    val intent = Intent(this@BluetoothLOTOActivity, MainActivity::class.java)
+                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     startActivity(intent)
                                     finish()
                                 }, 1000)

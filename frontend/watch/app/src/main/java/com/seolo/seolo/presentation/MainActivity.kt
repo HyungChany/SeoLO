@@ -26,4 +26,9 @@ class MainActivity : AppCompatActivity() {
 
         viewPager.adapter = adapter
     }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
+    }
+
 }
