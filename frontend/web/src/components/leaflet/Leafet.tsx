@@ -75,7 +75,7 @@ interface MarkerDetailType {
 const Button = styled.div<ButtonProps>`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
-  border-radius: 0.3rem;
+  border-radius: 0.5rem;
   border: 1px solid ${Color.GRAY100};
   /* padding: 0.7rem; */
   align-items: center;
@@ -84,6 +84,7 @@ const Button = styled.div<ButtonProps>`
   cursor: pointer;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.2);
   background-color: ${Color.GRAY100};
+  font-weight: 600;
   &:hover {
     background-color: ${(props) => props.$hoverBackgroundColor};
     border-color: ${Color.GRAY300};
@@ -209,13 +210,13 @@ export const Leaflet = ({
   // 알맞은 icon가져오기
   const lockedIcon = L.icon({
     iconUrl: '/Locked.png',
-    iconSize: [50, 50],
-    iconAnchor: [25, 25],
+    iconSize: [30, 30],
+    iconAnchor: [15.5, 15],
   });
   const openedIcon = L.icon({
     iconUrl: '/OpenLocker.png',
-    iconSize: [50, 40],
-    iconAnchor: [25, 20],
+    iconSize: [30, 30],
+    iconAnchor: [11.5, 15],
   });
 
   if (!imageFile || !bounds) return null;
@@ -254,7 +255,7 @@ export const Leaflet = ({
             style={{
               display: 'flex',
               flexDirection: 'column',
-              gap: '0.5rem',
+              gap: '0.3rem',
               // justifyContent: 'flex-end',
               alignItems: 'flex-end',
               width: '100%',
@@ -270,8 +271,8 @@ export const Leaflet = ({
             />
             <ButtonBox justifyContent="flex-end">
               <Button
-                width="3.5rem"
-                height="1.7rem"
+                width="3.3rem"
+                height="1.8rem"
                 $hoverBackgroundColor={Color.GREEN400}
                 onClick={(e) => {
                   handleMarkerClick(e);

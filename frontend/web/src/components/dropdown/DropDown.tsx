@@ -35,7 +35,7 @@ const Box = styled.div`
   display: flex;
   width: 17.5rem;
   height: 2.7rem;
-  padding: 1.125rem 0.9375rem;
+  padding: 1rem 0.9rem;
   /* margin: 0 1.5rem; */
   justify-content: center;
   align-items: center;
@@ -51,7 +51,7 @@ const StyledSelect = styled(Select<OptionType>).attrs({
   .react-select__control {
     background-color: white;
     width: 17.5rem;
-    height: 100%;
+    height: 2.7rem;
     border: 1px solid ${Color.GRAY300};
     display: flex;
     font-size: 1.375rem;
