@@ -422,9 +422,7 @@ const Equipment = () => {
                     onChange={handleDate}
                     placeholder="ex) 2024-05-20"
                     onBlur={() => {
-                      if (!validateDate(date)) {
-                        console.log('Invalid date');
-                      } else {
+                      if (validateDate(date)) {
                         setDateError(''); // 오류가 없으면 오류 메시지 초기화
                       }
                     }}

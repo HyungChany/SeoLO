@@ -228,7 +228,6 @@ const MainPage = () => {
   // 작업장 편집모드 활성화, 비활성화
   const changeModifyMode = () => {
     setModifyMode((prevMode) => !prevMode);
-    console.log(modifyMode);
   };
 
   // 도면 등록
@@ -274,13 +273,9 @@ const MainPage = () => {
   // 로그아웃
   const handleLogout = () => {
     const fetchLogout = async () => {
-      try {
-        const data = await Logout();
-        if (data?.status === 200) {
-          navigate('/login');
-        }
-      } catch (e) {
-        console.log(e);
+      const data = await Logout();
+      if (data?.status === 200) {
+        navigate('/login');
       }
     };
     fetchLogout();
@@ -344,11 +339,7 @@ const MainPage = () => {
                 id="fileInput"
               />
               <label htmlFor="fileInput">
-                <Menu
-                  width={'100%'}
-                  $enterSize={1}
-                  onClick={() => console.log()}
-                >
+                <Menu width={'100%'} $enterSize={1}>
                   <CheckListIcon />
                   <Typo.Body1B color={Color.ONYX}>도면 추가/수정</Typo.Body1B>
                 </Menu>
@@ -361,12 +352,6 @@ const MainPage = () => {
               <Spacer space={'1rem'} />
               {modifyMode && (
                 <RowContainer>
-                  {/* <Dropdown
-                    options={machineDropdown}
-                    selectedOption={machineSelected}
-                    onOptionChange={handleMachineChange}
-                    placeholder="기계를 선택하세요"
-                  /> */}
                   <Button
                     onClick={changeModifyMode}
                     width={3.5}
@@ -454,7 +439,7 @@ const MainPage = () => {
                     <div style={{ marginTop: '0.3rem' }}>등록 장비</div>
                   </Typo.H4>
                 </InnerContainer>
-                <NumberContainer color={Color.GREEN400}>
+                <NumberContainer color={Color.GREEN400} marginTop="1rem">
                   {mainData?.num_all_machines_in_this_facility}
                 </NumberContainer>
               </Card>

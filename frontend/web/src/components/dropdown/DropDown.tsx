@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Select, { ActionMeta, SingleValue } from 'react-select';
+import Select, { SingleValue } from 'react-select';
 import * as Color from '@/config/color/Color.ts';
 
 interface OptionType {
@@ -96,11 +96,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   onOptionChange,
   placeholder,
 }) => {
-  const handleOptionChange = (
-    newValue: SingleValue<OptionType>,
-    actionMeta: ActionMeta<OptionType>,
-  ) => {
-    console.log('Action: ', actionMeta.action);
+  const handleOptionChange = (newValue: SingleValue<OptionType>) => {
     if (newValue) {
       onOptionChange(newValue);
     }
