@@ -188,6 +188,7 @@ const CardDrawing = styled.div`
 
 const InnerContainer = styled.div`
   flex-direction: column;
+  flex-grow: 1;
 `;
 
 const NumberContainer = styled.div<NumberType>`
@@ -196,11 +197,14 @@ const NumberContainer = styled.div<NumberType>`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  padding-right: 0.5rem;
+  box-sizing: border-box;
   font-size: 6rem;
   font-weight: 700;
   color: ${(props) => props.color};
   margin-top: ${(props) => props.marginTop || '0'};
   margin-bottom: ${(props) => props.marginBottom || '0'};
+  /* position: relative; */
 `;
 
 // const Handle = () => {};
@@ -450,7 +454,7 @@ const MainPage = () => {
                     <div style={{ marginTop: '0.3rem' }}>등록 장비</div>
                   </Typo.H4>
                 </InnerContainer>
-                <NumberContainer color={Color.GREEN400} marginTop="1rem">
+                <NumberContainer color={Color.GREEN400}>
                   {mainData?.num_all_machines_in_this_facility}
                 </NumberContainer>
               </Card>

@@ -9,6 +9,7 @@ interface CardProps {
   flexDirection?: string;
   alignItems?: string;
   gap?: number;
+  position?: string;
 }
 const CardContainer = styled.div<CardProps>`
   width: ${(props) =>
@@ -21,6 +22,7 @@ const CardContainer = styled.div<CardProps>`
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
   justify-content: ${(props) => props.justifyContent};
   flex-direction: ${(props) => props.flexDirection};
+  position: ${(props) => props.position};
   align-items: ${(props) => props.alignItems};
   gap: ${(props) => `${props.gap}rem`};
   padding: 0.5rem;
@@ -38,6 +40,7 @@ const Card = (props: CardProps) => {
       flexDirection={props.flexDirection}
       alignItems={props.alignItems}
       gap={props.gap}
+      position={props.position}
     >
       {props.children}
     </CardContainer>
