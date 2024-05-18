@@ -16,16 +16,22 @@ class LotoProcessScreen extends StatelessWidget {
       body: Center(
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.9,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('LOTO란?', style: TextStyle(fontSize: 30),),
-                LotoDefinition(),
-                const Text('LOTO 작업절차', style: TextStyle(fontSize: 30)),
-                LotoWorkProcess(),
-                Image.asset('assets/images/loto_process_character.png',fit: BoxFit.contain,)
-              ],
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('LOTO란?', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                  SizedBox(height: 10,),
+                  LotoDefinition(),
+                  SizedBox(height: 10,),
+                  const Text('LOTO 작업절차', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 10,),
+                  LotoWorkProcess(),
+                  // Image.asset('assets/images/loto_process_character.png',fit: BoxFit.contain,)
+                ],
+              ),
             ),
           ),
         ),

@@ -2,19 +2,36 @@ import 'package:app/main.dart';
 import 'package:flutter/material.dart';
 
 class LotoWorkProcess extends StatelessWidget {
-  const LotoWorkProcess({super.key});
+  LotoWorkProcess({super.key});
 
-  // List<String> = ['전원차단 준비', '기계설비 '];
+  List<String> content = [
+    '전원차단 준비',
+    '기계설비 운전 정지',
+    '전원차단 및 잔류에너지 확인',
+    'LOTO 설치',
+    '작업실시',
+    '점검 및 확인',
+    'LOTO 해제',
+    '기계 설비 재가동'
+  ];
+
   container(text) {
-    return Container(
-      child: Text(
-        text,
-        style:
-            TextStyle(color: snow, fontSize: 30, fontWeight: FontWeight.bold),
-        textAlign: TextAlign.center,
-      ),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10), color: blue100),
+    return Column(
+      children: [
+        Container(
+          height: 55,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50), color: blue400),
+          child: Center(
+            child: Text(
+              text,
+              style:
+                  TextStyle(color: snow, fontSize: 25, fontWeight: FontWeight.bold),
+            ),
+          ),
+        ),
+        SizedBox(height: 10,)
+      ],
     );
   }
 
@@ -22,8 +39,14 @@ class LotoWorkProcess extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.9,
-      height: MediaQuery.of(context).size.height * 0.06,
-      child: container('전원차단 준비'),
+      height: MediaQuery.of(context).size.height * 0.6,
+      child: ListView.builder(
+        // scrollDirection: Axis.vertical,
+        itemCount: content.length,
+        itemBuilder: (BuildContext context, int index) {
+          return container(content[index]);
+        },
+      ),
     );
   }
 }

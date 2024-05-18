@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:app/main.dart';
 import 'package:app/screens/bluetooth/bluetooth_off_screen.dart';
 import 'package:app/view_models/core/core_check_view_model.dart';
 import 'package:app/view_models/core/core_issue_view_model.dart';
@@ -48,11 +49,14 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   void initState() {
     super.initState();
 
-    _adapterStateStateSubscription = FlutterBluePlus.adapterState.listen((state) {
+    _adapterStateStateSubscription =
+        FlutterBluePlus.adapterState.listen((state) {
       _adapterState = state;
       if (_adapterState != BluetoothAdapterState.on) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => const BluetoothOffScreen()));
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const BluetoothOffScreen()));
       }
       if (mounted) {
         setState(() {});
@@ -184,6 +188,12 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     debugPrint('응답값: $receivedString');
                     if (mounted) {
                       if (_receivedValues[0] == 'ALERT' && !hasExecutedAlert) {
+                        if (coreCode == "LOCK") {
+                          _isLocking = false;
+                        }
+                        if (coreCode == "LOCKED") {
+                          _isUnlocking = false;
+                        }
                         hasExecutedAlert = true;
                         showDialog(
                             context: context,
@@ -311,7 +321,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                             Navigator.pushNamedAndRemoveUntil(
                               context,
                               '/resultUnlock',
-                                  (Route<dynamic> route) => route.isFirst,
+                              (Route<dynamic> route) => route.isFirst,
                             );
                           } else {
                             if (unlockVM.errorMessage == 'JT') {
@@ -339,7 +349,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
                                 '/resultUnlock',
-                                    (Route<dynamic> route) => route.isFirst,
+                                (Route<dynamic> route) => route.isFirst,
                               );
                             }
                           }
@@ -357,7 +367,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                             Navigator.pushNamedAndRemoveUntil(
                               context,
                               '/resultLock',
-                                  (Route<dynamic> route) => route.isFirst,
+                              (Route<dynamic> route) => route.isFirst,
                             );
                           } else {
                             if (lockedVM.errorMessage == 'JT') {
@@ -383,7 +393,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
                                 '/resultLock',
-                                    (Route<dynamic> route) => route.isFirst,
+                                (Route<dynamic> route) => route.isFirst,
                               );
                             }
                           }
@@ -461,14 +471,39 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
               onRefresh: onRefresh,
               child: Stack(
                 children: [
-                  ListView(
-                    children: <Widget>[
-                      Text('receive: $_receivedValues'),
-                      Text('최근 연결한 자물쇠'),
-                      ..._buildLastScanResultTiles(context),
-                      Text('새로운 자물쇠'),
-                      ..._buildScanResultTiles(context),
-                    ],
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text('최근 연결한 자물쇠',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 20,),
+                        Expanded(
+                          flex: 2,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: _buildLastScanResultTiles(context),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20,),
+                        Text('새로운 자물쇠',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                        SizedBox(height: 20,),
+                        Expanded(
+                          flex: 8,
+                          child: SingleChildScrollView(
+                            child: Column(
+                              children: _buildScanResultTiles(context),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Align(
                       alignment: Alignment.bottomCenter,
