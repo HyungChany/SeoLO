@@ -21,6 +21,8 @@ class ChecklistActivity : AppCompatActivity() {
     // 뷰페이저 및 시설물 목록 초기화
     private lateinit var viewPager: ViewPager2
     private var facilities: List<FacilityItem> = emptyList()
+    private var checklistItemCount: Int = 0
+    private var checkedItemCount: Int = 0
 
     // 액티비티 생성 시 호출되는 메서드
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +41,7 @@ class ChecklistActivity : AppCompatActivity() {
 
         // 체크리스트가 비어있지 않으면 각 아이템을 프래그먼트로 추가
         if (!checklistItems.isNullOrEmpty()) {
+            checklistItemCount = checklistItems.size
             for (item in checklistItems) {
                 adapter.addFragment(ChecklistFragment.newInstance(item.context))
             }
@@ -54,18 +57,26 @@ class ChecklistActivity : AppCompatActivity() {
         getFacilities()
     }
 
-    // 다음 페이지로 이동하는 메서드
-    fun moveToNextPage() {
-        val currentItem = viewPager.currentItem
-        val totalItems = viewPager.adapter?.itemCount ?: 0
-        if (currentItem < totalItems - 1) {
-            viewPager.currentItem = currentItem + 1
+    // 체크박스 상태가 변경될 때 호출되는 메서드
+    fun onCheckboxCheckedChange(isChecked: Boolean) {
+        if (isChecked) {
+            checkedItemCount++
         } else {
-            // 시설물 정보를 담아 LocationActivity로 이동
-            val intent = Intent(this, FacilityActivity::class.java)
-            intent.putExtra("facilities", ArrayList(facilities))
-            startActivity(intent)
+            checkedItemCount--
         }
+
+        // 모든 체크박스가 체크되었을 경우 다음 액티비티로 전환
+        if (checkedItemCount == checklistItemCount) {
+            moveToNextPage()
+        }
+    }
+
+    // 다음 페이지로 이동하는 메서드
+    private fun moveToNextPage() {
+        // 시설물 정보를 담아 LocationActivity로 이동
+        val intent = Intent(this, FacilityActivity::class.java)
+        intent.putExtra("facilities", ArrayList(facilities))
+        startActivity(intent)
     }
 
     // 시설물 정보를 가져오는 메서드

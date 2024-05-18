@@ -16,6 +16,7 @@ import com.seolo.seolo.presentation.ChecklistActivity
 class ChecklistFragment : Fragment() {
     // 체크리스트 텍스트를 저장하는 변수
     private var checklistText: String? = null
+    private var isChecked = false
 
     // Fragment가 생성될 때 호출되는 메서드
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,26 +42,20 @@ class ChecklistFragment : Fragment() {
         textView.text = checklistText
         textView.movementMethod = ScrollingMovementMethod()
 
-        // 체크박스를 클릭하면 다음 페이지로 이동하는 이벤트 처리
-        textBox.setOnClickListener {
-            val wasChecked = checkBox.isChecked
-            checkBox.isChecked = !checkBox.isChecked
-            if (!wasChecked) {
-                view.postDelayed({
-                    (activity as? ChecklistActivity)?.moveToNextPage()
-                }, 800)
-            }
+        // 체크박스를 클릭하면 상태 변경 및 액티비티에 알림
+        checkBox.setOnCheckedChangeListener { _, isChecked ->
+            this.isChecked = isChecked
+            (activity as? ChecklistActivity)?.onCheckboxCheckedChange(isChecked)
         }
 
-        // 뷰를 클릭하면 다음 페이지로 이동하는 이벤트 처리
-        view.setOnClickListener {
-            val wasChecked = checkBox.isChecked
+        // 텍스트박스를 클릭하면 체크박스 상태 변경
+        textBox.setOnClickListener {
             checkBox.isChecked = !checkBox.isChecked
-            if (!wasChecked) {
-                view.postDelayed({
-                    (activity as? ChecklistActivity)?.moveToNextPage()
-                }, 800)
-            }
+        }
+
+        // 뷰를 클릭하면 체크박스 상태 변경
+        view.setOnClickListener {
+            checkBox.isChecked = !checkBox.isChecked
         }
 
         return view
@@ -77,5 +72,10 @@ class ChecklistFragment : Fragment() {
                 }
             }
         }
+    }
+
+    // 체크박스 상태 반환 메서드
+    fun isChecked(): Boolean {
+        return isChecked
     }
 }
