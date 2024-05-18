@@ -32,8 +32,9 @@ const ButtonBox = styled.div`
 `;
 const EquipmentModal = ({ onClick, option }: EquipmentModalProps) => {
   const navigate = useNavigate();
+
   const handleButtonClick = () => {
-    navigate('/equipment');
+    navigate('/equipment', { state: { option } });
   };
   const [machineData, setMachineData] = useState<EquipmentType[]>([]);
   useEffect(() => {
