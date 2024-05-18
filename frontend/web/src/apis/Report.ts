@@ -3,7 +3,7 @@ import { api } from './Base.ts';
 interface PatchData {
   isAccident: boolean;
   accident_type: string;
-  victims_num: number;
+  victims_num: number | null;
   index: number;
 }
 export const totalReport = async () => {

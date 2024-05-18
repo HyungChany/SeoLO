@@ -76,6 +76,7 @@ const DaySelectBox = styled.div`
   align-items: center;
 `;
 const MainBox = styled.div`
+  min-width: 1440px;
   width: 100%;
   height: 100%;
   display: flex;
@@ -84,6 +85,8 @@ const MainBox = styled.div`
   flex-direction: column;
   gap: 2rem;
   overflow-y: auto;
+  flex-shrink: 0;
+  overflow-x: hidden;
 `;
 
 const Overlay = styled.div`
@@ -266,8 +269,14 @@ const Report = () => {
           item.taskEndDateTime === null
             ? '-'
             : formatDate(item.taskEndDateTime),
-        accidentType: item.accidentType === null ? '-' : item.accidentType,
-        victimsNum: item.victimsNum === null ? '-' : item.victimsNum,
+        accidentType:
+          item.accidentType === null || item.accidentType === ''
+            ? '-'
+            : item.accidentType,
+        victimsNum:
+          item.victimsNum === null || item.victimsNum === 0
+            ? '-'
+            : item.victimsNum,
         accident: item.accident === false ? 'N' : 'T',
       }));
       setReportData(formattedData);
@@ -316,7 +325,7 @@ const Report = () => {
       taskEndDateTime:
         item.taskEndDateTime === null ? '-' : formatDate(item.taskEndDateTime),
       accidentType: item.accidentType === null ? '-' : item.accidentType,
-      victimsNum: item.victimsNum === null ? '-' : item.victimsNum,
+      victimsNum: item.victimsNum === null || 0 ? '-' : item.victimsNum,
       accident: item.accident === false ? 'N' : 'T',
     }));
     setReportData(formattedData);
@@ -423,6 +432,10 @@ const Report = () => {
                       padding: '1rem',
                       textAlign: 'center',
                       cursor: 'pointer',
+                      maxWidth: '60px',
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
                     }}
                   >
                     {cell.render('Cell')}
