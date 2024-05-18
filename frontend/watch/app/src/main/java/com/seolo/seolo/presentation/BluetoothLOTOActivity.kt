@@ -48,7 +48,8 @@ class BluetoothLOTOActivity : AppCompatActivity() {
     private var selectedDevice: BluetoothDevice? = null
     private var isDataReceived = false
     private val handler = Handler(Looper.getMainLooper())
-    private val scanInterval: Long = 10000
+    private val scanInterval: Long = 3000
+    private var statusCode: String = "INIT"
 
     companion object {
         private const val REQUEST_BLUETOOTH_PERMISSION = 101
@@ -258,7 +259,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                 val lotoUserId = TokenManager.getUserId(this@BluetoothLOTOActivity)
 
                 if (dataParts.size >= 4 && (lotoUserId != null)) {
-                    val statusCode = dataParts[0]
+                    statusCode = dataParts[0]
                     val lotoUid = dataParts[1]
                     val machineId = dataParts[2]
                     val batteryInfo = dataParts[3]
