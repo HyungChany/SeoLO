@@ -11,6 +11,7 @@ import {
   EmployeeRegistration,
   RegistratedEmployee,
 } from '@/apis/Employee.ts';
+import { useNavigate } from 'react-router-dom';
 interface EmployeeType {
   employee_join_date: string;
   employee_leave_date: string;
@@ -160,6 +161,7 @@ const Employee = () => {
   const handleEquipmentNumber = (e: ChangeEvent<HTMLInputElement>) => {
     setEquipmentNumber(e.target.value);
   };
+  const navigate = useNavigate();
   const handleSubmit = async () => {
     try {
       if (employeeInformation && companyCode) {
@@ -184,6 +186,7 @@ const Employee = () => {
   };
   const handleCancel = () => {
     setEquipmentNumber('');
+    navigate('/information');
   };
   const handleSearch = () => {
     const fetchData = async () => {
