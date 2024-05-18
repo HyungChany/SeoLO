@@ -1,4 +1,3 @@
-import { Example } from '@/components/Example.tsx';
 import styled from 'styled-components';
 import CompanyInformation from '@/pages/Information.tsx';
 import { createBrowserRouter } from 'react-router-dom';
@@ -66,9 +65,8 @@ const informationRoute = [
     element: <PrivateRoute>{With(<Report />)}</PrivateRoute>,
   },
 ];
-const exampleRoute = { path: '/example', element: <Example /> };
 
-const routes = [...informationRoute, ...mainRoutes, loginRoute, exampleRoute];
+const routes = [...informationRoute, ...mainRoutes, loginRoute];
 
 const Router = createBrowserRouter(routes);
 

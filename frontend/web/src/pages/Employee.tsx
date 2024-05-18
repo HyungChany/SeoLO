@@ -12,6 +12,7 @@ import {
   RegistratedEmployee,
 } from '@/apis/Employee.ts';
 import { useNavigate } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 interface EmployeeType {
   employee_join_date: string;
   employee_leave_date: string;
@@ -157,9 +158,36 @@ const Employee = () => {
   const [EmployeeNumber, setEmployeeNumber] = useState<number>(0);
   const [employeeInformation, setEmployeeInformation] =
     useState<EmployeeType | null>(null);
+  const [searchEnabled, setSearchEnabled] = useState(false);
   const handleEquipmentNumber = (e: ChangeEvent<HTMLInputElement>) => {
     setEquipmentNumber(e.target.value);
   };
+  const queryClient = useQueryClient();
+  // 작업자 등록
+  const { mutate: registrationMutate } = useMutation({
+    mutationFn: EmployeeRegistration,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['employeeList'] }),
+  });
+
+  // 작업자 디테일 정보
+  const { data: employeeDetail } = useQuery({
+    queryKey: ['employeeDetail'],
+    queryFn: () => {
+      if (equipmentNumber) {
+        return EmployeeDetail(equipmentNumber);
+      }
+    },
+    enabled: searchEnabled,
+  });
+
+  // 등록된 작업자 전체 조회
+  const { data: employeeList } = useQuery({
+    queryKey: ['employeeList'],
+    queryFn: () => {
+      return RegistratedEmployee();
+    },
+  });
   const navigate = useNavigate();
   const handleSubmit = async () => {
     if (employeeInformation && companyCode) {
@@ -172,9 +200,7 @@ const Employee = () => {
         password: 'A' + 'a' + formattedBirthday + '@', // 초기 비밀번호는 Aa생년월일@
         company_code: companyCode,
       };
-      const response = await EmployeeRegistration(employeeData);
-      console.log(response);
-      window.location.reload();
+      registrationMutate(employeeData);
     } else {
       alert('사번을 입력해주세요.');
     }
@@ -184,21 +210,20 @@ const Employee = () => {
     navigate('/information');
   };
   const handleSearch = () => {
-    const fetchData = async () => {
-      const data = await EmployeeDetail(equipmentNumber);
-      setEmployeeInformation(data);
-
-      console.log(data);
-    };
-    fetchData();
+    setSearchEnabled(true);
   };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const data = await RegistratedEmployee();
-      setEmployeeNumber(data.length);
-    };
-    fetchData();
-  }, []);
+    if (employeeDetail) {
+      setEmployeeInformation(employeeDetail);
+      setSearchEnabled(false);
+    }
+  }, [employeeDetail]);
+  useEffect(() => {
+    if (employeeList) {
+      setEmployeeNumber(employeeList.length);
+    }
+  }, [employeeList]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {

@@ -21,6 +21,11 @@ const useSSE = () => {
     const connectSSE = () => {
       const accessToken = sessionStorage.getItem('accessToken') || '';
       const companyCode = sessionStorage.getItem('companyCode') || '';
+      if (!accessToken || !companyCode) {
+        setTimeout(connectSSE, 5000); // 5000 후 재연결 시
+        return;
+      }
+
       const eventSource = new EventSourcePolyfill(url, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -55,7 +60,7 @@ const useSSE = () => {
 
     return () => {
       isMounted = false;
-      disconnectSSE();
+      if (disconnectSSE) disconnectSSE();
     };
     // }
   }, [url, setEvents]);

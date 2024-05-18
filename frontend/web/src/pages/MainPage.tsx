@@ -439,7 +439,7 @@ const MainPage = () => {
                     <div style={{ marginTop: '0.3rem' }}>등록 장비</div>
                   </Typo.H4>
                 </InnerContainer>
-                <NumberContainer color={Color.GREEN400}>
+                <NumberContainer color={Color.GREEN400} marginTop="1rem">
                   {mainData?.num_all_machines_in_this_facility}
                 </NumberContainer>
               </Card>

@@ -21,7 +21,7 @@ const CardContainer = styled.div<CardProps>`
   border-radius: 1.25rem;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25);
   justify-content: ${(props) => props.justifyContent};
-  flex-direction: ${(props) => props.flexDirection};
+  flex-direction: ${(props) => props.flexDirection || 'row'};
   position: ${(props) => props.position};
   align-items: ${(props) => props.alignItems};
   gap: ${(props) => `${props.gap}rem`};
