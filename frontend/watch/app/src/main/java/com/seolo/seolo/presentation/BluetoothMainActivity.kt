@@ -120,7 +120,7 @@ class BluetoothMainActivity : AppCompatActivity() {
         // Bluetooth 연결 권한 확인
         if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
             val deviceName = device.name ?: "Unknown Device"
-            Toast.makeText(this@BluetoothMainActivity, "$deviceName 와 연결중입니다.", Toast.LENGTH_LONG)
+            Toast.makeText(this@BluetoothMainActivity, "$deviceName 와 연결을 \n 시도하고 있습니다.", Toast.LENGTH_LONG)
                 .show()
 
             // Bluetooth GATT로 기기 연결 시작 (BluetoothDevice.TRANSPORT_LE 사용)
@@ -363,7 +363,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                     Log.d("API 요청 실패_Main", "API 요청 실패: $errorMessage")
                     runOnUiThread {
                         Toast.makeText(
-                            this@BluetoothMainActivity, errorMessage, Toast.LENGTH_LONG
+                            this@BluetoothMainActivity, "네트워크 연결을 다시 한 번 확인하세요.", Toast.LENGTH_LONG
                         ).show()
                     }
                 }
@@ -374,7 +374,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                 Log.d("API 요청 실패_Main", "Error: ${t.message}")
                 runOnUiThread {
                     Toast.makeText(
-                        this@BluetoothMainActivity, "Error: ${t.message}", Toast.LENGTH_SHORT
+                        this@BluetoothMainActivity, "네트워크 연결을 다시 한 번 확인하세요.", Toast.LENGTH_SHORT
                     ).show()
                 }
                 onCompleted()
