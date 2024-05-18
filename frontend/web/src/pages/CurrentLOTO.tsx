@@ -71,26 +71,12 @@ const ContentBox = styled.div<ContentBoxProps>`
   /* color: ${(props) => (props.battery < 40 ? Color.WHITE : Color.BLACK)}; */
 `;
 const CurrentLOTO = () => {
-  // const [lockers, setLockers] = useState<LockTypes[]>([]);
   const events = useRecoilValue(notificationEventsState);
   const { data: locker } = useQuery({
     queryKey: ['locker', events],
     queryFn: () => lockCheck(),
   });
-  // useEffect(() => {
-  //   const fetchLocks = async () => {
-  //     const data = await lockCheck();
-  //     console.log('라커', data); // data를 상태로 설정
-  //     const newOptions = data.map((locks: LockTypes) => ({
-  //       id: locks.id,
-  //       uid: locks.uid,
-  //       locked: locks.locked,
-  //       battery: locks.battery,
-  //     }));
-  //     setLockers(newOptions);
-  //   };
-  //   fetchLocks();
-  // }, []);
+
   return (
     <BackGround>
       <Box>

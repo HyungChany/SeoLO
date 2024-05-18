@@ -56,9 +56,6 @@ const CreateCheckListModal = ({ onClose, onClick }: CheckListModalProps) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['checkList'] });
     },
-    onError: (error) => {
-      console.error(error);
-    },
   });
   const handleSubmit = () => {
     const checklistData = { context: checklist };

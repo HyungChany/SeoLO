@@ -20,14 +20,11 @@ export const EmployeeList = async () => {
   } catch (error) {
     if (error instanceof AxiosError) {
       const errorCode = error.response?.data.error_code;
-      console.log('AxiosError:', error.response);
+
       if (errorCode && errorCode.startsWith('JT')) {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('companyCode');
       }
-    } else {
-      // Handle other errors
-      console.log('Unexpected Error:', error);
     }
   }
 };
@@ -46,14 +43,11 @@ export const RegistratedEmployee = async () => {
   } catch (error) {
     if (error instanceof AxiosError) {
       const errorCode = error.response?.data.error_code;
-      console.log('AxiosError:', error.response);
+
       if (errorCode && errorCode.startsWith('JT')) {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('companyCode');
       }
-    } else {
-      // Handle other errors
-      console.log('Unexpected Error:', error);
     }
   }
 };
@@ -72,14 +66,12 @@ export const EmployeeDetail = async (employeeNumber: string) => {
   } catch (error) {
     if (error instanceof AxiosError) {
       const errorCode = error.response?.data.error_code;
-      console.log('AxiosError:', error.response);
+
       if (errorCode && errorCode.startsWith('JT')) {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('companyCode');
       }
     } else {
-      // Handle other errors
-      console.log('Unexpected Error:', error);
       alert('해당 직원이 존재하지 않습니다');
     }
   }
@@ -88,12 +80,10 @@ export const EmployeeDetail = async (employeeNumber: string) => {
 export const EmployeeRegistration = async (employeeData: EmployeeType) => {
   try {
     const accessToken = sessionStorage.getItem('accessToken');
-    // const companyCode = sessionStorage.getItem('companyCode');
     const response = await api.post(`/join`, employeeData, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
         'Device-Type': 'web',
-        // 'Company-Code': companyCode,
       },
     });
     alert('임직원 등록에 성공하였습니다.');
@@ -107,11 +97,7 @@ export const EmployeeRegistration = async (employeeData: EmployeeType) => {
           sessionStorage.removeItem('companyCode');
         }
         alert(error.response.data.message); // 오류 메시지를 보여줍니다.
-      } else {
-        console.log('Error without response data');
       }
-    } else {
-      console.log('Unexpected error', error);
     }
   }
 };

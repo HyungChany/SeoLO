@@ -16,14 +16,10 @@ export const lockCheck = async () => {
   } catch (error) {
     if (error instanceof AxiosError) {
       const errorCode = error.response?.data.error_code;
-      console.log('공장:', error.response);
       if (errorCode && errorCode.startsWith('JT')) {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('companyCode');
       }
-    } else {
-      // Handle other errors
-      console.log('Unexpected Error:', error);
     }
   }
 };

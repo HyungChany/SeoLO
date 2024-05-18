@@ -21,14 +21,11 @@ export const getBasicCheckList = async () => {
   } catch (error) {
     if (error instanceof AxiosError) {
       const errorCode = error.response?.data.error_code;
-      console.log('AxiosError:', error.response);
+
       if (errorCode && errorCode.startsWith('JT')) {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('companyCode');
       }
-    } else {
-      // Handle other errors
-      console.log('Unexpected Error:', error);
     }
   }
 };
@@ -45,16 +42,12 @@ export const getCheckList = async () => {
     });
     return response.data.checklists;
   } catch (error) {
-    console.log('체크리스트', error);
     if (error instanceof AxiosError) {
       const errorCode = error.response?.data.error_code;
       if (errorCode && errorCode.startsWith('JT')) {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('companyCode');
       }
-    } else {
-      // Handle other errors
-      console.log('Unexpected Error:', error);
     }
   }
 };
@@ -75,14 +68,10 @@ export const postCheckList = async (listData: ListType) => {
   } catch (error) {
     if (error instanceof AxiosError) {
       const errorCode = error.response?.data.error_code;
-      console.log('AxiosError:', error.response);
       if (errorCode && errorCode.startsWith('JT')) {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('companyCode');
       }
-    } else {
-      // Handle other errors
-      console.log('Unexpected Error:', error);
     }
   }
 };
@@ -98,14 +87,11 @@ export const patchtCheckList = async (
   } catch (error) {
     if (error instanceof AxiosError) {
       const errorCode = error.response?.data.error_code;
-      console.log('AxiosError:', error.response);
+
       if (errorCode && errorCode.startsWith('JT')) {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('companyCode');
       }
-    } else {
-      // Handle other errors
-      console.log('Unexpected Error:', error);
     }
   }
 };
@@ -126,14 +112,11 @@ export const deleteCheckList = async (checklistId: number) => {
   } catch (error) {
     if (error instanceof AxiosError) {
       const errorCode = error.response?.data.error_code;
-      console.log('AxiosError:', error.response);
+
       if (errorCode && errorCode.startsWith('JT')) {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('companyCode');
       }
-    } else {
-      // Handle other errors
-      console.log('Unexpected Error:', error);
     }
   }
 };

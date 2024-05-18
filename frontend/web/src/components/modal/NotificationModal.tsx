@@ -104,11 +104,9 @@ const NotificationModal: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [batteryImage, setBatteryImage] = useState<string>('');
   const event = events[events.length - 1];
-  console.log('이벤트', event);
-  console.log('저 왔어요');
+
   useEffect(() => {
     if (events.length > 0) {
-      console.log(2);
       if (event.battery_info) {
         const getBatteryImage = (level: number) => {
           if (level <= 20) {
@@ -126,7 +124,6 @@ const NotificationModal: React.FC = () => {
         setBatteryImage(getBatteryImage(event.battery_info));
       }
 
-      console.log('이벤트', events);
       setVisible(true);
       const timer = setTimeout(() => {
         setVisible(false);

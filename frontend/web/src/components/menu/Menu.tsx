@@ -5,7 +5,7 @@ import EnterIcon from '@/../assets/icons/Enter.svg?react';
 
 // 타입 정의
 interface MenuProps {
-  onClick: () => void;
+  onClick?: () => void;
   width: number | string;
   $enterSize: number;
   children: React.ReactNode;

@@ -250,9 +250,6 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['report'] });
     },
-    onError: (error) => {
-      console.error(error);
-    },
   });
   const handleModify = () => {
     const data = {
@@ -275,7 +272,7 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
     }
     onClose();
   };
-  console.log('인명피해', reportData?.victimsNum);
+
   useEffect(() => {
     if (modifyModal && reportData) {
       setAccidentBtn(reportData.accident);

@@ -102,12 +102,11 @@ const LoginPage = () => {
         company_code: companyNumber,
       };
       const response = await userLogin(data);
-      console.log('로그인 성공:', response);
+
       sessionStorage.setItem('accessToken', response.issuedToken.accessToken);
       sessionStorage.setItem('companyCode', companyNumber);
       navigate('/');
     } catch (error) {
-      console.error('로그인 실패:', error);
       // 로그인 실패 시 사용자에게 알림, 예: 알림창 띄우기
       alert('로그인 실패');
     }

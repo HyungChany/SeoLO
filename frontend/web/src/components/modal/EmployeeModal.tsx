@@ -42,7 +42,7 @@ const EmployeeModal = ({ onClick }: EmployeeModalProps) => {
     };
     fetchData();
   }, []);
-  console.log(employeeData);
+
   const columns: Column<EmployeeType>[] = React.useMemo<Column<EmployeeType>[]>(
     () => [
       { Header: '이름', accessor: 'name' },

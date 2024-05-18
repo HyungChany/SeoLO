@@ -15,8 +15,7 @@ export const userLogin = async (loginData: LoginType) => {
     });
     return response.data;
   } catch (error) {
-    console.error('로그인 실패: ', error);
-    throw error;
+    alert('로그인 실패');
   }
 };
 
@@ -39,6 +38,6 @@ export const Logout = async () => {
     sessionStorage.removeItem('companyCode');
     return response;
   } catch (error) {
-    console.error('로그아웃 실패: ', error);
+    alert('로그아웃 실패');
   }
 };
