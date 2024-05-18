@@ -31,23 +31,15 @@ const useSSE = () => {
       });
 
       eventSource.onmessage = (event) => {
-        if (event.data === 'heartbeat') {
-          console.log('Heartbeat received');
-        } else {
-          try {
-            const newEvent: NotificationEvent = JSON.parse(event.data);
-            if (isMounted) {
-              setEvents((prevEvents) => [...prevEvents, newEvent]);
-            }
-            console.log('New SSE Event:', newEvent);
-          } catch (error) {
-            console.error('Message parsing error:', error);
+        if (event.data != 'heartbeat') {
+          const newEvent: NotificationEvent = JSON.parse(event.data);
+          if (isMounted) {
+            setEvents((prevEvents) => [...prevEvents, newEvent]);
           }
         }
       };
 
-      eventSource.onerror = (error) => {
-        console.error('EventSource failed:', error);
+      eventSource.onerror = () => {
         eventSource.close();
         if (isMounted) {
           setTimeout(connectSSE, 5000); // 5초 후 재연결 시도

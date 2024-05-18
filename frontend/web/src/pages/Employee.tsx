@@ -152,7 +152,6 @@ const WidthInputBox = styled(InputBox)<{ width?: string }>`
 `;
 
 const Employee = () => {
-  // const [imagePreviewUrl, setImagePreviewUrl] = useState<string>('');
   const [equipmentNumber, setEquipmentNumber] = useState<string>('');
   const companyCode = sessionStorage.getItem('companyCode');
   const [EmployeeNumber, setEmployeeNumber] = useState<number>(0);
@@ -163,25 +162,21 @@ const Employee = () => {
   };
   const navigate = useNavigate();
   const handleSubmit = async () => {
-    try {
-      if (employeeInformation && companyCode) {
-        const formattedBirthday = employeeInformation.employee_birthday.replace(
-          /-/g,
-          '',
-        );
-        const employeeData = {
-          username: equipmentNumber,
-          password: 'A' + 'a' + formattedBirthday + '@', // 초기 비밀번호는 Aa생년월일@
-          company_code: companyCode,
-        };
-        const response = await EmployeeRegistration(employeeData);
-        console.log(response);
-        window.location.reload();
-      } else {
-        alert('사번을 입력해주세요.');
-      }
-    } catch (e) {
-      console.log(e);
+    if (employeeInformation && companyCode) {
+      const formattedBirthday = employeeInformation.employee_birthday.replace(
+        /-/g,
+        '',
+      );
+      const employeeData = {
+        username: equipmentNumber,
+        password: 'A' + 'a' + formattedBirthday + '@', // 초기 비밀번호는 Aa생년월일@
+        company_code: companyCode,
+      };
+      const response = await EmployeeRegistration(employeeData);
+      console.log(response);
+      window.location.reload();
+    } else {
+      alert('사번을 입력해주세요.');
     }
   };
   const handleCancel = () => {

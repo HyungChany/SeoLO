@@ -55,9 +55,6 @@ const DeleteCheckListModal = ({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['checkList'] });
     },
-    onError: (error) => {
-      console.error(error);
-    },
   });
   const handleDelete = async () => {
     deleteMutation(checklistId);
