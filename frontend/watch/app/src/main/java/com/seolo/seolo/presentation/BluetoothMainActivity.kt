@@ -355,7 +355,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                     Log.d("API 요청 성공_Main", "API 요청 성공: $message")
                     runOnUiThread {
                         Toast.makeText(
-                            this@BluetoothMainActivity, message, Toast.LENGTH_LONG
+                            this@BluetoothMainActivity, "자물쇠 잠금이 해제 됐습니다.", Toast.LENGTH_LONG
                         ).show()
                     }
                 } else {
