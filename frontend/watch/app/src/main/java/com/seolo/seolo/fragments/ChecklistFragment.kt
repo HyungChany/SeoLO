@@ -1,6 +1,8 @@
 package com.seolo.seolo.fragments
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +11,7 @@ import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.R
 import com.seolo.seolo.presentation.ChecklistActivity
 
@@ -46,7 +49,20 @@ class ChecklistFragment : Fragment() {
         checkBox.setOnCheckedChangeListener { _, isChecked ->
             this.isChecked = isChecked
             (activity as? ChecklistActivity)?.onCheckboxCheckedChange(isChecked)
+            if (isChecked) {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    (activity as? ChecklistActivity)?.let { activity ->
+                        val viewPager = activity.findViewById<ViewPager2>(R.id.viewPagerChecklist)
+                        val currentItem = viewPager.currentItem
+                        val totalItems = viewPager.adapter?.itemCount ?: 0
+                        if (currentItem < totalItems - 1) {
+                            viewPager.setCurrentItem(currentItem + 1, true)
+                        }
+                    }
+                }, 800)
+            }
         }
+
 
         // 텍스트박스를 클릭하면 체크박스 상태 변경
         textBox.setOnClickListener {
