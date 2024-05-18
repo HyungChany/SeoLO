@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
@@ -39,7 +38,6 @@ class ChecklistFragment : Fragment() {
         // View 내부의 요소들을 가져옴
         val checkBox = view.findViewById<CheckBox>(R.id.checkBox)
         val textView = view.findViewById<TextView>(R.id.textView)
-        val textBox = view.findViewById<LinearLayout>(R.id.textbox)
 
         // TextView에 체크리스트 텍스트 설정
         textView.text = checklistText
@@ -56,17 +54,11 @@ class ChecklistFragment : Fragment() {
                         val currentItem = viewPager.currentItem
                         val totalItems = viewPager.adapter?.itemCount ?: 0
                         if (currentItem < totalItems - 1) {
-                            viewPager.setCurrentItem(currentItem + 1, true)
+                            viewPager.setCurrentItem(currentItem + 1, false)
                         }
                     }
                 }, 800)
             }
-        }
-
-
-        // 텍스트박스를 클릭하면 체크박스 상태 변경
-        textBox.setOnClickListener {
-            checkBox.isChecked = !checkBox.isChecked
         }
 
         // 뷰를 클릭하면 체크박스 상태 변경
