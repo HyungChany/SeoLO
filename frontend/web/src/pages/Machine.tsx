@@ -14,7 +14,7 @@ import {
   MachineRegistration,
 } from '@/apis/Machine.ts';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface OptionType {
   value: number;
@@ -189,6 +189,7 @@ const Equipment = () => {
   const [dateError, setDateError] = useState<string>('');
   const location = useLocation();
   const { option } = location.state as { option: number };
+  const navigate = useNavigate();
   const validateDate = (data: string): boolean => {
     // YYYY-MM-DD 정규식
     const regex = /^\d{4}-\d{2}-\d{2}$/;
@@ -336,6 +337,11 @@ const Equipment = () => {
       setSelectedOption(options[option - 1]);
     }
   }, [option, options]);
+
+  //취소 버튼 클릭시
+  const handleCancel = () => {
+    navigate('/information');
+  };
   return (
     <Background>
       <Box>
@@ -460,7 +466,7 @@ const Equipment = () => {
               $borderRadius={0.75}
               $hoverBackgroundColor={Color.GRAY300}
               $hoverBorderColor={Color.GRAY300}
-              onClick={handleSubmit}
+              onClick={handleCancel}
               fontSize={'1.2'}
               fontWeight={'bold'}
             >
