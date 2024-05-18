@@ -111,7 +111,6 @@ const RightContent = styled.div`
   font-family: NYJGothicM;
   font-weight: 500;
   color: ${Color.BLACK};
-  display: flex;
   word-wrap: break-word;
   align-items: center;
   overflow-wrap: break-word;
@@ -137,6 +136,22 @@ const AccidentButton = styled.div<AccidentCheckType>`
   border-radius: 8px;
   cursor: pointer;
 `;
+
+// const TextAreaBox = styled.div`
+//   width: auto;
+//   height: auto;
+//   /* max-height: ; */
+//   max-width: 100%;
+//   font-size: 20px;
+//   font-family: NYJGothicM;
+//   font-weight: 500;
+//   color: ${Color.BLACK};
+//   /* display: flex; */
+//   /* word-wrap: normal; */
+//   align-items: center;
+//   overflow-wrap: break-word;
+//   white-space: ㅜㅐㄱ;
+// `;
 
 const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
   onClose,
@@ -175,11 +190,13 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
         taskStartDateTime: formatDate(detailReportData.taskStartDateTime),
         taskEndDateTime: formatDate(detailReportData.taskEndDateTime),
         accidentType:
-          detailReportData.accidentType === null
+          detailReportData.accidentType === null ||
+          detailReportData.accidentType === ''
             ? '-'
             : detailReportData.accidentType,
         victimsNum:
-          detailReportData.victimsNum === null
+          detailReportData.victimsNum === null ||
+          detailReportData.victimsNum === 0
             ? '-'
             : detailReportData.victimsNum,
       };
@@ -244,7 +261,7 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
       victims_num: accidentPeopleCount,
       index: contentIndex,
     };
-    if (data.accident_type && data.victims_num) {
+    if ((data.accident_type && data.victims_num) || !data.isAccident) {
       modifyMutate(data);
     } else if (!data.accident_type && !data.victims_num) {
       alert('사고 유형과 인명 피해를 모두 입력해주세요');
@@ -258,13 +275,15 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
     }
     onClose();
   };
+  console.log('인명피해', reportData?.victimsNum);
   useEffect(() => {
     if (modifyModal && reportData) {
       setAccidentBtn(reportData.accident);
       setAccidentPeopleCount(reportData.victimsNum || 0);
       if (
         reportData.accidentType === '-' &&
-        reportData.victimsNum?.toString() === '-'
+        (reportData.victimsNum?.toString() === '-' ||
+          reportData.victimsNum === 0)
       ) {
         setAccidentText('');
         setAccidentPeople('');
@@ -277,6 +296,13 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
     }
   }, [modifyModal, reportData]);
 
+  useEffect(() => {
+    if (reportData && !accidentBtn) {
+      setAccidentText('');
+      setAccidentPeople('');
+      setAccidentPeopleCount(0);
+    }
+  }, [accidentBtn, reportData]);
   const handleCancle = () => {
     onClose();
   };

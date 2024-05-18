@@ -25,6 +25,7 @@ const ModalContainer = styled.div<ModalProps>`
   transform: translate(-50%, -50%);
   z-index: 10;
   box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.3);
+  /* overflow-y: auto; */
 `;
 
 /**

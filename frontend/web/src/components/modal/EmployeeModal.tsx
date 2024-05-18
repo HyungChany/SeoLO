@@ -26,6 +26,12 @@ const ButtonBox = styled.div`
   display: flex;
   justify-content: flex-end;
 `;
+const TableContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  overflow-y: auto; /* 세로 스크롤 */
+`;
+
 const EmployeeModal = ({ onClick }: EmployeeModalProps) => {
   const [employeeData, setEmployeeData] = useState<EmployeeType[]>([]);
   const navigate = useNavigate();
@@ -72,60 +78,62 @@ const EmployeeModal = ({ onClick }: EmployeeModalProps) => {
           등록
         </Button>
       </ButtonBox>
-
-      <table
-        {...getTableProps}
-        style={{
-          width: '100%',
-          borderCollapse: 'collapse',
-          marginTop: '1rem',
-        }}
-      >
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  {...column.getHeaderProps()}
-                  style={{
-                    borderBottom: '2px solid black',
-                    paddingBottom: '1rem',
-                    boxSizing: 'border-box',
-                    color: Color.BLACK,
-                    fontWeight: 'bold',
-                    fontFamily: 'NYJGothicB',
-                    fontSize: '1.5rem',
-                  }}
-                >
-                  {column.render('Header')}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell) => (
-                  <td
-                    {...cell.getCellProps()}
+      <TableContainer>
+        <table
+          {...getTableProps}
+          style={{
+            width: '100%',
+            borderCollapse: 'collapse',
+            marginTop: '1rem',
+          }}
+        >
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th
+                    {...column.getHeaderProps()}
                     style={{
-                      padding: '1rem',
-                      textAlign: 'center',
+                      borderBottom: '2px solid black',
+                      paddingBottom: '1rem',
+                      boxSizing: 'border-box',
+                      color: Color.BLACK,
                       fontWeight: 'bold',
                       fontFamily: 'NYJGothicB',
+                      fontSize: '1.5rem',
                     }}
                   >
-                    {cell.render('Cell')}
-                  </td>
+                    {column.render('Header')}
+                  </th>
                 ))}
               </tr>
-            );
-          })}
-        </tbody>
-      </table>
+            ))}
+          </thead>
+
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => (
+                    <td
+                      {...cell.getCellProps()}
+                      style={{
+                        padding: '1rem',
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                        fontFamily: 'NYJGothicB',
+                      }}
+                    >
+                      {cell.render('Cell')}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </TableContainer>
     </Modal>
   );
 };
