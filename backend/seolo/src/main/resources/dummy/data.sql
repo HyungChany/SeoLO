@@ -10,7 +10,7 @@ VALUES
     ('200500001', 'SFY001KOR', '오정민', '사원', '영업팀', '1967-03-12', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/jeogmin.jpg', '2005-11-20', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('201500001', 'SFY001KOR', '이현비', '사원', '개발팀', '1996-08-20', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/hb.jpg', '2015-09-20', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('200500002', 'SFY001KOR', '조형찬', '대리', '품질관리팀', '1989-12-01', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/hc.jpg', '2005-06-25', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('200700001', 'SFY001KOR', '한건희', '대리', '생산기술팀', '1959-03-27', 'default', '2007-08-21', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('200700001', 'SFY001KOR', '서정빈', '코치', '생산기술팀', '2000-01-06', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/image+(3).png', '2007-08-21', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('202100002', 'SFY001KOR', '정형찬', '사원', '개발팀', '1972-03-17', 'default', '2021-02-23', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('200400001', 'SFY001KOR', '이지훈', '사원', '경영지원팀', '1960-11-04', 'default', '2004-06-02', '2013-06-07', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('202200001', 'SFY001KOR', '임정민', '사원', '영업팀', '1984-02-26', 'default', '2022-10-16', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -179,35 +179,31 @@ values ('LOTO에 대해 작업자 교육이 이루어졌는가?'),
        ('모든 작업자들에게 LOTO 제거를 공지하였는가?');
 
 INSERT INTO task_template(task_template_type, task_template_precaution)
-values ('정비', '정비 중입니다.'),
-       ('청소', '청소 중입니다.'),
-       ('수리', '수리 중입니다.'),
+values ('정비', '장비 정비 중입니다. 현재 작업자가 기계안에 있으니 주의해주세요.'),
+       ('청소', '장비 청소 중입니다. 현재 작업자가 기계안에 있으니 주의해주세요.'),
+       ('수리', '장비 수리 중입니다. 현재 작업자가 기계안에 있으니 주의해주세요.'),
        ('기타', '');
 
 INSERT INTO locker (locker_battery, locker_is_locked, created_at, locker_id, updated_at, company_code, locker_encryption_key, locker_uid)
     VALUES
-    (100, false, '2024-05-10 16:12:53.296591', 1, '2024-05-10 16:12:53.296591', 'SFY001KOR', 'EsF0JwMZcTL2EcXAjUae0Q==', '1DA24G01'),
+    (85, false, '2024-05-10 16:12:53.296591', 1, '2024-05-10 16:12:53.296591', 'SFY001KOR', 'EsF0JwMZcTL2EcXAjUae0Q==', '1DA24G01'),
     (10, true, '2024-05-10 16:12:55.492353', 2, '2024-05-10 16:12:55.492353', 'SFY001KOR', '6TLmUCZhww0DoEKhQZFOHg==', '1DA24G02'),
-    (33, false, '2024-05-10 16:12:58.387418', 3, '2024-05-10 16:12:58.387418', 'SFY001KOR', '4l6y7KE3+eCaWCoIgr4z0w==', '1DA24G03'),
+    (30, false, '2024-05-10 16:12:58.387418', 3, '2024-05-10 16:12:58.387418', 'SFY001KOR', '4l6y7KE3+eCaWCoIgr4z0w==', '1DA24G03'),
     (80, false, '2024-05-10 16:13:00.926239', 4, '2024-05-10 16:13:00.926239', 'SFY001KOR', 'j6sUC1pUiwDiOaMcHN92Xw==', '1DA24G04'),
-    (43, false, '2024-05-10 16:13:03.842874', 5, '2024-05-10 16:13:03.842874', 'SFY001KOR', 'K1dxA+RqNTbToADO0y6YLQ==', '1DA24G05'),
-    (22, false, '2024-05-10 16:13:06.309538', 6, '2024-05-10 16:13:06.309538', 'SFY001KOR', 'am+ex3/pdWC91Eq3J29C2g==', '1DA24G06'),
-    (87, false, '2024-05-10 16:13:09.233656', 7, '2024-05-10 16:13:09.233656', 'SFY001KOR', 'qBTgGEatO245odWL+nQYhg==', '1DA24G07'),
-    (64, true, '2024-05-10 16:13:11.847460', 8, '2024-05-10 16:13:11.847460', 'SFY001KOR', 'ca4qnbGeWucX3+FRSTqDQw==', '1DA24G08'),
-    (52, false, '2024-05-10 16:13:14.543031', 9, '2024-05-10 16:13:14.543031', 'SFY001KOR', 'rngYK1p4rzOyhwTXD0U4aA==', '1DA24G09'),
+    (45, false, '2024-05-10 16:13:03.842874', 5, '2024-05-10 16:13:03.842874', 'SFY001KOR', 'K1dxA+RqNTbToADO0y6YLQ==', '1DA24G05'),
+    (20, false, '2024-05-10 16:13:06.309538', 6, '2024-05-10 16:13:06.309538', 'SFY001KOR', 'am+ex3/pdWC91Eq3J29C2g==', '1DA24G06'),
+    (85, false, '2024-05-10 16:13:09.233656', 7, '2024-05-10 16:13:09.233656', 'SFY001KOR', 'qBTgGEatO245odWL+nQYhg==', '1DA24G07'),
+    (65, true, '2024-05-10 16:13:11.847460', 8, '2024-05-10 16:13:11.847460', 'SFY001KOR', 'ca4qnbGeWucX3+FRSTqDQw==', '1DA24G08'),
+    (50, false, '2024-05-10 16:13:14.543031', 9, '2024-05-10 16:13:14.543031', 'SFY001KOR', 'rngYK1p4rzOyhwTXD0U4aA==', '1DA24G09'),
     (0, false, '2024-05-14 11:00:33.439625', 10, '2024-05-14 11:00:33.439625', 'SFY001KOR', '1Uxl86dVL5irFevWjwPhRg==', '1DA24G10'),
-    (0, false, '2024-05-14 11:04:56.556307', 11, '2024-05-14 11:04:56.556307', 'SFY001KOR', 'C4aEe5YsKBR3N279a5r6WQ==', '1DA24G11'),
-    (74, false, '2024-05-14 11:05:00.458098', 12, '2024-05-14 11:05:00.458098', 'SFY001KOR', 'p4gSTjdIhukHI9imBiCq1A==', '1DA24G12'),
-    (4, false, '2024-05-14 11:05:03.302093', 13, '2024-05-14 11:05:03.302093', 'SFY001KOR', 'DayHMWSiuU4KKuZTd0iUbA==', '1DA24G13'),
-    (92, false, '2024-05-14 11:05:06.012501', 14, '2024-05-14 11:05:06.012501', 'SFY001KOR', '8Djr/RvU+GuEwWjzDf2sWA==', '1DA24G14');
+    (55, false, '2024-05-14 11:04:56.556307', 11, '2024-05-14 11:04:56.556307', 'SFY001KOR', 'C4aEe5YsKBR3N279a5r6WQ==', '1DA24G11'),
+    (75, false, '2024-05-14 11:05:00.458098', 12, '2024-05-14 11:05:00.458098', 'SFY001KOR', 'p4gSTjdIhukHI9imBiCq1A==', '1DA24G12'),
+    (10, false, '2024-05-14 11:05:03.302093', 13, '2024-05-14 11:05:03.302093', 'SFY001KOR', 'DayHMWSiuU4KKuZTd0iUbA==', '1DA24G13'),
+    (90, false, '2024-05-14 11:05:06.012501', 14, '2024-05-14 11:05:06.012501', 'SFY001KOR', '8Djr/RvU+GuEwWjzDf2sWA==', '1DA24G14');
 
 insert into facility(created_at, updated_at, facility_company_code, facility_name, facility_address, facility_layout, facility_thum)
-values (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '1공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
-       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '2공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
-       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '3공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
-       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '4공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
-       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '5공장', '광주광역시 광산구 하남산단6번로 107', '', ''),
-       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '6공장', '광주광역시 광산구 하남산단6번로 107', '', '');
+values (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '그린시티 1캠퍼스', '광주광역시 광산구 하남산단6번로 107', '', ''),
+       (CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'SFY001KOR', '그린시티 2캠퍼스', '광주광역시 광산구 하남산단6번로 107', '', '');
 
 INSERT INTO machine_subcategory (machine_subcategory)
 VALUES
