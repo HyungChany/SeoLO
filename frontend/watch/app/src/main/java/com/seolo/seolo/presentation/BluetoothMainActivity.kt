@@ -25,6 +25,7 @@ import com.seolo.seolo.R
 import com.seolo.seolo.adapters.BluetoothAdapter
 import com.seolo.seolo.adapters.BluetoothDeviceAdapter
 import com.seolo.seolo.helper.LotoManager
+import com.seolo.seolo.helper.LotoManager.clearLoto
 import com.seolo.seolo.helper.TokenManager
 import com.seolo.seolo.model.UnlockInfo
 import com.seolo.seolo.model.UnlockResponse
@@ -182,7 +183,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                     val companyCode =
                         TokenManager.getCompanyCode(this@BluetoothMainActivity) // 회사 코드 가져오기
                     val token =
-                        TokenManager.getTokenValue(this@BluetoothMainActivity) // 자물쇠 토큰 값 가져오기
+                        LotoManager.getTokenValue(this@BluetoothMainActivity) // 자물쇠 토큰 값 가져오기
                     val machineId =
                         LotoManager.getLotoMachineId(this@BluetoothMainActivity) // 머신 Id 가져오기
                     val userId = TokenManager.getUserId(this@BluetoothMainActivity) // 사용자 Id 가져오기
@@ -330,7 +331,7 @@ class BluetoothMainActivity : AppCompatActivity() {
         val unlockInfo = LotoManager.getLotoUid(this@BluetoothMainActivity)?.let { uid ->
             LotoManager.getLotoBatteryInfo(this@BluetoothMainActivity)?.let { batteryInfo ->
                 LotoManager.getLotoMachineId(this@BluetoothMainActivity)?.let { machineId ->
-                    TokenManager.getTokenValue(this@BluetoothMainActivity)?.let { tokenValue ->
+                    LotoManager.getTokenValue(this@BluetoothMainActivity)?.let { tokenValue ->
                         UnlockInfo(
                             uid, batteryInfo, machineId, tokenValue
                         )
@@ -356,6 +357,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                     val unlockResponse = response.body()
                     val message = unlockResponse?.message
                     Log.d("API 요청 성공_Main", "API 요청 성공: $message")
+                    clearLoto(this@BluetoothMainActivity)
                 } else {
                     val errorMessage = response.message()
                     Log.d("API 요청 실패_Main", "API 요청 실패: $errorMessage")

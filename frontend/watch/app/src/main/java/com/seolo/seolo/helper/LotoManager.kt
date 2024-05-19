@@ -12,6 +12,7 @@ object LotoManager{
     private const val PREF_LOTO_MACHINE_ID = "loto_machine_id"
     private const val PREF_LOTO_BATTERY_INFO = "loto_battery_info"
     private const val PREF_LOTO_USER_ID = "loto_user_id"
+    private const val PREF_TOKEN_VALUE = "token_value"
 
     // SharedPreferences를 안전하게 가져오는 메서드
     private fun getPreferences(context: Context): SharedPreferences {
@@ -33,7 +34,7 @@ object LotoManager{
 
     // LOTO 상태 코드 가져오는 메서드
     fun getLotoStatusCode(context: Context): String? {
-        return getPreferences(context).getString(PREF_LOTO_STATUS_CODE, "")
+        return getPreferences(context).getString(PREF_LOTO_STATUS_CODE, "INIT")
     }
 
     // LOTO UID 설정 메서드
@@ -75,6 +76,18 @@ object LotoManager{
     fun getLotoUserId(context: Context): String? {
         return getPreferences(context).getString(PREF_LOTO_USER_ID, "")
     }
+
+    // 1회용 토큰 설정 메서드
+    fun setTokenValue(context: Context, token: String) {
+        getPreferences(context).edit().putString(PREF_TOKEN_VALUE, token).apply()
+    }
+
+    // 1회용 토큰 가져오는 메서드
+    fun getTokenValue(context: Context): String? {
+        return getPreferences(context).getString(PREF_TOKEN_VALUE, "")
+    }
+
+
 
     // 저장된 모든 세션 정보 삭제하는 메서드
     fun clearLoto(context: Context) {

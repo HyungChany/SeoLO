@@ -105,5 +105,4 @@ class MainChkFragment : Fragment() {
         val intent = Intent(activity, ChecklistActivity::class.java)
         startActivity(intent)
     }
-
 }
