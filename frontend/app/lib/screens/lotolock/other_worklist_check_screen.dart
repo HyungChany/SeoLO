@@ -1,13 +1,16 @@
+import 'package:app/view_models/core/core_check_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/button/common_text_button.dart';
 import 'package:app/main.dart';
+import 'package:provider/provider.dart';
 
 class OtherWorkListCheckScreen extends StatefulWidget {
   const OtherWorkListCheckScreen({super.key});
 
   @override
-  _OtherWorkListCheckScreenState createState() => _OtherWorkListCheckScreenState();
+  State<OtherWorkListCheckScreen> createState() =>
+      _OtherWorkListCheckScreenState();
 }
 
 class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
@@ -17,43 +20,56 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
     '장비 번호',
     '작업 담당자',
     '시작 시간',
-    '종료 시간',
+    '종료 예상 시간',
     '작업 내용'
   ];
-  List<String> workListContent = [
-    '1공장 검사 라인',
-    'L/W - 2',
-    '3578DA1204',
-    '생산기술팀 오정민 팀장',
-    '2024.05.01 12:00',
-    '2024.05.01 14:00',
-    '수리'
-  ];
-
-  String remark = "작업이 완료되었습니다. 추가 점검이 필요합니다.";
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<CoreCheckViewModel>(context);
+    String? startTimeString = viewModel.startTime ?? '';
+    List<String> startParts = startTimeString.split('T');
+    String formattedStartTime = (startTimeString == '')
+        ? ''
+        : '${startParts[0]} | ${startParts[1].substring(0, 5)}';
+
+    String? endTimeString = viewModel.endTime ?? '';
+    List<String> endParts = endTimeString.split('T');
+    String formattedEndTime = (endTimeString == '')
+        ? ''
+        : '${endParts[0]} | ${endParts[1].substring(0, 5)}';
+
+    final List<String> workListContent = [
+      viewModel.facilityName ?? '조회 불가',
+      viewModel.machineName ?? '조회 불가',
+      viewModel.machineCode ?? '조회 불가',
+      '${viewModel.workerTeam} ${viewModel.workerName} ${viewModel.workerTitle}',
+      formattedStartTime,
+      formattedEndTime,
+      viewModel.taskType ?? '조회 불가',
+    ];
     return Scaffold(
-      appBar: Header(title: '작업 내역', back: true),
+      appBar: Header(title: '${viewModel.workerName}님의 작업 내역', back: true),
       body: Stack(
         children: [
           SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0), // 전체 내용의 양쪽 패딩
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              // 전체 내용의 양쪽 패딩
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: workListTitle.length,
                     itemBuilder: (context, index) {
                       return ListTile(
                         title: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            Text(workListTitle[index], style: TextStyle(color: samsungBlue)),
+                            Text(workListTitle[index],
+                                style: const TextStyle(color: samsungBlue)),
                             Expanded(
                               child: Text(
                                 workListContent[index],
@@ -65,21 +81,26 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
                       );
                     },
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0), // 비고 라벨의 패딩
-                    child: Text('비고', style: TextStyle(fontSize: 16.0, color: samsungBlue)),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: 8.0, horizontal: 16.0), // 비고 라벨의 패딩
+                    child: Text('비고',
+                        style: TextStyle(fontSize: 16.0, color: samsungBlue)),
                   ),
                   Container(
-                    height: 260,
-                    padding: EdgeInsets.all(16.0),
-                    margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0), // 비고 컨테이너의 마진
+                    width: MediaQuery.of(context).size.width * 0.9,
+                    height: MediaQuery.of(context).size.height * 0.25,
+                    padding: const EdgeInsets.all(16.0),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: SingleChildScrollView(
-                      child: Text(remark, style: TextStyle(fontSize: 16.0)),
+                      child: Text(viewModel.precaution ?? '조회 불가',
+                          style: TextStyle(fontSize: 16.0)),
                     ),
                   ),
                 ],
@@ -89,11 +110,12 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: EdgeInsets.only(bottom: 20, left: 50, right: 50),
+              padding: const EdgeInsets.only(bottom: 20, left: 50, right: 50),
               child: CommonTextButton(
                 text: '확인',
                 onTap: () {
-                  Navigator.pushNamed(context, '/main');
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, '/main', (route) => false);
                 },
               ),
             ),

@@ -1,4 +1,3 @@
-import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/main/main_navi_page.dart';
 import 'package:app/widgets/main/main_news_banner.dart';
 import 'package:app/widgets/main/main_welcome_banner.dart';
@@ -37,26 +36,26 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-          child: SizedBox(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width * 0.85,
-            child: const Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                MainWelcomeBanner(),
-                MainNewsBanner(),
-                MainNaviPage(),
-              ],
-            ),
+      body: Center(
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.85,
+          child: const Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              SizedBox(
+                height: 10,
+              ),
+              MainWelcomeBanner(),
+              MainNewsBanner(),
+              MainNaviPage(),
+            ],
           ),
         ),
-        bottomNavigationBar: CustomBottomNavigationBar(
-          selectedIndex: _selectedIndex,
-          onItemTapped: _onItemTapped,
-        ) ,
+      ),
+      bottomNavigationBar: CustomBottomNavigationBar(
+        selectedIndex: _selectedIndex,
+        onItemTapped: _onItemTapped,
+      ),
     );
   }
 }

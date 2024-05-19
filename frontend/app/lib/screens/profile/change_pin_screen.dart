@@ -1,13 +1,14 @@
 import 'package:app/main.dart';
 import 'package:app/view_models/user/pin_change_view_model.dart';
-import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/widgets/login/key_board_key.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChangePinScreen extends StatefulWidget {
+  const ChangePinScreen({super.key});
+
   @override
-  _ChangePinScreenState createState() => _ChangePinScreenState();
+  State<ChangePinScreen> createState() => _ChangePinScreenState();
 }
 
 class _ChangePinScreenState extends State<ChangePinScreen> {
@@ -25,7 +26,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
     ['1', '2', '3'],
     ['4', '5', '6'],
     ['7', '8', '9'],
-    ['', '0', Icon(Icons.backspace_outlined)],
+    ['', '0', const Icon(Icons.backspace_outlined)],
   ];
 
   onNumberPress(val) {
@@ -52,7 +53,10 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
   gradient1() {
     return BoxDecoration(
       gradient: LinearGradient(
-        colors: [Colors.white.withOpacity(0.5), Color.fromRGBO(215, 223, 243, 0.5)],
+        colors: [
+          Colors.white.withOpacity(0.5),
+          const Color.fromRGBO(215, 223, 243, 0.5)
+        ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
@@ -60,9 +64,12 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
   }
 
   gradient2() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
-        colors: [Color.fromRGBO(215, 223, 243, 0.5), Color.fromRGBO(175, 190, 240, 0.5)],
+        colors: [
+          Color.fromRGBO(215, 223, 243, 0.5),
+          Color.fromRGBO(175, 190, 240, 0.5)
+        ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
@@ -70,9 +77,12 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
   }
 
   gradient3() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
-        colors: [Color.fromRGBO(175, 190, 240, 0.5), Color.fromRGBO (135, 157, 238, 0.5)],
+        colors: [
+          Color.fromRGBO(175, 190, 240, 0.5),
+          Color.fromRGBO(135, 157, 238, 0.5)
+        ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
@@ -80,7 +90,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
   }
 
   gradient4() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
         colors: [Color.fromRGBO(135, 157, 238, 0.5), blue100],
         begin: Alignment.topCenter,
@@ -110,7 +120,13 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
               return Expanded(
                 child: KeyboardKey(
                   label: y,
-                  onTap: y is Widget ? onBackspacePress(y) : onNumberPress(y),
+                  onTap: () {
+                    if (y is Widget) {
+                      onBackspacePress(y);
+                    } else {
+                      onNumberPress(y);
+                    }
+                  },
                   value: y,
                 ),
               );
@@ -124,9 +140,9 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
 
   renderText() {
     TextStyle styleTitle =
-        TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
+        const TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
 
-    TextStyle styleContent = TextStyle(
+    TextStyle styleContent = const TextStyle(
         fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black);
 
     return Expanded(
@@ -138,14 +154,14 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
               '암호 입력',
               style: styleTitle,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
               content,
               style: styleContent,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Row(
@@ -157,7 +173,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                     style: TextStyle(
                       color: pin.length >= i
                           ? blue100
-                          : Color.fromRGBO(227, 227, 227, 1),
+                          : const Color.fromRGBO(227, 227, 227, 1),
                       fontWeight: FontWeight.bold,
                       fontSize: 50.0,
                     ),

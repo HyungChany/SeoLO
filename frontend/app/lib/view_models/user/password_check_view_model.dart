@@ -10,7 +10,9 @@ class PasswordCheckViewModel extends ChangeNotifier {
   String? _errorMessage;
 
   String get nowPwd => _passwordCheckData.nowPwd;
+
   bool get isLoading => _isLoading;
+
   String? get errorMessage => _errorMessage;
 
   void setNowPwd(String value) {

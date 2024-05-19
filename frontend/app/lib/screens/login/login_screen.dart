@@ -10,11 +10,11 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-  _LoginScreenState createState() => _LoginScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _storage = FlutterSecureStorage();
+  final _storage = const FlutterSecureStorage();
   final shadow1 = const BoxShadow(
       color: Color.fromRGBO(255, 255, 255, 0.25),
       blurRadius: 5.29,
@@ -64,7 +64,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 if (!viewModel.isLoading) {
                   viewModel.login().then((_) {
                     if (viewModel.errorMessage == null) {
-                      Navigator.pushReplacementNamed(context, '/main');
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/main', (route) => false);
                     } else {
                       showDialog(
                           context: context,
@@ -87,33 +88,38 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-
-  _asyncMethod() async {
-    String? token = await _storage.read(key: 'token');
-    if (token != null) {
-      if (!mounted) return;
-      Navigator.pushReplacementNamed(context, '/pinLogin');
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _asyncMethod();
-    });
-  }
+  //
+  // _asyncMethod() async {
+  //   String? token = await _storage.read(key: 'token');
+  //   if (token != null) {
+  //     if (!mounted) return;
+  //     Navigator.pushReplacementNamed(context, '/pinLogin');
+  //   }
+  // }
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     _asyncMethod();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Container(
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage('assets/images/login.png'))),
-        child: Center(child: loginBox()),
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          decoration: const BoxDecoration(
+              image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage('assets/images/login.png'))),
+          child: Center(child: loginBox()),
+        ),
       ),
     );
   }

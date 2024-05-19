@@ -13,7 +13,7 @@ class PinLoginScreen extends StatefulWidget {
   const PinLoginScreen({super.key});
 
   @override
-  _PinLoginScreenState createState() => _PinLoginScreenState();
+  State<PinLoginScreen> createState() => _PinLoginScreenState();
 }
 
 class _PinLoginScreenState extends State<PinLoginScreen> {
@@ -50,7 +50,7 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
     bool isAuthenticated = await FingerprintAuth.authenticate();
     // 지문인식 성공
     if (isAuthenticated) {
-      Navigator.pushReplacementNamed(context, '/main');
+      Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
       setState(() {
         pin = '';
         failCount = 0;
@@ -62,7 +62,7 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
     ['1', '2', '3'],
     ['4', '5', '6'],
     ['7', '8', '9'],
-    [Icon(Icons.fingerprint), '0', Icon(Icons.backspace_outlined)],
+    [const Icon(Icons.fingerprint), '0', const Icon(Icons.backspace_outlined)],
   ];
 
   onNumberPress(val) {
@@ -76,46 +76,63 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
       if (!viewModel.isLoading) {
         viewModel.pinLogin().then((_) {
           if (viewModel.errorMessage == null) {
-            Navigator.pushReplacementNamed(context, '/main');
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/main', (route) => false);
             setState(() {
               pin = '';
               failCount = 0;
             });
           } else {
-            setState(() {
-              pin = '';
-              failCount += 1;
-              content = failCount == 5
-                  ? ''
-                  : '${viewModel.errorMessage!} ($failCount/5)';
-            });
-            failCount == 3
-                ? showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return const CommonDialog(
-                        content: 'pin 번호를 5번 틀릴 시 계정이 잠깁니다.',
-                        buttonText: '확인',
-                      );
-                    })
-                : null;
-            failCount == 5
-                ? showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return CommonDialog(
-                        content: viewModel.errorMessage!,
-                        buttonText: '확인',
-                        buttonClick: () {
-                          _storage.deleteAll();
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, '/login', (route) => false);
-                        },
-                      );
-                    })
-                : null;
+            if (viewModel.errorMessage == 'JT') {
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return CommonDialog(
+                      content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                      buttonText: '확인',
+                      buttonClick: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/login', (route) => false);
+                      },
+                    );
+                  });
+            } else {
+              setState(() {
+                pin = '';
+                failCount += 1;
+                content = failCount == 5
+                    ? ''
+                    : '${viewModel.errorMessage!} ($failCount/5)';
+              });
+              failCount == 3
+                  ? showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return const CommonDialog(
+                          content: 'pin 번호를 5번 틀릴 시 계정이 잠깁니다.',
+                          buttonText: '확인',
+                        );
+                      })
+                  : null;
+              failCount == 5
+                  ? showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return CommonDialog(
+                          content: viewModel.errorMessage!,
+                          buttonText: '확인',
+                          buttonClick: () {
+                            _storage.deleteAll();
+                            Navigator.pushNamedAndRemoveUntil(
+                                context, '/login', (route) => false);
+                          },
+                        );
+                      })
+                  : null;
+            }
           }
         });
       }

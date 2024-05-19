@@ -9,7 +9,7 @@ class FingerprintAuth {
     try {
       return await _auth.canCheckBiometrics ?? false;
     } catch (e) {
-      debugPrint('에러 : $e');
+      // debugPrint('에러 : $e');
     }
     return false;
   }
@@ -18,7 +18,7 @@ class FingerprintAuth {
     try {
       return await _auth.getAvailableBiometrics();
     } catch (e) {
-      debugPrint('에러 : $e');
+      // debugPrint('에러 : $e');
     }
     return <BiometricType>[];
   }
@@ -49,7 +49,7 @@ class FingerprintAuth {
             )
           ]);
     } catch (e) {
-      debugPrint('에러 : $e');
+      // debugPrint('에러 : $e');
     }
     return false;
   }

@@ -9,7 +9,13 @@ class LogoutViewModel extends ChangeNotifier {
 
   // 로그아웃
   Future<void> logout() async {
-    await _userService.logout();
+    final result = await _userService.logout();
+
+    if (!result['success']) {
+      _errorMessage = result['message'];
+    } else {
+      _errorMessage = null;
+    }
     notifyListeners();
   }
 }

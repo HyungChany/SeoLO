@@ -6,7 +6,7 @@ class MainNaviPage extends StatefulWidget {
   const MainNaviPage({super.key});
 
   @override
-  _MainNaviPageState createState() => _MainNaviPageState();
+  State<MainNaviPage> createState() => _MainNaviPageState();
 }
 
 class _MainNaviPageState extends State<MainNaviPage> {
@@ -17,34 +17,39 @@ class _MainNaviPageState extends State<MainNaviPage> {
     'assets/images/loto_process_icon.png'
   ];
 
-  final List<String> pageText = ['NFC 태그', '내 작업 일지', 'LOTO 잠금', 'LOTO 절차'];
+  final List<String> pageText = ['BLUETOOTH', '내 작업 일지', 'LOTO 잠금', 'LOTO 절차'];
 
-  final List<String> pageTap = ['/bluetooth', '/profile', '/checklist', '/lotoProcess'];
+  final List<String> pageTap = [
+    '/bluetooth',
+    '/profile',
+    '/checklist',
+    '/lotoProcess'
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.4,
+      height: MediaQuery.of(context).size.height * 0.53,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(255, 250, 250, 1),
+        color: const Color.fromRGBO(255, 250, 250, 1),
         borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [shadow],
+        boxShadow: const [shadow],
       ),
       child: Center(
         child: GridView.count(
           crossAxisCount: 2,
-          mainAxisSpacing: 10.0,
-          crossAxisSpacing: 10.0,
-          padding: EdgeInsets.all(9.0),
+          mainAxisSpacing: 35.0,
           shrinkWrap: true,
           children: List.generate(
             pageIcon.length,
-                (index) => CommonIconButton(
+            (index) => CommonIconButton(
               text: pageText[index],
               iconImage: pageIcon[index],
               shape: BoxShape.rectangle,
               onTap: () {
-                Navigator.pushNamed(context, pageTap[index]);
+                (index != 1)
+                    ? Navigator.pushNamed(context, pageTap[index])
+                    : Navigator.pushReplacementNamed(context, pageTap[index]);
               },
             ),
           ),
@@ -52,5 +57,4 @@ class _MainNaviPageState extends State<MainNaviPage> {
       ),
     );
   }
-
 }

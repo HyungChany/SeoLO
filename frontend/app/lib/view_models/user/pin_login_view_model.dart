@@ -11,10 +11,14 @@ class PinLoginViewModel extends ChangeNotifier {
   int? _failCount;
   String? _errorCode;
 
-  String get pin  => _pinLoginData.pin;
+  String get pin => _pinLoginData.pin;
+
   bool get isLoading => _isLoading;
+
   String? get errorMessage => _errorMessage;
+
   int? get failCount => _failCount;
+
   String? get errorCode => _errorCode;
 
   void setPin(String value) {

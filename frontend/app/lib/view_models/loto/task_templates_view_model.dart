@@ -15,8 +15,7 @@ class TaskTemplatesViewModel extends ChangeNotifier {
 
   String? get errorMessage => _errorMessage;
 
-  void getTemplates() async {
-    _templates = [];
+  Future<void> getTemplates() async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
@@ -24,7 +23,7 @@ class TaskTemplatesViewModel extends ChangeNotifier {
     final result = await _lotoService.getTaskTemplates();
     if (!result['success']) {
       _isLoading = false;
-      _errorMessage = 'API 연결에 실패했습니다';
+      _errorMessage = result['message'];
     } else {
       _isLoading = false;
       _errorMessage = null;

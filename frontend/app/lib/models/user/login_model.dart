@@ -7,7 +7,6 @@ class LoginModel {
     required this.username,
     required this.password,
     required this.companyCode,
-
   });
 
   factory LoginModel.fromJson(Map<String, dynamic> json) {
@@ -19,9 +18,8 @@ class LoginModel {
   }
 
   Map<String, dynamic> toJson() => {
-    'username': username,
-    'password': password,
-    'company_code': companyCode,
-  };
+        'username': username,
+        'password': password,
+        'company_code': companyCode,
+      };
 }
-
