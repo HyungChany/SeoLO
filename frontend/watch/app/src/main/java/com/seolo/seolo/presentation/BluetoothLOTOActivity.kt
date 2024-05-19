@@ -14,7 +14,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.View
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -275,14 +274,8 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                         // WRITE 상태인 경우 API 호출
                         issueCoreLogic {
                             Handler(Looper.getMainLooper()).post {
-                                Toast.makeText(
-                                    this@BluetoothLOTOActivity,
-                                    "$statusCode, 잠금완료",
-                                    Toast.LENGTH_SHORT
-                                ).show()
                                 Handler(Looper.getMainLooper()).postDelayed({
-                                    val intent = Intent(this@BluetoothLOTOActivity, MainActivity::class.java)
-                                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    val intent = Intent(this@BluetoothLOTOActivity, LockCompleteActivity::class.java)
                                     startActivity(intent)
                                     finish()
                                 }, 1000)
@@ -463,10 +456,10 @@ class BluetoothLOTOActivity : AppCompatActivity() {
         }
 
         // Debug logs to check the data before making the API call
-        Log.d("API_CALL_LOCKED", "Authorization: $authorization")
-        Log.d("API_CALL_LOCKED", "CompanyCode: $companyCode")
-        Log.d("API_CALL_LOCKED", "DeviceType: $deviceType")
-        Log.d("API_CALL_LOCKED", "LotoInfo: $lotoInfo")
+        Log.d("LOCKED_Send", "Authorization: $authorization")
+        Log.d("LOCKED_Send", "CompanyCode: $companyCode")
+        Log.d("LOCKED_Send", "DeviceType: $deviceType")
+        Log.d("LOCKED_Send", "LotoInfo: $lotoInfo")
 
         call?.enqueue(object : Callback<LockedResponse> {
             override fun onResponse(
@@ -474,30 +467,27 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     val issueResponse = response.body()
-                    Log.d("API_CALL_LOCKED", "response.body(): $issueResponse")
-                    Log.d("API_CALL_LOCKED", "Response Success: ${issueResponse?.next_code}")
-                    val nextCode = issueResponse?.next_code
+                    Log.d("LOCKED_Response", "response.body(): $issueResponse")
+                    Log.d("LOCKED_Response", "response.body()?.next_code: ${issueResponse?.next_code}")
                     Log.d(
-                        "API_CALL_LOCKED", "response.body()?.next_code: ${issueResponse?.next_code}"
+                        "LOCKED_Response", "response.body()?.message: ${issueResponse?.message}"
                     )
-                    val message = issueResponse?.message
-
                     // onCompleted 콜백 호출
                     onCompleted()
                 } else {
-                    Log.d("API_CALL_LOCKED", "Response Failed: ${response.message()}")
+                    Log.d("LOCKED_Response", "Response Failed: ${response.message()}")
                 }
             }
 
             override fun onFailure(call: Call<LockedResponse>, t: Throwable) {
-                Log.d("API_CALL_LOCKED", "Error: ${t.message}")
+                Log.d("LOCKED_Response", "Error: ${t.message}")
                 Toast.makeText(
                     this@BluetoothLOTOActivity, "네트워크 연결을 다시 한 번 확인하세요.", Toast.LENGTH_SHORT
                 ).show()
                 // onCompleted 콜백 호출
                 onCompleted()
             }
-        }) ?: onCompleted() // call이 null인 경우에도 onCompleted 콜백 호출
+        }) ?: onCompleted()
     }
 
     // Bluetooth 권한 확인 및 Bluetooth 활성화 함수
@@ -532,7 +522,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
         if (requestCode == bluetoothAdapter.REQUEST_BLUETOOTH_SCAN && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
             bluetoothAdapter.startDiscoveryWithPermissions()
         } else {
-            Log.e("BluetoothLOTOActivity", "권한 요청 거부") // 권한 요청 거부 처리
+            Log.e("BluetoothLOTOActivity", "권한 요청 거부")
         }
     }
 
@@ -540,7 +530,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
     override fun onDestroy() {
         try {
             if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
-                bluetoothGatt?.close() // 권한이 있을 때 GATT 연결 해제
+                bluetoothGatt?.close()
             }
         } catch (e: SecurityException) {
             Log.e("BluetoothLOTOActivity", "권한 에러: ${e.message}")

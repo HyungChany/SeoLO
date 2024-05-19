@@ -307,7 +307,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                             LotoManager.clearLoto(this@BluetoothMainActivity)
                             Handler(Looper.getMainLooper()).post {
                                 val intent =
-                                    Intent(this@BluetoothMainActivity, MainActivity::class.java)
+                                    Intent(this@BluetoothMainActivity, UnLockCompleteActivity::class.java)
                                 startActivity(intent)
                                 finish()
                             }
@@ -353,11 +353,6 @@ class BluetoothMainActivity : AppCompatActivity() {
                     val unlockResponse = response.body()
                     val message = unlockResponse?.message
                     Log.d("API 요청 성공_Main", "API 요청 성공: $message")
-                    runOnUiThread {
-                        Toast.makeText(
-                            this@BluetoothMainActivity, "자물쇠 잠금이 해제 됐습니다.", Toast.LENGTH_LONG
-                        ).show()
-                    }
                 } else {
                     val errorMessage = response.message()
                     Log.d("API 요청 실패_Main", "API 요청 실패: $errorMessage")

@@ -59,7 +59,13 @@
         </activity>
 
         <activity
-            android:name=".presentation.LockUnLockActivity"
+            android:name=".presentation.LockCompleteActivity"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name=".presentation.UnLockCompleteActivity"
             android:exported="false"
             android:taskAffinity=""
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />

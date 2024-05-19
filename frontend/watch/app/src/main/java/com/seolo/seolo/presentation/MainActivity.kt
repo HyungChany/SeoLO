@@ -1,12 +1,13 @@
 package com.seolo.seolo.presentation
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.R
 import com.seolo.seolo.adapters.CarouselStateAdapter
-import com.seolo.seolo.fragments.MainChkFragment
 import com.seolo.seolo.fragments.MainBluetoothFragment
+import com.seolo.seolo.fragments.MainChkFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,10 +26,15 @@ class MainActivity : AppCompatActivity() {
         adapter.addFragment(RedoPinNumberFragment.newInstance())
 
         viewPager.adapter = adapter
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finishAffinity()
+            }
+        })
+        // 뒤로가기 버튼 비활성화
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+            }
+        })
     }
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finishAffinity()
-    }
-
 }
