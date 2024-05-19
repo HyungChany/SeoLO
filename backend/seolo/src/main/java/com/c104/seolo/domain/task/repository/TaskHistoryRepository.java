@@ -30,8 +30,8 @@ public interface TaskHistoryRepository extends JpaRepository<TaskHistory, Long> 
     @Query("SELECT t FROM TaskHistory t WHERE t.machine.id = :machineId AND t.user.id = :userId AND t.taskCode is NOT NULL")
     Optional<TaskHistory> getCurrentTaskHistoryByMachineIdAndUserId(Long machineId, Long userId);
 
-//    @Query("SELECT t FROM TaskHistory t WHERE (t.machine.id = :machineId OR t.user.id = :userId) AND t.taskCode is NOT NULL")
-//    Optional<TaskHistory> findByMachineIdOrUserIdAndTaskCode(Long machineId, Long userId);
+    @Query("SELECT t FROM TaskHistory t WHERE t.locker.id = :LockerId AND t.user.id = :userId AND t.taskCode is NOT NULL")
+    Optional<TaskHistory> getCurrentTaskHistoryByLockerIdAndUserId(Long LockerId, Long userId);
 
     @Query("SELECT t FROM TaskHistory t WHERE (t.machine.id = :machineId OR t.user.id = :userId) AND t.taskCode IS NOT NULL")
     List<TaskHistory> findByMachineIdOrUserIdAndTaskCode(@Param("machineId") Long machineId, @Param("userId") Long userId);
@@ -44,9 +44,6 @@ public interface TaskHistoryRepository extends JpaRepository<TaskHistory, Long> 
             "u.employee.employeeTeam, u.employee.employeeName, u.employee.employeeTitle " +
             ") FROM TaskHistory t join t.user u join t.machine m where t.user.employee.employeeNum = :employeeNum order by t.taskStartDateTime desc ")
     List<TaskHistoryInfo> getTaskHistoryByEmployeeNum(String employeeNum);
-
-    @Query("SELECT COUNT(th) FROM TaskHistory th WHERE th.machine.facility.id = :facilityId")
-    Long countByFacilityId(@Param("facilityId") Long facilityId);
 
     @Query("SELECT COUNT(th) FROM TaskHistory th WHERE th.machine.facility.id = :facilityId AND th.createdAt >= :startOfDay AND th.createdAt < :endOfDay")
     Long countByFacilityIdAndCreatedAtBetween(@Param("facilityId") Long facilityId, @Param("startOfDay") LocalDateTime startOfDay, @Param("endOfDay") LocalDateTime endOfDay);

@@ -1,5 +1,6 @@
 package com.c104.seolo.domain.core.service;
 
+import com.c104.seolo.domain.core.dto.LockerDto;
 import com.c104.seolo.domain.core.dto.request.LockerEnrollRequest;
 import com.c104.seolo.domain.core.dto.request.LockerRequest;
 import com.c104.seolo.domain.core.dto.response.LockerResponse;

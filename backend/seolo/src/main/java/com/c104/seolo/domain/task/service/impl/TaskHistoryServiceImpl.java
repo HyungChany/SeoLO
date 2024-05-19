@@ -79,6 +79,13 @@ public class TaskHistoryServiceImpl implements TaskHistoryService {
     }
 
     @Override
+    public TaskHistoryDto getCurrentTaskHistoryByLockerIdAndUserIdIfNotNull(Long lockerId, Long userId) {
+        return taskHistoryRepository.getCurrentTaskHistoryByLockerIdAndUserId(lockerId, userId)
+                .map(TaskHistoryDto::of)
+                .orElse(null);
+    }
+
+    @Override
     public void enrollTaskHistory(CCodePrincipal cCodePrincipal,
                                   String lockerUid,
                                   Long taskTemplateId,
