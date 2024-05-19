@@ -47,4 +47,6 @@ Adafruit_PN532
 - 조형찬 : NFC, MOTOR, Magnetic Sensor, C-type, 조립
 - 오유진 : BLE, Base64, AES128 (Core Logic)
 - 이현비 : 3D Modeling
-- 오민상 : 남땜 지원
+- 오민상 : 회로 연결
+- 김진명 : Serial Monitor Error 탐지, base64 library 탐색 도움
+- 오정민 : 부품업체 컨택
