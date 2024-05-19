@@ -1,6 +1,7 @@
 import CheckList from '@/../assets/icons/CheckList.svg?react';
 import ListModify from '@/../assets/icons/ListModify.svg?react';
 import logoutIcon from '@/../assets/images/Logout.png';
+import userIcon from '@/../assets/images/usericon.png' 
 import { Facilities } from '@/apis/Facilities.ts';
 import { Logout } from '@/apis/Login.ts';
 import {
@@ -166,6 +167,17 @@ const LogoutBtn = styled.button`
   }
 `;
 
+const UserImg = styled.div`
+  width: 6rem;
+  height: 6rem;
+  display: flex;
+  align-items: flex-end;
+`;
+
+const UserIcon = styled.img`
+  width: 100%;
+`;
+
 const LogoutIcon = styled.img`
   width: 2.3rem;
 `;
@@ -247,6 +259,7 @@ const MainPage = () => {
     null,
   );
   const [userData, setUserData] = useState<UserInformationType | null>(null);
+  const [hoverText, setHoverText] = useState<string>('하세요');
   const events = useRecoilValue(notificationEventsState);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleCardDrawingClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -327,6 +340,16 @@ const MainPage = () => {
     };
     fetchLogout();
   };
+
+  // 로그아웃 버튼 호버 이벤트 핸들러
+  const handleMouseEnter = () => {
+    setHoverText('하셨나요?');
+  };
+
+  const handleMouseLeave = () => {
+    setHoverText('하세요');
+  };
+
   // 드롭다운 옵션 가져오기
   const { data: dropdownData } = useQuery({
     queryKey: ['dropdown'],
@@ -366,9 +389,10 @@ const MainPage = () => {
           <LeftContainer>
             <div
               style={{
-                fontSize: '2.3rem',
+                fontSize: '2.2rem',
                 textAlign: 'center',
-                fontWeight: '1000',
+                fontWeight: '8000',
+                fontFamily: 'NYJGothic',
                 color: Color.SAMSUNG_BLUE,
               }}
             >
@@ -442,14 +466,15 @@ const MainPage = () => {
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'center',
-                paddingLeft: '2rem',
-                marginBottom: '2rem',
+                paddingLeft: '0rem',
+                marginBottom: '1rem',
               }}
             >
               <div
                 style={{
                   display: 'flex',
-                  alignItems: 'center',
+                  alignItems: 'flex-end',
+                  fontFamily: 'NYJGothic',
                 }}
               >
                 <div
@@ -461,12 +486,24 @@ const MainPage = () => {
                 >
                   {userData?.employee.employeeName}
                 </div>
-                <div style={{ fontSize: '2rem' }}>&nbsp;님</div>
+                <div
+                  style={{
+                    fontSize: '2rem',
+                    marginRight: '0.4rem',
+                  }}
+                >
+                  &nbsp;님
+                </div>
+                <UserImg>
+                  <UserIcon src={userIcon} />
+                </UserImg>
               </div>
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
+                  fontFamily: 'NYJGothic',
+                  // backgroundColor: 'red',
                 }}
               >
                 <div
@@ -480,15 +517,19 @@ const MainPage = () => {
                   style={{
                     fontSize: '2rem',
                     color: Color.BLUE100,
-                    fontWeight: 'bold',
+                    fontWeight: '800',
                   }}
                 >
                   &nbsp;서로&nbsp;
                 </div>
-                <div style={{ fontSize: '1.5rem' }}>하셨나요?</div>
+                <div style={{ fontSize: '1.5rem' }}>{hoverText}</div>
               </div>
             </div>
-            <LogoutBtn onClick={handleLogout}>
+            <LogoutBtn
+              onClick={handleLogout}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
               <LogoutIcon src={logoutIcon} />
               로그아웃
             </LogoutBtn>
