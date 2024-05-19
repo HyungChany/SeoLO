@@ -22,11 +22,11 @@
 
 ### 회로도
 - 회로도
-  ![회로도](SEOLO\SEOLO.png)
+  ![회로도](../embedded/SEOLO/SEOLO.png)
 - 스케메틱
-  ![스케메틱](SEOLO\SEOLO_schem.png)
+  ![스케메틱](../embedded/SEOLO/SEOLO_schem.png)
 - PCB
-  ![PCB](SEOLO\SEOLO_pcb.ps.png)
+  ![PCB](../embedded/SEOLO/SEOLO_pcb.ps.png)
 
 ### 부품 정보
 ```
