@@ -30,13 +30,13 @@ class CoreIssueModel {
   });
 
   Map<String, dynamic> toJson() => {
-    'locker_uid': lockerUid,
-    'battery_info': battery,
-    'machine_id': machineId,
-    'task_template_id': taskTemplateId,
-    'task_precaution': taskPrecaution,
-    'end_time': endTime,
-  };
+        'locker_uid': lockerUid,
+        'battery_info': battery,
+        'machine_id': machineId,
+        'task_template_id': taskTemplateId,
+        'task_precaution': taskPrecaution,
+        'end_time': endTime,
+      };
 
   factory CoreIssueModel.fromJson(Map<String, dynamic> json) {
     return CoreIssueModel(
@@ -45,4 +45,3 @@ class CoreIssueModel {
     );
   }
 }
-

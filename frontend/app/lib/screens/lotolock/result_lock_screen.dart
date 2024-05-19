@@ -1,5 +1,4 @@
 import 'package:app/view_models/core/core_locked_view_model.dart';
-import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,29 +9,7 @@ class ResultLockScreen extends StatefulWidget {
   State<ResultLockScreen> createState() => _ResultLockScreenState();
 }
 
-class _ResultLockScreenState extends State<ResultLockScreen>
-    with WidgetsBindingObserver {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addObserver(this);
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
-  //
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.paused ||
-  //       state == AppLifecycleState.detached) {
-  //     Provider.of<AppLockState>(context, listen: false)
-  //         .lock(ModalRoute.of(context)!.settings.name!);
-  //   }
-  // }
-
+class _ResultLockScreenState extends State<ResultLockScreen> {
   @override
   Widget build(BuildContext context) {
     final lockVM = Provider.of<CoreLockedViewModel>(context);
@@ -50,7 +27,7 @@ class _ResultLockScreenState extends State<ResultLockScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset('assets/images/success_loto.png'),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           const Text(
@@ -69,12 +46,12 @@ class _ResultLockScreenState extends State<ResultLockScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset('assets/images/fail_loto.png'),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Text(
                             lockVM.errorMessage ?? '잠금에 실패하였습니다.',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           )
                         ],

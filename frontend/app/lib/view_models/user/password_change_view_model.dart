@@ -5,22 +5,28 @@ import 'package:flutter/material.dart';
 class PasswordChangeViewModel extends ChangeNotifier {
   final UserService _userService = UserService();
 
-  PasswordChangeModel _passwordChangeData = PasswordChangeModel(newPwd: '', checkNewPwd: '');
+  PasswordChangeModel _passwordChangeData =
+      PasswordChangeModel(newPwd: '', checkNewPwd: '');
   bool _isLoading = false;
   String? _errorMessage;
 
-  String get newPwd  => _passwordChangeData.newPwd;
+  String get newPwd => _passwordChangeData.newPwd;
+
   String get checkNewPwd => _passwordChangeData.checkNewPwd;
+
   bool get isLoading => _isLoading;
+
   String? get errorMessage => _errorMessage;
 
   void setNewPwd(String value) {
-    _passwordChangeData = PasswordChangeModel(newPwd: value, checkNewPwd: _passwordChangeData.checkNewPwd);
+    _passwordChangeData = PasswordChangeModel(
+        newPwd: value, checkNewPwd: _passwordChangeData.checkNewPwd);
     notifyListeners();
   }
 
   void setCheckNewPwd(String value) {
-    _passwordChangeData = PasswordChangeModel(newPwd: _passwordChangeData.newPwd, checkNewPwd: value);
+    _passwordChangeData = PasswordChangeModel(
+        newPwd: _passwordChangeData.newPwd, checkNewPwd: value);
     notifyListeners();
   }
 

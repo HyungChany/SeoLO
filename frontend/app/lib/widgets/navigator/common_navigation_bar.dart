@@ -14,7 +14,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      items: <BottomNavigationBarItem>[
+      items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home_outlined),
           label: 'Home',
@@ -30,9 +30,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
       ],
       currentIndex: selectedIndex,
       selectedItemColor: samsungBlue,
-      selectedLabelStyle: const TextStyle(
-        fontWeight: FontWeight.bold
-      ),
+      selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
       onTap: onItemTapped,
     );
   }

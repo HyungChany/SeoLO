@@ -13,15 +13,19 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       automaticallyImplyLeading: false,
-      title: Text(title, style: TextStyle(fontWeight: FontWeight.bold),),
+      title: Text(
+        title,
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
       centerTitle: true,
-      leading: back ? IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ) : null,
+      leading: back
+          ? IconButton(
+              icon: const Icon(Icons.arrow_back_ios_new),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          : null,
     );
   }
-
 }

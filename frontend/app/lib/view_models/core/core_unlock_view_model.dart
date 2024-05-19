@@ -1,4 +1,3 @@
-import 'package:app/models/core/check_model.dart';
 import 'package:app/models/core/unlock_model.dart';
 import 'package:app/services/core_service.dart';
 import 'package:flutter/material.dart';

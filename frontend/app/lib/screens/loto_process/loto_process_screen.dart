@@ -1,9 +1,6 @@
-import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/loto_process/loto_definition.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class LotoProcessScreen extends StatefulWidget {
   const LotoProcessScreen({super.key});
@@ -12,29 +9,7 @@ class LotoProcessScreen extends StatefulWidget {
   State<LotoProcessScreen> createState() => _LotoProcessState();
 }
 
-class _LotoProcessState extends State<LotoProcessScreen>
-    with WidgetsBindingObserver {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addObserver(this);
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
-  //
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.paused ||
-  //       state == AppLifecycleState.detached) {
-  //     Provider.of<AppLockState>(context, listen: false)
-  //         .lock('/lotoProcess');
-  //   }
-  // }
-
+class _LotoProcessState extends State<LotoProcessScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

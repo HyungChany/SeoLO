@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:app/main.dart';
-import 'package:app/screens/bluetooth/bluetooth_off_screen.dart';
 import 'package:app/view_models/core/core_check_view_model.dart';
 import 'package:app/view_models/core/core_issue_view_model.dart';
 import 'package:app/view_models/core/core_locked_view_model.dart';
@@ -64,10 +62,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
         FlutterBluePlus.adapterState.listen((state) {
       _adapterState = state;
       if (_adapterState != BluetoothAdapterState.on) {
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const BluetoothOffScreen()));
+        Navigator.pushReplacementNamed(context, '/bluetoothOff');
       }
       if (mounted) {
         setState(() {});
@@ -176,10 +171,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
               List<int> encodedMessage = utf8.encode(message);
               try {
                 await characteristic.write(encodedMessage,
-                    // withoutResponse:
-                    // characteristic.properties.writeWithoutResponse,
-                    allowLongWrite: true,
-                    timeout: 30);
+                    allowLongWrite: true, timeout: 30);
                 characteristic.setNotifyValue(true);
                 characteristic.read();
                 characteristic.lastValueStream.listen((value) async {
@@ -419,7 +411,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     context: context,
                     barrierDismissible: false,
                     builder: (BuildContext context) {
-                      return CommonDialog(
+                      return const CommonDialog(
                         content: '다시 연결해 주세요.',
                         buttonText: '확인',
                       );
@@ -497,10 +489,10 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Text('최근 연결한 자물쇠',
+                        const Text('최근 연결한 자물쇠',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold)),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Expanded(
@@ -511,13 +503,13 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
-                        Text('새로운 자물쇠',
+                        const Text('새로운 자물쇠',
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold)),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         Expanded(

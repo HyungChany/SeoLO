@@ -5,20 +5,20 @@ class KeyboardKey extends StatefulWidget {
   final dynamic value;
   final VoidCallback onTap;
 
-  KeyboardKey({super.key,
+  const KeyboardKey({
+    super.key,
     required this.label,
     required this.onTap,
     required this.value,
   });
 
   @override
-  _KeyboardKeyState createState() => _KeyboardKeyState();
+  State<KeyboardKey> createState() => _KeyboardKeyState();
 }
 
 class _KeyboardKeyState extends State<KeyboardKey> {
-
-  renderLabel(){
-    if(widget.label is String){
+  renderLabel() {
+    if (widget.label is String) {
       return Text(
         widget.label,
         style: const TextStyle(
@@ -26,7 +26,7 @@ class _KeyboardKeyState extends State<KeyboardKey> {
           fontWeight: FontWeight.bold,
         ),
       );
-    }else{
+    } else {
       return widget.label;
     }
   }
@@ -34,7 +34,7 @@ class _KeyboardKeyState extends State<KeyboardKey> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         widget.onTap();
       },
       child: AspectRatio(

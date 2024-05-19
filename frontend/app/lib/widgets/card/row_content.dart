@@ -22,7 +22,7 @@ class RowContent extends StatelessWidget {
           SizedBox(
             width: 65,
             child: Text(
-              title, // 제목 뒤에 콜론 추가
+              title,
               style: const TextStyle(
                 color: samsungBlue,
                 fontWeight: FontWeight.bold,
@@ -32,7 +32,7 @@ class RowContent extends StatelessWidget {
           Expanded(
             child: Text(
               content,
-              softWrap: true, // 줄바꿈 활성화
+              softWrap: true,
               overflow: TextOverflow.ellipsis,
               maxLines: line,
             ),

@@ -1,4 +1,3 @@
-import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,33 +14,11 @@ class TimeSelect extends StatefulWidget {
   State<TimeSelect> createState() => _TimeSelectState();
 }
 
-class _TimeSelectState extends State<TimeSelect> with WidgetsBindingObserver {
+class _TimeSelectState extends State<TimeSelect> {
   String endTime = DateFormat('HH:mm').format(DateTime.now());
   late DateTime currentDay;
   late int endHour;
   late int endMin;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addObserver(this);
-  //   currentDay = DateTime.now();
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
-  //
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.paused ||
-  //       state == AppLifecycleState.detached) {
-  //     Provider.of<AppLockState>(context, listen: false)
-  //         .lock(ModalRoute.of(context)!.settings.name!);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +57,7 @@ class _TimeSelectState extends State<TimeSelect> with WidgetsBindingObserver {
                   text: '다음 단계',
                   onTap: () {
                     if (DateTime.now().isAfter(endDay
-                        .add(Duration(hours: endHour, minutes: endMin)))) {
+                        .add(Duration(hours: endHour, minutes: endMin + 1)))) {
                       showDialog(
                           context: context,
                           barrierDismissible: true,

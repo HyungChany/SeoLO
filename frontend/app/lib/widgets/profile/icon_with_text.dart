@@ -10,7 +10,7 @@ class IconWithText extends StatelessWidget {
     required this.icon,
     required this.text,
     required this.naviPage,
-});
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +23,14 @@ class IconWithText extends StatelessWidget {
         child: Row(
           children: [
             icon,
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
-            Text(text, style: TextStyle(fontSize: 23.0, fontWeight: FontWeight.w400),),
+            Text(
+              text,
+              style:
+                  const TextStyle(fontSize: 23.0, fontWeight: FontWeight.w400),
+            ),
           ],
         ),
       ),

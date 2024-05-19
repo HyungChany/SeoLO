@@ -1,5 +1,4 @@
 import 'package:app/view_models/core/core_issue_view_model.dart';
-import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
@@ -15,32 +14,10 @@ class WorkListCheckScreen extends StatefulWidget {
   State<WorkListCheckScreen> createState() => _WorkListCheckScreenState();
 }
 
-class _WorkListCheckScreenState extends State<WorkListCheckScreen> with WidgetsBindingObserver {
+class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
   final _storage = const FlutterSecureStorage();
   String? lockerUid;
   List<String> workListTitle = ['작업장', '장비 명', '작업 담당자', '종료 예상 시간', '작업 내용'];
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addObserver(this);
-  //   isConnect();
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
-  //
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.paused ||
-  //       state == AppLifecycleState.detached) {
-  //     Provider.of<AppLockState>(context, listen: false)
-  //         .lock(ModalRoute.of(context)!.settings.name!);
-  //   }
-  // }
 
   void isConnect() async {
     lockerUid = await _storage.read(key: 'locker_uid');
@@ -111,7 +88,7 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> with WidgetsB
                     ),
                     child: SingleChildScrollView(
                       child: Text(viewModel.taskPrecaution!,
-                          style: TextStyle(fontSize: 16.0)),
+                          style: const TextStyle(fontSize: 16.0)),
                     ),
                   ),
                 ],
@@ -138,10 +115,8 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> with WidgetsB
                           Navigator.pushNamedAndRemoveUntil(
                             context,
                             '/bluetooth',
-                                (Route<dynamic> route) => route.isFirst,
+                            (Route<dynamic> route) => route.isFirst,
                           );
-                          // Navigator.pushNamedAndRemoveUntil(context,
-                          //     '/bluetooth', ModalRoute.withName('/main'));
                         } else {
                           if (viewModel.errorMessage == 'JT') {
                             showDialog(
@@ -180,10 +155,8 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> with WidgetsB
                     Navigator.pushNamedAndRemoveUntil(
                       context,
                       '/bluetooth',
-                          (Route<dynamic> route) => route.isFirst,
+                      (Route<dynamic> route) => route.isFirst,
                     );
-                    // Navigator.pushNamedAndRemoveUntil(
-                    //     context, '/bluetooth', ModalRoute.withName('/main'));
                   }
                 },
               ),

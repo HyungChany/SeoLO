@@ -1,6 +1,5 @@
 import 'package:app/view_models/core/core_issue_view_model.dart';
 import 'package:app/view_models/loto/machine_view_model.dart';
-import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/checklist/check_banner.dart';
@@ -15,12 +14,10 @@ class MachineSelectScreen extends StatefulWidget {
   State<MachineSelectScreen> createState() => _MachineSelectScreenState();
 }
 
-class _MachineSelectScreenState extends State<MachineSelectScreen>
-    with WidgetsBindingObserver {
+class _MachineSelectScreenState extends State<MachineSelectScreen> {
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addObserver(this);
     final viewModel = Provider.of<MachineViewModel>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       viewModel.loadInitialData().then((_) {
@@ -55,21 +52,6 @@ class _MachineSelectScreenState extends State<MachineSelectScreen>
       });
     });
   }
-
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
-  //
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.paused ||
-  //       state == AppLifecycleState.detached) {
-  //     Provider.of<AppLockState>(context, listen: false)
-  //         .lock(ModalRoute.of(context)!.settings.name!);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -111,8 +93,6 @@ class _MachineSelectScreenState extends State<MachineSelectScreen>
                                       viewModel.machines[index].machineId);
                                   coreViewModel.setMachineName(
                                       viewModel.machines[index].machineName);
-                                  // coreViewModel.setMachineCode(
-                                  //     viewModel.machines[index].machineCode);
                                   Navigator.pushNamed(context, '/taskTemplate');
                                 },
                               );

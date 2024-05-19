@@ -15,6 +15,7 @@ class MyLoto extends StatefulWidget {
 class _MyLotoState extends State<MyLoto> {
   int currentIndex = 0;
   late PageController _pageController;
+
   @override
   void initState() {
     super.initState();

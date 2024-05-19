@@ -1,4 +1,3 @@
-import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/view_models/user/password_change_view_model.dart';
 import 'package:app/widgets/button/common_text_button.dart';
 import 'package:app/widgets/dialog/dialog.dart';
@@ -14,29 +13,7 @@ class ChangePassword extends StatefulWidget {
   State<ChangePassword> createState() => _ChangePasswordState();
 }
 
-class _ChangePasswordState extends State<ChangePassword>
-    with WidgetsBindingObserver {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addObserver(this);
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
-  //
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.paused ||
-  //       state == AppLifecycleState.detached) {
-  //     Provider.of<AppLockState>(context, listen: false)
-  //         .lock(ModalRoute.of(context)!.settings.name!);
-  //   }
-  // }
-
+class _ChangePasswordState extends State<ChangePassword> {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<PasswordChangeViewModel>(context);
@@ -56,11 +33,12 @@ class _ChangePasswordState extends State<ChangePassword>
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: Column(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: 50,
                       ),
-                      Text('비밀번호는 영문 대문자/소문자/숫자/특수문자를 섞어 8~16자리로 입력해주세요.'),
-                      SizedBox(
+                      const Text(
+                          '비밀번호는 영문 대문자/소문자/숫자/특수문자를 섞어 8~16자리로 입력해주세요.'),
+                      const SizedBox(
                         height: 30,
                       ),
                       SmallInputBox(
@@ -70,7 +48,7 @@ class _ChangePasswordState extends State<ChangePassword>
                           onChanged: (value) {
                             viewModel.setNewPwd(value);
                           }),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       SmallInputBox(
@@ -88,7 +66,7 @@ class _ChangePasswordState extends State<ChangePassword>
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: EdgeInsets.only(bottom: 20),
+                padding: const EdgeInsets.only(bottom: 20),
                 child: CommonTextButton(
                   text: '확인',
                   onTap: () {

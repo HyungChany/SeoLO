@@ -12,7 +12,6 @@ class PinLoginModel {
   }
 
   Map<String, dynamic> toJson() => {
-    'pin': pin,
-  };
+        'pin': pin,
+      };
 }
-

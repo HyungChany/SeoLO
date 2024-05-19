@@ -1,5 +1,4 @@
 import 'package:app/view_models/core/core_check_view_model.dart';
-import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/button/common_text_button.dart';
@@ -14,7 +13,7 @@ class OtherWorkListCheckScreen extends StatefulWidget {
       _OtherWorkListCheckScreenState();
 }
 
-class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> with WidgetsBindingObserver {
+class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
   List<String> workListTitle = [
     '작업장',
     '장비 명',
@@ -25,39 +24,20 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> wit
     '작업 내용'
   ];
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addObserver(this);
-  // }
-  //
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
-  //
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.paused ||
-  //       state == AppLifecycleState.detached) {
-  //     Provider.of<AppLockState>(context, listen: false)
-  //         .lock(ModalRoute.of(context)!.settings.name!);
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<CoreCheckViewModel>(context);
     String? startTimeString = viewModel.startTime ?? '';
     List<String> startParts = startTimeString.split('T');
-    String formattedStartTime = (startTimeString == '') ? '' :
-    '${startParts[0]} | ${startParts[1].substring(0, 5)}';
+    String formattedStartTime = (startTimeString == '')
+        ? ''
+        : '${startParts[0]} | ${startParts[1].substring(0, 5)}';
 
     String? endTimeString = viewModel.endTime ?? '';
     List<String> endParts = endTimeString.split('T');
-    String formattedEndTime = (endTimeString == '') ? '' :
-    '${endParts[0]} | ${endParts[1].substring(0, 5)}';
+    String formattedEndTime = (endTimeString == '')
+        ? ''
+        : '${endParts[0]} | ${endParts[1].substring(0, 5)}';
 
     final List<String> workListContent = [
       viewModel.facilityName ?? '조회 불가',
@@ -74,13 +54,14 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> wit
         children: [
           SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0), // 전체 내용의 양쪽 패딩
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              // 전체 내용의 양쪽 패딩
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: workListTitle.length,
                     itemBuilder: (context, index) {
                       return ListTile(
@@ -88,7 +69,7 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> wit
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(workListTitle[index],
-                                style: TextStyle(color: samsungBlue)),
+                                style: const TextStyle(color: samsungBlue)),
                             Expanded(
                               child: Text(
                                 workListContent[index],
@@ -100,7 +81,7 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> wit
                       );
                     },
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.symmetric(
                         vertical: 8.0, horizontal: 16.0), // 비고 라벨의 패딩
                     child: Text('비고',
@@ -110,15 +91,16 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> wit
                     width: MediaQuery.of(context).size.width * 0.9,
                     height: MediaQuery.of(context).size.height * 0.25,
                     padding: const EdgeInsets.all(16.0),
-                    margin:
-                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       border: Border.all(color: Colors.grey),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: SingleChildScrollView(
-                      child: Text(viewModel.precaution ?? '조회 불가', style: TextStyle(fontSize: 16.0)),
+                      child: Text(viewModel.precaution ?? '조회 불가',
+                          style: TextStyle(fontSize: 16.0)),
                     ),
                   ),
                 ],

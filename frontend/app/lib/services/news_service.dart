@@ -1,12 +1,11 @@
 import 'package:app/models/main/news_model.dart';
 import 'package:dio/dio.dart' as Dio;
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class NewsService {
   final _dio = Dio.Dio();
-  final _storage = FlutterSecureStorage();
+  final _storage = const FlutterSecureStorage();
   final baseUrl = dotenv.env['API_URL2'] ?? '';
 
   NewsService() {
@@ -22,9 +21,9 @@ class NewsService {
         return handler.next(options);
       },
     ));
-    _dio.interceptors.add(LoggingInterceptor());
   }
 
+  ///////////////////////// newslist //////////////////////////////////
   Future<Map<String, dynamic>> getNews() async {
     try {
       Dio.Response response = await _dio.get(
@@ -50,7 +49,6 @@ class NewsService {
           'message': 'JT'
         };
       } else {
-        debugPrint(e.message);
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -58,30 +56,5 @@ class NewsService {
         };
       }
     }
-  }
-}
-
-class LoggingInterceptor extends Dio.Interceptor {
-  @override
-  void onRequest(
-      Dio.RequestOptions options, Dio.RequestInterceptorHandler handler) {
-    debugPrint("REQUEST[${options.method}] => PATH: ${options.path}");
-    debugPrint("Request Header: ${options.headers}");
-    super.onRequest(options, handler);
-  }
-
-  @override
-  void onResponse(
-      Dio.Response response, Dio.ResponseInterceptorHandler handler) {
-    debugPrint(
-        "RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}");
-    super.onResponse(response, handler);
-  }
-
-  @override
-  void onError(Dio.DioError err, Dio.ErrorInterceptorHandler handler) {
-    debugPrint(
-        "ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}");
-    super.onError(err, handler);
   }
 }

@@ -4,7 +4,6 @@ class MyTasksModel {
   final String? startTime;
   final String? endTime;
 
-
   MyTasksModel({
     this.facilityName = '',
     this.machineName = '',
@@ -21,4 +20,3 @@ class MyTasksModel {
     );
   }
 }
-

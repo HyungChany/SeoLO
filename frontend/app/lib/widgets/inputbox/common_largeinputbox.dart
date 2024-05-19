@@ -6,7 +6,11 @@ class LargeInputBox extends StatefulWidget {
   final String? precaution;
   final void Function(String) onTextSaved;
 
-  const LargeInputBox({super.key, required this.hintText, this.precaution, required this.onTextSaved});
+  const LargeInputBox(
+      {super.key,
+      required this.hintText,
+      this.precaution,
+      required this.onTextSaved});
 
   @override
   State<LargeInputBox> createState() => _LargeInputBoxState();
@@ -27,7 +31,8 @@ class _LargeInputBoxState extends State<LargeInputBox> {
   @override
   void didUpdateWidget(covariant LargeInputBox oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.precaution != null && widget.precaution != oldWidget.precaution) {
+    if (widget.precaution != null &&
+        widget.precaution != oldWidget.precaution) {
       _controller.text = widget.precaution!;
     }
   }
@@ -52,25 +57,27 @@ class _LargeInputBoxState extends State<LargeInputBox> {
         alignment: Alignment.topRight,
         children: [
           TextField(
-            onChanged: (text) {_sendTextToScreen();},
+            onChanged: (text) {
+              _sendTextToScreen();
+            },
             controller: _controller,
             keyboardType: TextInputType.multiline,
             maxLines: 10,
             maxLength: _maxLength,
             buildCounter: (
-                BuildContext context, {
-                  required int currentLength,
-                  required bool isFocused,
-                  required int? maxLength,
-                }) {
+              BuildContext context, {
+              required int currentLength,
+              required bool isFocused,
+              required int? maxLength,
+            }) {
               return Text(
                 '$currentLength / $maxLength',
-                style: TextStyle(fontSize: 12),
+                style: const TextStyle(fontSize: 12),
               );
             },
             decoration: InputDecoration(
               labelText: '비고',
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
               floatingLabelBehavior: FloatingLabelBehavior.always,
               hintText: widget.hintText,
             ),

@@ -5,7 +5,6 @@ import 'package:app/models/core/unlock_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter/material.dart';
 
 class CoreService {
   final _dio = Dio.Dio();
@@ -25,7 +24,6 @@ class CoreService {
         return handler.next(options);
       },
     ));
-    _dio.interceptors.add(LoggingInterceptor());
   }
 
   ///////////////////////// issue //////////////////////////////////
@@ -35,7 +33,6 @@ class CoreService {
         '$baseUrl/core/ISSUE',
         data: coreIssueModel.toJson(),
       );
-      debugPrint('issue 요청값 : ${coreIssueModel.toJson().toString()}');
       if (response.statusCode == 200) {
         await _storage.write(
             key: 'Core-Code', value: response.data['next_code']);
@@ -58,7 +55,6 @@ class CoreService {
           'message': 'JT'
         };
       } else {
-        debugPrint(e.message);
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -70,20 +66,25 @@ class CoreService {
 
   ///////////////////////// check //////////////////////////////////
   Future<Map<String, dynamic>> coreCheck(CoreCheckModel coreCheckModel) async {
-    debugPrint('core check api 보내기 : ${coreCheckModel.toJson().toString()}');
     try {
       Dio.Response response =
           await _dio.post('$baseUrl/core/CHECK', data: coreCheckModel.toJson());
       if (response.statusCode == 200) {
-        debugPrint('check 응답: ${response.data.toString()}');
         await _storage.delete(key: 'locker_uid');
         await _storage.delete(key: 'machine_id');
         await _storage.delete(key: 'locker_battery');
-        CoreCheckModel coreCheckModel = CoreCheckModel.fromJson(response.data['check_more_response']);
-        coreCheckModel.taskType = response.data['task_history']['taskTemplate']['task_type'].toString();
-        coreCheckModel.startTime = response.data['task_history']['taskStartDateTime'].toString();
-        coreCheckModel.endTime = response.data['task_history']['taskEndEstimatedDateTime'].toString();
-        coreCheckModel.precaution = response.data['task_history']['taskPrecaution'].toString();
+        CoreCheckModel coreCheckModel =
+            CoreCheckModel.fromJson(response.data['check_more_response']);
+        coreCheckModel.taskType = response.data['task_history']['taskTemplate']
+                ['task_type']
+            .toString();
+        coreCheckModel.startTime =
+            response.data['task_history']['taskStartDateTime'].toString();
+        coreCheckModel.endTime = response.data['task_history']
+                ['taskEndEstimatedDateTime']
+            .toString();
+        coreCheckModel.precaution =
+            response.data['task_history']['taskPrecaution'].toString();
         return {'success': true, 'coreCheckModel': coreCheckModel};
       } else {
         return {'success': false};
@@ -97,7 +98,6 @@ class CoreService {
           'message': 'JT'
         };
       } else {
-        debugPrint(e.message);
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -113,7 +113,6 @@ class CoreService {
     try {
       Dio.Response response = await _dio.post('$baseUrl/core/UNLOCK',
           data: coreUnlockModel.toJson());
-      debugPrint('unlock 요청값 : ${coreUnlockModel.toJson().toString()}');
       if (response.statusCode == 200) {
         await _storage.delete(key: 'Core-Code');
         await _storage.delete(key: 'machine_id');
@@ -135,7 +134,6 @@ class CoreService {
           'message': 'JT'
         };
       } else {
-        debugPrint(e.message);
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -151,9 +149,7 @@ class CoreService {
     try {
       Dio.Response response = await _dio.post('$baseUrl/core/LOCKED',
           data: coreLockedModel.toJson());
-      debugPrint(coreLockedModel.toJson().toString());
       if (response.statusCode == 200) {
-        // debugPrint(response.data);
         await _storage.write(
             key: 'Core-Code', value: response.data['next_code']);
         return {
@@ -171,7 +167,6 @@ class CoreService {
           'message': 'JT'
         };
       } else {
-        debugPrint(e.message);
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -179,30 +174,5 @@ class CoreService {
         };
       }
     }
-  }
-}
-
-class LoggingInterceptor extends Dio.Interceptor {
-  @override
-  void onRequest(
-      Dio.RequestOptions options, Dio.RequestInterceptorHandler handler) {
-    debugPrint("REQUEST[${options.method}] => PATH: ${options.path}");
-    debugPrint("Request Header: ${options.headers}");
-    super.onRequest(options, handler);
-  }
-
-  @override
-  void onResponse(
-      Dio.Response response, Dio.ResponseInterceptorHandler handler) {
-    debugPrint(
-        "RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}");
-    super.onResponse(response, handler);
-  }
-
-  @override
-  void onError(Dio.DioError err, Dio.ErrorInterceptorHandler handler) {
-    debugPrint(
-        "ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}");
-    super.onError(err, handler);
   }
 }

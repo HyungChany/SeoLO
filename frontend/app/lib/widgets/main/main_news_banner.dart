@@ -86,9 +86,7 @@ class _MainNewsBannerState extends State<MainNewsBanner> {
                               );
                               if (await canLaunchUrl(url)) {
                                 launchUrl(url);
-                              } else {
-                                debugPrint("Can't launch $url");
-                              }
+                              } else {}
                             },
                             child: Column(
                               children: [

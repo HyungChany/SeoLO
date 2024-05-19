@@ -1,9 +1,7 @@
 import 'package:app/view_models/core/core_issue_view_model.dart';
 import 'package:app/view_models/loto/task_templates_view_model.dart';
-import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/widgets/button/common_icon_button.dart';
 import 'package:app/widgets/dialog/dialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/inputbox/common_largeinputbox.dart';
@@ -18,7 +16,7 @@ class TaskTemplateSelectScreen extends StatefulWidget {
       _TaskTemplateSelectScreenState();
 }
 
-class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> with WidgetsBindingObserver {
+class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> {
   String? taskOption;
   int selectId = 0;
   String selectName = '';
@@ -49,8 +47,8 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> wit
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addObserver(this);
-    final viewModel = Provider.of<TaskTemplatesViewModel>(context, listen: false);
+    final viewModel =
+        Provider.of<TaskTemplatesViewModel>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       viewModel.getTemplates().then((_) {
         if (viewModel.errorMessage == null) {
@@ -86,21 +84,6 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> wit
       selectName = '';
     });
   }
-  //
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
-  //
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.paused ||
-  //       state == AppLifecycleState.detached) {
-  //     Provider.of<AppLockState>(context, listen: false)
-  //         .lock(ModalRoute.of(context)!.settings.name!);
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -113,16 +96,16 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> wit
               child: CircularProgressIndicator(),
             )
           : GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-            child: Stack(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Stack(
                 children: [
                   SingleChildScrollView(
                     child: Center(
                       child: Column(
                         children: <Widget>[
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           SizedBox(
@@ -138,8 +121,8 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> wit
                                       iconImage: taskIcon[index],
                                       shape: BoxShape.circle,
                                       isSelected: taskOption ==
-                                          viewModel
-                                              .templates[index].taskTemplateName,
+                                          viewModel.templates[index]
+                                              .taskTemplateName,
                                       onTap: () {
                                         selectId = viewModel
                                             .templates[index].taskTemplateId;
@@ -192,7 +175,7 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> wit
                   ),
                 ],
               ),
-          ),
+            ),
     );
   }
 }

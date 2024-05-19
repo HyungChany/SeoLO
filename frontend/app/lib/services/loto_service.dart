@@ -6,7 +6,6 @@ import 'package:app/view_models/user/my_info_view_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter/material.dart';
 import 'package:app/models/loto/checklist_model.dart';
 
 class LotoService {
@@ -27,7 +26,6 @@ class LotoService {
         return handler.next(options);
       },
     ));
-    _dio.interceptors.add(LoggingInterceptor());
   }
 
   ///////////////////////// checklist //////////////////////////////////
@@ -61,7 +59,6 @@ class LotoService {
           'message': 'JT'
         };
       } else {
-        debugPrint(e.message);
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -104,7 +101,6 @@ class LotoService {
           'message': 'JT'
         };
       } else {
-        debugPrint(e.message);
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -140,7 +136,6 @@ class LotoService {
           'message': 'JT'
         };
       } else {
-        debugPrint(e.message);
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -176,7 +171,6 @@ class LotoService {
           'message': 'JT'
         };
       } else {
-        debugPrint(e.message);
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -184,30 +178,5 @@ class LotoService {
         };
       }
     }
-  }
-}
-
-class LoggingInterceptor extends Dio.Interceptor {
-  @override
-  void onRequest(
-      Dio.RequestOptions options, Dio.RequestInterceptorHandler handler) {
-    debugPrint("REQUEST[${options.method}] => PATH: ${options.path}");
-    debugPrint("Request Header: ${options.headers}");
-    super.onRequest(options, handler);
-  }
-
-  @override
-  void onResponse(
-      Dio.Response response, Dio.ResponseInterceptorHandler handler) {
-    debugPrint(
-        "RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}");
-    super.onResponse(response, handler);
-  }
-
-  @override
-  void onError(Dio.DioError err, Dio.ErrorInterceptorHandler handler) {
-    debugPrint(
-        "ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}");
-    super.onError(err, handler);
   }
 }

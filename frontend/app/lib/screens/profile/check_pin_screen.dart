@@ -1,5 +1,4 @@
 import 'package:app/main.dart';
-import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:app/widgets/login/key_board_key.dart';
@@ -14,7 +13,7 @@ class CheckPinScreen extends StatefulWidget {
   State<CheckPinScreen> createState() => _CheckPinScreenState();
 }
 
-class _CheckPinScreenState extends State<CheckPinScreen> with WidgetsBindingObserver {
+class _CheckPinScreenState extends State<CheckPinScreen> {
   final _storage = const FlutterSecureStorage();
   String pin = '';
   String content = '';
@@ -23,26 +22,10 @@ class _CheckPinScreenState extends State<CheckPinScreen> with WidgetsBindingObse
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addObserver(this);
     pin = '';
     content = '기존 암호를 입력해 주세요.';
     failCount = 0;
   }
-
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
-  //
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.paused ||
-  //       state == AppLifecycleState.detached) {
-  //     Provider.of<AppLockState>(context, listen: false)
-  //         .lock(ModalRoute.of(context)!.settings.name!);
-  //   }
-  // }
 
   final keys = [
     ['1', '2', '3'],
@@ -135,7 +118,7 @@ class _CheckPinScreenState extends State<CheckPinScreen> with WidgetsBindingObse
       gradient: LinearGradient(
         colors: [
           Colors.white.withOpacity(0.5),
-          Color.fromRGBO(215, 223, 243, 0.5)
+          const Color.fromRGBO(215, 223, 243, 0.5)
         ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
@@ -144,7 +127,7 @@ class _CheckPinScreenState extends State<CheckPinScreen> with WidgetsBindingObse
   }
 
   gradient2() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
         colors: [
           Color.fromRGBO(215, 223, 243, 0.5),
@@ -157,7 +140,7 @@ class _CheckPinScreenState extends State<CheckPinScreen> with WidgetsBindingObse
   }
 
   gradient3() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
         colors: [
           Color.fromRGBO(175, 190, 240, 0.5),
@@ -170,7 +153,7 @@ class _CheckPinScreenState extends State<CheckPinScreen> with WidgetsBindingObse
   }
 
   gradient4() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
         colors: [Color.fromRGBO(135, 157, 238, 0.5), blue100],
         begin: Alignment.topCenter,
@@ -220,9 +203,9 @@ class _CheckPinScreenState extends State<CheckPinScreen> with WidgetsBindingObse
 
   renderText() {
     TextStyle styleTitle =
-        TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
+        const TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
 
-    TextStyle styleContent = TextStyle(
+    TextStyle styleContent = const TextStyle(
         fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black);
 
     return Expanded(
@@ -234,14 +217,14 @@ class _CheckPinScreenState extends State<CheckPinScreen> with WidgetsBindingObse
               '암호 입력',
               style: styleTitle,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
               content,
               style: styleContent,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Row(
@@ -253,7 +236,7 @@ class _CheckPinScreenState extends State<CheckPinScreen> with WidgetsBindingObse
                     style: TextStyle(
                       color: pin.length >= i
                           ? blue100
-                          : Color.fromRGBO(227, 227, 227, 1),
+                          : const Color.fromRGBO(227, 227, 227, 1),
                       fontWeight: FontWeight.bold,
                       fontSize: 50.0,
                     ),

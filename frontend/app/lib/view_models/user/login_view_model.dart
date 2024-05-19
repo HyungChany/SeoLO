@@ -5,14 +5,15 @@ import 'package:flutter/material.dart';
 class LoginViewModel extends ChangeNotifier {
   final UserService _userService = UserService();
 
-  LoginModel _loginData = LoginModel(
-      username: '', password: '', companyCode: '');
+  LoginModel _loginData =
+      LoginModel(username: '', password: '', companyCode: '');
   bool _isFocused = false;
   bool _isLoading = false;
   String? _errorMessage;
   int? _statusCode;
 
   int? get statusCode => _statusCode;
+
   String get userName => _loginData.username;
 
   String get password => _loginData.password;
@@ -26,21 +27,24 @@ class LoginViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   void setUsername(String value) {
-    _loginData = LoginModel(username: value,
+    _loginData = LoginModel(
+        username: value,
         password: _loginData.password,
         companyCode: _loginData.companyCode);
     notifyListeners();
   }
 
   void setPassword(String value) {
-    _loginData = LoginModel(username: _loginData.username,
+    _loginData = LoginModel(
+        username: _loginData.username,
         password: value,
         companyCode: _loginData.companyCode);
     notifyListeners();
   }
 
   void setCompanyCode(String value) {
-    _loginData = LoginModel(username: _loginData.username,
+    _loginData = LoginModel(
+        username: _loginData.username,
         password: _loginData.companyCode,
         companyCode: value);
     notifyListeners();

@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class ScanResultTile extends StatefulWidget {
-  const ScanResultTile(
-      {super.key, required this.result, this.onTap,});
+  const ScanResultTile({
+    super.key,
+    required this.result,
+    this.onTap,
+  });
 
   final ScanResult result;
   final VoidCallback? onTap;
@@ -100,9 +103,11 @@ class _ScanResultTileState extends State<ScanResultTile> {
   Widget build(BuildContext context) {
     return ExpansionTile(
       title: _buildTitle(context),
-      leading: const Icon(Icons.lock, color: blue100,),
+      leading: const Icon(
+        Icons.lock,
+        color: blue100,
+      ),
       trailing: _buildConnectButton(context),
-
     );
   }
 }

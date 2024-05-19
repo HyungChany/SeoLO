@@ -1,5 +1,4 @@
 import 'package:app/view_models/core/core_issue_view_model.dart';
-import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,28 +14,7 @@ class DaySelect extends StatefulWidget {
   State<DaySelect> createState() => _DaySelectState();
 }
 
-class _DaySelectState extends State<DaySelect> with WidgetsBindingObserver {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addObserver(this);
-  // }
-
-  // @override
-  // void dispose() {
-  //   WidgetsBinding.instance.removeObserver(this);
-  //   super.dispose();
-  // }
-  //
-  // @override
-  // void didChangeAppLifecycleState(AppLifecycleState state) {
-  //   if (state == AppLifecycleState.paused ||
-  //       state == AppLifecycleState.detached) {
-  //     Provider.of<AppLockState>(context, listen: false)
-  //         .lock(ModalRoute.of(context)!.settings.name!);
-  //   }
-  // }
-
+class _DaySelectState extends State<DaySelect> {
   String endDay = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
   @override

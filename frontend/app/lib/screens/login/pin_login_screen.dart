@@ -1,5 +1,4 @@
 import 'package:app/main.dart';
-import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:app/widgets/login/fingerprint_auth.dart';
@@ -48,14 +47,10 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
   }
 
   void authenticateWithBiometrics() async {
-    final stateVM = Provider.of<AppLockState>(context, listen: false);
     bool isAuthenticated = await FingerprintAuth.authenticate();
     // 지문인식 성공
     if (isAuthenticated) {
-      stateVM.unlock();
-      if (mounted) {
-        Navigator.pushNamedAndRemoveUntil(context, stateVM.lastRoute, (route) => false);
-      }
+      Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
       setState(() {
         pin = '';
         failCount = 0;
@@ -67,12 +62,11 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
     ['1', '2', '3'],
     ['4', '5', '6'],
     ['7', '8', '9'],
-    [Icon(Icons.fingerprint), '0', Icon(Icons.backspace_outlined)],
+    [const Icon(Icons.fingerprint), '0', const Icon(Icons.backspace_outlined)],
   ];
 
   onNumberPress(val) {
     final viewModel = Provider.of<PinLoginViewModel>(context, listen: false);
-    final stateVM = Provider.of<AppLockState>(context, listen: false);
     setState(() {
       pin = pin + val;
       viewModel.setPin(pin);
@@ -82,8 +76,8 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
       if (!viewModel.isLoading) {
         viewModel.pinLogin().then((_) {
           if (viewModel.errorMessage == null) {
-            stateVM.unlock();
-            Navigator.pushNamedAndRemoveUntil(context, stateVM.lastRoute, (route) => false);
+            Navigator.pushNamedAndRemoveUntil(
+                context, '/main', (route) => false);
             setState(() {
               pin = '';
               failCount = 0;

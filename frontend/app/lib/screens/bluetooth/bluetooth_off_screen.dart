@@ -21,16 +21,19 @@ class BluetoothOffScreen extends StatelessWidget {
   Widget buildTurnOnButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child: CommonTextButton(text: '블루투스 켜기', onTap: () async {
-        try {
-          if (Platform.isAndroid) {
-            await FlutterBluePlus.turnOn();
-            Navigator.pushReplacementNamed(context, '/bluetooth');
+      child: CommonTextButton(
+        text: '블루투스 켜기',
+        onTap: () async {
+          try {
+            if (Platform.isAndroid) {
+              await FlutterBluePlus.turnOn();
+              Navigator.pushReplacementNamed(context, '/bluetooth');
+            }
+          } catch (e) {
+            debugPrint("Error Turning On: $e");
           }
-        } catch (e) {
-          debugPrint("Error Turning On: $e");
-        }
-      },),
+        },
+      ),
     );
   }
 
@@ -41,8 +44,13 @@ class BluetoothOffScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text('블루투스를 활성화해 주세요.', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-            SizedBox(height: 20,),
+            const Text(
+              '블루투스를 활성화해 주세요.',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             buildBluetoothOffIcon(context),
             if (Platform.isAndroid) buildTurnOnButton(context),
           ],

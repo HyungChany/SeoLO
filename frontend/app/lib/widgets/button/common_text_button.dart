@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../../main.dart';
 
 class CommonTextButton extends StatelessWidget {
-  final String text; // 버튼 내용
-  final double? width; // 너비
-  final double? height; // 높이
-  final VoidCallback onTap; // 클릭 이벤트
+  final String text;
+  final double? width;
+  final double? height;
+  final VoidCallback onTap;
 
   const CommonTextButton({
     super.key,

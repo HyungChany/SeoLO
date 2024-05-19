@@ -55,14 +55,15 @@ class _CommonCardState extends State<CommonCard> {
             }).toList(),
           ),
         ),
-        if (!widget.center) Container(
-          width: MediaQuery.of(context).size.width * 0.35,
-          height: MediaQuery.of(context).size.height * 0.25,
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(10.0),
+        if (!widget.center)
+          Container(
+            width: MediaQuery.of(context).size.width * 0.35,
+            height: MediaQuery.of(context).size.height * 0.25,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
           ),
-        ),
       ],
     );
   }

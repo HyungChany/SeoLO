@@ -58,10 +58,10 @@ class _MainWelcomeBannerState extends State<MainWelcomeBanner> {
                 fontSize: 23, fontWeight: FontWeight.bold, color: Colors.black),
             children: [
           (viewModel.isLoading || viewModel.myInfoModel == null)
-              ? TextSpan(text: '           ')
+              ? const TextSpan(text: '           ')
               : TextSpan(
                   text: viewModel.myInfoModel!.employeeName,
-                  style: TextStyle(color: blue400)),
+                  style: const TextStyle(color: blue400)),
           const TextSpan(text: '님, 오늘도 '),
           const TextSpan(text: '서로 ', style: TextStyle(color: safetyBlue)),
           const TextSpan(text: '지켰나요?')
@@ -80,7 +80,7 @@ class _MainWelcomeBannerState extends State<MainWelcomeBanner> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           content(),
-          Text(' '),
+          const Text(' '),
           Image.asset(
             'assets/images/seolo_character.png',
             width: 30,
