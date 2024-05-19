@@ -40,6 +40,11 @@
 - KY-003 : 마그네틱 센터 3.3V 
 ```
 
+### 내부 사진
+![내부사진 1](../embedded/SEOLO/LOCK%20(1).jpg)
+![내부사진 2](../embedded/SEOLO/LOCK%20(2).jpg)
+![내부사진 3](../embedded/SEOLO/LOCK%20(3).jpg)
+
 ### 사용 라이브러리
 ```
 // 내장 라이브러리
