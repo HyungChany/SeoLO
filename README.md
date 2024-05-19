@@ -1,4 +1,5 @@
 # SEOLO(Safe+Easy Our LOTO)
+![SEOLO banner](docs/images/SEOLO%20banner.png)
 > **현직자들이 원하는, 현직자들을 위한 새로운 로토 서비스**<br>
 서로에서 작업자들의 안전을 기원합니다.
 
@@ -8,8 +9,8 @@
 [3. 인증 로직](#3-인증-로직)<br>
 [4. 아키텍처](#4-아키텍처)<br>
 [5. 사용 예시](#5-사용-예시)<br>
-[6. 포팅 매뉴얼](#6-설치)<br>
-[7. 플랫폼별 설명](#7-플랫폼별)<br>
+[6. 포팅 매뉴얼](#6-개발-설정)<br>
+[7. 플랫폼별 설명](#7-플랫폼별-설명)<br>
 [8. 팀원](#8-팀원)<br>
 [9. UCC](#9-ucc)<br>
 
@@ -53,12 +54,12 @@
 ## 7. 플랫폼별 설명
 > 플랫폼별 프로젝트 설명입니다. 수행 내용과 기여, 폴더 등에 대한 설명을 담고 있습니다.
 
-- BE - SEOLO 
-- BE - news
-- EMBEDDED
-- FE - WEB
-- FE - APP
-- FE - WATCH
+- BE - seolo
+- [BE - news](backend/news/README_BE_news.md)
+- [EMBEDDED](embedded/README_EM.md)
+- FE - web
+- FE - app
+- FE - watch
 
 ## 8. 팀원
 |이름|역할|
