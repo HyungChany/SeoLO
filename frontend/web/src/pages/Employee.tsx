@@ -112,6 +112,7 @@ const CommonBox = styled.div`
   justify-content: space-between;
   flex-direction: column;
   gap: 1rem;
+  font-family: NYJGothicEB;
 `;
 const ButtonBox = styled.div`
   display: flex;
@@ -136,6 +137,7 @@ const Content = styled.div`
   font-size: 1.5rem;
   font-weight: 400;
   color: ${Color.BLACK};
+  font-family: NYJGothicM;
 `;
 const SearchBox = styled.div`
   width: 100%;

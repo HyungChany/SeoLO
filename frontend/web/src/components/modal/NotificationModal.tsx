@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { notificationEventsState } from '@/recoil/sseState.tsx';
 import battery20 from '/battery20.png';
 import battery40 from '/battery40.png';
@@ -14,6 +14,16 @@ const OuterContainer = styled.div`
   height: 100%;
   position: relative;
 `;
+const fadeIn = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
 
 const ModalContainer = styled.div`
   width: 260px;
@@ -24,6 +34,7 @@ const ModalContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  animation: ${fadeIn} 0.5s ease-in-out;
 `;
 
 const AdditionalImage = styled.img`
