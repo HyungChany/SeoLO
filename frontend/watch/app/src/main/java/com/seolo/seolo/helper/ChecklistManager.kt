@@ -24,13 +24,13 @@ object ChecklistManager {
         )
     }
 
-    // 체크리스트 데이터를 저장하는 메서드
+    // 체크리스트 데이터 저장
     fun setChecklist(context: Context, checklist: List<ChecklistItem>) {
         val jsonData = Gson().toJson(checklist)
         getPreferences(context).edit().putString(PREF_CHECKLIST, jsonData).apply()
     }
 
-    // 저장된 체크리스트 데이터를 가져오는 메서드
+    // 저장된 체크리스트 데이터 가져오기
     fun getChecklist(context: Context): List<ChecklistItem>? {
         val jsonData = getPreferences(context).getString(PREF_CHECKLIST, null)
         return jsonData?.let {
@@ -38,7 +38,7 @@ object ChecklistManager {
         }
     }
 
-    // 저장된 체크리스트 데이터를 삭제하는 메서드
+    // 저장된 체크리스트 데이터를 삭제
     fun clearChecklist(context: Context) {
         getPreferences(context).edit().remove(PREF_CHECKLIST).apply()
     }

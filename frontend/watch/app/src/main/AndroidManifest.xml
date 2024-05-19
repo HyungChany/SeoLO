@@ -27,10 +27,6 @@
             android:name="com.google.android.wearable"
             android:required="true" />
 
-        <!--
-               Set to true if your app is Standalone, that is, it does not require the handheld
-               app to run.
-        -->
         <meta-data
             android:name="com.google.android.wearable.standalone"
             android:value="true" />
@@ -59,7 +55,13 @@
         </activity>
 
         <activity
-            android:name=".presentation.LockUnLockActivity"
+            android:name=".presentation.LockCompleteActivity"
+            android:exported="false"
+            android:taskAffinity=""
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+
+        <activity
+            android:name=".presentation.UnLockCompleteActivity"
             android:exported="false"
             android:taskAffinity=""
             android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />

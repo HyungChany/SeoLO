@@ -17,6 +17,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -83,6 +84,20 @@ class BluetoothMainActivity : AppCompatActivity() {
                 deviceAdapter.updateDevices(newDevices)
             }
         }
+
+        // 최상위 레이아웃에 클릭 리스너 추가
+        val mainLayout = findViewById<ConstraintLayout>(R.id.mainLayout)
+        mainLayout.setOnClickListener {
+            // 블루투스 재탐색 시작
+            if (!bluetoothAdapter.checkBluetoothPermissions()) {
+                bluetoothAdapter.requestBluetoothPermissions()
+            } else {
+                bluetoothAdapter.startDiscoveryForSpecificDevices("SEOLO LOCK") { newDevices ->
+                    deviceAdapter.updateDevices(newDevices)
+                }
+            }
+        }
+
     }
 
     // 기기 선택 시 호출되는 함수
@@ -103,7 +118,7 @@ class BluetoothMainActivity : AppCompatActivity() {
         // Bluetooth 연결 권한 확인
         if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
             val deviceName = device.name ?: "Unknown Device"
-            Toast.makeText(this@BluetoothMainActivity, "$deviceName 와 연결중입니다.", Toast.LENGTH_LONG)
+            Toast.makeText(this@BluetoothMainActivity, "$deviceName 와 연결을 \n 시도하고 있습니다.", Toast.LENGTH_LONG)
                 .show()
 
             // Bluetooth GATT로 기기 연결 시작 (BluetoothDevice.TRANSPORT_LE 사용)
@@ -147,7 +162,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                     gatt?.close()
                     bluetoothGatt = null
                     Handler(Looper.getMainLooper()).postDelayed({
-                        gatt?.device?.let { connectToDevice(it) }  // 3초 후 재시도
+                        gatt?.device?.let { connectToDevice(it) }
                     }, 3000)
                 }
             }
@@ -164,7 +179,6 @@ class BluetoothMainActivity : AppCompatActivity() {
 
                 if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     // 권한이 있을 때
-                    // 데이터 쓰기 포맷(회사코드,토큰,머신ID,유저ID,자물쇠UID,명령어)
                     val companyCode =
                         TokenManager.getCompanyCode(this@BluetoothMainActivity) // 회사 코드 가져오기
                     val token =
@@ -174,6 +188,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                     val userId = TokenManager.getUserId(this@BluetoothMainActivity) // 사용자 Id 가져오기
                     val lotoUid = LotoManager.getLotoUid(this@BluetoothMainActivity) // 자물쇠 Uid 가져오기
 
+                    // 데이터 쓰기 포맷(회사코드,토큰,머신ID,유저ID,자물쇠UID,명령어)
                     val sendData = if (lotoUid == "") {
                         "$companyCode,$token,$machineId,$userId,$lotoUid,INIT"
                     } else {
@@ -194,10 +209,10 @@ class BluetoothMainActivity : AppCompatActivity() {
                     descriptor?.value = BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
                     gatt?.writeDescriptor(descriptor)
 
-                    // 1초 후 onCharacteristicChanged 메서드 호출
+                    // 5초 후 onCharacteristicChanged 메서드 호출
                     Handler(Looper.getMainLooper()).postDelayed({
                         onCharacteristicChanged(gatt, char)
-                    }, 1000)
+                    }, 5000)
 
                 } else {
                     // 권한이 없을 때 사용자에게 권한 요청
@@ -215,7 +230,7 @@ class BluetoothMainActivity : AppCompatActivity() {
             super.onCharacteristicWrite(gatt, characteristic, status)
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.d(
-                    "데이터 쓰기 성공_Main", "${characteristic?.value?.toString(StandardCharsets.UTF_8)}"
+                    "데이터 읽기 쓰기 성공_Main", "${characteristic?.value?.toString(StandardCharsets.UTF_8)}"
                 )
             }
         }
@@ -237,18 +252,30 @@ class BluetoothMainActivity : AppCompatActivity() {
             // 데이터 읽기 포맷(명령어,자물쇠Uid,머신Id,배터리잔량,유저Id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
             val lotoUserId = TokenManager.getUserId(this@BluetoothMainActivity)
+
             // 송신 데이터와 수신 데이터가 같으면 리턴
-            if (receivedData == lastSentData && lotoUserId == null) return
+            if (receivedData == lastSentData) return
             Log.d("수신데이터_Main", "Data received: $receivedData")
 
             receivedData?.let {
                 val dataParts = it.split(",")
-                if (dataParts.size >= 4) {
+                if (dataParts.size >= 4 && (lotoUserId != null)) {
                     val statusCode = dataParts[0]
                     val lotoUid = dataParts[1]
                     val machineId = dataParts[2]
                     val batteryInfo = dataParts[3]
+
+                    // LotoManager에 데이터 설정
+                    LotoManager.setLotoStatusCode(this@BluetoothMainActivity, statusCode!!)
+                    LotoManager.setLotoUid(this@BluetoothMainActivity, lotoUid)
+                    LotoManager.setLotoMachineId(this@BluetoothMainActivity, machineId)
+                    LotoManager.setLotoBatteryInfo(this@BluetoothMainActivity, batteryInfo)
+                    LotoManager.setLotoUserId(this@BluetoothMainActivity, lotoUserId)
+
+                    Log.d("수신데이터_Main체크", "statusCode: $statusCode, lotoUid: $lotoUid")
+
                     // 자물쇠 상태 확인 명령어가 CHECK일 때(자물쇠가 잠겨있는데 그냥 일단 찍어본 경우)
+                    Log.d("체크", "$statusCode, $lotoUid, $machineId, $batteryInfo, $lotoUserId")
                     if (statusCode == "CHECK") {
                         Handler(Looper.getMainLooper()).post {
                             Toast.makeText(
@@ -277,28 +304,17 @@ class BluetoothMainActivity : AppCompatActivity() {
                             ).show()
                         }
                     } else if (statusCode == "UNLOCK") {
-                        Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(
-                                this@BluetoothMainActivity,
-                                "자물쇠 잠금을 해제 합니다. \n 배터리 잔량: $batteryInfo",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            // 백으로 언락됐다는 API 연결 보내고 LotoManager 초기화
-                            unlockCoreLogic {
-                                LotoManager.clearLoto(this@BluetoothMainActivity)
+                        Log.d("수신데이터_Main", "UNLOCK 상태 수신됨")
+                        unlockCoreLogic {
+                            Log.d("수신데이터_Main", "unlockCoreLogic 호출됨")
+                            LotoManager.clearLoto(this@BluetoothMainActivity)
+                            Handler(Looper.getMainLooper()).post {
                                 val intent =
-                                    Intent(this@BluetoothMainActivity, MainActivity::class.java)
+                                    Intent(this@BluetoothMainActivity, UnLockCompleteActivity::class.java)
                                 startActivity(intent)
                                 finish()
                             }
                         }
-                        LotoManager.clearLoto(this@BluetoothMainActivity)
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            val intent =
-                                Intent(this@BluetoothMainActivity, MainActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }, 2500)
                     }
                 }
             }
@@ -306,7 +322,7 @@ class BluetoothMainActivity : AppCompatActivity() {
     }
 
     // API 요청 함수
-    private fun unlockCoreLogic(function: () -> Unit) {
+    private fun unlockCoreLogic(onCompleted: () -> Unit) {
         val authorization = "Bearer " + TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)
         val deviceType = "watch"
@@ -322,7 +338,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                 }
             }
         }
-
+        Log.d("unlock call 직전", "언락 콜 직전")
         val call = unlockInfo?.let {
             RetrofitClient.unlockService.sendUnlockInfo(
                 authorization = authorization,
@@ -331,7 +347,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                 unlockInfo = it
             )
         }
-
+        Log.d("unlock 응답 직전", "언락 응답 직전")
         call?.enqueue(object : Callback<UnlockResponse> {
             override fun onResponse(
                 call: Call<UnlockResponse>, response: Response<UnlockResponse>
@@ -340,29 +356,26 @@ class BluetoothMainActivity : AppCompatActivity() {
                     val unlockResponse = response.body()
                     val message = unlockResponse?.message
                     Log.d("API 요청 성공_Main", "API 요청 성공: $message")
-                    runOnUiThread {
-                        Toast.makeText(
-                            this@BluetoothMainActivity, message, Toast.LENGTH_LONG
-                        ).show()
-                    }
                 } else {
-                    val errorMessage = response.body()?.message
+                    val errorMessage = response.message()
                     Log.d("API 요청 실패_Main", "API 요청 실패: $errorMessage")
                     runOnUiThread {
                         Toast.makeText(
-                            this@BluetoothMainActivity, errorMessage, Toast.LENGTH_LONG
+                            this@BluetoothMainActivity, "네트워크 연결을 다시 한 번 확인하세요.", Toast.LENGTH_LONG
                         ).show()
                     }
                 }
+                onCompleted()
             }
 
             override fun onFailure(call: Call<UnlockResponse>, t: Throwable) {
-                Log.d("API_CALL", "Error: ${t.message}")
+                Log.d("API 요청 실패_Main", "Error: ${t.message}")
                 runOnUiThread {
                     Toast.makeText(
-                        this@BluetoothMainActivity, "Error: ${t.message}", Toast.LENGTH_SHORT
+                        this@BluetoothMainActivity, "네트워크 연결을 다시 한 번 확인하세요.", Toast.LENGTH_SHORT
                     ).show()
                 }
+                onCompleted()
             }
         })
     }

@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
 
-// LOTOInfoFragment 클래스 정의
 class LOTOInfoFragment : Fragment() {
     // 제목과 내용을 저장하는 변수 선언
     private var titleText: String? = null
@@ -28,7 +27,6 @@ class LOTOInfoFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        // work_list_card_layout 레이아웃을 inflate하여 View 객체 생성
         val view = inflater.inflate(R.layout.work_list_card_layout, container, false)
         // View 내부의 제목과 내용 TextView에 값 설정
         view.findViewById<TextView>(R.id.TitleView).text = titleText

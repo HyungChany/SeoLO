@@ -4,7 +4,11 @@ data class TokenResponse(
     val userId: String,
     val username: String,
     val companyCode: String,
-    val issuedToken: IssuedToken
+    val codeStatus: String,
+    val issuedToken: IssuedToken,
+    val workingLockerUid: String?,
+    val workingMachineId: String?,
+    val issuedCoreToken: String?
 )
 
 data class IssuedToken(

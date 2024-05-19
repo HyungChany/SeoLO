@@ -20,7 +20,6 @@ import retrofit2.Response
 import sh.tyy.wheelpicker.core.WheelPickerRecyclerView
 
 class FacilityActivity : AppCompatActivity() {
-    // 필드 초기화
     private lateinit var facilities: ArrayList<FacilityItem>
     private var selectedFacilityId: String? = null
 
@@ -66,7 +65,7 @@ class FacilityActivity : AppCompatActivity() {
         }
     }
 
-    // 기계 목록을 가져오는 메서드
+    // 기계 목록을 가져오기
     private fun getMachines(facilityId: String) {
         val token = TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)
