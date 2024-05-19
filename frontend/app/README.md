@@ -1,4 +1,4 @@
-## MVVM 구조를 활용한 개발
+## MVVM 구조를 활용한 개발 + 파일 구조
 
 ### model
 애플리케이션의 데이터와 비즈니스 로직을 담당. 모델은 데이터의 저장, 검색, 수정 등을 처리하며, 데이터베이스, 웹 서비스 호출 등 백엔드와의 통신을 담당.
@@ -129,6 +129,15 @@
  ┃ ┃ ┗ 📜icon.png
  ```
 
+## 주요 기능
+- ID 로그인 / PIN 로그인
+- 안전 뉴스 조회
+- LOTO 작업 내역 작성
+- BLE 통신을 통한 자물쇠 잠금 / 열림
+- 잠겨있는 자물쇠의 작업 내역 조회
+- 나의 LOTO 작업 내역 리스트 확인
+- LOTO 절차 확인
+
  ## bluetooth (BLE)
 
 사용한 package
@@ -246,4 +255,19 @@ if (_receivedValues[0] == 'WRITED' &&
 
 
 ## pin login
-pin login package가 있지만 ui/ux를 위해 직접 구현
+pin login package가 있지만 ui/ux를 위해 직접 구현 + 지문인식 기능
+```
+  void checkBiometricAvailability() async {
+    // 지문인식을 지원하는 기기인지 확인
+    bool isBiometricAvailable = await FingerprintAuth.hasBiometrics();
+    if (isBiometricAvailable) {
+      List<BiometricType> availableBiometrics =
+          await FingerprintAuth.getBiometrics();
+      // 지문이 등록되어 있다면
+      if (availableBiometrics.isNotEmpty) {
+        // 지문인식 진행
+        authenticateWithBiometrics();
+      } else {}
+    } else {}
+  }
+```
