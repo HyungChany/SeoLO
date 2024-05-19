@@ -255,9 +255,12 @@ const Equipment = () => {
   const queryClient = useQueryClient();
   const { mutate: machineMutate } = useMutation({
     mutationFn: MachineRegistration,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['machineList'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['machineList'] });
+      alert('장비 등록에 성공하였습니다');
+    },
   });
+
   const handleSubmit = () => {
     if (dateError) {
       alert(dateError);
