@@ -20,7 +20,7 @@ export const MachineRegistration = async (machineData: MachinesType) => {
         'Device-Type': 'web',
       },
     });
-    alert('장비등록에 성공하였습니다.');
+
     return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
