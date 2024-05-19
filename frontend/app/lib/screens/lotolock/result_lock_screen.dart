@@ -12,26 +12,26 @@ class ResultLockScreen extends StatefulWidget {
 
 class _ResultLockScreenState extends State<ResultLockScreen>
     with WidgetsBindingObserver {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      Provider.of<AppLockState>(context, listen: false)
-          .lock(ModalRoute.of(context)!.settings.name!);
-    }
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addObserver(this);
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   WidgetsBinding.instance.removeObserver(this);
+  //   super.dispose();
+  // }
+  //
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.paused ||
+  //       state == AppLifecycleState.detached) {
+  //     Provider.of<AppLockState>(context, listen: false)
+  //         .lock(ModalRoute.of(context)!.settings.name!);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

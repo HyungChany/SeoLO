@@ -23,26 +23,26 @@ class _CheckPinScreenState extends State<CheckPinScreen> with WidgetsBindingObse
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    // WidgetsBinding.instance.addObserver(this);
     pin = '';
     content = '기존 암호를 입력해 주세요.';
     failCount = 0;
   }
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      Provider.of<AppLockState>(context, listen: false)
-          .lock(ModalRoute.of(context)!.settings.name!);
-    }
-  }
+  // @override
+  // void dispose() {
+  //   WidgetsBinding.instance.removeObserver(this);
+  //   super.dispose();
+  // }
+  //
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.paused ||
+  //       state == AppLifecycleState.detached) {
+  //     Provider.of<AppLockState>(context, listen: false)
+  //         .lock(ModalRoute.of(context)!.settings.name!);
+  //   }
+  // }
 
   final keys = [
     ['1', '2', '3'],

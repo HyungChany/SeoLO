@@ -20,7 +20,7 @@ class _ChecklistScreenState extends State<ChecklistScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    // WidgetsBinding.instance.addObserver(this);
     final viewModel = Provider.of<ChecklistViewModel>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       viewModel.loadInitialData().then((_) {
@@ -55,20 +55,20 @@ class _ChecklistScreenState extends State<ChecklistScreen>
     });
   }
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      Provider.of<AppLockState>(context, listen: false)
-          .lock(ModalRoute.of(context)!.settings.name!);
-    }
-  }
+  // @override
+  // void dispose() {
+  //   WidgetsBinding.instance.removeObserver(this);
+  //   super.dispose();
+  // }
+  //
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.paused ||
+  //       state == AppLifecycleState.detached) {
+  //     Provider.of<AppLockState>(context, listen: false)
+  //         .lock(ModalRoute.of(context)!.settings.name!);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

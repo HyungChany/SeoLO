@@ -20,25 +20,25 @@ class _ChangePinScreenState extends State<ChangePinScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    // WidgetsBinding.instance.addObserver(this);
     pin = '';
     content = '새로운 암호를 입력해 주세요.';
   }
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      Provider.of<AppLockState>(context, listen: false)
-          .lock(ModalRoute.of(context)!.settings.name!);
-    }
-  }
+  // @override
+  // void dispose() {
+  //   WidgetsBinding.instance.removeObserver(this);
+  //   super.dispose();
+  // }
+  //
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.paused ||
+  //       state == AppLifecycleState.detached) {
+  //     Provider.of<AppLockState>(context, listen: false)
+  //         .lock(ModalRoute.of(context)!.settings.name!);
+  //   }
+  // }
 
   final keys = [
     ['1', '2', '3'],

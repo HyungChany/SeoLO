@@ -48,11 +48,14 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
   }
 
   void authenticateWithBiometrics() async {
+    final stateVM = Provider.of<AppLockState>(context, listen: false);
     bool isAuthenticated = await FingerprintAuth.authenticate();
     // 지문인식 성공
     if (isAuthenticated) {
-      Provider.of<AppLockState>(context, listen: false).unlock();
-      Navigator.pushReplacementNamed(context, Provider.of<AppLockState>(context, listen: false).lastRoute);
+      stateVM.unlock();
+      if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(context, stateVM.lastRoute, (route) => false);
+      }
       setState(() {
         pin = '';
         failCount = 0;
@@ -69,6 +72,7 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
 
   onNumberPress(val) {
     final viewModel = Provider.of<PinLoginViewModel>(context, listen: false);
+    final stateVM = Provider.of<AppLockState>(context, listen: false);
     setState(() {
       pin = pin + val;
       viewModel.setPin(pin);
@@ -78,8 +82,8 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
       if (!viewModel.isLoading) {
         viewModel.pinLogin().then((_) {
           if (viewModel.errorMessage == null) {
-            Provider.of<AppLockState>(context, listen: false).unlock();
-            Navigator.pushReplacementNamed(context, Provider.of<AppLockState>(context, listen: false).lastRoute);
+            stateVM.unlock();
+            Navigator.pushNamedAndRemoveUntil(context, stateVM.lastRoute, (route) => false);
             setState(() {
               pin = '';
               failCount = 0;

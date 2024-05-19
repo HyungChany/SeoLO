@@ -20,27 +20,27 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> with WidgetsB
   String? lockerUid;
   List<String> workListTitle = ['작업장', '장비 명', '작업 담당자', '종료 예상 시간', '작업 내용'];
 
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    isConnect();
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      Provider.of<AppLockState>(context, listen: false)
-          .lock(ModalRoute.of(context)!.settings.name!);
-    }
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addObserver(this);
+  //   isConnect();
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   WidgetsBinding.instance.removeObserver(this);
+  //   super.dispose();
+  // }
+  //
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.paused ||
+  //       state == AppLifecycleState.detached) {
+  //     Provider.of<AppLockState>(context, listen: false)
+  //         .lock(ModalRoute.of(context)!.settings.name!);
+  //   }
+  // }
 
   void isConnect() async {
     lockerUid = await _storage.read(key: 'locker_uid');

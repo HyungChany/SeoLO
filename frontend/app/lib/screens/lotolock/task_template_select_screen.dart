@@ -49,7 +49,7 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> wit
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    // WidgetsBinding.instance.addObserver(this);
     final viewModel = Provider.of<TaskTemplatesViewModel>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       viewModel.getTemplates().then((_) {
@@ -86,21 +86,21 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> wit
       selectName = '';
     });
   }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      Provider.of<AppLockState>(context, listen: false)
-          .lock(ModalRoute.of(context)!.settings.name!);
-    }
-  }
+  //
+  // @override
+  // void dispose() {
+  //   WidgetsBinding.instance.removeObserver(this);
+  //   super.dispose();
+  // }
+  //
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.paused ||
+  //       state == AppLifecycleState.detached) {
+  //     Provider.of<AppLockState>(context, listen: false)
+  //         .lock(ModalRoute.of(context)!.settings.name!);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

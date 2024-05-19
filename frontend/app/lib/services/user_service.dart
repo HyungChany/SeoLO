@@ -39,15 +39,28 @@ class UserService {
           await _dio.post('$baseUrl/login', data: loginModel.toJson());
       if (response.statusCode == 200) {
         String? token = response.data['issuedToken']['accessToken'];
-        String? userId = response.data['userId'].toString();
+        String? userId = response.data['userId'];
         String? companyCode = loginModel.companyCode.toString();
+        String? coreCode = response.data['codeStatus'];
+        String? lockerUid = response.data['workingLockerUid'];
+        String? machineId = response.data['workingMachineId'];
+        String? lockerToken = response.data['issuedCoreToken'];
         if (token != null) {
           await _storage.deleteAll();
           await _storage.write(key: 'token', value: token);
           await _storage.write(key: 'Company-Code', value: companyCode);
           await _storage.write(key: 'user_id', value: userId);
           await _storage.write(
-              key: 'Core-Code', value: response.data['codeStatus']);
+              key: 'Core-Code', value: coreCode);
+          if (lockerUid != null) {
+            await _storage.write(key: 'locker_uid', value: lockerUid);
+          } else {}
+          if (machineId != null) {
+            await _storage.write(key: 'machine_id', value: machineId);
+          } else {}
+          if (lockerToken != null) {
+            await _storage.write(key: 'locker_token', value: lockerToken);
+          } else {}
           return {'success': true};
         } else {
           return {

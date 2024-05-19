@@ -20,7 +20,7 @@ class _FacilitySelectScreenState extends State<FacilitySelectScreen> with Widget
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
+    // WidgetsBinding.instance.addObserver(this);
     final viewModel = Provider.of<FacilityViewModel>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<CoreIssueViewModel>(context, listen: false).fetchMyInfo();
@@ -57,20 +57,20 @@ class _FacilitySelectScreenState extends State<FacilitySelectScreen> with Widget
     });
   }
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      Provider.of<AppLockState>(context, listen: false)
-          .lock(ModalRoute.of(context)!.settings.name!);
-    }
-  }
+  // @override
+  // void dispose() {
+  //   WidgetsBinding.instance.removeObserver(this);
+  //   super.dispose();
+  // }
+  //
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   if (state == AppLifecycleState.paused ||
+  //       state == AppLifecycleState.detached) {
+  //     Provider.of<AppLockState>(context, listen: false)
+  //         .lock(ModalRoute.of(context)!.settings.name!);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
