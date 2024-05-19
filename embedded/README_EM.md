@@ -30,12 +30,14 @@
 
 ### 사용 라이브러리
 ```
+// 내장 라이브러리
 Arduino
 base64
 libb64/cdecode
 Wire
 sstream
 
+// 추가 설치 라이브러리
 ESP32_BLE_Arduino
 AccelStepper
 Preferences
@@ -44,8 +46,8 @@ Adafruit_PN532
 ```
 
 ### 기여
-- 조형찬 : NFC, MOTOR, Magnetic Sensor, C-type, 조립
-- 오유진 : BLE, Base64, AES128 (Core Logic)
+- 조형찬 : 회로도 설계, HW 설계 및 조립, NFC, MOTOR, 배터리, C-type 충전, Magnetic Sensor
+- 오유진 : BLE, Base64, AES128 (Core Logic), fritzing 작성
 - 이현비 : 3D Modeling
 - 오민상 : 회로 연결
 - 김진명 : Serial Monitor Error 탐지, base64 library 탐색 도움
