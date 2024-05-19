@@ -12,6 +12,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     project: './tsconfig.json',
+    tsconfigRootDir: __dirname,
   },
   plugins: ['react-refresh', 'import', 'react'],
   rules: {
@@ -25,14 +26,17 @@ module.exports = {
       1,
       { extensions: ['.jsx', '.js', '.ts', '.tsx'] },
     ],
-      'prettier/prettier': ['error', {
-      'endOfLine': 'auto',
-      'semi': true,
-      'singleQuote': true,
-      'printWidth': 80,
-      'tabWidth': 2,
-      'trailingComma': 'all',
-      'bracketSpacing': true
-    }],
+    'prettier/prettier': [
+      'error',
+      {
+        endOfLine: 'auto',
+        semi: true,
+        singleQuote: true,
+        printWidth: 80,
+        tabWidth: 2,
+        trailingComma: 'all',
+        bracketSpacing: true,
+      },
+    ],
   },
 };
