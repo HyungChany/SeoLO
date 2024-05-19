@@ -195,6 +195,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                               buttonText: '확인',
                               buttonClick: () {
                                 hasExecutedAlert = true;
+                                Navigator.pushReplacementNamed(context, '/bluetooth');
                               },
                             );
                           });

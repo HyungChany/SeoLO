@@ -128,3 +128,122 @@
  ┃ ┗ 📂splash
  ┃ ┃ ┗ 📜icon.png
  ```
+
+ ## bluetooth (BLE)
+
+사용한 package
+```
+flutter_blue_plus: ^1.32.5
+```
+
+bluetooth 활성화 감지
+```
+bluetooth screen의 initState시 bluetooth 상태를 감지
+
+    _adapterStateStateSubscription =
+        FlutterBluePlus.adapterState.listen((state) {
+      _adapterState = state;
+      // bluetooth가 활성화되지 않아있다면 bluetooth off screen으로 이동
+      if (_adapterState != BluetoothAdapterState.on) {
+        Navigator.pushReplacementNamed(context, '/bluetoothOff');
+      }
+      if (mounted) {
+        setState(() {});
+      }
+    });
+```
+initState시 최근 연결한 자물쇠 list를 띄움으로써 편의성 제공
+```
+    _lastScanResults = FlutterBluePlus.lastScanResults;
+
+    List<Widget> _buildLastScanResultTiles(BuildContext context) {
+    return _lastScanResults
+        .map(
+          (r) => ScanResultTile(
+            result: r,
+            onTap: () => connectToDevice(r.device),
+          ),
+        )
+        .toList();
+  }
+```
+bluetooth connect
+```
+  Future<void> connectToDevice(BluetoothDevice device) async {
+    await device.connect();
+    FlutterBluePlus.stopScan();
+    await writeToDevice(device); // 연결 되었다면 바로 데이터 송신 (write)
+  }
+```
+button click을 통해 데이터를 보낼 service와 character를 따로 지정하지 않고, 자동으로 character에 데이터를 송신하도록 지정
+```
+
+    await device.discoverServices().then((services) async {
+      for (var service in services) {
+        if (service.uuid.toString().toUpperCase() ==
+            "자물쇠 service uuid") {
+          List<BluetoothCharacteristic> characteristics =
+              service.characteristics;
+          for (var characteristic in characteristics) {
+            if (characteristic.uuid.toString().toUpperCase() ==
+                "데이터를 송신할 character uuid") {
+              bluetoothCharacteristic = characteristic;
+```
+utf-8 형식으로 데이터 송·수신
+데이터들은 flutter_secure_storage를 활용하여 관리
+```
+String message ="${companyCode ?? ''},${lockerToken ?? ''},${machineId ?? ''},${userId ?? ''},${lockerUid ?? ''},${coreCode ?? 'INIT'}";
+
+List<int> encodedMessage = utf8.encode(message);
+
+try {
+    await characteristic.write(encodedMessage, allowLongWrite: true, timeout: 30);
+    characteristic.setNotifyValue(true);
+    characteristic.read();
+    characteristic.lastValueStream.listen((value) async {
+        String receivedString = utf8.decode(value);
+        _receivedValues = receivedString.split(',');
+
+```
+응답값에서 core code에 따라 서로 다른 로직 수행 <br>
+ex) write의 경우 작업 내역을 작성하지 않은 상태이므로 작업 내역을 작성하도록 screen 이동 + 작업 내역 확인 screen에서 issue api 요청<br>
+writed의 경우 작업 내역을 작성한 상태이므로 issue api 요청 후 성공시 result
+```
+if (_receivedValues[0] == 'WRITE') {
+    Navigator.pushReplacementNamed(context, '/checklist');
+}
+
+if (_receivedValues[0] == 'WRITED' &&
+   !hasExecutedCoreIssued) {
+    hasExecutedCoreIssued = true;
+    issueVM.coreIssue().then((_) {
+    if (issueVM.errorMessage == null) {
+        writeToDevice(device);
+    } else {
+        showDialog(
+        context: context,
+        builder: (BuildContext context) {
+        return CommonDialog(
+            content: issueVM.errorMessage!,
+            buttonText: '확인',
+        );
+    });
+    }
+});
+}
+```
+데이터 전송 후 수신 전까지 _isWriting을 true로 설정하여 gif 띄움
+```
+(_isWriting == true)
+    ? Center(
+        child: Image.asset(
+        'assets/images/loading_icon.gif',
+        width: 200,
+        height: 200,
+    ))
+    : scan list
+```
+
+
+## pin login
+pin login package가 있지만 ui/ux를 위해 직접 구현

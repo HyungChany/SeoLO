@@ -9,6 +9,7 @@ class ResultLockScreen extends StatefulWidget {
   State<ResultLockScreen> createState() => _ResultLockScreenState();
 }
 
+
 class _ResultLockScreenState extends State<ResultLockScreen> {
   @override
   Widget build(BuildContext context) {
