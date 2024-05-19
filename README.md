@@ -44,17 +44,18 @@
 [인증로직으로 가기](docs/AuthLogic.md)
 
 ## 4. 아키텍처
-![아키텍처](docs/ARCHITECTURE.png)
+![아키텍처](docs/images/ARCHITECTURE.png)
 
 ## 5. 사용 예시
+
 
 ## 6. 개발 설정
 - 포팅매뉴얼
 
 ## 7. 플랫폼별 설명
-> 플랫폼별 프로젝트 설명입니다. 수행 내용과 기여, 폴더 등에 대한 설명을 담고 있습니다.
+> 플랫폼별 프로젝트 설명입니다. 폴더구조에 대한 설명과 선택적으로 기여 및 분담내용을 담고 있습니다.
 
-- BE - seolo
+- [BE - seolo](backend/README.md)
 - [BE - news](backend/news/README_BE_news.md)
 - [EMBEDDED](embedded/README_EM.md)
 - FE - web
@@ -72,4 +73,6 @@
 |조형찬|EMB, CSS|
 
 # 9. UCC
+> **위기탈출 넘버원**<br>작업자들이 점점 다치거나 사라지는데.. 그 뒤에 숨은 이야기<br><br>감독 조형찬<br> 출연 이현비, 오민상, 오정민, 김진명<br> 촬영 오유진
+
 [📹SEOLO UCC]()
