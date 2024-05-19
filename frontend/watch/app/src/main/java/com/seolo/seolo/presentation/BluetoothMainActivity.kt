@@ -296,12 +296,6 @@ class BluetoothMainActivity : AppCompatActivity() {
                         }
                     } else if (statusCode == "UNLOCK") {
                         Log.d("수신데이터_Main", "UNLOCK 상태 수신됨")
-                        Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(
-                                this@BluetoothMainActivity, "잠금 해제 요청을 처리합니다.",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
                         unlockCoreLogic {
                             Log.d("수신데이터_Main", "unlockCoreLogic 호출됨")
                             LotoManager.clearLoto(this@BluetoothMainActivity)
