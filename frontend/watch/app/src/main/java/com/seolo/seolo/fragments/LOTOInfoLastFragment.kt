@@ -59,7 +59,6 @@ class LOTOInfoLastFragment : Fragment() {
         dialog.show()
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-            issueCoreLogic()
             val intent = Intent(activity, BluetoothLOTOActivity::class.java)
             startActivity(intent)
             Handler(requireActivity().mainLooper).postDelayed({
@@ -80,45 +79,5 @@ class LOTOInfoLastFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun issueCoreLogic() {
-        val authorization = "Bearer " + TokenManager.getAccessToken(requireContext())
-        val companyCode = TokenManager.getCompanyCode(requireContext())
-        val deviceType = "watch"
-
-        val lotoInfo = LotoInfo(
-            locker_uid = "",
-            battery_info = "",
-            machine_id = SessionManager.selectedMachineId ?: "",
-            task_template_id = SessionManager.selectedTaskTemplateId ?: "",
-            task_precaution = SessionManager.selectedTaskPrecaution ?: "",
-            end_time = SessionManager.selectedDate + "T" + SessionManager.selectedTime
-        )
-
-        val call = RetrofitClient.issueService.sendLotoInfo(
-            authorization = authorization,
-            companyCode = companyCode ?: "",
-            deviceType = deviceType,
-            lotoInfo = lotoInfo
-        )
-
-        call.enqueue(object : Callback<IssueResponse> {
-            override fun onResponse(call: Call<IssueResponse>, response: Response<IssueResponse>) {
-                if (response.isSuccessful) {
-                    val issueResponse = response.body()
-                    Log.d("token_value, ", "Response.next_code: ${issueResponse?.next_code}")
-                    Log.d("token_value, ", "Response.token_value: ${issueResponse?.token_value}")
-                } else {
-                    Log.d(
-                        "Failed, ", "Failed: ${response.message()}"
-                    )
-                }
-            }
-
-            override fun onFailure(call: Call<IssueResponse>, t: Throwable) {
-                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
     }
 }

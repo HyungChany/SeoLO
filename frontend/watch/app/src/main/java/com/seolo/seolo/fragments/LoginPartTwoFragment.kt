@@ -89,7 +89,7 @@ class LoginPartTwoFragment : Fragment() {
                             )
                         }
                         tokenResponse.issuedCoreToken?.let {
-                            TokenManager.setTokenValue(
+                            LotoManager.setTokenValue(
                                 requireContext(), it
                             )
                         }
@@ -114,7 +114,6 @@ class LoginPartTwoFragment : Fragment() {
                 Toast.makeText(
                     requireContext(), "네트워크 연결을 다시 한 번 확인 해주세요.", Toast.LENGTH_SHORT
                 ).show()
-
             }
         })
     }
