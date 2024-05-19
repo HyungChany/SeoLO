@@ -21,7 +21,7 @@ const LinksContainer = styled.div`
   gap: 5rem;
 `;
 
-const Link = styled.a`
+const Link = styled.div`
   font-family: 'NYJGothicR', sans-serif;
   font-style: normal;
   font-weight: 300;
@@ -48,9 +48,9 @@ const Copyright = styled.div`
 const Footer = () => (
   <FooterContainer>
     <LinksContainer>
-      <Link href="#">이용약관</Link>
-      <Link href="#">개인정보 처리 방침</Link>
-      <Link href="#">기술 지원</Link>
+      <Link>이용약관</Link>
+      <Link>개인정보 처리 방침</Link>
+      <Link>기술 지원</Link>
     </LinksContainer>
     <Copyright>©SeoLo, All right reserved</Copyright>
   </FooterContainer>
