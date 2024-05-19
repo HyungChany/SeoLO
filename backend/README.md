@@ -1,3 +1,7 @@
+# 🕸 ERD
+![erd](../docs/images/erd.png)
+
+
 # 📁메인 백엔드 서버 디렉토리 구조
 
 ## 리소스
