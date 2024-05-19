@@ -41,13 +41,15 @@
 ## 3. 인증 로직
 > 인증 로직으로, 서비스를 위한 주요 검증 내용을 담고 있습니다.
 
-[인증로직으로 가기](docs/AuthLogic.md)
+[인증로직 보러가기](docs/AuthLogic.md)
 
 ## 4. 아키텍처
 ![아키텍처](docs/images/ARCHITECTURE.png)
 
 ## 5. 사용 예시
+> 사진과 gif를 활용해 사용 예시를 보여줍니다.
 
+[사용예시 보러가기]()
 
 ## 6. 개발 설정
 - 포팅매뉴얼
@@ -58,9 +60,9 @@
 - [BE - seolo](backend/README.md)
 - [BE - news](backend/news/README_BE_news.md)
 - [EMBEDDED](embedded/README_EM.md)
-- FE - web
-- FE - app
-- FE - watch
+- [FE - web](frontend/web/README.md)
+- [FE - app](frontend/app/README.md)
+- [FE - watch](frontend/watch/README.md)
 
 ## 8. 팀원
 |이름|역할|
@@ -70,7 +72,7 @@
 |오민상|FE(WATCH), EMB(회로)|
 |오정민|FE(WEB)|
 |이현비|FE(APP)|
-|조형찬|EMB, CSS|
+|조형찬|EMB, CSS, UCC편집|
 
 # 9. UCC
 > **위기탈출 넘버원**<br>작업자들이 점점 다치거나 사라지는데.. 그 뒤에 숨은 이야기<br><br>감독 조형찬<br> 출연 이현비, 오민상, 오정민, 김진명<br> 촬영 오유진
