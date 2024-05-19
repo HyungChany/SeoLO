@@ -103,6 +103,27 @@ class BluetoothLOTOActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        val statusCode = LotoManager.getLotoStatusCode(this@BluetoothLOTOActivity)
+        if (statusCode == "WRITE") {
+            // WRITE 상태인 경우 API 호출
+            issueCoreLogic {
+                Handler(Looper.getMainLooper()).post {
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        val intent =
+                            Intent(this@BluetoothLOTOActivity, LockCompleteActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }, 1000)
+                }
+            }
+        } else {
+
+        }
+    }
+
+
     // 기기 선택 시 호출
     @RequiresApi(Build.VERSION_CODES.S)
     private fun onDeviceSelected(device: BluetoothDevice) {
@@ -183,12 +204,13 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                 if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     // 권한이 있을 때
                     val companyCode = TokenManager.getCompanyCode(this@BluetoothLOTOActivity)
-                    val token = TokenManager.getTokenValue(this@BluetoothLOTOActivity)
+                    val token = LotoManager.getTokenValue(this@BluetoothLOTOActivity)
                     val machineId = LotoManager.getLotoMachineId(this@BluetoothLOTOActivity)
                     val userId = TokenManager.getUserId(this@BluetoothLOTOActivity)
                     val lotoUid = LotoManager.getLotoUid(this@BluetoothLOTOActivity)
+                    val statusCode = LotoManager.getLotoStatusCode(this@BluetoothLOTOActivity)
                     // 데이터 쓰기 포맷(회사코드,토큰,머신ID,유저ID,자물쇠UID,명령어)
-                    val sendData = "$companyCode,$token,$machineId,$userId,$lotoUid,INIT"
+                    val sendData = "$companyCode,$token,$machineId,$userId,$lotoUid,$statusCode"
                     lastSentData = sendData
                     Log.d("데이터 쓰기_LOTO", sendData)
                     char?.setValue(sendData.toByteArray(StandardCharsets.UTF_8))
@@ -263,13 +285,13 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     val batteryInfo = dataParts[3]
 
                     // LotoManager에 데이터 설정
-                    LotoManager.setLotoStatusCode(this@BluetoothLOTOActivity, statusCode!!)
+                    LotoManager.setLotoStatusCode(this@BluetoothLOTOActivity, statusCode)
                     LotoManager.setLotoUid(this@BluetoothLOTOActivity, lotoUid)
                     LotoManager.setLotoMachineId(this@BluetoothLOTOActivity, machineId)
                     LotoManager.setLotoBatteryInfo(this@BluetoothLOTOActivity, batteryInfo)
                     LotoManager.setLotoUserId(this@BluetoothLOTOActivity, lotoUserId)
-                    Log.d("수신데이터_LOTO체크", "statusCode: $statusCode, lotoUid: $lotoUid")
                     if (statusCode == "WRITED") {
+
                         // WRITE 상태인 경우 API 호출
                         issueCoreLogic {
                             Handler(Looper.getMainLooper()).post {
@@ -309,6 +331,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
         val authorization = "Bearer " + TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)
         val deviceType = "watch"
+        Log.d("이슈", "dasdas")
 
         val lotoInfo = LotoManager.getLotoUid(this@BluetoothLOTOActivity)?.let {
             LotoManager.getLotoBatteryInfo(this@BluetoothLOTOActivity)?.let { batteryInfo ->
@@ -340,7 +363,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     val nextCode = issueResponse?.next_code
                     // 응답에서 token_value 저장
                     issueResponse?.token_value?.let {
-                        TokenManager.setTokenValue(this@BluetoothLOTOActivity, it)
+                        LotoManager.setTokenValue(this@BluetoothLOTOActivity, it)
                     }
                     Log.d("API_CALL_ISSUE", "response.body(): $issueResponse")
                     Log.d(
@@ -386,7 +409,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                     val char = service?.getCharacteristic(CHAR_UUID)
                     if (char != null) {
                         val companyCode = TokenManager.getCompanyCode(this)
-                        val token = TokenManager.getTokenValue(this)
+                        val token = LotoManager.getTokenValue(this)
                         val machineId = SessionManager.selectedMachineId
                         val userId = TokenManager.getUserId(this)
                         val lotoUid = LotoManager.getLotoUid(this)
