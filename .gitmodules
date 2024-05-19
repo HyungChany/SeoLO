@@ -1,0 +1,9 @@
+[submodule "backend/seolo/src/main/resources/confidence"]
+	path = backend/seolo/src/main/resources/confidence
+	url = https://github.com/makeUgreat/seolo-config.git
+	branch = master
+
+[submodule "backend/news/news/setting"]
+	path = backend/news/news/setting
+	url = https://github.com/makeUgreat/seolo-django-config.git
+	branch = master
