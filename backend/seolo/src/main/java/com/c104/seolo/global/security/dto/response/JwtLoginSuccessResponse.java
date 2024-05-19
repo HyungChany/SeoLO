@@ -6,18 +6,24 @@ import lombok.Getter;
 
 @Getter
 public class JwtLoginSuccessResponse {
-    private Long userId;
-    private String username;
-    private String companyCode;
-    private String codeStatus;
+    private final Long userId;
+    private final String username;
+    private final String companyCode;
+    private final String codeStatus;
     private final IssuedToken issuedToken;
+    private  String workingLockerUid;
+    private  Long workingMachineId;
+    private  String issuedCoreToken;
 
     @Builder
-    public JwtLoginSuccessResponse(IssuedToken issuedToken, String companyCode, String username, Long userId, String codeStatus) {
-        this.issuedToken = issuedToken;
-        this.companyCode = companyCode;
-        this.username = username;
+    public JwtLoginSuccessResponse(Long userId, String username, String companyCode, String codeStatus, IssuedToken issuedToken, String workingLockerUid, Long workingMachineId, String issuedCoreToken) {
         this.userId = userId;
+        this.username = username;
+        this.companyCode = companyCode;
         this.codeStatus = codeStatus;
+        this.issuedToken = issuedToken;
+        this.workingLockerUid = workingLockerUid;
+        this.workingMachineId = workingMachineId;
+        this.issuedCoreToken = issuedCoreToken;
     }
 }

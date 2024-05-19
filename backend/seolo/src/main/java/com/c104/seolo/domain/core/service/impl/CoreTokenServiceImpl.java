@@ -82,15 +82,6 @@ public class CoreTokenServiceImpl implements CoreTokenService {
                 .build();
     }
 
-    @Override
-    public void deleteTokenByUserId(Long userId) {
-        tokenRepository.findByAppUserId(userId).ifPresentOrElse(
-                tokenRepository::delete,
-                () -> {
-                    throw new CommonException(CoreTokenErrorCode.NOT_EXIST_TOKEN);
-                }
-        );
-    }
 
     @Override
     public boolean isTokenExistedForUserId(Long userId) {
@@ -125,5 +116,12 @@ public class CoreTokenServiceImpl implements CoreTokenService {
         );
 
         return token.getLocker().getUid().equals(lockerId);
+    }
+
+    @Override
+    public TokenDto getCoreTokenByUserIdIfNotNull(Long userId) {
+        return tokenRepository.findByAppUserId(userId)
+                .map(TokenDto::of)
+                .orElse(null);
     }
 }

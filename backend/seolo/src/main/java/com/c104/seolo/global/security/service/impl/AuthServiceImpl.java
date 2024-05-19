@@ -1,5 +1,9 @@
 package com.c104.seolo.global.security.service.impl;
 
+import com.c104.seolo.domain.core.dto.TokenDto;
+import com.c104.seolo.domain.core.service.CoreTokenService;
+import com.c104.seolo.domain.task.dto.TaskHistoryDto;
+import com.c104.seolo.domain.task.service.TaskHistoryService;
 import com.c104.seolo.domain.user.dto.request.UserLoginRequest;
 import com.c104.seolo.domain.user.entity.AppUser;
 import com.c104.seolo.domain.user.repository.UserRepository;
@@ -35,7 +39,9 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final JwtTokenService jwtTokenService;
+    private final CoreTokenService coreTokenService;
     private final DBUserDetailService dbUserDetailService;
+    private final TaskHistoryService taskHistoryService;
 
     @Override
     public JwtLoginSuccessResponse userLogin(UserLoginRequest userLoginRequest, String deviceType) {
@@ -47,19 +53,35 @@ public class AuthServiceImpl implements AuthService {
         ));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        log.info("로그인 성공 객체정보 : {} ", authentication.toString());
+        log.debug("로그인 성공 객체정보 : {} ", authentication.toString());
 
         // JWT토큰 발급
         IssuedToken issuedToken = jwtTokenService.issueToken(authentication, deviceType);
-        log.info("발급된 토큰 : {}", issuedToken.toString());
+        log.debug("발급된 토큰 : {}", issuedToken.toString());
 
         AppUser appUser = (AppUser) authentication.getPrincipal();
+        TokenDto coreToken = coreTokenService.getCoreTokenByUserIdIfNotNull(appUser.getId());
+
+        String workingLockerUid = null;
+        Long workingMachineId = null;
+        String isseudCoreToken = null;
+        if (coreToken != null) {
+            workingLockerUid = coreToken.getLocker().getUid();
+            isseudCoreToken = coreToken.getTokenValue();
+
+            TaskHistoryDto nowTask = taskHistoryService.getCurrentTaskHistoryByLockerIdAndUserIdIfNotNull(coreToken.getLocker().getId(), appUser.getId());
+            workingMachineId = (nowTask != null) ? nowTask.getMachineId() : null;
+        }
+
         return JwtLoginSuccessResponse.builder()
                 .userId(appUser.getId())
                 .username(userLoginRequest.getUsername())
                 .companyCode(userLoginRequest.getCompanyCode())
                 .issuedToken(issuedToken)
                 .codeStatus(appUser.getStatusCODE().name())
+                .workingLockerUid(workingLockerUid)
+                .workingMachineId(workingMachineId)
+                .issuedCoreToken(isseudCoreToken)
                 .build();
     }
 
@@ -73,7 +95,7 @@ public class AuthServiceImpl implements AuthService {
         if (token != null && token.startsWith("Bearer ")) {
             String accessToken = token.split(" ")[1];
             jwtTokenService.removeAccessToken(accessToken);
-            log.info("로그아웃으로 인한 access토큰 블랙리스트 추가 : {}", accessToken);
+            log.debug("로그아웃으로 인한 access토큰 블랙리스트 추가 : {}", accessToken);
         }
 
         SecurityContextHolder.clearContext();

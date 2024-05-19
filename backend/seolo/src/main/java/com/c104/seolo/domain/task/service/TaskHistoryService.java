@@ -12,6 +12,7 @@ public interface TaskHistoryService {
     TaskHistoryResponse getTaskHistory(Long taskId, String companyCode);
     TaskHistoryDto getLatestTaskHistoryEntityByMachineId(Long machineId);
     TaskHistoryDto getCurrentTaskHistoryByMachineIdAndUserId(Long machineId, Long userId);
+    TaskHistoryDto getCurrentTaskHistoryByLockerIdAndUserIdIfNotNull(Long lockerId, Long userId);
     TaskListResponse getTaskHistoryEntityByEmployeeNum(String employeeNum);
     void enrollTaskHistory(CCodePrincipal cCodePrincipal,
                            String lockerUid,
