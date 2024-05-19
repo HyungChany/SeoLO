@@ -13,6 +13,7 @@ import {
 } from '@/apis/Employee.ts';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+
 interface EmployeeType {
   employee_join_date: string;
   employee_leave_date: string;
@@ -70,12 +71,7 @@ const LeftBox = styled.div`
   justify-content: space-between;
   flex-direction: column;
 `;
-// const DropdownBox = styled.div`
-//   width: 100%;
-//   display: flex;
-//   flex-direction: column;
-//   gap: 1rem;
-// `;
+
 const PhotoBox = styled.div`
   width: 100%;
   display: flex;
@@ -155,6 +151,7 @@ const WidthInputBox = styled(InputBox)<{ width?: string }>`
 const Employee = () => {
   const [equipmentNumber, setEquipmentNumber] = useState<string>('');
   const companyCode = sessionStorage.getItem('companyCode');
+  const [number, setNumber] = useState<string>('');
   const [EmployeeNumber, setEmployeeNumber] = useState<number>(0);
   const [employeeInformation, setEmployeeInformation] =
     useState<EmployeeType | null>(null);
@@ -163,24 +160,35 @@ const Employee = () => {
     setEquipmentNumber(e.target.value);
   };
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
   // 작업자 등록
   const { mutate: registrationMutate } = useMutation({
     mutationFn: EmployeeRegistration,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['employeeList'] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['employeeList'] });
+      navigate('/information');
+    },
   });
 
   // 작업자 디테일 정보
-  const { data: employeeDetail } = useQuery({
-    queryKey: ['employeeDetail'],
+  const { data: employeeDetail, error: detailError } = useQuery({
+    queryKey: ['employeeDetail', number],
     queryFn: () => {
-      if (equipmentNumber) {
-        return EmployeeDetail(equipmentNumber);
+      if (number && searchEnabled) {
+        return EmployeeDetail(number);
+      } else {
+        return null;
       }
     },
+
     enabled: searchEnabled,
   });
-
+  useEffect(() => {
+    if (detailError) {
+      setEmployeeInformation(null);
+    }
+  }, [detailError]);
   // 등록된 작업자 전체 조회
   const { data: employeeList } = useQuery({
     queryKey: ['employeeList'],
@@ -188,7 +196,7 @@ const Employee = () => {
       return RegistratedEmployee();
     },
   });
-  const navigate = useNavigate();
+
   const handleSubmit = async () => {
     if (employeeInformation && companyCode) {
       const formattedBirthday = employeeInformation.employee_birthday.replace(
@@ -211,8 +219,13 @@ const Employee = () => {
   };
   const handleSearch = () => {
     setSearchEnabled(true);
+    setNumber(equipmentNumber);
   };
-
+  useEffect(() => {
+    if (searchEnabled && equipmentNumber) {
+      setSearchEnabled(false);
+    }
+  }, [searchEnabled, equipmentNumber]);
   useEffect(() => {
     if (employeeDetail) {
       setEmployeeInformation(employeeDetail);

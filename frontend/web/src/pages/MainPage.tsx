@@ -7,6 +7,7 @@ import {
   MainInformation,
   blueprintList,
   blueprintRegitration,
+  presentUser,
 } from '@/apis/Main.ts';
 import { Spacer } from '@/components/basic/Spacer.tsx';
 import { Button } from '@/components/button/Button.tsx';
@@ -39,6 +40,34 @@ interface DropDownType {
   label: string;
 }
 
+interface CompanyType {
+  companyCode: string;
+  companyName: string;
+  companyLogo: string;
+  companyRegistrationNum: string;
+  companyAccidentManageNum: string;
+}
+interface EmployeeType {
+  employeeNum: string;
+  company: CompanyType;
+  employeeName: string;
+  employeeTitle: string;
+  employeeTeam: string;
+  employeeBirthday: string;
+  employeeThum: string;
+  employeeJoinDate: string;
+  employeeLeaveDate: string | null;
+  companycode: string;
+  birthdayMonthDay: string;
+}
+interface UserInformationType {
+  id: number;
+  employee: EmployeeType;
+  status_code: string;
+  locked: boolean;
+  roles: string;
+  pin: string;
+}
 const Background = styled.div`
   box-sizing: border-box;
   width: 100%;
@@ -217,6 +246,7 @@ const MainPage = () => {
   const [selectedOption, setSelectedOption] = useState<DropDownType | null>(
     null,
   );
+  const [userData, setUserData] = useState<UserInformationType | null>(null);
   const events = useRecoilValue(notificationEventsState);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleCardDrawingClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -227,6 +257,20 @@ const MainPage = () => {
     }
   };
   const navigate = useNavigate();
+  // 현재 유저 불러오기
+  const { data: currentUser } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: () => {
+      return presentUser();
+    },
+  });
+
+  // 유저 정보 업데이트
+  useEffect(() => {
+    if (currentUser) {
+      setUserData(currentUser);
+    }
+  }, [currentUser]);
 
   // 작업장 편집모드 활성화, 비활성화
   const changeModifyMode = () => {
@@ -320,6 +364,16 @@ const MainPage = () => {
       <Background>
         <MainContainer>
           <LeftContainer>
+            <div
+              style={{
+                fontSize: '2.3rem',
+                textAlign: 'center',
+                fontWeight: '1000',
+                color: Color.SAMSUNG_BLUE,
+              }}
+            >
+              멀티캠퍼스 {userData?.employee.company.companyName}
+            </div>
             <HeaderContainer>
               <Dropdown
                 options={dropdownOptions}
@@ -383,6 +437,57 @@ const MainPage = () => {
                 </RowContainer>
               )}
             </SideMenuBox>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                paddingLeft: '2rem',
+                marginBottom: '2rem',
+              }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '2.5rem',
+                    color: Color.SAMSUNG_BLUE,
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {userData?.employee.employeeName}
+                </div>
+                <div style={{ fontSize: '2rem' }}>&nbsp;님</div>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '1.5rem',
+                  }}
+                >
+                  오늘도
+                </div>
+                <div
+                  style={{
+                    fontSize: '2rem',
+                    color: Color.BLUE100,
+                    fontWeight: 'bold',
+                  }}
+                >
+                  &nbsp;서로&nbsp;
+                </div>
+                <div style={{ fontSize: '1.5rem' }}>하셨나요?</div>
+              </div>
+            </div>
             <LogoutBtn onClick={handleLogout}>
               <LogoutIcon src={logoutIcon} />
               로그아웃
@@ -416,7 +521,6 @@ const MainPage = () => {
                   id="fileInput"
                   ref={fileInputRef}
                 />
-                {/* <label htmlFor="fileInput" style={{ cursor: 'pointer' }}> */}
                 <div>
                   <Typo.Body0B color={Color.GRAY400}>
                     저장된 도면이 없습니다. 도면을 추가하세요.

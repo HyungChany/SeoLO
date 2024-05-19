@@ -70,9 +70,9 @@ export const EmployeeDetail = async (employeeNumber: string) => {
       if (errorCode && errorCode.startsWith('JT')) {
         sessionStorage.removeItem('accessToken');
         sessionStorage.removeItem('companyCode');
+      } else {
+        alert('해당 직원이 존재하지 않습니다');
       }
-    } else {
-      alert('해당 직원이 존재하지 않습니다');
     }
   }
 };
