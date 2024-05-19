@@ -193,13 +193,26 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                               },
                             );
                           });
+                    } else if (_receivedValues[0] == '') {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return CommonDialog(
+                              content: '오류가 발생하였습니다',
+                              buttonText: '확인',
+                              buttonClick: () async {
+                                await _storage.write(
+                                    key: 'Core-Code', value: 'INIT');
+                                Navigator.pop(context);
+                              },
+                            );
+                          });
                     } else {
                       await _storage.write(
                           key: 'Core-Code', value: _receivedValues[0]);
-                      if (_receivedValues[1] != '') {
-                        await _storage.write(
-                            key: 'locker_uid', value: _receivedValues[1]);
-                      }
+                      await _storage.write(
+                          key: 'locker_uid', value: _receivedValues[1]);
                       await _storage.write(
                           key: 'machine_id', value: _receivedValues[2]);
                       await _storage.write(
@@ -209,14 +222,14 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                           !hasExecutedCoreIssued) {
                         String? battery =
                             await _storage.read(key: 'locker_battery');
-                        int? batteryInfo =
-                            (battery != null) ? int.parse(battery) : 0;
-                        issueVM.setBattery(batteryInfo);
                         String? lockerUid =
                             await _storage.read(key: 'locker_uid');
                         (lockerUid != null)
                             ? issueVM.setLockerUid(lockerUid)
                             : issueVM.setLockerUid('');
+                        (battery != null)
+                            ? issueVM.setBattery(int.parse(battery))
+                            : issueVM.setBattery(0);
                         setState(() {
                           hasExecutedCoreIssued = true;
                         });
