@@ -16,7 +16,6 @@ class MainBluetoothFragment : Fragment() {
     private var content: String? = null
 
     companion object {
-        // Fragment 인스턴스를 생성하는 메서드
         fun newInstance(content: String): MainBluetoothFragment {
             val fragment = MainBluetoothFragment()
             val args = Bundle()
@@ -28,7 +27,6 @@ class MainBluetoothFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 전달받은 content 데이터를 저장
         content = arguments?.getString("content_key")
     }
 
@@ -38,7 +36,6 @@ class MainBluetoothFragment : Fragment() {
         // 레이아웃 파일을 인플레이트하여 뷰 생성
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        // TextView와 ImageView 참조
         val textView = view.findViewById<TextView>(R.id.textViewOverlay)
         textView.text = content
         val imageView = view.findViewById<ImageView>(R.id.gifImageView)

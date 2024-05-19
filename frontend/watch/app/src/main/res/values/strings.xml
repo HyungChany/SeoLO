@@ -9,7 +9,6 @@
     <string name="open_example_activity">Open Example Activity</string>
     <string name="left"><![CDATA[<]]></string>
     <string name="right"><![CDATA[>]]></string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Lock">잠금</string>
     <string name="Unlock">잠금해제</string>

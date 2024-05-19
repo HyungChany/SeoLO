@@ -15,11 +15,8 @@ import com.seolo.seolo.helper.SessionManager
 class LOTOInfoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 테마 설정
         setTheme(android.R.style.Theme_DeviceDefault)
-        // 액션바 숨기기
         supportActionBar?.hide()
-        // 레이아웃 설정
         setContentView(R.layout.activity_layout)
 
         // ViewPager2와 CarouselStateAdapter 설정
@@ -67,57 +64,5 @@ class LOTOInfoActivity : AppCompatActivity() {
             leftArrow.visibility = View.VISIBLE
         }
     }
-
-//    // ISSUE Core Logic 인증 정보 POST
-//    private fun issueCoreLogic() {
-//        // SessionManager에서 필요한 정보 받아오기
-//        val authorization = "Bearer " + TokenManager.getAccessToken(this)
-//        val companyCode = TokenManager.getCompanyCode(this)
-//        val deviceType = "watch"
-//
-//        // LotoInfo 객체 생성
-//        val lotoInfo = LotoInfo(
-//            locker_uid = "",
-//            battery_info = SessionManager.selectedBatteryInfo ?: "",
-//            machine_id = SessionManager.selectedMachineId ?: "",
-//            task_template_id = SessionManager.selectedTaskTemplateId ?: "",
-//            task_precaution = SessionManager.selectedTaskPrecaution ?: "",
-//            end_time = SessionManager.selectedDate + "T" + SessionManager.selectedTime
-//        )
-//
-//        // API 요청
-//        val call = companyCode?.let {
-//            RetrofitClient.issueService.sendLotoInfo(
-//                authorization = authorization,
-//                companyCode = it,
-//                deviceType = deviceType,
-//                lotoInfo = lotoInfo
-//            )
-//        }
-//
-//        // API 응답 처리
-//        if (call != null) {
-//            call.enqueue(object : Callback<IssueResponse> {
-//                override fun onResponse(call: Call<IssueResponse>, response: Response<IssueResponse>) {
-//                    if (response.isSuccessful) {
-//                        val issueResponse = response.body()
-//                        Toast.makeText(
-//                            this@LOTOInfoActivity,
-//                            "Response: ${issueResponse?.next_code}",
-//                            Toast.LENGTH_SHORT
-//                        ).show()
-//                    } else {
-//                        Toast.makeText(
-//                            this@LOTOInfoActivity, "Failed: ${response.message()}", Toast.LENGTH_SHORT
-//                        ).show()
-//                    }
-//                }
-//
-//                override fun onFailure(call: Call<IssueResponse>, t: Throwable) {
-//                    Toast.makeText(this@LOTOInfoActivity, "Error: ${t.message}", Toast.LENGTH_SHORT)
-//                        .show()
-//                }
-//            })
-//        }
 }
 

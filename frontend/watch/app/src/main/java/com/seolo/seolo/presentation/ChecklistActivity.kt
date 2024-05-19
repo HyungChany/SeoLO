@@ -24,19 +24,16 @@ class ChecklistActivity : AppCompatActivity() {
     private var checklistItemCount: Int = 0
     private var checkedItemCount: Int = 0
 
-    // 액티비티 생성 시 호출되는 메서드
+    // 액티비티 생성 시 호출
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 기본 테마 설정 및 액션바 숨김
         setTheme(android.R.style.Theme_DeviceDefault)
         supportActionBar?.hide()
         setContentView(R.layout.checklist_layout)
 
-        // 뷰페이저 초기화
         viewPager = findViewById(R.id.viewPagerChecklist)
         val adapter = CarouselStateAdapter(this)
 
-        // 체크리스트 아이템 가져오기
         val checklistItems = ChecklistManager.getChecklist(this)
 
         // 체크리스트가 비어있지 않으면 각 아이템을 프래그먼트로 추가
@@ -57,7 +54,7 @@ class ChecklistActivity : AppCompatActivity() {
         getFacilities()
     }
 
-    // 체크박스 상태가 변경될 때 호출되는 메서드
+    // 체크박스 상태가 변경될 때 호출
     fun onCheckboxCheckedChange(isChecked: Boolean) {
         if (isChecked) {
             checkedItemCount++
@@ -71,7 +68,7 @@ class ChecklistActivity : AppCompatActivity() {
         }
     }
 
-    // 다음 페이지로 이동하는 메서드
+    // 다음 페이지로 이동
     private fun moveToNextPage() {
         // 시설물 정보를 담아 LocationActivity로 이동
         val intent = Intent(this, FacilityActivity::class.java)
@@ -79,7 +76,7 @@ class ChecklistActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
-    // 시설물 정보를 가져오는 메서드
+    // 시설물 정보를 가져오기
     private fun getFacilities() {
         val accessToken = TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)

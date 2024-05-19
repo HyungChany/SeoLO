@@ -103,7 +103,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
         }
     }
 
-    // 기기 선택 시 호출되는 함수
+    // 기기 선택 시 호출
     @RequiresApi(Build.VERSION_CODES.S)
     private fun onDeviceSelected(device: BluetoothDevice) {
         // 기기 선택 시 GATT 스캐닝 중지
@@ -116,7 +116,7 @@ class BluetoothLOTOActivity : AppCompatActivity() {
         }, 100)
     }
 
-    // 기기 연결 및 데이터 전송 로직을 포함한 함수
+    // 기기 연결 및 데이터 전송
     @RequiresApi(Build.VERSION_CODES.S)
     private fun connectToDevice(device: BluetoothDevice) {
         // Bluetooth 연결 권한 확인
@@ -182,12 +182,12 @@ class BluetoothLOTOActivity : AppCompatActivity() {
 
                 if (checkSelfPermission(Manifest.permission.BLUETOOTH_CONNECT) == PackageManager.PERMISSION_GRANTED) {
                     // 권한이 있을 때
-                    // 데이터 쓰기 포맷(회사코드,토큰,머신ID,유저ID,자물쇠UID,명령어)
                     val companyCode = TokenManager.getCompanyCode(this@BluetoothLOTOActivity)
                     val token = TokenManager.getTokenValue(this@BluetoothLOTOActivity)
                     val machineId = LotoManager.getLotoMachineId(this@BluetoothLOTOActivity)
                     val userId = TokenManager.getUserId(this@BluetoothLOTOActivity)
                     val lotoUid = LotoManager.getLotoUid(this@BluetoothLOTOActivity)
+                    // 데이터 쓰기 포맷(회사코드,토큰,머신ID,유저ID,자물쇠UID,명령어)
                     val sendData = "$companyCode,$token,$machineId,$userId,$lotoUid,INIT"
                     lastSentData = sendData
                     Log.d("데이터 쓰기_LOTO", sendData)
@@ -332,12 +332,6 @@ class BluetoothLOTOActivity : AppCompatActivity() {
             )
         }
 
-        // Debug logs to check the data before making the API call
-        Log.d("API_CALL_ISSUE", "Authorization: $authorization")
-        Log.d("API_CALL_ISSUE", "CompanyCode: $companyCode")
-        Log.d("API_CALL_ISSUE", "DeviceType: $deviceType")
-        Log.d("API_CALL_ISSUE", "LotoInfo: $lotoInfo")
-
         call?.enqueue(object : Callback<IssueResponse> {
             override fun onResponse(call: Call<IssueResponse>, response: Response<IssueResponse>) {
                 if (response.isSuccessful) {
@@ -453,12 +447,6 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                 lockedInfo = it
             )
         }
-
-        // Debug logs to check the data before making the API call
-        Log.d("LOCKED_Send", "Authorization: $authorization")
-        Log.d("LOCKED_Send", "CompanyCode: $companyCode")
-        Log.d("LOCKED_Send", "DeviceType: $deviceType")
-        Log.d("LOCKED_Send", "LotoInfo: $lotoInfo")
 
         call?.enqueue(object : Callback<LockedResponse> {
             override fun onResponse(

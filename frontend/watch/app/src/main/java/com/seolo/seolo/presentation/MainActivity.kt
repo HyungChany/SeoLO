@@ -13,12 +13,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportActionBar?.hide() // 액션바 숨기기
+        supportActionBar?.hide()
 
-        setContentView(R.layout.activity_layout) // 메인 레이아웃 설정
+        setContentView(R.layout.activity_layout)
 
-        val viewPager: ViewPager2 = findViewById(R.id.viewPager) // ViewPager2 인스턴스화
-        val adapter = CarouselStateAdapter(this@MainActivity) // Adapter 인스턴스화
+        val viewPager: ViewPager2 = findViewById(R.id.viewPager)
+        val adapter = CarouselStateAdapter(this@MainActivity)
 
         // 프래그먼트를 ViewPager2에 추가
         adapter.addFragment(MainChkFragment.newInstance("LOTO 잠금"))

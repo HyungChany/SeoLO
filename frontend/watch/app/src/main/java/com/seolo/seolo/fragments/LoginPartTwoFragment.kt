@@ -66,7 +66,6 @@ class LoginPartTwoFragment : Fragment() {
                 if (response.isSuccessful) {
                     val tokenResponse = response.body()
                     if (tokenResponse != null && tokenResponse.issuedToken.accessToken.isNotEmpty()) {
-                        // 발급된 토큰 저장
                         TokenManager.setAccessToken(
                             requireContext(), tokenResponse.issuedToken.accessToken
                         )

@@ -10,6 +10,7 @@ import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 
+// 로그인 요청
 interface LoginService {
     @POST("login")
     fun login(
@@ -17,6 +18,7 @@ interface LoginService {
     ): Call<TokenResponse>
 }
 
+// pin 로그인 요청
 interface PINService {
     @POST("users/pin")
     fun sendPinNumber(
@@ -27,6 +29,8 @@ interface PINService {
     ): Call<PINResponse>
 }
 
+
+// pin 재설정 요청
 interface NewPINService {
     @PATCH("users/pin")
     fun sendPinNumber(

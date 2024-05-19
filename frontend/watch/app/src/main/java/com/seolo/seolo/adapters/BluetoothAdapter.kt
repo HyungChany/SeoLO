@@ -129,7 +129,7 @@ class BluetoothAdapter(private val context: Context) {
                 }
             }
         }, filter)
-        isReceiverRegistered = true // 리시버가 등록되었음을 표시
+        isReceiverRegistered = true
         bluetoothAdapter?.startDiscovery()
     }
 

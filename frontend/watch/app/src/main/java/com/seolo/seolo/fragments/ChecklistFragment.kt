@@ -14,9 +14,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.R
 import com.seolo.seolo.presentation.ChecklistActivity
 
-// CheckListFragment 클래스 정의
 class ChecklistFragment : Fragment() {
-    // 체크리스트 텍스트를 저장하는 변수
     private var checklistText: String? = null
     private var isChecked = false
 
