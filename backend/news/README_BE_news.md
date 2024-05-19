@@ -1,4 +1,4 @@
-# backend-news
+## backend-news
 
 안전 뉴스를 다음 사이트에서 스크래핑하여 제공합니다.<br>
 안전 뉴스는 redis cache에 저장합니다.<br>
@@ -53,3 +53,7 @@ urllib3==2.2.1
 
 => ConnectionRefusedError(10061, '[WinError 10061] 대상 컴퓨터에서 연결을 거부했으므로 연결하지 못했습니다.')
 이외에는 실패없이 news값을 받을 수 있었음.
+
+### 기여
+- 오유진 : 스크래핑, REDIS, Locust TEST
+- 김진명 : INFRA
