@@ -51,13 +51,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   void initState() {
     super.initState();
 
-    _isWriting = false;
-    hasExecutedCoreIssued = false;
-    hasExecutedCoreLocked = false;
-    hasExecutedCoreUnlock = false;
-    hasExecutedCoreCheck = false;
-    hasExecutedAlert = false;
-
     _adapterStateStateSubscription =
         FlutterBluePlus.adapterState.listen((state) {
       _adapterState = state;
@@ -176,15 +169,15 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                   String receivedString = utf8.decode(value);
                   _receivedValues = receivedString.split(',');
                   // 응답 받으면 writing 중지
-                  if (mounted) {
-                    setState(() {
-                      _isWriting = false;
-                    });
-                  }
+                  setState(() {
+                    _isWriting = false;
+                  });
                   if (_receivedValues[4] == userId) {
                     // 코드 uid 장비 배터리 유저id
                     if (_receivedValues[0] == 'ALERT' && !hasExecutedAlert) {
-                      hasExecutedAlert = true;
+                      setState(() {
+                        hasExecutedAlert = true;
+                      });
                       showDialog(
                           context: context,
                           barrierDismissible: false,
@@ -193,7 +186,9 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                               content: '연결할 자물쇠를 확인해 주세요.',
                               buttonText: '확인',
                               buttonClick: () {
-                                hasExecutedAlert = false;
+                                setState(() {
+                                  hasExecutedAlert = false;
+                                });
                                 Navigator.pop(context);
                               },
                             );
@@ -201,8 +196,10 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     } else {
                       await _storage.write(
                           key: 'Core-Code', value: _receivedValues[0]);
-                      await _storage.write(
-                          key: 'locker_uid', value: _receivedValues[1]);
+                      if (_receivedValues[1] != '') {
+                        await _storage.write(
+                            key: 'locker_uid', value: _receivedValues[1]);
+                      }
                       await _storage.write(
                           key: 'machine_id', value: _receivedValues[2]);
                       await _storage.write(
@@ -220,7 +217,9 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                         (lockerUid != null)
                             ? issueVM.setLockerUid(lockerUid)
                             : issueVM.setLockerUid('');
-                        hasExecutedCoreIssued = true;
+                        setState(() {
+                          hasExecutedCoreIssued = true;
+                        });
                         issueVM.coreIssue().then((_) {
                           if (issueVM.errorMessage == null) {
                             writeToDevice(device);
@@ -259,7 +258,9 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                       }
                       if (_receivedValues[0] == 'CHECK' &&
                           !hasExecutedCoreCheck) {
-                        hasExecutedCoreCheck = true;
+                        setState(() {
+                          hasExecutedCoreCheck = true;
+                        });
                         checkVM.coreCheck().then((_) async {
                           if (checkVM.errorMessage == null) {
                             if (coreCode != null) {
@@ -315,7 +316,9 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                                       content: checkVM.errorMessage!,
                                       buttonText: '확인',
                                       buttonClick: () {
-                                        hasExecutedCoreCheck = false;
+                                        setState(() {
+                                          hasExecutedCoreCheck = false;
+                                        });
                                         Navigator.pop(context);
                                       },
                                     );
@@ -326,7 +329,9 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                       }
                       if (_receivedValues[0] == 'UNLOCK' &&
                           !hasExecutedCoreUnlock) {
-                        hasExecutedCoreUnlock = true;
+                        setState(() {
+                          hasExecutedCoreUnlock = true;
+                        });
                         unlockVM.coreUnlock().then((_) {
                           if (unlockVM.errorMessage == null) {
                             Navigator.pushNamedAndRemoveUntil(
