@@ -90,12 +90,12 @@ class _ScanResultTileState extends State<ScanResultTile> {
   Widget _buildConnectButton(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: blue100,
+        backgroundColor: isConnected ? blue400 : blue100,
         foregroundColor: Colors.white,
       ),
       onPressed:
           (widget.result.advertisementData.connectable) ? widget.onTap : null,
-      child: isConnected ? Text('연결') : const Text('선택'),
+      child: isConnected ? const Text('송신') : const Text('연결'),
     );
   }
 
@@ -103,9 +103,9 @@ class _ScanResultTileState extends State<ScanResultTile> {
   Widget build(BuildContext context) {
     return ExpansionTile(
       title: _buildTitle(context),
-      leading: const Icon(
+      leading: Icon(
         Icons.lock,
-        color: blue100,
+        color: isConnected ? blue400 : blue100,
       ),
       trailing: _buildConnectButton(context),
     );
