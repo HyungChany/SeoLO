@@ -10,7 +10,7 @@ VALUES
     ('200500001', 'SFY001KOR', '오정민', '사원', '영업팀', '1967-03-12', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/jeogmin.jpg', '2005-11-20', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('201500001', 'SFY001KOR', '이현비', '사원', '개발팀', '1996-08-20', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/hb.jpg', '2015-09-20', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('200500002', 'SFY001KOR', '조형찬', '대리', '품질관리팀', '1989-12-01', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/hc.jpg', '2005-06-25', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('200700001', 'SFY001KOR', '서정빈', '코치', '생산기술팀', '2000-01-06', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/image+(3).png', '2007-08-21', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('200700001', 'SFY001KOR', '서정빈', '코치', '광주싸피팀', '2000-01-06', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/image+203.png', '2007-08-21', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('202100002', 'SFY001KOR', '정형찬', '사원', '개발팀', '1972-03-17', 'default', '2021-02-23', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('200400001', 'SFY001KOR', '이지훈', '사원', '경영지원팀', '1960-11-04', 'default', '2004-06-02', '2013-06-07', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('202200001', 'SFY001KOR', '임정민', '사원', '영업팀', '1984-02-26', 'default', '2022-10-16', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
@@ -254,7 +254,18 @@ VALUES
 INSERT INTO machine
     (CREATED_AT, FACILITY_ID, MACHINE_ID, MACHINE_INTRODUCTION_DATE, MACHINE_SUBCATEGORY, UPDATED_AT, MACHINE_LOCKER_TYPE, MACHINE_NAME, MACHINE_NUMBER, MACHINE_COMPANY, MACHINE_THUM)
 VALUES
-    ('2024-05-07 14:37:42.935150', 1, 1, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '수평형 컨베이어 삼면포장기', 'KL-7217', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL7217.jpg'),
-    ('2024-05-07 14:37:42.935150', 1, 2, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '삼용CNC조각기', 'KL-5709', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL5709.jpg'),
-    ('2024-05-07 14:37:42.935150', 1, 3, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '자동라벨기/스티커부착기', 'KL-0515', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL0515.jpg'),
-    ('2024-05-07 14:37:42.935150', 1, 4, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '레이저각인기', 'KL-8818', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL8818.jpeg');
+    ('2024-05-07 14:37:42.935150', 1, 1, '2015-02-23 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '컨베이어 삼면포장기', 'KL-7217', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL7217.jpg'),
+    ('2024-05-07 14:37:42.935150', 1, 2, '2018-05-21 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '상용CNC조각기', 'KL-5709', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL5709.jpg'),
+    ('2024-05-07 14:37:42.935150', 1, 3, '2020-06-11 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '자동라벨기', 'AP-0515', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL0515.jpg'),
+    ('2024-05-07 14:37:42.935150', 1, 4, '2023-09-12 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '레이저각인기', 'LS-8818', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL8818.jpeg'),
+    ('2024-05-17 14:37:42.935150', 2, 5, '2024-01-12 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '입자분리기', 'HX-0223', '미항공우주국', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/factory2_1.jpg'),
+    ('2024-05-18 14:37:42.935150', 2, 6, '2024-02-23 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '낡은기계', 'UU-1516', '선입견', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/factory2_2.jpg');
+
+
+INSERT INTO machine_manager
+    (mm_role, machine_id, machine_manager_id, user_id)
+VALUES
+    (0, 1, 1, 1),
+    (0, 2, 2, 1),
+    (0, 3, 3, 2),
+    (0, 4, 4, 3);
