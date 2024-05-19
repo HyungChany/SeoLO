@@ -22,24 +22,25 @@
         <TextView
             android:id="@+id/TitleView"
             android:layout_width="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_height="wrap_content"
             android:text="@string/sample_text"
             android:textAlignment="center"
             android:textColor="@color/SAMSUNG_BLUE"
-            android:textSize="22sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/ContentView"
             android:layout_width="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:paddingTop="10dp"
+            android:paddingTop="1dp"
+            android:scrollbars="vertical"
             android:text="@string/sample_text"
             android:textAlignment="center"
             android:textColor="@color/BLACK"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
     </LinearLayout>
 

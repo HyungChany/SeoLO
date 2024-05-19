@@ -44,8 +44,6 @@ class BluetoothMainActivity : AppCompatActivity() {
     private var bluetoothGatt: BluetoothGatt? = null
     private var lastSentData: String? = null
     private var isDataReceived = false
-    private var statusCode: String = "INIT"
-
 
     companion object {
         private const val REQUEST_BLUETOOTH_PERMISSION = 101
@@ -190,6 +188,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                         LotoManager.getLotoMachineId(this@BluetoothMainActivity) // 머신 Id 가져오기
                     val userId = TokenManager.getUserId(this@BluetoothMainActivity) // 사용자 Id 가져오기
                     val lotoUid = LotoManager.getLotoUid(this@BluetoothMainActivity) // 자물쇠 Uid 가져오기
+//                    val statusCode = LotoManager.getLotoStatusCode(this@BluetoothMainActivity) // 상태코드 가져오기
 
                     val sendData = if (lotoUid == "") {
                         "$companyCode,$token,$machineId,$userId,$lotoUid,INIT"
@@ -254,17 +253,29 @@ class BluetoothMainActivity : AppCompatActivity() {
             // 데이터 읽기 포맷(명령어,자물쇠Uid,머신Id,배터리잔량,유저Id)
             val receivedData = characteristic?.value?.toString(StandardCharsets.UTF_8)
             val lotoUserId = TokenManager.getUserId(this@BluetoothMainActivity)
+//            private var statusCode = LotoManager.getLotoStatusCode(this@BluetoothMainActivity)
+
             // 송신 데이터와 수신 데이터가 같으면 리턴
             if (receivedData == lastSentData) return
             Log.d("수신데이터_Main", "Data received: $receivedData")
 
             receivedData?.let {
                 val dataParts = it.split(",")
-                if (dataParts.size >= 4) {
-                    statusCode = dataParts[0]
+                if (dataParts.size >= 4 && (lotoUserId != null)) {
+                    val statusCode = dataParts[0]
                     val lotoUid = dataParts[1]
                     val machineId = dataParts[2]
                     val batteryInfo = dataParts[3]
+
+                    // LotoManager에 데이터 설정
+                    LotoManager.setLotoStatusCode(this@BluetoothMainActivity, statusCode!!)
+                    LotoManager.setLotoUid(this@BluetoothMainActivity, lotoUid)
+                    LotoManager.setLotoMachineId(this@BluetoothMainActivity, machineId)
+                    LotoManager.setLotoBatteryInfo(this@BluetoothMainActivity, batteryInfo)
+                    LotoManager.setLotoUserId(this@BluetoothMainActivity, lotoUserId)
+
+                    Log.d("수신데이터_Main체크", "statusCode: $statusCode, lotoUid: $lotoUid")
+
                     // 자물쇠 상태 확인 명령어가 CHECK일 때(자물쇠가 잠겨있는데 그냥 일단 찍어본 경우)
                     Log.d("체크", "$statusCode, $lotoUid, $machineId, $batteryInfo, $lotoUserId")
                     if (statusCode == "CHECK") {

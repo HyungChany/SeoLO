@@ -48,7 +48,6 @@ class BluetoothLOTOActivity : AppCompatActivity() {
     private var lastSentData: String? = null
     private var selectedDevice: BluetoothDevice? = null
     private var isDataReceived = false
-    private var statusCode: String = "INIT"
 
     companion object {
         private const val REQUEST_BLUETOOTH_PERMISSION = 101
@@ -258,13 +257,13 @@ class BluetoothLOTOActivity : AppCompatActivity() {
                 val lotoUserId = TokenManager.getUserId(this@BluetoothLOTOActivity)
 
                 if (dataParts.size >= 4 && (lotoUserId != null)) {
-                    statusCode = dataParts[0]
+                    val statusCode = dataParts[0]
                     val lotoUid = dataParts[1]
                     val machineId = dataParts[2]
                     val batteryInfo = dataParts[3]
 
                     // LotoManager에 데이터 설정
-                    LotoManager.setLotoStatusCode(this@BluetoothLOTOActivity, statusCode)
+                    LotoManager.setLotoStatusCode(this@BluetoothLOTOActivity, statusCode!!)
                     LotoManager.setLotoUid(this@BluetoothLOTOActivity, lotoUid)
                     LotoManager.setLotoMachineId(this@BluetoothLOTOActivity, machineId)
                     LotoManager.setLotoBatteryInfo(this@BluetoothLOTOActivity, batteryInfo)
