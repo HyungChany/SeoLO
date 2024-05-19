@@ -21,7 +21,7 @@ class LotoWorkProcess extends StatelessWidget {
         Container(
           height: 55,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50), color: blue400),
+              borderRadius: BorderRadius.circular(20), color: blue400),
           child: Center(
             child: Text(
               text,

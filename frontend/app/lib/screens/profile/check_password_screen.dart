@@ -1,4 +1,4 @@
-
+import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/view_models/user/password_check_view_model.dart';
 import 'package:app/widgets/button/common_text_button.dart';
 import 'package:app/widgets/dialog/dialog.dart';
@@ -14,7 +14,29 @@ class CheckPassword extends StatefulWidget {
   State<CheckPassword> createState() => _CheckPasswordState();
 }
 
-class _CheckPasswordState extends State<CheckPassword> {
+class _CheckPasswordState extends State<CheckPassword>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      Provider.of<AppLockState>(context, listen: false)
+          .lock(ModalRoute.of(context)!.settings.name!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<PasswordCheckViewModel>(context);
@@ -27,14 +49,18 @@ class _CheckPasswordState extends State<CheckPassword> {
         child: Stack(
           children: [
             SingleChildScrollView(
-              padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Center(
                 child: Column(
                   children: [
-                    SizedBox(height: 50,),
+                    SizedBox(
+                      height: 50,
+                    ),
                     Text('비밀번호 재설정을 위해 현재 비밀번호를 입력해 주세요.'),
-                    SizedBox(height: 30,),
+                    SizedBox(
+                      height: 30,
+                    ),
                     SmallInputBox(
                         hintText: '현재 비밀번호',
                         textInputAction: TextInputAction.done,
@@ -55,7 +81,8 @@ class _CheckPasswordState extends State<CheckPassword> {
                     onTap: () {
                       viewModel.passwordCheck().then((_) {
                         if (viewModel.errorMessage == null) {
-                          Navigator.pushReplacementNamed(context, '/changePassword');
+                          Navigator.pushReplacementNamed(
+                              context, '/changePassword');
                         } else {
                           if (viewModel.errorMessage == 'JT') {
                             showDialog(
@@ -84,8 +111,7 @@ class _CheckPasswordState extends State<CheckPassword> {
                           }
                         }
                       });
-                    }
-                ),
+                    }),
               ),
             ),
           ],

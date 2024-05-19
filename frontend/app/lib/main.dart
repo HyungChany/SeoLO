@@ -11,6 +11,7 @@ import 'package:app/view_models/loto/facility_view_model.dart';
 import 'package:app/view_models/loto/machine_view_model.dart';
 import 'package:app/view_models/loto/task_templates_view_model.dart';
 import 'package:app/view_models/main/news_view_model.dart';
+import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/view_models/user/login_view_model.dart';
 import 'package:app/view_models/user/my_info_view_model.dart';
 import 'package:app/view_models/user/my_tasks_view_model.dart';
@@ -20,6 +21,7 @@ import 'package:app/view_models/user/pin_change_view_model.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/view_models/user/logout_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -78,8 +80,6 @@ const BoxShadow shadow = BoxShadow(
   offset: Offset(0, 2), // 그림자 위치
 );
 
-
-
 void main() async {
   // WidgetsBinding widgetsBinding =
   WidgetsFlutterBinding.ensureInitialized(); // 초기화 보장
@@ -87,7 +87,14 @@ void main() async {
 
   await dotenv.load(fileName: '.env');
   FlutterBluePlus.setLogLevel(LogLevel.verbose, color: true);
-  runApp(const MyApp());
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  runApp(
+      ChangeNotifierProvider(
+        create: (context) => AppLockState(),
+        child: MyApp(),
+      ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -144,103 +151,136 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends StatelessWidget {
+
+  final storage = const FlutterSecureStorage();
+
   const SplashScreen({super.key});
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> with WidgetsBindingObserver {
-  final _storage = const FlutterSecureStorage();
-  bool isLogin = false;
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    debugPrint('state = $state');
-    switch(state) {
-      case AppLifecycleState.resumed:
-        _resumed();
-        break;
-      case AppLifecycleState.paused:
-        _paused();
-        break;
-      case AppLifecycleState.inactive:
-        _inactive();
-        break;
-      default:
-        break;
-    }
-  }
-
-  final lastKnownStateKey = 'lastKnownStateKey';
-  final backgroundedTimeKey = 'backgroundedTimeKey';
-
-  Future _paused() async {
-    final sp = await SharedPreferences.getInstance();
-    sp.setInt(lastKnownStateKey, AppLifecycleState.paused.index);
-  }
-
-  Future _inactive() async {
-    debugPrint('inactive');
-    final sp = await SharedPreferences.getInstance();
-    final prevState = sp.getInt(lastKnownStateKey);
-
-    final prevStateIsNotPaused = prevState != null &&
-        AppLifecycleState.values[prevState] != AppLifecycleState.paused;
-
-    if( prevStateIsNotPaused ) {
-      sp.setInt(backgroundedTimeKey, DateTime.now().millisecondsSinceEpoch);
-    }
-
-    sp.setInt(lastKnownStateKey, AppLifecycleState.inactive.index);
-  }
-
-  final pinLockMillis = 2000;
-  Future _resumed() async {
-    debugPrint('resumed');
-    final sp = await SharedPreferences.getInstance();
-
-    final bgTime = sp.getInt(backgroundedTimeKey) ?? 0;
-    final allowedBackgroundTime = bgTime + pinLockMillis;
-    final shouldShowPIN = DateTime.now().millisecondsSinceEpoch > allowedBackgroundTime;
-
-    if(shouldShowPIN) {
-      // show PIN screen
-      Navigator.pushNamedAndRemoveUntil(context, '/pinLogin', (route) => false);
-    }
-    sp.remove(backgroundedTimeKey);
-    sp.setInt(lastKnownStateKey, AppLifecycleState.resumed.index);
-  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: SecureStorageService.getToken(),
-      builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+      future: storage.read(key: 'token'),
+      builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else {
-          if (snapshot.hasData && snapshot.data != null) {
-            return PinLoginScreen();
+          if (snapshot.data != null) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacementNamed(context, '/pinLogin');
+            });
           } else {
-            return LoginScreen();
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacementNamed(context, '/login');
+            });
           }
+          return Container();
         }
       },
     );
   }
 }
+
+// class SplashScreen extends StatefulWidget {
+//   const SplashScreen({super.key});
+//
+//   @override
+//   State<SplashScreen> createState() => _SplashScreenState();
+// }
+//
+// class _SplashScreenState extends State<SplashScreen>
+//     with WidgetsBindingObserver {
+//   final _storage = const FlutterSecureStorage();
+//   bool isLogin = false;
+//
+//   @override
+//   void dispose() {
+//     WidgetsBinding.instance.removeObserver(this);
+//     super.dispose();
+//   }
+//
+//   @override
+//   void initState() {
+//     super.initState();
+//     WidgetsBinding.instance.addObserver(this);
+//   }
+//
+//   @override
+//   void didChangeAppLifecycleState(AppLifecycleState state) {
+//     super.didChangeAppLifecycleState(state);
+//     debugPrint('state = $state');
+//     switch (state) {
+//       case AppLifecycleState.resumed:
+//         _resumed();
+//         break;
+//       case AppLifecycleState.paused:
+//         _paused();
+//         break;
+//       case AppLifecycleState.inactive:
+//         _inactive();
+//         break;
+//       default:
+//         break;
+//     }
+//   }
+//
+//   final lastKnownStateKey = 'lastKnownStateKey';
+//   final backgroundedTimeKey = 'backgroundedTimeKey';
+//
+//   Future _paused() async {
+//     final sp = await SharedPreferences.getInstance();
+//     sp.setInt(lastKnownStateKey, AppLifecycleState.paused.index);
+//   }
+//
+//   Future _inactive() async {
+//     debugPrint('inactive');
+//     final sp = await SharedPreferences.getInstance();
+//     final prevState = sp.getInt(lastKnownStateKey);
+//
+//     final prevStateIsNotPaused = prevState != null &&
+//         AppLifecycleState.values[prevState] != AppLifecycleState.paused;
+//
+//     if (prevStateIsNotPaused) {
+//       sp.setInt(backgroundedTimeKey, DateTime.now().millisecondsSinceEpoch);
+//     }
+//
+//     sp.setInt(lastKnownStateKey, AppLifecycleState.inactive.index);
+//   }
+//
+//   final pinLockMillis = 2000;
+//
+//   Future _resumed() async {
+//     debugPrint('resumed');
+//     final sp = await SharedPreferences.getInstance();
+//
+//     final bgTime = sp.getInt(backgroundedTimeKey) ?? 0;
+//     final allowedBackgroundTime = bgTime + pinLockMillis;
+//     final shouldShowPIN =
+//         DateTime.now().millisecondsSinceEpoch > allowedBackgroundTime;
+//
+//     if (shouldShowPIN) {
+//       // show PIN screen
+//       Navigator.pushNamedAndRemoveUntil(context, '/pinLogin', (route) => false);
+//     }
+//     sp.remove(backgroundedTimeKey);
+//     sp.setInt(lastKnownStateKey, AppLifecycleState.resumed.index);
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return FutureBuilder(
+//       future: SecureStorageService.getToken(),
+//       builder: (BuildContext context, AsyncSnapshot<String?> snapshot) {
+//         if (snapshot.connectionState == ConnectionState.waiting) {
+//           return CircularProgressIndicator();
+//         } else {
+//           if (snapshot.hasData && snapshot.data != null) {
+//             return PinLoginScreen();
+//           } else {
+//             return LoginScreen();
+//           }
+//         }
+//       },
+//     );
+//   }
+// }

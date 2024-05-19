@@ -1,23 +1,43 @@
 import 'package:app/main.dart';
+import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/view_models/user/pin_change_view_model.dart';
 import 'package:app/widgets/login/key_board_key.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChangePinScreen extends StatefulWidget {
+  const ChangePinScreen({super.key});
+
   @override
-  _ChangePinScreenState createState() => _ChangePinScreenState();
+  State<ChangePinScreen> createState() => _ChangePinScreenState();
 }
 
-class _ChangePinScreenState extends State<ChangePinScreen> {
+class _ChangePinScreenState extends State<ChangePinScreen>
+    with WidgetsBindingObserver {
   String pin = '';
   String content = '';
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     pin = '';
     content = '새로운 암호를 입력해 주세요.';
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      Provider.of<AppLockState>(context, listen: false)
+          .lock(ModalRoute.of(context)!.settings.name!);
+    }
   }
 
   final keys = [
@@ -51,7 +71,10 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
   gradient1() {
     return BoxDecoration(
       gradient: LinearGradient(
-        colors: [Colors.white.withOpacity(0.5), Color.fromRGBO(215, 223, 243, 0.5)],
+        colors: [
+          Colors.white.withOpacity(0.5),
+          Color.fromRGBO(215, 223, 243, 0.5)
+        ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
@@ -61,7 +84,10 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
   gradient2() {
     return BoxDecoration(
       gradient: LinearGradient(
-        colors: [Color.fromRGBO(215, 223, 243, 0.5), Color.fromRGBO(175, 190, 240, 0.5)],
+        colors: [
+          Color.fromRGBO(215, 223, 243, 0.5),
+          Color.fromRGBO(175, 190, 240, 0.5)
+        ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
@@ -71,7 +97,10 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
   gradient3() {
     return BoxDecoration(
       gradient: LinearGradient(
-        colors: [Color.fromRGBO(175, 190, 240, 0.5), Color.fromRGBO (135, 157, 238, 0.5)],
+        colors: [
+          Color.fromRGBO(175, 190, 240, 0.5),
+          Color.fromRGBO(135, 157, 238, 0.5)
+        ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),

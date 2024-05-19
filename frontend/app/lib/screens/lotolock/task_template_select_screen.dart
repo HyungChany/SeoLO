@@ -1,5 +1,6 @@
 import 'package:app/view_models/core/core_issue_view_model.dart';
 import 'package:app/view_models/loto/task_templates_view_model.dart';
+import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/widgets/button/common_icon_button.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -17,7 +18,7 @@ class TaskTemplateSelectScreen extends StatefulWidget {
       _TaskTemplateSelectScreenState();
 }
 
-class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> {
+class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> with WidgetsBindingObserver {
   String? taskOption;
   int selectId = 0;
   String selectName = '';
@@ -48,6 +49,7 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     final viewModel = Provider.of<TaskTemplatesViewModel>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       viewModel.getTemplates().then((_) {
@@ -83,6 +85,21 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> {
       selectId = 0;
       selectName = '';
     });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      Provider.of<AppLockState>(context, listen: false)
+          .lock(ModalRoute.of(context)!.settings.name!);
+    }
   }
 
   @override

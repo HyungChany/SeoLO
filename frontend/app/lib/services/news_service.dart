@@ -43,9 +43,7 @@ class NewsService {
       }
     } on Dio.DioException catch (e) {
       if (e.response?.data['error_code']?.startsWith('JT')) {
-        await _storage.delete(key: 'token');
-        await _storage.delete(key: 'Company-Code');
-        await _storage.delete(key: 'user_id');
+        await _storage.deleteAll();
         return {
           'success': false,
           'statusCode': e.response?.statusCode,

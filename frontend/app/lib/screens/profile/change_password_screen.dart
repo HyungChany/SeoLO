@@ -1,3 +1,4 @@
+import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/view_models/user/password_change_view_model.dart';
 import 'package:app/widgets/button/common_text_button.dart';
 import 'package:app/widgets/dialog/dialog.dart';
@@ -13,7 +14,29 @@ class ChangePassword extends StatefulWidget {
   State<ChangePassword> createState() => _ChangePasswordState();
 }
 
-class _ChangePasswordState extends State<ChangePassword> {
+class _ChangePasswordState extends State<ChangePassword>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      Provider.of<AppLockState>(context, listen: false)
+          .lock(ModalRoute.of(context)!.settings.name!);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<PasswordChangeViewModel>(context);
@@ -26,16 +49,20 @@ class _ChangePasswordState extends State<ChangePassword> {
         child: Stack(
           children: [
             SingleChildScrollView(
-              padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Center(
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.9,
                   child: Column(
                     children: [
-                      SizedBox(height: 50,),
+                      SizedBox(
+                        height: 50,
+                      ),
                       Text('비밀번호는 영문 대문자/소문자/숫자/특수문자를 섞어 8~16자리로 입력해주세요.'),
-                      SizedBox(height: 30,),
+                      SizedBox(
+                        height: 30,
+                      ),
                       SmallInputBox(
                           hintText: '새 비밀번호',
                           textInputAction: TextInputAction.next,
@@ -43,7 +70,9 @@ class _ChangePasswordState extends State<ChangePassword> {
                           onChanged: (value) {
                             viewModel.setNewPwd(value);
                           }),
-                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 20,
+                      ),
                       SmallInputBox(
                           hintText: '새 비밀번호 확인',
                           textInputAction: TextInputAction.done,

@@ -10,7 +10,7 @@ class LogoutButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<LogoutViewModel>(context);
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         viewModel.logout().then((_) {
           if (viewModel.errorMessage == null) {

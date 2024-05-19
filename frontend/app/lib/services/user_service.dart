@@ -42,10 +42,7 @@ class UserService {
         String? userId = response.data['userId'].toString();
         String? companyCode = loginModel.companyCode.toString();
         if (token != null) {
-          await _storage.delete(key: 'token');
-          await _storage.delete(key: 'Company-Code');
-          await _storage.delete(key: 'user_id');
-          await _storage.delete(key: 'Core-Code');
+          await _storage.deleteAll();
           await _storage.write(key: 'token', value: token);
           await _storage.write(key: 'Company-Code', value: companyCode);
           await _storage.write(key: 'user_id', value: userId);
@@ -68,9 +65,7 @@ class UserService {
       }
     } on Dio.DioException catch (e) {
       if (e.response?.data['error_code']?.startsWith('JT')) {
-        await _storage.delete(key: 'token');
-        await _storage.delete(key: 'Company-Code');
-        await _storage.delete(key: 'user_id');
+        await _storage.deleteAll();
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -96,10 +91,6 @@ class UserService {
 
       if (response.statusCode == 200) {
         await _storage.deleteAll();
-        await _storage.delete(key: 'token');
-        await _storage.delete(key: 'Company-Code');
-        await _storage.delete(key: 'user_id');
-
         return {'success': true};
       } else {
         return {
@@ -109,9 +100,7 @@ class UserService {
       }
     } on Dio.DioException catch (e) {
       if (e.response?.data['error_code']?.startsWith('JT')) {
-        await _storage.delete(key: 'token');
-        await _storage.delete(key: 'Company-Code');
-        await _storage.delete(key: 'user_id');
+        await _storage.deleteAll();
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -150,9 +139,7 @@ class UserService {
       }
     } on Dio.DioException catch (e) {
       if (e.response?.data['error_code']?.startsWith('JT')) {
-        await _storage.delete(key: 'token');
-        await _storage.delete(key: 'Company-Code');
-        await _storage.delete(key: 'user_id');
+        await _storage.deleteAll();
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -184,9 +171,7 @@ class UserService {
       }
     } on Dio.DioException catch (e) {
       if (e.response?.data['error_code']?.startsWith('JT')) {
-        await _storage.delete(key: 'token');
-        await _storage.delete(key: 'Company-Code');
-        await _storage.delete(key: 'user_id');
+        await _storage.deleteAll();
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -218,9 +203,7 @@ class UserService {
       }
     } on Dio.DioException catch (e) {
       if (e.response?.data['error_code']?.startsWith('JT')) {
-        await _storage.delete(key: 'token');
-        await _storage.delete(key: 'Company-Code');
-        await _storage.delete(key: 'user_id');
+        await _storage.deleteAll();
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -252,9 +235,7 @@ class UserService {
       }
     } on Dio.DioException catch (e) {
       if (e.response?.data['error_code']?.startsWith('JT')) {
-        await _storage.delete(key: 'token');
-        await _storage.delete(key: 'Company-Code');
-        await _storage.delete(key: 'user_id');
+        await _storage.deleteAll();
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -289,9 +270,7 @@ class UserService {
       }
     } on Dio.DioException catch (e) {
       if (e.response?.data['error_code']?.startsWith('JT')) {
-        await _storage.delete(key: 'token');
-        await _storage.delete(key: 'Company-Code');
-        await _storage.delete(key: 'user_id');
+        await _storage.deleteAll();
         return {
           'success': false,
           'statusCode': e.response?.statusCode,
@@ -333,9 +312,7 @@ class UserService {
       }
     } on Dio.DioException catch (e) {
       if (e.response?.data['error_code']?.startsWith('JT')) {
-        await _storage.delete(key: 'token');
-        await _storage.delete(key: 'Company-Code');
-        await _storage.delete(key: 'user_id');
+        await _storage.deleteAll();
         return {
           'success': false,
           'statusCode': e.response?.statusCode,

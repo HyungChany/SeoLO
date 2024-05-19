@@ -1,4 +1,5 @@
 import 'package:app/main.dart';
+import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:app/widgets/login/fingerprint_auth.dart';
@@ -50,7 +51,8 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
     bool isAuthenticated = await FingerprintAuth.authenticate();
     // 지문인식 성공
     if (isAuthenticated) {
-      Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
+      Provider.of<AppLockState>(context, listen: false).unlock();
+      Navigator.pushReplacementNamed(context, Provider.of<AppLockState>(context, listen: false).lastRoute);
       setState(() {
         pin = '';
         failCount = 0;
@@ -76,7 +78,8 @@ class _PinLoginScreenState extends State<PinLoginScreen> {
       if (!viewModel.isLoading) {
         viewModel.pinLogin().then((_) {
           if (viewModel.errorMessage == null) {
-            Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
+            Provider.of<AppLockState>(context, listen: false).unlock();
+            Navigator.pushReplacementNamed(context, Provider.of<AppLockState>(context, listen: false).lastRoute);
             setState(() {
               pin = '';
               failCount = 0;

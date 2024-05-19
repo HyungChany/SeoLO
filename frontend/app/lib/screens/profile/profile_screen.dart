@@ -1,3 +1,4 @@
+import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/navigator/common_navigation_bar.dart';
 import 'package:app/widgets/profile/logout_button.dart';
@@ -5,6 +6,7 @@ import 'package:app/widgets/profile/my_activity.dart';
 import 'package:app/widgets/profile/my_info.dart';
 import 'package:app/widgets/profile/my_loto.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -13,7 +15,28 @@ class ProfileScreen extends StatefulWidget {
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      Provider.of<AppLockState>(context, listen: false)
+          .lock(ModalRoute.of(context)!.settings.name!);
+    }
+  }
+
   int _selectedIndex = 2;
 
   void _onItemTapped(int index) {

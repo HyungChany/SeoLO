@@ -1,5 +1,6 @@
 import 'package:app/main.dart';
 import 'package:app/view_models/loto/checklist_view_model.dart';
+import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
@@ -14,10 +15,12 @@ class ChecklistScreen extends StatefulWidget {
   State<ChecklistScreen> createState() => _ChecklistScreenState();
 }
 
-class _ChecklistScreenState extends State<ChecklistScreen> {
+class _ChecklistScreenState extends State<ChecklistScreen>
+    with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     final viewModel = Provider.of<ChecklistViewModel>(context, listen: false);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       viewModel.loadInitialData().then((_) {
@@ -50,6 +53,21 @@ class _ChecklistScreenState extends State<ChecklistScreen> {
         }
       });
     });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      Provider.of<AppLockState>(context, listen: false)
+          .lock(ModalRoute.of(context)!.settings.name!);
+    }
   }
 
   @override

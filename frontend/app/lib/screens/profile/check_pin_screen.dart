@@ -1,4 +1,5 @@
 import 'package:app/main.dart';
+import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:app/widgets/login/key_board_key.dart';
@@ -13,7 +14,7 @@ class CheckPinScreen extends StatefulWidget {
   State<CheckPinScreen> createState() => _CheckPinScreenState();
 }
 
-class _CheckPinScreenState extends State<CheckPinScreen> {
+class _CheckPinScreenState extends State<CheckPinScreen> with WidgetsBindingObserver {
   final _storage = const FlutterSecureStorage();
   String pin = '';
   String content = '';
@@ -22,9 +23,25 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     pin = '';
     content = '기존 암호를 입력해 주세요.';
     failCount = 0;
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      Provider.of<AppLockState>(context, listen: false)
+          .lock(ModalRoute.of(context)!.settings.name!);
+    }
   }
 
   final keys = [

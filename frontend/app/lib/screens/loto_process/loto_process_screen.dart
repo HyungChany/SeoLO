@@ -1,10 +1,38 @@
+import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/loto_process/loto_definition.dart';
-import 'package:app/widgets/loto_process/loto_work_process.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class LotoProcessScreen extends StatelessWidget {
+class LotoProcessScreen extends StatefulWidget {
   const LotoProcessScreen({super.key});
+
+  @override
+  State<LotoProcessScreen> createState() => _LotoProcessState();
+}
+
+class _LotoProcessState extends State<LotoProcessScreen>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      Provider.of<AppLockState>(context, listen: false)
+          .lock(ModalRoute.of(context)!.settings.name!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,26 +41,24 @@ class LotoProcessScreen extends StatelessWidget {
         title: 'LOTO 정의',
         back: true,
       ),
-      body: Center(
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.9,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('LOTO란?', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                  SizedBox(height: 10,),
-                  LotoDefinition(),
-                  SizedBox(height: 10,),
-                  const Text('LOTO 작업절차', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 10,),
-                  LotoWorkProcess(),
-                  // Image.asset('assets/images/loto_process_character.png',fit: BoxFit.contain,)
-                ],
+      body: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'LOTO란?',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-            ),
+              LotoDefinition(),
+              const Text('LOTO 작업절차',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Image.asset(
+                'assets/images/loto_process_character.png',
+              )
+            ],
           ),
         ),
       ),

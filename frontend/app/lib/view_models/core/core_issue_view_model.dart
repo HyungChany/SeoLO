@@ -18,7 +18,7 @@ class CoreIssueViewModel extends ChangeNotifier {
   String? lockerUid;
 
   Future<void> fetchMyInfo() async {
-    // await _myInfoViewModel.myInfo();
+    await _myInfoViewModel.myInfo();
     myInfo = _myInfoViewModel.myInfoModel!;
 
     final manager =

@@ -1,4 +1,5 @@
 import 'package:app/view_models/core/core_check_view_model.dart';
+import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:flutter/material.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/button/common_text_button.dart';
@@ -13,16 +14,37 @@ class OtherWorkListCheckScreen extends StatefulWidget {
       _OtherWorkListCheckScreenState();
 }
 
-class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
+class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> with WidgetsBindingObserver {
   List<String> workListTitle = [
     '작업장',
     '장비 명',
     '장비 번호',
     '작업 담당자',
     '시작 시간',
-    '종료 시간',
+    '종료 예상 시간',
     '작업 내용'
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      Provider.of<AppLockState>(context, listen: false)
+          .lock(ModalRoute.of(context)!.settings.name!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +108,7 @@ class _OtherWorkListCheckScreenState extends State<OtherWorkListCheckScreen> {
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.9,
-                    height: MediaQuery.of(context).size.height * 0.3,
+                    height: MediaQuery.of(context).size.height * 0.25,
                     padding: const EdgeInsets.all(16.0),
                     margin:
                     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),

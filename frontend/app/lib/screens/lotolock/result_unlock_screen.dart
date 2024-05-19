@@ -1,4 +1,5 @@
 import 'package:app/view_models/core/core_unlock_view_model.dart';
+import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -9,7 +10,27 @@ class ResultUnlockScreen extends StatefulWidget {
   State<ResultUnlockScreen> createState() => _ResultUnlockScreenState();
 }
 
-class _ResultUnlockScreenState extends State<ResultUnlockScreen> {
+class _ResultUnlockScreenState extends State<ResultUnlockScreen> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.detached) {
+      Provider.of<AppLockState>(context, listen: false)
+          .lock(ModalRoute.of(context)!.settings.name!);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final unlockVM = Provider.of<CoreUnlockViewModel>(context);

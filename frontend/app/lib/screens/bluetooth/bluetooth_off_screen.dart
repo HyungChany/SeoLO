@@ -41,6 +41,8 @@ class BluetoothOffScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            Text('블루투스를 활성화해 주세요.', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+            SizedBox(height: 20,),
             buildBluetoothOffIcon(context),
             if (Platform.isAndroid) buildTurnOnButton(context),
           ],
