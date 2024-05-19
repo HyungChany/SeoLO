@@ -23,7 +23,7 @@ const InputBoxContainer = styled.input<InputBoxProps>`
   border-radius: 8px;
   padding-left: 0.7rem;
   font-size: 1.1rem;
-
+  font-family: NYJGothicM;
   &::placeholder {
     color: ${Color.GRAY400};
   }
