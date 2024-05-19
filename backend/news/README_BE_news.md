@@ -13,6 +13,35 @@
 - 썸네일
 - 기사 링크
 
+### 파일 구조
+```
+📦news
+ ┣ 📂imgs                                                 // IMGS
+ ┃ ┣ 📜locust_dash.PNG
+ ┃ ┣ 📜locust_failures.PNG
+ ┃ ┗ 📜total_requests_per_second_1713936120.272.png
+ ┣ 📂news                                                 // NEWS Django Project
+ ┃ ┣ 📜asgi.py
+ ┃ ┣ 📜settings.py
+ ┃ ┣ 📜urls.py
+ ┃ ┣ 📜wsgi.py
+ ┃ ┗ 📜__init__.py
+ ┣ 📂scraper                                              // scraper Django APP
+ ┃ ┣ 📜admin.py
+ ┃ ┣ 📜apps.py
+ ┃ ┣ 📜models.py
+ ┃ ┣ 📜scraping.py                                        // scraping
+ ┃ ┣ 📜tasks.py                                           // scheduler
+ ┃ ┣ 📜tests.py
+ ┃ ┣ 📜urls.py
+ ┃ ┣ 📜views.py
+ ┃ ┗ 📜__init__.py
+ ┣ 📜Dockerfile                                           // Docker
+ ┣ 📜manage.py
+ ┣ 📜README_BE_news.md
+ ┗ 📜requirements.txt                                     // requirements
+```
+
 ### requirements.txt
 
 ```
