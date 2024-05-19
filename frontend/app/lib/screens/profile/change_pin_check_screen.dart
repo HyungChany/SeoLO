@@ -1,14 +1,15 @@
 import 'package:app/main.dart';
 import 'package:app/view_models/user/pin_change_view_model.dart';
-import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/widgets/dialog/dialog.dart';
 import 'package:app/widgets/login/key_board_key.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class ChangePinCheckScreen extends StatefulWidget {
+  const ChangePinCheckScreen({super.key});
+
   @override
-  _ChangePinCheckScreenState createState() => _ChangePinCheckScreenState();
+  State<ChangePinCheckScreen> createState() => _ChangePinCheckScreenState();
 }
 
 class _ChangePinCheckScreenState extends State<ChangePinCheckScreen> {
@@ -26,7 +27,7 @@ class _ChangePinCheckScreenState extends State<ChangePinCheckScreen> {
     ['1', '2', '3'],
     ['4', '5', '6'],
     ['7', '8', '9'],
-    ['', '0', Icon(Icons.backspace_outlined)],
+    ['', '0', const Icon(Icons.backspace_outlined)],
   ];
 
   onNumberPress(val) {
@@ -60,10 +61,26 @@ class _ChangePinCheckScreenState extends State<ChangePinCheckScreen> {
                     );
                   });
             } else {
-              setState(() {
-                pin = '';
-                content = viewModel.errorMessage!;
-              });
+              if (viewModel.errorMessage == 'JT') {
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return CommonDialog(
+                        content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                        buttonText: '확인',
+                        buttonClick: () {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, '/login', (route) => false);
+                        },
+                      );
+                    });
+              } else {
+                setState(() {
+                  pin = '';
+                  content = viewModel.errorMessage!;
+                });
+              }
             }
           });
         }
@@ -80,7 +97,10 @@ class _ChangePinCheckScreenState extends State<ChangePinCheckScreen> {
   gradient1() {
     return BoxDecoration(
       gradient: LinearGradient(
-        colors: [Colors.white.withOpacity(0.5), Color.fromRGBO(215, 223, 243, 0.5)],
+        colors: [
+          Colors.white.withOpacity(0.5),
+          const Color.fromRGBO(215, 223, 243, 0.5)
+        ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
@@ -88,9 +108,12 @@ class _ChangePinCheckScreenState extends State<ChangePinCheckScreen> {
   }
 
   gradient2() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
-        colors: [Color.fromRGBO(215, 223, 243, 0.5), Color.fromRGBO(175, 190, 240, 0.5)],
+        colors: [
+          Color.fromRGBO(215, 223, 243, 0.5),
+          Color.fromRGBO(175, 190, 240, 0.5)
+        ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
@@ -98,9 +121,12 @@ class _ChangePinCheckScreenState extends State<ChangePinCheckScreen> {
   }
 
   gradient3() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
-        colors: [Color.fromRGBO(175, 190, 240, 0.5), Color.fromRGBO (135, 157, 238, 0.5)],
+        colors: [
+          Color.fromRGBO(175, 190, 240, 0.5),
+          Color.fromRGBO(135, 157, 238, 0.5)
+        ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
@@ -108,7 +134,7 @@ class _ChangePinCheckScreenState extends State<ChangePinCheckScreen> {
   }
 
   gradient4() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
         colors: [Color.fromRGBO(135, 157, 238, 0.5), blue100],
         begin: Alignment.topCenter,
@@ -138,7 +164,13 @@ class _ChangePinCheckScreenState extends State<ChangePinCheckScreen> {
               return Expanded(
                 child: KeyboardKey(
                   label: y,
-                  onTap: y is Widget ? onBackspacePress(y) : onNumberPress(y),
+                  onTap: () {
+                    if (y is Widget) {
+                      onBackspacePress(y);
+                    } else {
+                      onNumberPress(y);
+                    }
+                  },
                   value: y,
                 ),
               );
@@ -151,10 +183,10 @@ class _ChangePinCheckScreenState extends State<ChangePinCheckScreen> {
   }
 
   renderText() {
-    TextStyle styleTitle =
-    TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
+    TextStyle styleTitle = const TextStyle(
+        fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
 
-    TextStyle styleContent = TextStyle(
+    TextStyle styleContent = const TextStyle(
         fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black);
 
     return Expanded(
@@ -166,14 +198,14 @@ class _ChangePinCheckScreenState extends State<ChangePinCheckScreen> {
               '암호 입력',
               style: styleTitle,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
               content,
               style: styleContent,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Row(
@@ -185,7 +217,7 @@ class _ChangePinCheckScreenState extends State<ChangePinCheckScreen> {
                     style: TextStyle(
                       color: pin.length >= i
                           ? blue100
-                          : Color.fromRGBO(227, 227, 227, 1),
+                          : const Color.fromRGBO(227, 227, 227, 1),
                       fontWeight: FontWeight.bold,
                       fontSize: 50.0,
                     ),

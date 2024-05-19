@@ -8,8 +8,7 @@ class PasswordChangeModel {
   });
 
   Map<String, dynamic> toJson() => {
-    'new_password': newPwd,
-    'check_new_password': checkNewPwd,
-  };
+        'new_password': newPwd,
+        'check_new_password': checkNewPwd,
+      };
 }
-

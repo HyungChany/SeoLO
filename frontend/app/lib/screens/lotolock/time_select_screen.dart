@@ -8,7 +8,7 @@ import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/button/common_text_button.dart';
 
 class TimeSelect extends StatefulWidget {
-  const TimeSelect({Key? key}) : super(key: key);
+  const TimeSelect({super.key});
 
   @override
   State<TimeSelect> createState() => _TimeSelectState();
@@ -19,11 +19,6 @@ class _TimeSelectState extends State<TimeSelect> {
   late DateTime currentDay;
   late int endHour;
   late int endMin;
-  @override
-  void initState() {
-    super.initState();
-    currentDay = DateTime.now();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +27,10 @@ class _TimeSelectState extends State<TimeSelect> {
         .parse('${DateTime.now().hour}:${DateTime.now().minute}');
 
     DateTime endDay;
-    endDay = DateFormat('yyyy-MM-dd').parse(coreViewModel.endDay);
+    endDay = DateFormat('yyyy-MM-dd').parse(coreViewModel.endDay!);
 
     return Scaffold(
-      appBar: const Header(title: '시간 선택', back: true),
+      appBar: const Header(title: '예상 작업 종료 시간', back: true),
       body: Stack(
         children: [
           Center(
@@ -54,28 +49,30 @@ class _TimeSelectState extends State<TimeSelect> {
               ),
             ),
           ),
-          Positioned(
-            bottom: 20,
-            left: 50,
-            right: 50,
-            child: CommonTextButton(
-                text: '다음 단계',
-                onTap: () {
-                  if (DateTime.now().isAfter(endDay.add(Duration(hours: endHour, minutes: endMin)))) {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (BuildContext context) {
-                          return const CommonDialog(
-                            content: '현재 이후의 시간를 선택해 주세요.',
-                            buttonText: '확인',
-                          );
-                        });
-                  } else {
-                    coreViewModel.setEndTime(endTime);
-                    Navigator.pushNamed(context, '/worklistcheck');
-                  }
-                }),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 20, left: 50, right: 50),
+              child: CommonTextButton(
+                  text: '다음 단계',
+                  onTap: () {
+                    if (DateTime.now().isAfter(endDay
+                        .add(Duration(hours: endHour, minutes: endMin + 1)))) {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (BuildContext context) {
+                            return const CommonDialog(
+                              content: '현재 이후의 시간를 선택해 주세요.',
+                              buttonText: '확인',
+                            );
+                          });
+                    } else {
+                      coreViewModel.setEndTime(endTime);
+                      Navigator.pushNamed(context, '/worklistCheck');
+                    }
+                  }),
+            ),
           ),
         ],
       ),

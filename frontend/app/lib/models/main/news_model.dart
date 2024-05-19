@@ -27,12 +27,11 @@ class NewsModel {
   }
 
   Map<String, dynamic> toJson() => {
-    'title': title,
-    'preview': preview,
-    'author': author,
-    'date': date,
-    'thum': thum,
-    'link': link,
-  };
+        'title': title,
+        'preview': preview,
+        'author': author,
+        'date': date,
+        'thum': thum,
+        'link': link,
+      };
 }
-

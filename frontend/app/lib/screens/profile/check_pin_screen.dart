@@ -10,11 +10,11 @@ class CheckPinScreen extends StatefulWidget {
   const CheckPinScreen({super.key});
 
   @override
-  _CheckPinScreenState createState() => _CheckPinScreenState();
+  State<CheckPinScreen> createState() => _CheckPinScreenState();
 }
 
 class _CheckPinScreenState extends State<CheckPinScreen> {
-  final _storage = FlutterSecureStorage();
+  final _storage = const FlutterSecureStorage();
   String pin = '';
   String content = '';
   int failCount = 0;
@@ -31,7 +31,7 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
     ['1', '2', '3'],
     ['4', '5', '6'],
     ['7', '8', '9'],
-    ['', '0', Icon(Icons.backspace_outlined)],
+    ['', '0', const Icon(Icons.backspace_outlined)],
   ];
 
   onNumberPress(val) {
@@ -51,38 +51,56 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
               failCount = 0;
             });
           } else {
-            setState(() {
-              pin = '';
-              failCount += 1;
-              content = failCount == 5 ? '' : '${viewModel.errorMessage!} ($failCount/5)';
-            });
-            failCount == 3
-                ? showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return const CommonDialog(
-                    content: 'pin 번호를 5번 틀릴 시 계정이 잠깁니다.',
-                    buttonText: '확인',
-                  );
-                })
-                : null;
-            failCount == 5
-                ? showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return CommonDialog(
-                    content: viewModel.errorMessage!,
-                    buttonText: '확인',
-                    buttonClick: () {
-                      _storage.deleteAll();
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, '/login', (route) => false);
-                    },
-                  );
-                })
-                : null;
+            if (viewModel.errorMessage == 'JT') {
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return CommonDialog(
+                      content: '토큰이 만료되었습니다. 다시 로그인 해주세요.',
+                      buttonText: '확인',
+                      buttonClick: () {
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/login', (route) => false);
+                      },
+                    );
+                  });
+            } else {
+              setState(() {
+                pin = '';
+                failCount += 1;
+                content = failCount == 5
+                    ? ''
+                    : '${viewModel.errorMessage!} ($failCount/5)';
+              });
+              failCount == 3
+                  ? showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return const CommonDialog(
+                      content: 'pin 번호를 5번 틀릴 시 계정이 잠깁니다.',
+                      buttonText: '확인',
+                    );
+                  })
+                  : null;
+              failCount == 5
+                  ? showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return CommonDialog(
+                      content: viewModel.errorMessage!,
+                      buttonText: '확인',
+                      buttonClick: () {
+                        _storage.deleteAll();
+                        Navigator.pushNamedAndRemoveUntil(
+                            context, '/login', (route) => false);
+                      },
+                    );
+                  })
+                  : null;
+            }
           }
         });
       }
@@ -98,7 +116,10 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
   gradient1() {
     return BoxDecoration(
       gradient: LinearGradient(
-        colors: [Colors.white.withOpacity(0.5), Color.fromRGBO(215, 223, 243, 0.5)],
+        colors: [
+          Colors.white.withOpacity(0.5),
+          const Color.fromRGBO(215, 223, 243, 0.5)
+        ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
@@ -106,9 +127,12 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
   }
 
   gradient2() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
-        colors: [Color.fromRGBO(215, 223, 243, 0.5), Color.fromRGBO(175, 190, 240, 0.5)],
+        colors: [
+          Color.fromRGBO(215, 223, 243, 0.5),
+          Color.fromRGBO(175, 190, 240, 0.5)
+        ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
@@ -116,9 +140,12 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
   }
 
   gradient3() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
-        colors: [Color.fromRGBO(175, 190, 240, 0.5), Color.fromRGBO (135, 157, 238, 0.5)],
+        colors: [
+          Color.fromRGBO(175, 190, 240, 0.5),
+          Color.fromRGBO(135, 157, 238, 0.5)
+        ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
       ),
@@ -126,7 +153,7 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
   }
 
   gradient4() {
-    return BoxDecoration(
+    return const BoxDecoration(
       gradient: LinearGradient(
         colors: [Color.fromRGBO(135, 157, 238, 0.5), blue100],
         begin: Alignment.topCenter,
@@ -156,7 +183,13 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
               return Expanded(
                 child: KeyboardKey(
                   label: y,
-                  onTap: y is Widget ? onBackspacePress(y) : onNumberPress(y),
+                  onTap: () {
+                    if (y is Widget) {
+                      onBackspacePress(y);
+                    } else {
+                      onNumberPress(y);
+                    }
+                  },
                   value: y,
                 ),
               );
@@ -170,9 +203,9 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
 
   renderText() {
     TextStyle styleTitle =
-        TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
+        const TextStyle(fontSize: 30, fontWeight: FontWeight.w700, color: blue400);
 
-    TextStyle styleContent = TextStyle(
+    TextStyle styleContent = const TextStyle(
         fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black);
 
     return Expanded(
@@ -184,14 +217,14 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
               '암호 입력',
               style: styleTitle,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Text(
               content,
               style: styleContent,
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             Row(
@@ -203,7 +236,7 @@ class _CheckPinScreenState extends State<CheckPinScreen> {
                     style: TextStyle(
                       color: pin.length >= i
                           ? blue100
-                          : Color.fromRGBO(227, 227, 227, 1),
+                          : const Color.fromRGBO(227, 227, 227, 1),
                       fontWeight: FontWeight.bold,
                       fontSize: 50.0,
                     ),

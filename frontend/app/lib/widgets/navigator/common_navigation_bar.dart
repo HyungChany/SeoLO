@@ -14,25 +14,23 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      items: <BottomNavigationBarItem>[
+      items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Image.asset('assets/images/home_icon.png',width: 34,height: 34),
+          icon: Icon(Icons.home_outlined),
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Image.asset('assets/images/nfc_icon.png',width: 34,height: 34),
-          label: 'NFC',
+          icon: Icon(Icons.bluetooth),
+          label: 'BLUETOOTH',
         ),
         BottomNavigationBarItem(
-          icon: Image.asset('assets/images/profile_icon.png',width: 34,height: 34),
+          icon: Icon(Icons.person_2_outlined),
           label: 'Profile',
         ),
       ],
       currentIndex: selectedIndex,
       selectedItemColor: samsungBlue,
-      selectedLabelStyle: const TextStyle(
-        fontWeight: FontWeight.bold
-      ),
+      selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold),
       onTap: onItemTapped,
     );
   }

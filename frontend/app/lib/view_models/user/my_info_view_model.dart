@@ -5,11 +5,6 @@ import 'package:flutter/material.dart';
 class MyInfoViewModel extends ChangeNotifier {
   final UserService _userService = UserService();
 
-  MyInfoViewModel() {
-    myInfo();
-    notifyListeners();
-  }
-
   MyInfoModel? _myInfoModel;
   bool _isLoading = false;
   String? _errorMessage;

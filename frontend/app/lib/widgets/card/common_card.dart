@@ -18,7 +18,7 @@ class CommonCard extends StatefulWidget {
       required this.center});
 
   @override
-  _CommonCardState createState() => _CommonCardState();
+  State<CommonCard> createState() => _CommonCardState();
 }
 
 class _CommonCardState extends State<CommonCard> {
@@ -34,7 +34,7 @@ class _CommonCardState extends State<CommonCard> {
       alignment: Alignment.center,
       children: [
         Container(
-          width: MediaQuery.of(context).size.width * 0.35,
+          width: MediaQuery.of(context).size.width * 0.36,
           height: MediaQuery.of(context).size.height * 0.25,
           decoration: BoxDecoration(
             color: const Color.fromRGBO(237, 244, 251, 1),
@@ -55,14 +55,15 @@ class _CommonCardState extends State<CommonCard> {
             }).toList(),
           ),
         ),
-        if (!widget.center) Container(
-          width: MediaQuery.of(context).size.width * 0.35,
-          height: MediaQuery.of(context).size.height * 0.25,
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(10.0),
+        if (!widget.center)
+          Container(
+            width: MediaQuery.of(context).size.width * 0.35,
+            height: MediaQuery.of(context).size.height * 0.25,
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.5),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
           ),
-        ),
       ],
     );
   }

@@ -1,6 +1,9 @@
 import 'package:app/routes/main_route.dart';
 import 'package:app/screens/login/login_screen.dart';
+import 'package:app/view_models/core/core_check_view_model.dart';
 import 'package:app/view_models/core/core_issue_view_model.dart';
+import 'package:app/view_models/core/core_locked_view_model.dart';
+import 'package:app/view_models/core/core_unlock_view_model.dart';
 import 'package:app/view_models/loto/checklist_view_model.dart';
 import 'package:app/view_models/loto/facility_view_model.dart';
 import 'package:app/view_models/loto/machine_view_model.dart';
@@ -15,12 +18,13 @@ import 'package:app/view_models/user/pin_change_view_model.dart';
 import 'package:app/view_models/user/pin_login_view_model.dart';
 import 'package:app/view_models/user/logout_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
-// main.dart import 후 color: blue100 이러한 방식으로 사용
-// 참고로 color: blue100하고 tab 누르면 알아서 import 됨
 const Color blue100 = Color.fromRGBO(135, 185, 231, 1);
 const Color blue400 = Color.fromRGBO(52, 107, 190, 1);
 const Color blue800 = Color.fromRGBO(56, 61, 101, 1);
@@ -37,23 +41,27 @@ const Color yellow200 = Color.fromRGBO(250, 237, 11, 1);
 const Color safetyRed = Color.fromRGBO(255, 0, 0, 1);
 // 그림자
 const BoxShadow shadow = BoxShadow(
-  color: Color.fromRGBO(0, 0, 0, 0.25), // 그림자 확산 범위
-  blurRadius: 5, // 그림자 흐림 정도
-  offset: Offset(0, 2), // 그림자 위치
+  color: Color.fromRGBO(0, 0, 0, 0.25),
+  blurRadius: 5,
+  offset: Offset(0, 2),
 );
 
 void main() async {
-  // WidgetsBinding widgetsBinding =
   WidgetsFlutterBinding.ensureInitialized(); // 초기화 보장
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   await dotenv.load(fileName: '.env');
-  runApp(const MyApp());
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
-  _MyAppState createState() => _MyAppState();
+  @override
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -75,9 +83,13 @@ class _MyAppState extends State<MyApp> {
           ChangeNotifierProvider(create: (_) => FacilityViewModel()),
           ChangeNotifierProvider(create: (_) => MachineViewModel()),
           ChangeNotifierProvider(create: (_) => TaskTemplatesViewModel()),
+          ChangeNotifierProvider(create: (_) => CoreIssueViewModel()),
+          ChangeNotifierProvider(create: (_) => CoreCheckViewModel()),
+          ChangeNotifierProvider(create: (_) => CoreLockedViewModel()),
+          ChangeNotifierProvider(create: (_) => CoreUnlockViewModel()),
         ],
         child: MaterialApp(
-          localizationsDelegates: [
+          localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
           ],
@@ -85,16 +97,42 @@ class _MyAppState extends State<MyApp> {
             Locale('en', ''), // English, no country code
             Locale('ko', ''), // Korean, no country code
           ],
-          // supportedLocales: _localization.supportedLocales,
-          // localizationsDelegates: _localization.localizationsDelegates,
           title: 'SeoLo',
-          // debugShowCheckedModeBanner: false,
           theme: ThemeData(
               primarySwatch: Colors.blue,
               visualDensity: VisualDensity.adaptivePlatformDensity,
               fontFamily: 'font'),
-          home: const LoginScreen(),
+          home: const SplashScreen(),
           onGenerateRoute: generateMainRoute,
         ));
+  }
+}
+
+class SplashScreen extends StatelessWidget {
+  final storage = const FlutterSecureStorage();
+
+  const SplashScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: storage.read(key: 'token'),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
+        } else {
+          if (snapshot.data != null) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacementNamed(context, '/pinLogin');
+            });
+          } else {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacementNamed(context, '/login');
+            });
+          }
+          return Container();
+        }
+      },
+    );
   }
 }

@@ -8,12 +8,12 @@ class CommonDialog extends StatelessWidget {
   final VoidCallback? buttonClick;
 
   const CommonDialog({
-    Key? key,
+    super.key,
     this.title,
     required this.content,
     required this.buttonText,
     this.buttonClick,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +25,9 @@ class CommonDialog extends StatelessWidget {
       content: Text(content),
       actions: [
         CommonTextButton(
-          onTap: buttonClick ?? () => Navigator.pop(context),
-          text: buttonText,
-          width: 80
-        ),
+            onTap: buttonClick ?? () => Navigator.pop(context),
+            text: buttonText,
+            width: 80),
       ],
     );
   }

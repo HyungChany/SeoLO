@@ -46,9 +46,9 @@ dependencies:
   flutter_localization: ^0.2.0 # 도로록 영어 -> 한글
   nfc_manager: ^3.4.0 # nfc 통신
   flutter_secure_storage: ^9.0.0 # token 담을 스토리지
-  local_auth_android: ^1.0.38
+  local_auth_android: ^1.0.38 # 지문인식 안드로이드 기본 설정 창
   flutter_launcher_icons: ^0.13.1 #앱 아이콘 설정
-  flutter_blue_plus: ^1.32.5
+  flutter_blue_plus: ^1.32.5 # 블루투스
 
 dev_dependencies:
   flutter_test:
@@ -99,6 +99,11 @@ flutter:
     - assets/images/loading_icon.png
     - assets/images/login.png
     - assets/images/login_logo.png
+    - assets/images/success_loto.png
+    - assets/images/fail_loto.png
+    - assets/images/bluetooth_icon.png
+    - assets/images/loto_process_character.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

@@ -9,18 +9,18 @@ import 'package:app/view_models/user/my_info_view_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:dio/dio.dart' as Dio;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter/material.dart';
 
 class UserService {
   final _dio = Dio.Dio();
-  final _storage = FlutterSecureStorage();
+  final _storage = const FlutterSecureStorage();
   final baseUrl = dotenv.env['API_URL'] ?? '';
 
   UserService() {
     _dio.interceptors.add(Dio.InterceptorsWrapper(
       onRequest: (options, handler) async {
         String? token = await _storage.read(key: 'token');
-        String? companyCode = await _storage.read(key: 'companyCode');
+        String? companyCode = await _storage.read(key: 'Company-Code');
+        options.headers['Device-Type'] = 'app';
         if (token != null) {
           options.headers['Authorization'] = 'Bearer $token';
           options.headers['Company-Code'] = companyCode;
@@ -28,7 +28,6 @@ class UserService {
         return handler.next(options);
       },
     ));
-    _dio.interceptors.add(LoggingInterceptor());
   }
 
   ///////////////////////// id 로그인 //////////////////////////////////
@@ -38,15 +37,35 @@ class UserService {
           await _dio.post('$baseUrl/login', data: loginModel.toJson());
       if (response.statusCode == 200) {
         String? token = response.data['issuedToken']['accessToken'];
+        String? userId = response.data['userId'].toString();
         String? companyCode = loginModel.companyCode.toString();
+        String? coreCode = response.data['codeStatus'];
+        String? lockerUid = response.data['workingLockerUid'];
+        int? machineId = response.data['workingMachineId'];
+        String? lockerToken = response.data['issuedCoreToken'];
         if (token != null) {
-          await _storage.delete(key: 'token');
-          await _storage.delete(key: 'companyCode');
+          await _storage.deleteAll();
           await _storage.write(key: 'token', value: token);
-          await _storage.write(key: 'companyCode', value: companyCode);
+          await _storage.write(key: 'Company-Code', value: companyCode);
+          await _storage.write(key: 'user_id', value: userId);
+          await _storage.write(key: 'Core-Code', value: coreCode);
+          if (lockerUid != null) {
+            await _storage.write(key: 'locker_uid', value: lockerUid);
+          } else {}
+          if (machineId != null) {
+            await _storage.write(
+                key: 'machine_id', value: machineId.toString());
+          } else {}
+          if (lockerToken != null) {
+            await _storage.write(key: 'locker_token', value: lockerToken);
+          } else {}
           return {'success': true};
         } else {
-          return {'success': false, 'message': '로그인에 실패하였습니다.'};
+          return {
+            'success': false,
+            'message': '로그인에 실패하였습니다.',
+            'statusCode': response.statusCode
+          };
         }
       } else {
         return {
@@ -56,24 +75,54 @@ class UserService {
         };
       }
     } on Dio.DioException catch (e) {
-      // debugPrint(e.message);
-      return {
-        'success': false,
-        'statusCode': e.response?.statusCode,
-        'message': e.response?.data['message'],
-      };
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.deleteAll();
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
     }
   }
 
   ///////////////////////// 로그아웃 //////////////////////////////////
-  Future<void> logout() async {
-    Dio.Response response = await _dio.post(
-      '$baseUrl/logout',
-    );
+  Future<Map<String, dynamic>> logout() async {
+    try {
+      Dio.Response response = await _dio.post(
+        '$baseUrl/logout',
+      );
 
-    if (response.statusCode == 200) {
-      await _storage.delete(key: 'token');
-      await _storage.delete(key: 'companyCode');
+      if (response.statusCode == 200) {
+        await _storage.deleteAll();
+        return {'success': true};
+      } else {
+        return {
+          'success': false,
+          'message': '로그아웃 실패',
+        };
+      }
+    } on Dio.DioException catch (e) {
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.deleteAll();
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
     }
   }
 
@@ -98,12 +147,21 @@ class UserService {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
       }
     } on Dio.DioException catch (e) {
-      return {
-        'success': false,
-        'statusCode': e.response?.statusCode,
-        'message': e.response?.data['message'],
-        'errorCode': e.response?.data['error_code'],
-      };
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.deleteAll();
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+          'errorCode': e.response?.data['error_code'],
+        };
+      }
     }
   }
 
@@ -120,11 +178,20 @@ class UserService {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
       }
     } on Dio.DioException catch (e) {
-      return {
-        'success': false,
-        'statusCode': e.response?.statusCode,
-        'message': e.response?.data['message'],
-      };
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.deleteAll();
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
     }
   }
 
@@ -137,17 +204,25 @@ class UserService {
       if (response.statusCode == 200) {
         MyInfoModel myInfoModel =
             MyInfoModel.fromJson(response.data['employee']);
-
         return {'success': true, 'myInfo': myInfoModel};
       } else {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
       }
     } on Dio.DioException catch (e) {
-      return {
-        'success': false,
-        'statusCode': e.response?.statusCode,
-        'message': e.response?.data['message'],
-      };
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.deleteAll();
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
     }
   }
 
@@ -165,11 +240,20 @@ class UserService {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
       }
     } on Dio.DioException catch (e) {
-      return {
-        'success': false,
-        'statusCode': e.response?.statusCode,
-        'message': e.response?.data['message'],
-      };
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.deleteAll();
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
     }
   }
 
@@ -180,6 +264,9 @@ class UserService {
       Dio.Response response = await _dio.patch('$baseUrl/users/pwd',
           data: passwordChangeModel.toJson());
       if (response.statusCode == 200) {
+        await _storage.delete(key: 'token');
+        await _storage.delete(key: 'Company-Code');
+        await _storage.delete(key: 'user_id');
         return {
           'success': true,
         };
@@ -187,11 +274,20 @@ class UserService {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
       }
     } on Dio.DioException catch (e) {
-      return {
-        'success': false,
-        'statusCode': e.response?.statusCode,
-        'message': e.response?.data['message'],
-      };
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.deleteAll();
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
     }
   }
 
@@ -204,52 +300,34 @@ class UserService {
     myInfoModel = myInfoViewModel.myInfoModel!;
 
     try {
-      Dio.Response response = await _dio.get('$baseUrl/tasks/assignment/${myInfoModel.employeeNum}');
+      Dio.Response response = await _dio
+          .get('$baseUrl/tasks/assignment/${myInfoModel.employeeNum}');
       if (response.statusCode == 200) {
-        debugPrint('${response.data['tasks']}');
         List<MyTasksModel> tasks = [];
         for (var task in response.data['tasks']) {
           tasks.add(
             MyTasksModel.fromJson(task),
           );
         }
-        return {
-          'success': true, 'tasks': tasks
-        };
+        return {'success': true, 'tasks': tasks};
       } else {
         return {'success': false, 'message': '알 수 없는 오류가 발생하였습니다.'};
       }
     } on Dio.DioException catch (e) {
-      return {
-        'success': false,
-        'statusCode': e.response?.statusCode,
-        'message': e.response?.data['message'],
-      };
+      if (e.response?.data['error_code']?.startsWith('JT')) {
+        await _storage.deleteAll();
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': 'JT'
+        };
+      } else {
+        return {
+          'success': false,
+          'statusCode': e.response?.statusCode,
+          'message': e.response?.data['message'],
+        };
+      }
     }
-  }
-}
-
-class LoggingInterceptor extends Dio.Interceptor {
-  @override
-  void onRequest(
-      Dio.RequestOptions options, Dio.RequestInterceptorHandler handler) {
-    debugPrint("REQUEST[${options.method}] => PATH: ${options.path}");
-    debugPrint("Request Header: ${options.headers}");
-    super.onRequest(options, handler);
-  }
-
-  @override
-  void onResponse(
-      Dio.Response response, Dio.ResponseInterceptorHandler handler) {
-    debugPrint(
-        "RESPONSE[${response.statusCode}] => PATH: ${response.requestOptions.path}");
-    super.onResponse(response, handler);
-  }
-
-  @override
-  void onError(Dio.DioError err, Dio.ErrorInterceptorHandler handler) {
-    debugPrint(
-        "ERROR[${err.response?.statusCode}] => PATH: ${err.requestOptions.path}");
-    super.onError(err, handler);
   }
 }

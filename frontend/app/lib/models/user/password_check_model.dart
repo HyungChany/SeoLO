@@ -6,6 +6,6 @@ class PasswordCheckModel {
   });
 
   Map<String, dynamic> toJson() => {
-    'now_password': nowPwd,
-  };
+        'now_password': nowPwd,
+      };
 }

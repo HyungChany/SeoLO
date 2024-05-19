@@ -9,9 +9,12 @@ class PinChangeViewModel extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
 
-  String get newPin  => _pinChangeData.newPin;
-  String get checkNewPin  => _pinChangeData.checkNewPin;
+  String get newPin => _pinChangeData.newPin;
+
+  String get checkNewPin => _pinChangeData.checkNewPin;
+
   bool get isLoading => _isLoading;
+
   String? get errorMessage => _errorMessage;
 
   void setNewPin(String value) {
@@ -20,7 +23,8 @@ class PinChangeViewModel extends ChangeNotifier {
   }
 
   void setCheckNewPin(String value) {
-    _pinChangeData = PinChangeModel(newPin: _pinChangeData.newPin, checkNewPin: value);
+    _pinChangeData =
+        PinChangeModel(newPin: _pinChangeData.newPin, checkNewPin: value);
   }
 
   Future<void> pinChange() async {
@@ -32,7 +36,6 @@ class PinChangeViewModel extends ChangeNotifier {
     _isLoading = false;
 
     if (!result['success']) {
-      debugPrint('실패했을 때 메시지 : ${result['message']}');
       _errorMessage = result['message'];
     } else {
       _errorMessage = null;

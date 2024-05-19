@@ -26,7 +26,7 @@ class _DaySelectState extends State<DaySelect> {
         .parse('${today.year}-${today.month}-${today.day}');
 
     return Scaffold(
-      appBar: const Header(title: '날짜 선택', back: true),
+      appBar: const Header(title: '예상 작업 종료 일자', back: true),
       body: Stack(
         children: [
           Center(
@@ -45,28 +45,30 @@ class _DaySelectState extends State<DaySelect> {
               ),
             ),
           ),
-          Positioned(
-            bottom: 20,
-            left: 50,
-            right: 50,
-            child: CommonTextButton(
-                text: '다음 단계',
-                onTap: () {
-                  if (selectedDate.isBefore(today.subtract(const Duration(days: 1)))) {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: true,
-                        builder: (BuildContext context) {
-                          return const CommonDialog(
-                            content: '오늘 이후의 날짜를 선택해 주세요.',
-                            buttonText: '확인',
-                          );
-                        });
-                  } else {
-                    coreViewModel.setEndDay(endDay);
-                    Navigator.pushNamed(context, '/selectTime');
-                  }
-                }),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 20, left: 50, right: 50),
+              child: CommonTextButton(
+                  text: '다음 단계',
+                  onTap: () {
+                    if (selectedDate
+                        .isBefore(today.subtract(const Duration(days: 1)))) {
+                      showDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          builder: (BuildContext context) {
+                            return const CommonDialog(
+                              content: '오늘 이후의 날짜를 선택해 주세요.',
+                              buttonText: '확인',
+                            );
+                          });
+                    } else {
+                      coreViewModel.setEndDay(endDay);
+                      Navigator.pushNamed(context, '/selectTime');
+                    }
+                  }),
+            ),
           ),
         ],
       ),
