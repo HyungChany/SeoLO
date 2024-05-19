@@ -12,25 +12,17 @@ class CoreLockedViewModel extends ChangeNotifier {
   String? machineId;
   bool _isLoading = false;
   String? _errorMessage;
-  bool _isLocking = false;
 
   bool get isLoading => _isLoading;
-  bool get isLocking => _isLocking;
   String? get errorMessage => _errorMessage;
-
-
-  void setIsLocking() async {
-    _isLocking = !_isLocking;
-    notifyListeners();
-  }
 
   Future<void> initializeData() async {
     lockerUid = await _storage.read(key: 'locker_uid');
     battery = await _storage.read(key: 'locker_battery');
-    int? batteryInfo = int.parse(battery!);
+    int? batteryInfo = (battery != null) ? int.parse(battery!) : 0;
     machineId = await _storage.read(key: 'machine_id');
-    int? machineIdInfo = int.parse(machineId!);
-    _coreLockedModel = CoreLockedModel(lockerUid: lockerUid, battery: batteryInfo, machineId: machineIdInfo);
+    int? machineIdInfo = (machineId != null) ? int.parse(machineId!) : 0;
+    _coreLockedModel = CoreLockedModel(lockerUid: lockerUid ?? '', battery: batteryInfo, machineId: machineIdInfo);
     notifyListeners();
   }
 

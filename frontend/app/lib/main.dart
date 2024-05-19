@@ -104,101 +104,55 @@ class MyApp extends StatefulWidget {
   State<MyApp> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  late AppRouter _appRouter;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    _appRouter = AppRouter(Provider.of<AppLockState>(context, listen: false));
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.detached) {
-      Provider.of<AppLockState>(context, listen: false).lock();
-    }
-  }
-
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => NewsViewModel()),
-        ChangeNotifierProvider(create: (_) => LoginViewModel()),
-        ChangeNotifierProvider(create: (_) => LogoutViewModel()),
-        ChangeNotifierProvider(create: (_) => PinLoginViewModel()),
-        ChangeNotifierProvider(create: (_) => PinChangeViewModel()),
-        ChangeNotifierProvider(create: (_) => MyInfoViewModel()),
-        ChangeNotifierProvider(create: (_) => PasswordChangeViewModel()),
-        ChangeNotifierProvider(create: (_) => PasswordCheckViewModel()),
-        ChangeNotifierProvider(create: (_) => MyTasksViewModel()),
-        ChangeNotifierProvider(create: (_) => CoreIssueViewModel()),
-        ChangeNotifierProvider(create: (_) => ChecklistViewModel()),
-        ChangeNotifierProvider(create: (_) => FacilityViewModel()),
-        ChangeNotifierProvider(create: (_) => MachineViewModel()),
-        ChangeNotifierProvider(create: (_) => TaskTemplatesViewModel()),
-        ChangeNotifierProvider(create: (_) => CoreIssueViewModel()),
-        ChangeNotifierProvider(create: (_) => CoreCheckViewModel()),
-        ChangeNotifierProvider(create: (_) => CoreLockedViewModel()),
-        ChangeNotifierProvider(create: (_) => CoreUnlockViewModel()),
-      ],
-      child: Consumer<AppLockState>(
-        builder: (context, appLockState, child) {
-          return MaterialApp(
-            localizationsDelegates: [
-              GlobalMaterialLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [
-              Locale('en', ''), // English, no country code
-              Locale('ko', ''), // Korean, no country code
-            ],
-            // supportedLocales: _localization.supportedLocales,
-            // localizationsDelegates: _localization.localizationsDelegates,
-            title: 'SeoLo',
-            // debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-                primarySwatch: Colors.blue,
-                visualDensity: VisualDensity.adaptivePlatformDensity,
-                fontFamily: 'font'),
-            home: const SplashScreen(),
-            onGenerateRoute: _appRouter.generateMainRoute,
-            navigatorObservers: [AppRouteObserver()],
-          );
-        },
-      ),
-    );
-  }
-}
-
-class AppRouteObserver extends RouteObserver<PageRoute<dynamic>> {
-  @override
-  void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    if (route is PageRoute) {
-      Provider.of<AppLockState>(route.navigator!.context, listen: false)
-          .pushRoute(route.settings.name!);
-    }
-  }
-
-  @override
-  void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    if (route is PageRoute) {
-      Provider.of<AppLockState>(route.navigator!.context, listen: false)
-          .popRoute();
-    }
+        providers: [
+          ChangeNotifierProvider(create: (_) => NewsViewModel()),
+          ChangeNotifierProvider(create: (_) => LoginViewModel()),
+          ChangeNotifierProvider(create: (_) => LogoutViewModel()),
+          ChangeNotifierProvider(create: (_) => PinLoginViewModel()),
+          ChangeNotifierProvider(create: (_) => PinChangeViewModel()),
+          ChangeNotifierProvider(create: (_) => MyInfoViewModel()),
+          ChangeNotifierProvider(create: (_) => PasswordChangeViewModel()),
+          ChangeNotifierProvider(create: (_) => PasswordCheckViewModel()),
+          ChangeNotifierProvider(create: (_) => MyTasksViewModel()),
+          ChangeNotifierProvider(create: (_) => CoreIssueViewModel()),
+          ChangeNotifierProvider(create: (_) => ChecklistViewModel()),
+          ChangeNotifierProvider(create: (_) => FacilityViewModel()),
+          ChangeNotifierProvider(create: (_) => MachineViewModel()),
+          ChangeNotifierProvider(create: (_) => TaskTemplatesViewModel()),
+          ChangeNotifierProvider(create: (_) => CoreIssueViewModel()),
+          ChangeNotifierProvider(create: (_) => CoreCheckViewModel()),
+          ChangeNotifierProvider(create: (_) => CoreLockedViewModel()),
+          ChangeNotifierProvider(create: (_) => CoreUnlockViewModel()),
+        ],
+        child: MaterialApp(
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en', ''), // English, no country code
+            Locale('ko', ''), // Korean, no country code
+          ],
+          // supportedLocales: _localization.supportedLocales,
+          // localizationsDelegates: _localization.localizationsDelegates,
+          title: 'SeoLo',
+          // debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+              primarySwatch: Colors.blue,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+              fontFamily: 'font'),
+          home: const LoginScreen(),
+          onGenerateRoute: generateMainRoute,
+        ));
   }
 }
 
 class SplashScreen extends StatelessWidget {
+
   final storage = const FlutterSecureStorage();
 
   const SplashScreen({super.key});

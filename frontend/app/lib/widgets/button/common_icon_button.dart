@@ -75,7 +75,8 @@ class _CommonIconButtonState extends State<CommonIconButton>{
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
-          )
+          ),
+          SizedBox(height: 5,)
         ],
       ),
     );

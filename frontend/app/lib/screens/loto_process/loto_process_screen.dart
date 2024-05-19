@@ -1,6 +1,7 @@
 import 'package:app/view_models/user/app_lock_state.dart';
 import 'package:app/widgets/header/header.dart';
 import 'package:app/widgets/loto_process/loto_definition.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,23 +44,23 @@ class _LotoProcessState extends State<LotoProcessScreen>
       ),
       body: Padding(
         padding: const EdgeInsets.all(15.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'LOTO란?',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              LotoDefinition(),
-              const Text('LOTO 작업절차',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              Image.asset(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'LOTO란?',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            LotoDefinition(),
+            const Text('LOTO 작업절차',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            SingleChildScrollView(
+              child: Image.asset(
                 'assets/images/loto_process_character.png',
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

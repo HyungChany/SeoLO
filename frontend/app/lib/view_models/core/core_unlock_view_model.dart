@@ -12,31 +12,25 @@ class CoreUnlockViewModel extends ChangeNotifier {
   String? battery;
   String? machineId;
   String? tokenValue;
-  bool _isUnlocking = false;
   bool _isLoading = false;
   String? _errorMessage;
 
   bool get isLoading => _isLoading;
-  bool get isUnlocking => _isUnlocking;
-  String? get errorMessage => _errorMessage;
 
-  void setIsUnlocking() async {
-    _isUnlocking = !_isUnlocking;
-    notifyListeners();
-  }
+  String? get errorMessage => _errorMessage;
 
   Future<void> initializeData() async {
     lockerUid = await _storage.read(key: 'locker_uid');
     battery = await _storage.read(key: 'locker_battery');
-    int? batteryInfo = int.parse(battery!);
+    int? batteryInfo = (battery != null) ? int.parse(battery!) : 0;
     machineId = await _storage.read(key: 'machine_id');
-    int? machineIdInfo = int.parse(machineId!);
+    int? machineIdInfo = (machineId != null) ? int.parse(machineId!) : 0;
     tokenValue = await _storage.read(key: 'locker_token');
     _coreUnlockModel = CoreUnlockModel(
-        lockerUid: lockerUid,
+        lockerUid: lockerUid ?? '',
         battery: batteryInfo,
         machineId: machineIdInfo,
-        tokenValue: tokenValue);
+        tokenValue: tokenValue ?? '');
     notifyListeners();
   }
 

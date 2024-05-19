@@ -127,7 +127,7 @@ class _TaskTemplateSelectScreenState extends State<TaskTemplateSelectScreen> wit
                           ),
                           SizedBox(
                             width: MediaQuery.of(context).size.width * 0.8,
-                            height: MediaQuery.of(context).size.height * 0.4,
+                            height: MediaQuery.of(context).size.height * 0.45,
                             child: GridView.count(
                               crossAxisCount: 2,
                               children: List.generate(

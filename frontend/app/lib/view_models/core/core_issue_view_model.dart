@@ -23,9 +23,9 @@ class CoreIssueViewModel extends ChangeNotifier {
 
     final manager =
         '${myInfo.employeeTeam} ${myInfo.employeeName} ${myInfo.employeeTitle}';
+    lockerUid = await _storage.read(key: 'locker_uid');
     battery = await _storage.read(key: 'locker_battery');
     int? batteryInfo = (battery != null) ? int.parse(battery!) : 0;
-    lockerUid = await _storage.read(key: 'locker_uid');
     _coreIssueModel = CoreIssueModel(
       lockerUid: lockerUid ?? '',
       machineId: 0,

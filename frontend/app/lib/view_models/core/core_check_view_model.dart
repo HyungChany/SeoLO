@@ -38,9 +38,9 @@ class CoreCheckViewModel extends ChangeNotifier {
 
   String? get errorMessage => _errorMessage;
 
-  CoreCheckViewModel() {
-    initializeData();
-  }
+  // CoreCheckViewModel() {
+  //   initializeData();
+  // }
 
   Future<void> initializeData() async {
     lockerUid = await _storage.read(key: 'locker_uid');

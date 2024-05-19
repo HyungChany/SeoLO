@@ -24,10 +24,10 @@ import 'package:app/screens/lotolock/time_select_screen.dart';
 import 'package:app/screens/lotolock/worklist_check_screen.dart';
 import 'package:app/screens/lotolock/other_worklist_check_screen.dart';
 
-class AppRouter {
-  final AppLockState appLockState;
-
-  AppRouter(this.appLockState);
+// class AppRouter {
+//   final AppLockState appLockState;
+//
+//   AppRouter(this.appLockState);
 
   Route<dynamic> generateMainRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -86,4 +86,4 @@ class AppRouter {
         return MaterialPageRoute(builder: (context) => const MainScreen());
     }
   }
-}
+// }

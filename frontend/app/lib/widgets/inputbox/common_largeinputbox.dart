@@ -47,7 +47,7 @@ class _LargeInputBoxState extends State<LargeInputBox> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
-      height: MediaQuery.of(context).size.height * 0.38,
+      height: MediaQuery.of(context).size.height * 0.3,
       child: Stack(
         alignment: Alignment.topRight,
         children: [

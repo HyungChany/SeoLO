@@ -88,21 +88,21 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // _asyncMethod() async {
-  //   String? token = await _storage.read(key: 'token');
-  //   if (token != null) {
-  //     if (!mounted) return;
-  //     Navigator.pushReplacementNamed(context, '/pinLogin');
-  //   }
-  // }
-  //
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((_) {
-  //     _asyncMethod();
-  //   });
-  // }
+  _asyncMethod() async {
+    String? token = await _storage.read(key: 'token');
+    if (token != null) {
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, '/pinLogin');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _asyncMethod();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

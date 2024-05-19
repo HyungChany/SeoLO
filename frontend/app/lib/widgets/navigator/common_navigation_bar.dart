@@ -16,15 +16,15 @@ class CustomBottomNavigationBar extends StatelessWidget {
     return BottomNavigationBar(
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Image.asset('assets/images/home_icon.png',width: 34,height: 34),
+          icon: Icon(Icons.home_outlined),
           label: 'Home',
         ),
         BottomNavigationBarItem(
-          icon: Image.asset('assets/images/bluetooth_icon.png',width: 34,height: 34),
+          icon: Icon(Icons.bluetooth),
           label: 'BLUETOOTH',
         ),
         BottomNavigationBarItem(
-          icon: Image.asset('assets/images/profile_icon.png',width: 34,height: 34),
+          icon: Icon(Icons.person_2_outlined),
           label: 'Profile',
         ),
       ],

@@ -42,13 +42,23 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   String? lockerBattery;
   BluetoothService? bluetoothService;
   BluetoothCharacteristic? bluetoothCharacteristic;
-  bool _isLocking = false;
-  bool _isUnlocking = false;
   bool _isWriting = false;
+  bool hasExecutedCoreIssued = false; // 함수 중복 방지
+  bool hasExecutedCoreLocked = false;
+  bool hasExecutedCoreUnlock = false;
+  bool hasExecutedCoreCheck = false;
+  bool hasExecutedAlert = false;
 
   @override
   void initState() {
     super.initState();
+
+    _isWriting = false;
+    hasExecutedCoreIssued = false;
+    hasExecutedCoreLocked = false;
+    hasExecutedCoreUnlock = false;
+    hasExecutedCoreCheck = false;
+    hasExecutedAlert = false;
 
     _adapterStateStateSubscription =
         FlutterBluePlus.adapterState.listen((state) {
@@ -92,11 +102,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   }
 
   Future onScanPressed() async {
-    _storage.delete(key: 'Core-Code');
-    _storage.delete(key: 'locker_battery');
-    _storage.delete(key: 'machine_id');
-    _storage.delete(key: 'locker_token');
-    _storage.delete(key: 'locker_uid');
     try {
       await FlutterBluePlus.startScan(
           timeout: const Duration(seconds: 5), withKeywords: ["SEOLO"]);
@@ -127,11 +132,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     final checkVM = Provider.of<CoreCheckViewModel>(context, listen: false);
     final lockedVM = Provider.of<CoreLockedViewModel>(context, listen: false);
     final unlockVM = Provider.of<CoreUnlockViewModel>(context, listen: false);
-    // bool hasExecutedCoreIssued = false; // 함수 중복 방지
-    // bool hasExecutedCoreLocked = false;
-    // bool hasExecutedCoreUnlock = false;
-    // bool hasExecutedCoreCheck = false;
-    // bool hasExecutedAlert = false;
     setState(() {
       _isWriting = true;
     });
@@ -180,108 +180,47 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                     // characteristic.properties.writeWithoutResponse,
                     allowLongWrite: true,
                     timeout: 30);
-                // 잠금 요청을 보냈을 시 응답값이 올 동안 loading icon
-                if (coreCode == "LOCK") {
-                  setState(() {
-                    _isLocking = true;
-                  });
-                }
-                // 잠금 해제도 마찬가지로 loading icon
-                if (coreCode == "LOCKED") {
-                  setState(() {
-                    _isUnlocking = true;
-                  });
-                }
                 characteristic.setNotifyValue(true);
                 characteristic.read();
                 characteristic.lastValueStream.listen((value) async {
                   String receivedString = utf8.decode(value);
                   _receivedValues = receivedString.split(',');
+                  // 응답 받으면 writing 중지
+                  setState(() {
+                    _isWriting = false;
+                  });
                   if (_receivedValues[4] == userId) {
-                    // 응답 받으면 writing 중지
-                    setState(() {
-                      _isWriting = false;
-                    });
                     // 코드 uid 장비 배터리 유저id
                     debugPrint('응답값: $receivedString');
-                    if (_receivedValues[0] == 'ALERT')
-                    // if (_receivedValues[0] == 'ALERT' && !hasExecutedAlert)
-                    {
-                      if (coreCode != null) {
-                        await _storage.write(key: 'Core-Code', value: coreCode);
-                      } else {
-                        await _storage.write(key: 'Core-Code', value: coreCode);
-                      }
-                      if (lockerUid != null) {
-                        await _storage.write(
-                            key: 'locker_uid', value: lockerUid);
-                      }
-                      if (machineId != null) {
-                        await _storage.write(
-                            key: 'machine_id', value: machineId);
-                      }
-                      if (lockerBattery != null) {
-                        await _storage.write(
-                            key: 'locker_battery', value: lockerBattery);
-                      }
+                    if (_receivedValues[0] == 'ALERT' && !hasExecutedAlert) {
                       setState(() {
-                        _isUnlocking = false;
-                        _isLocking = false;
+                        _isWriting = false;
                       });
-
-                      // hasExecutedAlert = true;
-                      if (mounted) {
-                        showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            builder: (BuildContext context) {
-                              return CommonDialog(
-                                content: '연결할 자물쇠를 확인해 주세요.',
-                                buttonText: '확인',
-                                // buttonClick: () {
-                                //   Navigator.pushReplacementNamed(
-                                //       context, '/bluetooth');
-                                // },
-                              );
-                            });
-                      }
+                      hasExecutedAlert = true;
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return CommonDialog(
+                              content: '연결할 자물쇠를 확인해 주세요.',
+                              buttonText: '확인',
+                              buttonClick: () {
+                                hasExecutedAlert = true;
+                              },
+                            );
+                          });
                     } else {
-                      // CHECK 아니면 code 덮기
-                      if (_receivedValues[0] != 'CHECK') {
-                        await _storage.write(
-                            key: 'Core-Code', value: _receivedValues[0]);
-                        await _storage.write(
-                            key: 'locker_uid', value: _receivedValues[1]);
-                        await _storage.write(
-                            key: 'machine_id', value: _receivedValues[2]);
-                        await _storage.write(
-                            key: 'locker_battery', value: _receivedValues[3]);
-                      } else {
-                        if (coreCode != null) {
-                          await _storage.write(
-                              key: 'Core-Code', value: coreCode);
-                        } else {
-                          await _storage.write(
-                              key: 'Core-Code', value: coreCode);
-                        }
-                        if (lockerUid != null) {
-                          await _storage.write(
-                              key: 'locker_uid', value: lockerUid);
-                        }
-                        if (machineId != null) {
-                          await _storage.write(
-                              key: 'machine_id', value: machineId);
-                        }
-                        if (lockerBattery != null) {
-                          await _storage.write(
-                              key: 'locker_battery', value: lockerBattery);
-                        }
-                      }
+                      await _storage.write(
+                          key: 'Core-Code', value: _receivedValues[0]);
+                      await _storage.write(
+                          key: 'locker_uid', value: _receivedValues[1]);
+                      await _storage.write(
+                          key: 'machine_id', value: _receivedValues[2]);
+                      await _storage.write(
+                          key: 'locker_battery', value: _receivedValues[3]);
                       // 작업 내역을 미리 작성했다면
-                      if (_receivedValues[0] == 'WRITED')
-                      // if (_receivedValues[0] == 'WRITED' &&
-                      //     !hasExecutedCoreIssued)
-                      {
+                      if (_receivedValues[0] == 'WRITED' &&
+                          !hasExecutedCoreIssued) {
                         String? battery =
                             await _storage.read(key: 'locker_battery');
                         int? batteryInfo =
@@ -292,7 +231,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                         (lockerUid != null)
                             ? issueVM.setLockerUid(lockerUid)
                             : issueVM.setLockerUid('');
-                        // hasExecutedCoreIssued = true;
+                        hasExecutedCoreIssued = true;
                         issueVM.coreIssue().then((_) {
                           if (issueVM.errorMessage == null) {
                             writeToDevice(device);
@@ -328,19 +267,39 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                       }
                       if (_receivedValues[0] == 'WRITE') {
                         Navigator.pushReplacementNamed(context, '/checklist');
-                        // hasExecutedCoreIssued = true;
                       }
-                      // if (_receivedValues[0] == 'CHECK' &&
-                      //     !hasExecutedCoreCheck)
-                      if (_receivedValues[0] == 'CHECK') {
-                        // locked에서 check로 왔다면 상태 되돌리기
-                          setState(() {
-                            _isUnlocking = false;
-                          });
-                        // hasExecutedCoreCheck = true;
-                        checkVM.coreCheck().then((_) {
+                      if (_receivedValues[0] == 'CHECK' &&
+                          !hasExecutedCoreCheck) {
+                        hasExecutedCoreCheck = true;
+                        checkVM.coreCheck().then((_) async {
                           if (checkVM.errorMessage == null) {
-                            Navigator.pushReplacementNamed(
+                            if (coreCode != null) {
+                              await _storage.write(
+                                  key: 'Core-Code', value: coreCode);
+                            } else {
+                              await _storage.write(
+                                  key: 'Core-Code', value: coreCode);
+                            }
+                            if (lockerUid != null) {
+                              await _storage.write(
+                                  key: 'locker_uid', value: lockerUid);
+                            } else {
+                              await _storage.delete(key: 'locker_uid');
+                            }
+                            if (lockerBattery != null) {
+                              await _storage.write(
+                                  key: 'locker_battery', value: lockerBattery);
+                            } else {
+                              await _storage.delete(key: 'locker_battery');
+                            }
+                            if (machineId != null) {
+                              await _storage.write(
+                                  key: 'machine_id', value: machineId);
+                            } else {
+                              await _storage.delete(key: 'machine_id');
+                            }
+
+                            await Navigator.pushReplacementNamed(
                                 context, '/otherWorklistCheck');
                           } else {
                             if (checkVM.errorMessage == 'JT') {
@@ -366,25 +325,20 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                                     return CommonDialog(
                                       content: checkVM.errorMessage!,
                                       buttonText: '확인',
+                                      buttonClick: () {
+                                        hasExecutedCoreCheck = false;
+                                      },
                                     );
                                   });
                             }
                           }
                         });
                       }
-                      if (_receivedValues[0] == 'UNLOCK')
-                      // if (_receivedValues[0] == 'UNLOCK' &&
-                      //     !hasExecutedCoreUnlock)
-                      {
-                        setState(() {
-                          _isUnlocking = false;
-                        });
-                        // hasExecutedCoreUnlock = true;
+                      if (_receivedValues[0] == 'UNLOCK' &&
+                          !hasExecutedCoreUnlock) {
+                        hasExecutedCoreUnlock = true;
                         unlockVM.coreUnlock().then((_) {
                           if (unlockVM.errorMessage == null) {
-                            // Navigator.pushNamed(context, '/resultUnlock');
-                            // Navigator.pushNamedAndRemoveUntil(context,
-                            //     '/resultUnlock', ModalRoute.withName('/main'));
                             Navigator.pushNamedAndRemoveUntil(
                               context,
                               '/resultUnlock',
@@ -408,11 +362,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                                     );
                                   });
                             } else {
-                              // Navigator.pushNamed(context, '/resultUnlock');
-                              // Navigator.pushNamedAndRemoveUntil(
-                              //     context,
-                              //     '/resultUnlock',
-                              //     ModalRoute.withName('/main'));
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
                                 '/resultUnlock',
@@ -422,19 +371,11 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                           }
                         });
                       }
-                      if (_receivedValues[0] == 'LOCKED')
-                      // if (_receivedValues[0] == 'LOCKED' &&
-                      //     !hasExecutedCoreLocked)
-                      {
-                        setState(() {
-                          _isLocking = false;
-                        });
-                        // hasExecutedCoreLocked = true;
+                      if (_receivedValues[0] == 'LOCKED' &&
+                          !hasExecutedCoreLocked) {
+                        hasExecutedCoreLocked = true;
                         lockedVM.coreLocked().then((_) {
                           if (lockedVM.errorMessage == null) {
-                            // Navigator.pushNamed(context, '/resultLock');
-                            // Navigator.pushNamedAndRemoveUntil(context,
-                            //     '/resultLock', ModalRoute.withName('/main'));
                             Navigator.pushNamedAndRemoveUntil(
                               context,
                               '/resultLock',
@@ -458,9 +399,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                                     );
                                   });
                             } else {
-                              // Navigator.pushNamed(context, '/resultLock');
-                              // Navigator.pushNamedAndRemoveUntil(context,
-                              //     '/resultLock', ModalRoute.withName('/main'));
                               Navigator.pushNamedAndRemoveUntil(
                                 context,
                                 '/resultLock',
@@ -477,21 +415,15 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                 setState(() {
                   _isWriting = false;
                 });
-                if (mounted) {
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) {
-                        return CommonDialog(
-                          content: '다시 연결해 주세요.',
-                          buttonText: '확인',
-                          // buttonClick: () {
-                          //   Navigator.pushReplacementNamed(
-                          //       context, '/bluetooth');
-                          // },
-                        );
-                      });
-                }
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return CommonDialog(
+                        content: '다시 연결해 주세요.',
+                        buttonText: '확인',
+                      );
+                    });
                 debugPrint('write error: $e');
               }
             }
@@ -548,7 +480,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const Header(title: '자물쇠 선택', back: true),
-      body: (_isLocking == true || _isUnlocking == true)
+      body: (_isWriting == true)
           ? Center(
               child: Image.asset(
               'assets/images/loading_icon.gif',

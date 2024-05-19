@@ -1,7 +1,6 @@
 import 'package:app/models/user/login_model.dart';
 import 'package:app/services/user_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final UserService _userService = UserService();

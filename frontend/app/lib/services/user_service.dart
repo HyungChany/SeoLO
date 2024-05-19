@@ -39,11 +39,11 @@ class UserService {
           await _dio.post('$baseUrl/login', data: loginModel.toJson());
       if (response.statusCode == 200) {
         String? token = response.data['issuedToken']['accessToken'];
-        String? userId = response.data['userId'];
+        String? userId = response.data['userId'].toString();
         String? companyCode = loginModel.companyCode.toString();
         String? coreCode = response.data['codeStatus'];
         String? lockerUid = response.data['workingLockerUid'];
-        String? machineId = response.data['workingMachineId'];
+        int? machineId = response.data['workingMachineId'];
         String? lockerToken = response.data['issuedCoreToken'];
         if (token != null) {
           await _storage.deleteAll();
@@ -56,7 +56,7 @@ class UserService {
             await _storage.write(key: 'locker_uid', value: lockerUid);
           } else {}
           if (machineId != null) {
-            await _storage.write(key: 'machine_id', value: machineId);
+            await _storage.write(key: 'machine_id', value: machineId.toString());
           } else {}
           if (lockerToken != null) {
             await _storage.write(key: 'locker_token', value: lockerToken);

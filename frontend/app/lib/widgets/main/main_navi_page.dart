@@ -29,7 +29,7 @@ class _MainNaviPageState extends State<MainNaviPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.5,
+      height: MediaQuery.of(context).size.height * 0.53,
       decoration: BoxDecoration(
         color: const Color.fromRGBO(255, 250, 250, 1),
         borderRadius: BorderRadius.circular(10.0),
