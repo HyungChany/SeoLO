@@ -8,6 +8,18 @@ BLE기반 자물쇠를 제공합니다.<br>
 - C타입 충전
 - Magnetic Sensor 활용한 잠금 확인
 
+### 파일 구조
+```
+📦embedded
+ ┣ 📂SEOLO 
+ ┃ ┣ 📜SEOLO.fzz             // SEOLO fritzing FILE
+ ┃ ┣ 📜SEOLO.ino             // arduino file
+ ┃ ┣ 📜SEOLO.png             // 회로도
+ ┃ ┣ 📜SEOLO_pcb.ps.png      // PCB
+ ┃ ┗ 📜SEOLO_schem.png       // 스케메틱
+ ┗ 📜README_EM.md
+```
+
 ### 회로도
 - 회로도
   ![회로도](SEOLO\SEOLO.png)
