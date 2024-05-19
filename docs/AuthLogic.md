@@ -13,33 +13,17 @@
 
 | 경우의 수 | 잠겨진 자물쇠 | 열려있는 자물쇠 |
 | --- | --- | --- |
-| 해당 자물쇠를 잠근 사람 | 태그시 자물쇠 UNLOCK
-
-인증로직-태그먼저/LOCKER(worker)/LOCKED (https://www.notion.so/LOCKER-worker-LOCKED-5d761627b82d4ee3acd62e6bd126a2c0?pvs=21)  | 경우의 수 없음 |
-| 해당 자물쇠를 잠근 적 없는 사람 (→ 어떠한 자물쇠도 잠그지 않았다) | 태그시 정보 조회
-
-인증로직-태그먼저/NOLOCKER(WORKER)/LOCKED (https://www.notion.so/NOLOCKER-WORKER-LOCKED-90cf5615d5f047f3b6979da1425422fd?pvs=21)  | 태그시 LOTO 일지 페이지로 리다이렉트 후 잠금
-
-인증로직-태그먼저/NOLOCKER(WORKER)/OPENED (https://www.notion.so/NOLOCKER-WORKER-OPENED-554e8cd344d445ac86517bb81e40a8a4?pvs=21)  |
-| 해당 자물쇠는 잠그지 않았지만 다른 자물쇠를 잠그고 있는 사람 | 태그시 정보 조회
-
-인증로직-태그먼저/OTHERLOCKER(worker)/LOCKED (https://www.notion.so/OTHERLOCKER-worker-LOCKED-4f372b247732442785da715dced08865?pvs=21)  | 태그시 2개 이상의 자물쇠를 잠굴 수 없습니다 경고
-
-인증로직-태그먼저/OTHERLOCKER(worker)/OPENED (https://www.notion.so/OTHERLOCKER-worker-OPENED-3967e824005f4f52babdcf41c2921c47?pvs=21)  |
-| 관리자(마스터키 소지자) | 태그시 자물쇠 UNLOCK
-
-인증로직-태그먼저/NOLOCKER(MANAGER)/LOCKED (https://www.notion.so/NOLOCKER-MANAGER-LOCKED-a4d72e49e6e14f84a634e6a2ce01fc4b?pvs=21)  | 현재 고려안함 |
+| 해당 자물쇠를 잠근 사람 | 태그시 자물쇠 UNLOCK (https://www.notion.so/LOCKER-worker-LOCKED-5d761627b82d4ee3acd62e6bd126a2c0?pvs=21)  | 경우의 수 없음 |
+| 해당 자물쇠를 잠근 적 없는 사람 (→ 어떠한 자물쇠도 잠그지 않았다) | 태그시 정보 조회 (https://www.notion.so/NOLOCKER-WORKER-LOCKED-90cf5615d5f047f3b6979da1425422fd?pvs=21)  | 태그시 LOTO 일지 페이지로 리다이렉트 후 잠금 (https://www.notion.so/NOLOCKER-WORKER-OPENED-554e8cd344d445ac86517bb81e40a8a4?pvs=21)  |
+| 해당 자물쇠는 잠그지 않았지만 다른 자물쇠를 잠그고 있는 사람 | 태그시 정보 조회 (https://www.notion.so/OTHERLOCKER-worker-LOCKED-4f372b247732442785da715dced08865?pvs=21)  | 태그시 2개 이상의 자물쇠를 잠굴 수 없습니다 경고 (https://www.notion.so/OTHERLOCKER-worker-OPENED-3967e824005f4f52babdcf41c2921c47?pvs=21)  |
+| 관리자(마스터키 소지자) | 태그시 자물쇠 UNLOCK (https://www.notion.so/NOLOCKER-MANAGER-LOCKED-a4d72e49e6e14f84a634e6a2ce01fc4b?pvs=21)  | 현재 고려안함 |
 
 ### 사용자가 일지작성하고 자물쇠 태그하려는 경우
 
 |  | 잠겨진 자물쇠 | 열려있는 자물쇠 |
 | --- | --- | --- |
 | 자물쇠를 잠구고 있지 않은 경우 | 태그시 자물쇠
-’이미 잠겨져있는 자물쇠는 잠글 수 없습니다 오류’
-
-인증로직-일지먼저/NOLOCKER(WORKER)/LOCKED (https://www.notion.so/NOLOCKER-WORKER-LOCKED-4d0feb7ee5dd427a9f1e2fcf0bba831f?pvs=21)  | 태그시 자물쇠 LOCK
-
-인증로직-일지먼저/NOLOCKER(WORKER)/OPENED (https://www.notion.so/NOLOCKER-WORKER-OPENED-e7757527e6994ff3aa0dc2dd580aa7a4?pvs=21)  |
+’이미 잠겨져있는 자물쇠는 잠글 수 없습니다 오류’(https://www.notion.so/NOLOCKER-WORKER-LOCKED-4d0feb7ee5dd427a9f1e2fcf0bba831f?pvs=21)  | 태그시 자물쇠 LOCK (https://www.notion.so/NOLOCKER-WORKER-OPENED-e7757527e6994ff3aa0dc2dd580aa7a4?pvs=21)  |
 | 다른 자물쇠를 잠구고 있는 경우 | 일지 작성 불가 | 일지 작성 불가 |
 | 관리자인 경우(마스터키) | 일지 작성 불가 | 일지 작성 불가 |
 
