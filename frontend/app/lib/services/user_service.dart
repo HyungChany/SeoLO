@@ -46,19 +46,19 @@ class UserService {
         if (token != null) {
           await _storage.deleteAll();
           await _storage.write(key: 'token', value: token);
-          await _storage.write(key: 'Company-Code', value: companyCode);
           await _storage.write(key: 'user_id', value: userId);
+          await _storage.write(key: 'Company-Code', value: companyCode);
           await _storage.write(key: 'Core-Code', value: coreCode);
           if (lockerUid != null) {
             await _storage.write(key: 'locker_uid', value: lockerUid);
-          } else {}
+          }
           if (machineId != null) {
             await _storage.write(
                 key: 'machine_id', value: machineId.toString());
-          } else {}
+          }
           if (lockerToken != null) {
             await _storage.write(key: 'locker_token', value: lockerToken);
-          } else {}
+          }
           return {'success': true};
         } else {
           return {

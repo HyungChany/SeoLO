@@ -106,7 +106,9 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
                       key: 'machine_id', value: viewModel.machineId.toString());
                   // storage에 locker uid가 있다면 연결 먼저 한 것
                   // 그럼 issue api 요청 후 bluetooth 이동
+
                   if (lockerUid != null) {
+                    debugPrint(lockerUid);
                     if (!viewModel.isLoading) {
                       viewModel.coreIssue().then((_) {
                         // 일지 작성 후 lock 하러 가기!
