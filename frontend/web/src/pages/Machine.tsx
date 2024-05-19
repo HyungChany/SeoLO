@@ -13,7 +13,7 @@ import {
   MachinePhoto,
   MachineRegistration,
 } from '@/apis/Machine.ts';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 interface OptionType {
@@ -251,8 +251,12 @@ const Equipment = () => {
   const handleFileUpload = async () => {
     fileInputRef.current?.click();
   };
+
+  const queryClient = useQueryClient();
   const { mutate: machineMutate } = useMutation({
     mutationFn: MachineRegistration,
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ['machineList'] }),
   });
   const handleSubmit = () => {
     if (dateError) {
