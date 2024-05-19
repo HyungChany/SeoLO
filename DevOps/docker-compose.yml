@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  nginx:
+    container_name: seolo-nginx
+    image: seolo-nginx/front:latest
+    ports:
+      - "443:443"
+      - "80:80"
+    volumes:
+      - /home/ubuntu/certificates/k10c104.p.ssafy.io/fullchain1.pem:/etc/ssl/certs/fullchain1.pem
+      - /home/ubuntu/certificates/k10c104.p.ssafy.io/privkey1.pem:/etc/ssl/private/privkey1.pem
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - back
+    environment:
+      - TZ=Asia/Seoul
+    networks:
+      - jenkins-network
+
+  back:
+    container_name: seolo-back
+    build:
+      context: ../backend/seolo
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - TZ=Asia/Seoul
+    networks:
+      - jenkins-network
+
+  news-server:
+    container_name: seolo-news
+    build:
+      context: ../backend/news
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - TZ=Asia/Seoul
+    networks:
+      - jenkins-network
+
+networks:
+  jenkins-network:
+    external: true

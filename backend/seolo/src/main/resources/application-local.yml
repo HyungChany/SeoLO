@@ -1,0 +1,57 @@
+# 각자 환경에서  개발
+spring:
+  config:
+    import: "./confidence/application-secret.yml"
+    activate:
+      on-profile: local
+  security:
+    user:
+      name: ${security.user.name}
+      password: ${security.user.password}
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:tcp://localhost/~/test
+    username: sa
+    password:
+  sql:
+    init:
+      mode: always
+      data-locations: "classpath:/dummy/data.sql"
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true # true -> ddl-auto 이후 data.sql 실행 옵션
+    properties:
+      hibernate:
+        format_sql: true
+  jwt:
+    access: ${common.redis.session-store.accessKey}
+    refresh: ${common.redis.session-store.refreshKey}
+    accesstime: ${common.redis.session-store.accessLifetime}
+    refreshtime: ${common.redis.session-store.refreshLifetime}
+  data:
+    redis:
+      host: k10c104.p.ssafy.io
+      port: ${common.redis.session-store.port}
+  cloud:
+    aws:
+      credentials:
+        accessKey: ${common.aws.credentials.access-key}
+        secretKey: ${common.aws.credentials.secret-key}
+      region:
+        static: ${common.aws.region.static}
+      s3:
+        bucket: ${common.aws.s3.bucket}
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+
+logging:
+  level:
+    org.springframework.web : DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type: TRACE

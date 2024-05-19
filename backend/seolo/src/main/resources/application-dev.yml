@@ -1,0 +1,48 @@
+spring:
+  config:
+    import: "./confidence/application-secret.yml"
+    activate:
+      on-profile: dev # 개발전용DB로 연결
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://k10c104.p.ssafy.io:${dev.datasource.port}/seolo?serverTimezone=Asia/Seoul
+    username: ${dev.datasource.username}
+    password: ${dev.datasource.password}
+  sql:
+    init:
+      mode : always
+      data-locations: "classpath:/dummy/data.sql"
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: create-drop
+    database-platform: org.hibernate.dialect.MySQLDialect
+    defer-datasource-initialization: true # true -> ddl-auto 이후 data.sql 실행 옵션
+  jwt:
+    access: ${common.redis.session-store.accessKey}
+    refresh: ${common.redis.session-store.refreshKey}
+    accesstime: ${common.redis.session-store.accessLifetime}
+    refreshtime: ${common.redis.session-store.refreshLifetime}
+  data:
+    redis:
+      host: k10c104.p.ssafy.io
+      port: ${common.redis.session-store.port}
+  cloud:
+    aws:
+      credentials:
+        accessKey: ${common.aws.credentials.access-key}
+        secretKey: ${common.aws.credentials.secret-key}
+      region:
+        static: ${common.aws.region.static}
+      s3:
+        bucket: ${common.aws.s3.bucket}
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: OFF
+    org.hibernate.type: OFF
