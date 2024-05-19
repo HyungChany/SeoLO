@@ -15,11 +15,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class CoreServiceImpl implements CoreService {
     private static final String BASE_PACKAGE = "com.c104.seolo.domain.core.service.states.";
@@ -29,6 +29,7 @@ public class CoreServiceImpl implements CoreService {
 
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public CoreResponse coreAuth(String code, CCodePrincipal cCodePrincipal, String companyCode, CoreRequest coreRequest) {
         /*
         사용자로부터 받은 code 값에 따라 다른 로직을 수행

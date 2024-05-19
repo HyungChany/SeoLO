@@ -12,10 +12,11 @@ import com.c104.seolo.global.encryption.AesEncryption;
 import com.c104.seolo.global.exception.CommonException;
 import com.c104.seolo.global.security.jwt.entity.CCodePrincipal;
 import com.c104.seolo.global.security.service.DBUserDetailService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.crypto.SecretKey;
 import java.util.Base64;
@@ -33,7 +34,7 @@ public class CoreTokenServiceImpl implements CoreTokenService {
 
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public TokenDto issueCoreAuthToken(CCodePrincipal cCodePrincipal , String lockerUid) {
         AppUser appUser = dbUserDetailService.loadUserById(cCodePrincipal.getId());
         if (isTokenExistedForUserId(appUser.getId())) {
