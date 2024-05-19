@@ -7,16 +7,12 @@ interface LoginType {
 }
 
 export const userLogin = async (loginData: LoginType) => {
-  try {
-    const response = await api.post('/login', loginData, {
-      headers: {
-        'Device-Type': 'web',
-      },
-    });
-    return response.data;
-  } catch (error) {
-    alert('로그인 실패');
-  }
+  const response = await api.post('/login', loginData, {
+    headers: {
+      'Device-Type': 'web',
+    },
+  });
+  return response.data;
 };
 
 export const Logout = async () => {

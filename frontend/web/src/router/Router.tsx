@@ -45,7 +45,7 @@ const informationRoute = [
     element: <PrivateRoute>{With(<CompanyInformation />)}</PrivateRoute>,
   },
   {
-    path: '/currentloto',
+    path: '/locks',
     element: <PrivateRoute>{With(<CurrentLOTO />)}</PrivateRoute>,
   },
   {

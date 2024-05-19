@@ -63,7 +63,7 @@ const Navigation = () => {
           <MenuLink to="/report">
             <Typo.H3>LOTO 일지</Typo.H3>
           </MenuLink>
-          <MenuLink to="/currentloto">
+          <MenuLink to="/locks">
             <Typo.H3>자물쇠 현황</Typo.H3>
           </MenuLink>
           <MenuLink to="/checklist">
