@@ -259,6 +259,6 @@ INSERT INTO machine
     (CREATED_AT, FACILITY_ID, MACHINE_ID, MACHINE_INTRODUCTION_DATE, MACHINE_SUBCATEGORY, UPDATED_AT, MACHINE_LOCKER_TYPE, MACHINE_NAME, MACHINE_NUMBER, MACHINE_COMPANY, MACHINE_THUM)
 VALUES
     ('2024-05-07 14:37:42.935150', 1, 1, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '수평형 컨베이어 삼면포장기', 'KL-7217', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL7217.jpg'),
-    ('2024-05-07 14:37:42.935150', 1, 2, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', 'CNC조각기', 'KL-5709', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL5709.jpg'),
+    ('2024-05-07 14:37:42.935150', 1, 2, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '삼용CNC조각기', 'KL-5709', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL5709.jpg'),
     ('2024-05-07 14:37:42.935150', 1, 3, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '자동라벨기/스티커부착기', 'KL-0515', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL0515.jpg'),
     ('2024-05-07 14:37:42.935150', 1, 4, '2021-02-01 09:00:00.000000', null, '2024-05-07 14:37:42.935150', 'NO', '레이저각인기', 'KL-8818', '코알라산업', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/KL8818.jpeg');
