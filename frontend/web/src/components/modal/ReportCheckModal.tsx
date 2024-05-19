@@ -55,6 +55,7 @@ const Container = styled.div`
   height: auto;
   display: flex;
   flex-direction: row;
+  gap: 2rem;
 `;
 const RightContainer = styled.div`
   width: 48%;
@@ -71,8 +72,8 @@ const LeftTitleBox = styled.div`
   gap: 2rem;
 `;
 const LeftContentBox = styled.div`
-  width: auto;
-  height: auto;
+  width: 40%;
+  height: 101%;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -110,6 +111,7 @@ const RightContent = styled.div`
   font-size: 20px;
   font-family: NYJGothicM;
   font-weight: 500;
+  display: flex;
   color: ${Color.BLACK};
   word-wrap: break-word;
   align-items: center;
@@ -135,6 +137,17 @@ const AccidentButton = styled.div<AccidentCheckType>`
   color: ${(props) => props.color};
   border-radius: 8px;
   cursor: pointer;
+`;
+const AccidentText = styled.div`
+  width: auto;
+  height: 2rem;
+  font-size: 20px;
+  font-family: NYJGothicM;
+  font-weight: 500;
+  color: ${Color.BLACK};
+  word-wrap: break-word;
+  align-items: center;
+  overflow-wrap: break-word;
 `;
 
 // const TextAreaBox = styled.div`
@@ -209,8 +222,8 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
     '소속 부서',
     '직급',
     '작업장',
-    '장비 명',
     '장비 번호',
+    '장비 명',
   ];
 
   const rightTitle = [
@@ -321,8 +334,8 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
                   <RightContent>{reportData.workerTeam}</RightContent>
                   <RightContent>{reportData.workerTitle}</RightContent>
                   <RightContent>{reportData.facilityName}</RightContent>
-                  <RightContent>{reportData.machineName}</RightContent>
                   <RightContent>{reportData.machineNumber}</RightContent>
+                  <RightContent>{reportData.machineName}</RightContent>
                 </>
               )}
             </LeftContentBox>
@@ -406,7 +419,7 @@ const ReportCheckModal: React.FC<ReportCheckModalProps> = ({
                       />
                     )
                   ) : (
-                    <RightContent>{reportData.accidentType}</RightContent>
+                    <AccidentText>{reportData.accidentType}</AccidentText>
                   )}
                 </>
               )}
