@@ -258,6 +258,7 @@ const Equipment = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['machineList'] });
       alert('장비 등록에 성공하였습니다');
+      navigate('/information');
     },
   });
 
@@ -342,6 +343,7 @@ const Equipment = () => {
   useEffect(() => {
     if (option && options) {
       setSelectedOption(options[option - 1]);
+      setSelectedSubmitOption(options[option - 1]);
     }
   }, [option, options]);
 
