@@ -30,7 +30,7 @@ class BluetoothOffScreen extends StatelessWidget {
               Navigator.pushReplacementNamed(context, '/bluetooth');
             }
           } catch (e) {
-            debugPrint("Error Turning On: $e");
+            // debugPrint("Error Turning On: $e");
           }
         },
       ),

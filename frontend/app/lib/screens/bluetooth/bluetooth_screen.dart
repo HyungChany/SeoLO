@@ -75,7 +75,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
         setState(() {});
       }
     }, onError: (e) {
-      debugPrint(e);
+      // debugPrint(e);
     });
 
     _isScanningSubscription = FlutterBluePlus.isScanning.listen((state) {
@@ -101,7 +101,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
       await FlutterBluePlus.startScan(
           timeout: const Duration(seconds: 5), withKeywords: ["SEOLO"]);
     } catch (e) {
-      debugPrint("Start Scan Error: $e");
+      // debugPrint("Start Scan Error: $e");
     }
     if (mounted) {
       setState(() {});
@@ -112,7 +112,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
     try {
       FlutterBluePlus.stopScan();
     } catch (e) {
-      debugPrint("Stop Scan Error: $e");
+      // debugPrint("Stop Scan Error: $e");
     }
   }
 
@@ -163,11 +163,9 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
             if (characteristic.uuid.toString().toUpperCase() ==
                 "20240521-C104-C104-C104-012345678910") {
               bluetoothCharacteristic = characteristic;
-              debugPrint('쓰기 시도');
               //회사코드 토큰 장비 유저 uid coreCode
               String message =
                   "${companyCode ?? ''},${lockerToken ?? ''},${machineId ?? ''},${userId ?? ''},${lockerUid ?? ''},${coreCode ?? 'INIT'}";
-              debugPrint('보내는 값: $message');
               List<int> encodedMessage = utf8.encode(message);
               try {
                 await characteristic.write(encodedMessage,
@@ -183,7 +181,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                   });
                   if (_receivedValues[4] == userId) {
                     // 코드 uid 장비 배터리 유저id
-                    debugPrint('응답값: $receivedString');
                     if (_receivedValues[0] == 'ALERT' && !hasExecutedAlert) {
                       setState(() {
                         _isWriting = false;
@@ -416,7 +413,6 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                         buttonText: '확인',
                       );
                     });
-                debugPrint('write error: $e');
               }
             }
           }

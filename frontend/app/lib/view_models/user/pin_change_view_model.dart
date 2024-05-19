@@ -36,7 +36,6 @@ class PinChangeViewModel extends ChangeNotifier {
     _isLoading = false;
 
     if (!result['success']) {
-      debugPrint('실패했을 때 메시지 : ${result['message']}');
       _errorMessage = result['message'];
     } else {
       _errorMessage = null;

@@ -21,7 +21,6 @@ class _WorkListCheckScreenState extends State<WorkListCheckScreen> {
 
   void isConnect() async {
     lockerUid = await _storage.read(key: 'locker_uid');
-    debugPrint(lockerUid);
   }
 
   @override
