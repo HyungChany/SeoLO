@@ -18,7 +18,7 @@ object SessionManager {
     var lotoUserId: String? = null
 
 
-    // 세션 데이터를 초기화하는 메서드
+    // 세션 데이터 초기화
     fun clear() {
         selectedBatteryInfo = null
         selectedFacilityName = null

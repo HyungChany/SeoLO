@@ -24,7 +24,7 @@ class MainChkFragment : Fragment() {
     private var content: String? = null
 
     companion object {
-        // Fragment 인스턴스를 생성하는 메서드
+        // Fragment 인스턴스 생성
         fun newInstance(content: String): MainChkFragment {
             val fragment = MainChkFragment()
             val args = Bundle()
@@ -46,7 +46,6 @@ class MainChkFragment : Fragment() {
         // 레이아웃 파일을 인플레이트하여 뷰 생성
         val view = inflater.inflate(R.layout.fragment_main, container, false)
 
-        // TextView와 ImageView 참조
         val textView = view.findViewById<TextView>(R.id.textViewOverlay)
         textView.text = content
         val imageView = view.findViewById<ImageView>(R.id.gifImageView)
@@ -64,7 +63,6 @@ class MainChkFragment : Fragment() {
     }
 
     private fun fetchChecklistData() {
-        // 액세스 토큰과 회사 코드 가져오기
         val accessToken = TokenManager.getAccessToken(requireContext())
         val companyCode = TokenManager.getCompanyCode(requireContext())
         val deviceType = "watch"

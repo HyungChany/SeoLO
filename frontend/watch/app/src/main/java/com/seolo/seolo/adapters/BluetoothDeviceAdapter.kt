@@ -23,7 +23,6 @@ class BluetoothDeviceAdapter(
     private val gattMap = mutableMapOf<String, BluetoothGatt?>()
 
 
-    // ViewHolder 클래스 정의
     class DeviceViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         // 뷰 요소 초기화
         val deviceName: TextView = view.findViewById(R.id.deviceName)

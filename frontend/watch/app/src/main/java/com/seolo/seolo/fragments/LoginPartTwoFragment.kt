@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.seolo.seolo.R
+import com.seolo.seolo.helper.LotoManager
 import com.seolo.seolo.helper.TokenManager
 import com.seolo.seolo.model.TokenResponse
 import com.seolo.seolo.presentation.LoginActivity
@@ -65,13 +66,35 @@ class LoginPartTwoFragment : Fragment() {
                 if (response.isSuccessful) {
                     val tokenResponse = response.body()
                     if (tokenResponse != null && tokenResponse.issuedToken.accessToken.isNotEmpty()) {
-                        // 발급된 토큰 저장
                         TokenManager.setAccessToken(
                             requireContext(), tokenResponse.issuedToken.accessToken
                         )
                         TokenManager.setCompanyCode(requireContext(), companyCode)
                         TokenManager.setUserName(requireContext(), username)
                         TokenManager.setUserId(requireContext(), tokenResponse.userId)
+                        LotoManager.setLotoStatusCode(requireContext(), tokenResponse.codeStatus)
+                        if (tokenResponse.workingLockerUid == null) {
+                            LotoManager.setLotoUid(
+                                requireContext(), ""
+                            )
+                        } else {
+                            LotoManager.setLotoUid(requireContext(), tokenResponse.workingLockerUid)
+                        }
+
+                        if (tokenResponse.workingMachineId == null) {
+                            LotoManager.setLotoMachineId(requireContext(), "")
+                        } else {
+                            LotoManager.setLotoMachineId(
+                                requireContext(), tokenResponse.workingMachineId
+                            )
+                        }
+                        tokenResponse.issuedCoreToken?.let {
+                            TokenManager.setTokenValue(
+                                requireContext(), it
+                            )
+                        }
+
+
 
                         // 로그인 성공 시 MainActivity로 이동 및 현재 액티비티 종료
                         val intent = Intent(activity, MainActivity::class.java)

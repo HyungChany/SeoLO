@@ -13,14 +13,11 @@ import com.seolo.seolo.R
 import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.presentation.DatePickerActivity
 
-// 마지막 작업 목록을 표시하는 Fragment 클래스
 class TaskLastFragment : Fragment() {
     private var imageResourceId: Int = 0
     private var taskTemplateId: Int = 0
     private var taskTemplateName: String? = null
     private var taskPrecaution: String? = null
-
-    // Fragment가 생성될 때 호출되는 함수
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -38,18 +35,15 @@ class TaskLastFragment : Fragment() {
     ): View? {
         // 레이아웃을 인플레이트하여 View 객체 생성
         val view = inflater.inflate(R.layout.work_layout, container, false)
-        // 이미지 및 텍스트 설정
         view.findViewById<ImageView>(R.id.workImageView).setImageResource(imageResourceId)
         view.findViewById<TextView>(R.id.workTextView).text = taskTemplateName
 
         // 클릭 이벤트 처리
         view.setOnClickListener {
             val context = view.context
-            // 선택된 작업 정보를 세션 관리자에 저장
             SessionManager.selectedTaskTemplateId = taskTemplateId.toString()
             SessionManager.selectedTaskPrecaution = taskPrecaution
 
-            // 로그 출력
             Log.d(
                 "WorksFragment",
                 "Task ID: $taskTemplateId, Task Name: $taskTemplateName, Precaution: $taskPrecaution"

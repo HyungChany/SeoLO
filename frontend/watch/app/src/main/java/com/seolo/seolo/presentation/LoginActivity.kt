@@ -11,7 +11,6 @@ import com.seolo.seolo.fragments.LoginPartTwoFragment
 class LoginActivity : AppCompatActivity() {
     private lateinit var viewPager: ViewPager2
 
-    // 필드 초기화
     var companyCode: String = ""
     var username: String = ""
     var password: String = ""
@@ -31,7 +30,6 @@ class LoginActivity : AppCompatActivity() {
         viewPager.adapter = adapter
     }
 
-    // 다음 페이지로 이동하는 메서드
     fun nextPage() {
         val currentItem = viewPager.currentItem
         // 현재 페이지가 마지막 페이지가 아니면 다음 페이지로 이동

@@ -1,21 +1,22 @@
 package com.seolo.seolo.fragments
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.method.ScrollingMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.viewpager2.widget.ViewPager2
 import com.seolo.seolo.R
 import com.seolo.seolo.presentation.ChecklistActivity
 
-// CheckListFragment 클래스 정의
 class ChecklistFragment : Fragment() {
-    // 체크리스트 텍스트를 저장하는 변수
     private var checklistText: String? = null
+    private var isChecked = false
 
     // Fragment가 생성될 때 호출되는 메서드
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,32 +36,32 @@ class ChecklistFragment : Fragment() {
         // View 내부의 요소들을 가져옴
         val checkBox = view.findViewById<CheckBox>(R.id.checkBox)
         val textView = view.findViewById<TextView>(R.id.textView)
-        val textBox = view.findViewById<LinearLayout>(R.id.textbox)
 
         // TextView에 체크리스트 텍스트 설정
         textView.text = checklistText
         textView.movementMethod = ScrollingMovementMethod()
 
-        // 체크박스를 클릭하면 다음 페이지로 이동하는 이벤트 처리
-        textBox.setOnClickListener {
-            val wasChecked = checkBox.isChecked
-            checkBox.isChecked = !checkBox.isChecked
-            if (!wasChecked) {
-                view.postDelayed({
-                    (activity as? ChecklistActivity)?.moveToNextPage()
+        // 체크박스를 클릭하면 상태 변경 및 액티비티에 알림
+        checkBox.setOnCheckedChangeListener { _, isChecked ->
+            this.isChecked = isChecked
+            (activity as? ChecklistActivity)?.onCheckboxCheckedChange(isChecked)
+            if (isChecked) {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    (activity as? ChecklistActivity)?.let { activity ->
+                        val viewPager = activity.findViewById<ViewPager2>(R.id.viewPagerChecklist)
+                        val currentItem = viewPager.currentItem
+                        val totalItems = viewPager.adapter?.itemCount ?: 0
+                        if (currentItem < totalItems - 1) {
+                            viewPager.setCurrentItem(currentItem + 1, false)
+                        }
+                    }
                 }, 800)
             }
         }
 
-        // 뷰를 클릭하면 다음 페이지로 이동하는 이벤트 처리
+        // 뷰를 클릭하면 체크박스 상태 변경
         view.setOnClickListener {
-            val wasChecked = checkBox.isChecked
             checkBox.isChecked = !checkBox.isChecked
-            if (!wasChecked) {
-                view.postDelayed({
-                    (activity as? ChecklistActivity)?.moveToNextPage()
-                }, 800)
-            }
         }
 
         return view
@@ -77,5 +78,10 @@ class ChecklistFragment : Fragment() {
                 }
             }
         }
+    }
+
+    // 체크박스 상태 반환 메서드
+    fun isChecked(): Boolean {
+        return isChecked
     }
 }
