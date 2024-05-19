@@ -16,7 +16,7 @@ VALUES
     ('202200001', 'SFY001KOR', '임정민', '사원', '영업팀', '1984-02-26', 'default', '2022-10-16', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('198900001', 'SFY001KOR', '오승호', '사원', '영업팀', '1961-03-19', 'default', '1989-08-12', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('201100001', 'SFY001KOR', '박영철', '부장', '개발팀', '1988-06-05', 'default', '2011-10-04', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
-    ('199500002', 'SFY001KOR', '이서연', '대리', '개발팀', '1973-10-23', 'default', '1995-05-11', '1998-07-11', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    ('199500002', 'SFY001KOR', '이서연', '대리', '개발팀', '1973-10-23', 'https://fullerting-s3-v2.s3.ap-northeast-2.amazonaws.com/hb.jpg', '1995-05-11', '1998-07-11', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('202300001', 'SFY001KOR', '한예은', '대리', '영업팀', '1986-07-18', 'default', '2023-05-16', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('198500001', 'SFY001KOR', '박현진', '사원', '품질관리팀', '1967-11-01', 'default', '1985-07-18', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
     ('200900001', 'SFY001KOR', '임준호', '대리', '개발팀', '1961-07-17', 'default', '2009-04-06', NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
