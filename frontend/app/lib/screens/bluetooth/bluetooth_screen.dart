@@ -176,15 +176,14 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                   String receivedString = utf8.decode(value);
                   _receivedValues = receivedString.split(',');
                   // 응답 받으면 writing 중지
-                  setState(() {
-                    _isWriting = false;
-                  });
+                  if (mounted) {
+                    setState(() {
+                      _isWriting = false;
+                    });
+                  }
                   if (_receivedValues[4] == userId) {
                     // 코드 uid 장비 배터리 유저id
                     if (_receivedValues[0] == 'ALERT' && !hasExecutedAlert) {
-                      setState(() {
-                        _isWriting = false;
-                      });
                       hasExecutedAlert = true;
                       showDialog(
                           context: context,
@@ -194,8 +193,8 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                               content: '연결할 자물쇠를 확인해 주세요.',
                               buttonText: '확인',
                               buttonClick: () {
-                                hasExecutedAlert = true;
-                                Navigator.pushReplacementNamed(context, '/bluetooth');
+                                hasExecutedAlert = false;
+                                Navigator.pop(context);
                               },
                             );
                           });
@@ -317,6 +316,7 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                                       buttonText: '확인',
                                       buttonClick: () {
                                         hasExecutedCoreCheck = false;
+                                        Navigator.pop(context);
                                       },
                                     );
                                   });
@@ -363,7 +363,9 @@ class _BluetoothScreenState extends State<BluetoothScreen> {
                       }
                       if (_receivedValues[0] == 'LOCKED' &&
                           !hasExecutedCoreLocked) {
-                        hasExecutedCoreLocked = true;
+                        setState(() {
+                          hasExecutedCoreLocked = true;
+                        });
                         lockedVM.coreLocked().then((_) {
                           if (lockedVM.errorMessage == null) {
                             Navigator.pushNamedAndRemoveUntil(

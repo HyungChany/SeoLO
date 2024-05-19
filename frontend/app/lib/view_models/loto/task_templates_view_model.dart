@@ -16,7 +16,6 @@ class TaskTemplatesViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   Future<void> getTemplates() async {
-    _templates = [];
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
