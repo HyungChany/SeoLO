@@ -199,6 +199,7 @@ const CompanyInformation = () => {
           flexDirection={'column'}
           alignItems="center"
           onClick={handleEquipmentClick}
+          $hoverBackgroundColor={Color.GRAY300}
         >
           <Typo.H3>
             <div style={{ marginTop: '1.3rem' }}>현재 작업장의 장비 현황</div>
@@ -219,6 +220,7 @@ const CompanyInformation = () => {
           flexDirection={'column'}
           alignItems="center"
           onClick={handleEmployeeClick}
+          $hoverBackgroundColor={Color.GRAY300}
         >
           <Typo.H3>
             <div style={{ marginTop: '1.3rem' }}>등록 임직원현황</div>

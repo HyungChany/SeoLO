@@ -10,6 +10,7 @@ interface CardProps {
   alignItems?: string;
   gap?: number;
   position?: string;
+  $hoverBackgroundColor?: string;
 }
 const CardContainer = styled.div<CardProps>`
   width: ${(props) =>
@@ -28,6 +29,9 @@ const CardContainer = styled.div<CardProps>`
   padding: 0.5rem;
   box-sizing: border-box;
   cursor: ${(props) => (props.onClick ? 'pointer' : 'auto')};
+  &:hover {
+    background-color: ${(props) => props.$hoverBackgroundColor || null};
+  }
 `;
 
 const Card = (props: CardProps) => {
@@ -41,6 +45,7 @@ const Card = (props: CardProps) => {
       alignItems={props.alignItems}
       gap={props.gap}
       position={props.position}
+      $hoverBackgroundColor={props.$hoverBackgroundColor}
     >
       {props.children}
     </CardContainer>
