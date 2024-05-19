@@ -103,27 +103,6 @@ class BluetoothLOTOActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        val statusCode = LotoManager.getLotoStatusCode(this@BluetoothLOTOActivity)
-        if (statusCode == "WRITE") {
-            // WRITE 상태인 경우 API 호출
-            issueCoreLogic {
-                Handler(Looper.getMainLooper()).post {
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        val intent =
-                            Intent(this@BluetoothLOTOActivity, LockCompleteActivity::class.java)
-                        startActivity(intent)
-                        finish()
-                    }, 1000)
-                }
-            }
-        } else {
-
-        }
-    }
-
-
     // 기기 선택 시 호출
     @RequiresApi(Build.VERSION_CODES.S)
     private fun onDeviceSelected(device: BluetoothDevice) {

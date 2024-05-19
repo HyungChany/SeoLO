@@ -293,7 +293,7 @@ class BluetoothMainActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                             val intent =
-                                Intent(this@BluetoothMainActivity, ChecklistActivity::class.java)
+                                Intent(this@BluetoothMainActivity, MainActivity::class.java)
                             startActivity(intent)
                         }
                     } else if (statusCode == "ALERT") {
