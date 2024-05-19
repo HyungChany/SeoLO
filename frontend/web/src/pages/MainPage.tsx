@@ -259,6 +259,7 @@ const MainPage = () => {
     null,
   );
   const [userData, setUserData] = useState<UserInformationType | null>(null);
+  const [hoverText, setHoverText] = useState<string>('하세요');
   const events = useRecoilValue(notificationEventsState);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const handleCardDrawingClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -339,6 +340,16 @@ const MainPage = () => {
     };
     fetchLogout();
   };
+
+  // 로그아웃 버튼 호버 이벤트 핸들러
+  const handleMouseEnter = () => {
+    setHoverText('하셨나요?');
+  };
+
+  const handleMouseLeave = () => {
+    setHoverText('하세요');
+  };
+
   // 드롭다운 옵션 가져오기
   const { data: dropdownData } = useQuery({
     queryKey: ['dropdown'],
@@ -478,7 +489,7 @@ const MainPage = () => {
                 <div
                   style={{
                     fontSize: '2rem',
-                    marginRight: '0.8rem',
+                    marginRight: '0.4rem',
                   }}
                 >
                   &nbsp;님
@@ -497,7 +508,7 @@ const MainPage = () => {
               >
                 <div
                   style={{
-                    fontSize: '1.7rem',
+                    fontSize: '1.5rem',
                   }}
                 >
                   오늘도
@@ -511,10 +522,14 @@ const MainPage = () => {
                 >
                   &nbsp;서로&nbsp;
                 </div>
-                <div style={{ fontSize: '1.7rem' }}>하셨나요?</div>
+                <div style={{ fontSize: '1.5rem' }}>{hoverText}</div>
               </div>
             </div>
-            <LogoutBtn onClick={handleLogout}>
+            <LogoutBtn
+              onClick={handleLogout}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
               <LogoutIcon src={logoutIcon} />
               로그아웃
             </LogoutBtn>
