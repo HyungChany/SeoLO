@@ -1,6 +1,6 @@
 ## embedded
 
-BLE기반 자물쇠를 제공합니다.<br>
+> BLE기반 자물쇠를 제공합니다.<br>
 
 ### 제공 기능
 - BLE OPEN/CLOSE
