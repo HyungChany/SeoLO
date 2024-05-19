@@ -36,7 +36,29 @@
 
 ---
 ### APP
+- 안전뉴스
+    ![안전뉴스](../docs/images/APP/APP%20(0).jpg)
 
+- 프로필, 내 작업내역 확인
+    ![프로필, 내 작업내역 확인 1](../docs/images/APP/Profile%20(1).jpg)
+    ![프로필, 내 작업내역 확인 2](../docs/images/APP/Profile%20(2).jpg)
+
+- 타인 작업내역 확인
+    ![타인 작업내역 확인](../docs/images/APP/타인%20작업내역%20확인.gif)
+
+- 작업 등록, 잠금
+    ![작업 등록, 잠금 1](../docs/images/APP/APP%20(1).jpg)
+    ![작업 등록, 잠금 2](../docs/images/APP/APP%20(2).jpg)
+    ![작업 등록, 잠금 3](../docs/images/APP/APP%20(3).jpg)
+    ![작업 등록, 잠금 4](../docs/images/APP/APP%20(4).jpg)
+    ![작업 등록, 잠금 5](../docs/images/APP/APP%20(5).jpg)
+
+- 잠금 해제
+    ![잠금 해제 1](../docs/images/APP/LOTO잠금%20-%20열림%20완료.png)
+    ![잠금 해제 2](../docs/images/APP/LOTO잠금%20-%20잠금%20완료.png)
+
+- LOTO 절차
+    ![LOTO 절차](../docs/images/APP/LOTO%20절차.jpg)
 
 ---
 ### WATCH

@@ -1,6 +1,6 @@
 # SEOLO(Safe+Easy Our LOTO)
 ![SEOLO banner](docs/images/SEOLO%20banner.png)
-> **현직자들이 원하는, 현직자들을 위한 새로운 로토 서비스**<br>
+> **안전은 로또가 아닙니다. 새로운 로토 서비스**<br>
 서로에서 작업자들의 안전을 기원합니다.
 
 ## 목차
