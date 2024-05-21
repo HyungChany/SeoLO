@@ -77,8 +77,11 @@ class MainChkFragment : Fragment() {
                             // 성공적으로 응답 받았을 때 처리
                             response.body()?.let { checklistResponse ->
                                 // 가져온 체크리스트 데이터를 저장
-                                ChecklistManager.setChecklist(
+                                ChecklistManager.setBasicChecklist(
                                     requireContext(), checklistResponse.basicChecklists
+                                )
+                                ChecklistManager.setChecklistText(
+                                    requireContext(), checklistResponse.checklists
                                 )
                             }
                             // 체크리스트 액티비티로 이동
