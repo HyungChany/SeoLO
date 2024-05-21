@@ -310,7 +310,6 @@ class BluetoothLOTOActivity : AppCompatActivity() {
         val authorization = "Bearer " + TokenManager.getAccessToken(this)
         val companyCode = TokenManager.getCompanyCode(this)
         val deviceType = "watch"
-        Log.d("이슈", "dasdas")
 
         val lotoInfo = LotoManager.getLotoUid(this@BluetoothLOTOActivity)?.let {
             LotoManager.getLotoBatteryInfo(this@BluetoothLOTOActivity)?.let { batteryInfo ->
