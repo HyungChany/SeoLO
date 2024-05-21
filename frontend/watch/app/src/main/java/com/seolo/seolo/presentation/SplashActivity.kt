@@ -7,6 +7,7 @@ import android.os.Looper
 import androidx.activity.ComponentActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.seolo.seolo.R
+import com.seolo.seolo.helper.ChecklistManager.clearChecklist
 import com.seolo.seolo.helper.LotoManager
 import com.seolo.seolo.helper.SessionManager
 import com.seolo.seolo.helper.TokenManager
@@ -26,6 +27,7 @@ class SplashActivity : ComponentActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             checkTokenAndNavigate()
             SessionManager.clear()
+            clearChecklist(this)
         }, 2000)
     }
 

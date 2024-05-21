@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
         // 프래그먼트를 ViewPager2에 추가
         adapter.addFragment(MainChkFragment.newInstance("LOTO 잠금"))
-        adapter.addFragment(MainBluetoothFragment.newInstance("Bluetooth"))
+        adapter.addFragment(MainBluetoothFragment.newInstance("LOTO 해제"))
         adapter.addFragment(RedoPinNumberFragment.newInstance())
 
         viewPager.adapter = adapter
