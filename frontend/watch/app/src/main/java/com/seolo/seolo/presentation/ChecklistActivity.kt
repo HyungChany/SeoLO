@@ -10,6 +10,7 @@ import com.seolo.seolo.adapters.CarouselStateAdapter
 import com.seolo.seolo.fragments.ChecklistFragment
 import com.seolo.seolo.helper.ChecklistManager
 import com.seolo.seolo.helper.TokenManager
+import com.seolo.seolo.model.ChecklistItem
 import com.seolo.seolo.model.FacilityItem
 import com.seolo.seolo.model.FacilityResponse
 import com.seolo.seolo.services.RetrofitClient
@@ -34,10 +35,12 @@ class ChecklistActivity : AppCompatActivity() {
         viewPager = findViewById(R.id.viewPagerChecklist)
         val adapter = CarouselStateAdapter(this)
 
-        val checklistItems = ChecklistManager.getChecklist(this)
+        val basicChecklistItems = ChecklistManager.getBasicChecklist(this) ?: emptyList()
+        val checklistTextItems = ChecklistManager.getChecklistText(this) ?: emptyList()
+        val checklistItems: List<ChecklistItem> = basicChecklistItems + checklistTextItems
 
         // 체크리스트가 비어있지 않으면 각 아이템을 프래그먼트로 추가
-        if (!checklistItems.isNullOrEmpty()) {
+        if (checklistItems.isNotEmpty()) {
             checklistItemCount = checklistItems.size
             for (item in checklistItems) {
                 adapter.addFragment(ChecklistFragment.newInstance(item.context))
@@ -70,7 +73,7 @@ class ChecklistActivity : AppCompatActivity() {
 
     // 다음 페이지로 이동
     private fun moveToNextPage() {
-        // 시설물 정보를 담아 LocationActivity로 이동
+        // 시설물 정보를 담아 FacilityActivity로 이동
         val intent = Intent(this, FacilityActivity::class.java)
         intent.putExtra("facilities", ArrayList(facilities))
         startActivity(intent)
