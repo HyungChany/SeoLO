@@ -64,24 +64,27 @@
 ### WATCH
 
 - LOTO 시작<br>
-    ![LOTO시작](../docs/images/WATCH/WATCH%20초기화면.png)
+    ![LOTO시작](../docs/images/WATCH/WATCH%20PIn%20로그인.gif)
+
+- LOTO 메인화면<br>
+    ![LOTO시작](../docs/images/WATCH/WATCH%20메인화면.gif)
 
 - 체크리스트 확인<br>
-    > 체크리스트를 점검합니다. 모든 체크리스트를 점검 후에 다음 작업을 할 수 있습니다.<br>
-    ![체크리스트](../docs/images/WATCH/WATCH%20체크리스트.png)
-    ![체크리스트 확인](../docs/images/WATCH/WATCH%20체크리스트%20확인.png)
+    - 체크리스트를 점검합니다. 모든 체크리스트를 점검 후에 다음 작업을 할 수 있습니다.<br>
+
+    ![체크리스트](../docs/images/WATCH/WATCH%20체크리스트.gif)
 
 - 공장 선택<br>
-    ![공장 선택](../docs/images/WATCH/WATCH%20공장선택.png)
+    ![공장 선택](../docs/images/WATCH/WATCH%20공장선택.gif)
 
 - 장비 선택<br>
-    ![장비 선택](../docs/images/WATCH/WATCH%20장비선택.png)
+    ![장비 선택](../docs/images/WATCH/WATCH%20장비선택.gif)
 
 - 날짜 선택<br>
-    ![날짜 선택](../docs/images/WATCH/WATCH%20날짜선택.png)
+    ![날짜 선택](../docs/images/WATCH/WATCH%20날짜선택.gif)
 
 - 시간 선택<br>
-    ![시간 선택](../docs/images/WATCH/WATCH%20시간선택.png)
+    ![시간 선택](../docs/images/WATCH/WATCH%20시간선택.gif)
 
 - 자물쇠 선택<br>
     ![자물쇠 선택](../docs/images/WATCH/WATCH%20자물쇠%20선택.png)
