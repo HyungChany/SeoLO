@@ -83,9 +83,7 @@
 
 - 체크리스트 확인<br>
 
-  > 체크리스트를 점검합니다. 모든 체크리스트를 점검 후에 다음 작업을 할 수 있습니다.<br>
-  > ![체크리스트](../docs/images/WATCH/WATCH%20체크리스트.png)
-  > ![체크리스트 확인](../docs/images/WATCH/WATCH%20체크리스트%20확인.png)
+  > 체크리스트를 점검합니다. 모든 체크리스트를 점검 후에 다음 작업을 할 수 있습니다.<br> > ![체크리스트](../docs/images/WATCH/WATCH%20체크리스트.png) > ![체크리스트 확인](../docs/images/WATCH/WATCH%20체크리스트%20확인.png)
 
 - 공장 선택<br>
   ![공장 선택](../docs/images/WATCH/WATCH%20공장선택.png)
