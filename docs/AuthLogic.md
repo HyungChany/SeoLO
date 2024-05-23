@@ -1,7 +1,12 @@
 # 인증로직 과정
 
-## 자격검정
+## 시퀀스 다이어그램
+![seq1.PNG](images%2FCORE%2Fseq1.PNG) <br>
+![seq2.PNG](images%2FCORE%2Fseq2.PNG) <br>
+![seq3.PNG](images%2FCORE%2Fseq3.PNG) <br>
+![seq4.PNG](images%2FCORE%2Fseq4.PNG)
 
+## 자격검정
 - 사용자는 ID/PW 를 입력해 로그인하고 세션을 발급받는다.
 - 잠근 자물쇠가 없는 사용자는 행동코드 ‘INIT’을 담고있는다.
 
@@ -39,3 +44,22 @@
     - UNLOCK
     - WRITE
     - ALERT
+
+## 모듈화
+### 토큰발급모듈
+![1.PNG](images%2FCORE%2F1.PNG)
+![2.PNG](images%2FCORE%2F2.PNG)
+![3.PNG](images%2FCORE%2F3.PNG)
+
+### 코드 별 프론트모듈
+![4.PNG](images%2FCORE%2F4.PNG)
+![5.PNG](images%2FCORE%2F5.PNG)
+![7.PNG](images%2FCORE%2F7.PNG)
+
+### 코드 별 백엔드모듈
+![6.PNG](images%2FCORE%2F6.PNG)
+![8.PNG](images%2FCORE%2F8.PNG)
+
+### 토큰 생성
+![9.PNG](images%2FCORE%2F9.PNG)
+![10.PNG](images%2FCORE%2F10.PNG)
